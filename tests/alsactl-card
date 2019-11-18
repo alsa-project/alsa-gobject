@@ -10,7 +10,9 @@ gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
 target = ALSACtl.Card()
-props = ()
+props = (
+    'devnode',
+)
 methods = (
     'new',
     'open',

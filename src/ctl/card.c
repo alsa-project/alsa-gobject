@@ -8,21 +8,47 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <sound/asound.h>
 
 struct _ALSACtlCardPrivate {
     int fd;
+    char *devnode;
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
+
+enum ctl_card_prop_type {
+    CTL_CARD_PROP_DEVNODE = 1,
+    CTL_CARD_PROP_COUNT,
+};
+static GParamSpec *ctl_card_props[CTL_CARD_PROP_COUNT] = { NULL, };
+
+static void ctl_card_get_property(GObject *obj, guint id, GValue *val,
+                                  GParamSpec *spec)
+{
+    ALSACtlCard *self = ALSACTL_CARD(obj);
+    ALSACtlCardPrivate *priv = alsactl_card_get_instance_private(self);
+
+    switch (id) {
+    case CTL_CARD_PROP_DEVNODE:
+        g_value_set_string(val, priv->devnode);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
 
 static void ctl_card_finalize(GObject *obj)
 {
     ALSACtlCard *self = ALSACTL_CARD(obj);
     ALSACtlCardPrivate *priv = alsactl_card_get_instance_private(self);
 
-    if (priv->fd >= 0)
+    if (priv->fd >= 0) {
         close(priv->fd);
+        g_free(priv->devnode);
+    }
 
     G_OBJECT_CLASS(alsactl_card_parent_class)->finalize(obj);
 }
@@ -32,6 +58,16 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->finalize = ctl_card_finalize;
+    gobject_class->get_property = ctl_card_get_property;
+
+    ctl_card_props[CTL_CARD_PROP_DEVNODE] =
+        g_param_spec_string("devnode", "devnode",
+                            "The full path of control character device.",
+                            "",
+                            G_PARAM_READABLE);
+
+    g_object_class_install_properties(gobject_class, CTL_CARD_PROP_COUNT,
+                                      ctl_card_props);
 }
 
 static void alsactl_card_init(ALSACtlCard *self)
@@ -72,8 +108,11 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error)
         return;
 
     priv->fd = open(devnode, O_RDONLY | O_NONBLOCK);
-    if (priv->fd < 0)
+    if (priv->fd < 0) {
         generate_error(error, errno);
+        g_free(devnode);
+        return;
+    }
 
-    g_free(devnode);
+    priv->devnode = devnode;
 }

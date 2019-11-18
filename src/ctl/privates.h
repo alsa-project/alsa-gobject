@@ -7,6 +7,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "query.h"
+#include "card.h"
+
 G_BEGIN_DECLS
 
 GQuark alsactl_error_quark(void);
