@@ -51,6 +51,7 @@ tests = {
   ],
   'rawmidi': [
     'alsarawmidi-enums',
+    'alsarawmidi-substream-info',
   ],
 }
 
