@@ -241,3 +241,58 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
 
     udev_unref(ctx);
 }
+
+/**
+ * alsarawmidi_get_rawmidi_devnode:
+ * @card_id: The numeridcal ID of sound card.
+ * @device_id: The numerical ID of rawmidi device for the sound card.
+ * @devnode: (out): The string for devnode of rawmidi device.
+ * @error: A #GError.
+ *
+ * Allocate devnode string for rawmidi device and return it when exists.
+ */
+void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
+                                     char **devnode, GError **error)
+{
+    unsigned int length;
+    char *name;
+    struct udev *ctx;
+    struct udev_device *dev;
+    const char *node;
+
+    length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
+             calculate_digits(device_id) + 1;
+    name = g_try_malloc0(length);
+    if (name == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    snprintf(name, length, RAWMIDI_SYSNAME_TEMPLATE, card_id, device_id);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        g_free(name);
+        return;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
+    g_free(name);
+    if (dev == NULL) {
+        generate_error(error, ENODEV);
+        udev_unref(ctx);
+        return;
+    }
+
+    node = udev_device_get_devnode(dev);
+    if (node == NULL) {
+        generate_error(error, ENOENT);
+    } else {
+        *devnode = strdup(node);
+        if (*devnode == NULL)
+            generate_error(error, ENOMEM);
+    }
+
+    udev_device_unref(dev);
+    udev_unref(ctx);
+}
