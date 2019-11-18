@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSACtlCardInfo         ALSACtlCardInfo;
 typedef struct _ALSACtlCardInfoClass    ALSACtlCardInfoClass;
+typedef struct _ALSACtlCardInfoPrivate  ALSACtlCardInfoPrivate;
 
 struct _ALSACtlCardInfo {
     GObject parent_instance;
+
+    ALSACtlCardInfo *priv;
 };
 
 struct _ALSACtlCardInfoClass {

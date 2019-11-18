@@ -10,7 +10,15 @@ gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
 target = ALSACtl.CardInfo()
-props = ()
+props = (
+    'card-id',
+    'id',
+    'driver',
+    'name',
+    'long-name',
+    'mixer-name',
+    'components',
+)
 methods = ()
 signals = ()
 
