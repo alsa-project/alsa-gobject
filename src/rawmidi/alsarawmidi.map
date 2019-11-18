@@ -15,6 +15,9 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_stream_pair_new";
     "alsarawmidi_stream_pair_open";
     "alsarawmidi_stream_pair_get_substream_info";
+
+    "alsarawmidi_substream_params_get_type";
+    "alsarawmidi_substream_params_new";
   local:
     *;
 };
