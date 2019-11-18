@@ -13,6 +13,7 @@ tests = {
     'alsactl-elem-info-bytes',
     'alsactl-elem-info-iec60958',
     'alsactl-elem-info-int64',
+    'alsactl-elem-value',
   ],
 }
 

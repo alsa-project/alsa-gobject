@@ -58,6 +58,9 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsactl_elem_info_int64_get_type";
     "alsactl_elem_info_int64_new";
+
+    "alsactl_elem_value_get_type";
+    "alsactl_elem_value_new";
   local:
     *;
 };
