@@ -6,6 +6,7 @@ tests = {
     'alsactl-enums',
     'alsactl-card',
     'alsactl-card-info',
+    'alsactl-elem-info',
   ],
 }
 

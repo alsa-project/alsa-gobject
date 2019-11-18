@@ -13,6 +13,7 @@ sources = files(
   'card.c',
   'card-info.c',
   'elem-id.c',
+  'elem-info.c',
 )
 
 headers = files(
@@ -20,6 +21,7 @@ headers = files(
   'card.h',
   'card-info.h',
   'elem-id.h',
+  'elem-info.h',
 )
 
 privates = files(
