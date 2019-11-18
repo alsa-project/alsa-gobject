@@ -46,6 +46,14 @@ struct _ALSARawmidiStreamPair {
 
 struct _ALSARawmidiStreamPairClass {
     GObjectClass parent_class;
+
+    /**
+     * ALSARawmidiStreamPairClass::handle_messages:
+     * @self: A #ALSARawmidiStreamPair.
+     *
+     * When any input message in available, this event is emit.
+     */
+    void (*handle_messages)(ALSARawmidiStreamPair *self);
 };
 
 GType alsarawmidi_stream_pair_get_type(void) G_GNUC_CONST;

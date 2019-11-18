@@ -92,7 +92,7 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
         g_signal_new("handle_messages",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     0,
+                     G_STRUCT_OFFSET(ALSARawmidiStreamPairClass, handle_messages),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0, NULL);
