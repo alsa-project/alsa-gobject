@@ -42,6 +42,8 @@ struct _ALSACtlElemInfoIntClass {
 
 GType alsactl_elem_info_int_get_type(void) G_GNUC_CONST;
 
+ALSACtlElemInfoInt *alsactl_elem_info_int_new();
+
 G_END_DECLS
 
 #endif
