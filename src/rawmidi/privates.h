@@ -22,6 +22,8 @@ GQuark alsarawmidi_error_quark(void);
 void rawmidi_substream_info_refer_private(ALSARawmidiSubstreamInfo *self,
                                           struct snd_rawmidi_info **info);
 
+void rawmidi_select_subdevice(guint card_id, guint subdevice_id, GError **error);
+
 G_END_DECLS
 
 #endif

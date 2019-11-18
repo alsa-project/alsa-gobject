@@ -429,3 +429,10 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
     if (*error != NULL)
         g_object_unref(*substream_info);
 }
+
+void rawmidi_select_subdevice(guint card_id, guint subdevice_id, GError **error)
+{
+    guint data = subdevice_id;
+    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE,
+                              &data, error);
+}

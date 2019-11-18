@@ -13,6 +13,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsarawmidi_stream_pair_get_type";
     "alsarawmidi_stream_pair_new";
+    "alsarawmidi_stream_pair_open";
   local:
     *;
 };
