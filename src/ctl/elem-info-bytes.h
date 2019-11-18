@@ -44,6 +44,8 @@ struct _ALSACtlElemInfoBytesClass {
 
 GType alsactl_elem_info_bytes_get_type(void) G_GNUC_CONST;
 
+ALSACtlElemInfoBytes *alsactl_elem_info_bytes_new();
+
 G_END_DECLS
 
 #endif
