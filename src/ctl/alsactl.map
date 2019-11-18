@@ -24,6 +24,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_add_elems";
     "alsactl_card_replace_elems";
     "alsactl_card_remove_elems";
+    "alsactl_card_write_elem_value";
+    "alsactl_card_read_elem_value";
     "alsactl_card_create_source";
     "alsactl_sigs_marshal_VOID__BOXED_FLAGS";
 

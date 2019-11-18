@@ -27,6 +27,8 @@ methods = (
     'add_elems',
     'replace_elems',
     'remove_elems',
+    'write_elem_value',
+    'read_elem_value',
     'create_source',
     'do_handle_elem_event',
     'do_handle_disconnection',

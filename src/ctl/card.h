@@ -8,6 +8,7 @@
 #include <ctl/card-info.h>
 #include <ctl/elem-id.h>
 #include <ctl/elem-info.h>
+#include <ctl/elem-value.h>
 
 #include <ctl/alsactl-sigs-marshal.h>
 
@@ -109,6 +110,15 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             GList **entries, GError **error);
 void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                GError **error);
+
+void alsactl_card_write_elem_value(ALSACtlCard *self,
+                                   const ALSACtlElemId *elem_id,
+                                   const ALSACtlElemValue *elem_value,
+                                   GError **error);
+void alsactl_card_read_elem_value(ALSACtlCard *self,
+                                  const ALSACtlElemId *elem_id,
+                                  ALSACtlElemValue *const *elem_value,
+                                  GError **error);
 
 void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
                                 GError **error);

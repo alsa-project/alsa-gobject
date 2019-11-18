@@ -10,6 +10,7 @@
 #include "card-info.h"
 #include "elem-id.h"
 #include "elem-info.h"
+#include "elem-value.h"
 
 #include <sound/asound.h>
 
@@ -26,6 +27,9 @@ void ctl_card_info_refer_private(ALSACtlCardInfo *self,
 
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
                                  struct snd_ctl_elem_info **info);
+
+void ctl_elem_value_refer_private(ALSACtlElemValue *self,
+                                  struct snd_ctl_elem_value **value);
 
 G_END_DECLS
 

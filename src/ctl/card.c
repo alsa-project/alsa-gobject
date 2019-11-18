@@ -701,6 +701,64 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
         generate_error(error, errno);
 }
 
+/**
+ * alsactl_card_write_elem_value:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @elem_value: A derivative of #ALSACtlElemValue.
+ * @error: A #GError.
+ *
+ * Write given value to element indicated by given ID.
+ */
+void alsactl_card_write_elem_value(ALSACtlCard *self,
+                                   const ALSACtlElemId *elem_id,
+                                   const ALSACtlElemValue *elem_value,
+                                   GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_elem_value *value;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(elem_value));
+
+    ctl_elem_value_refer_private((ALSACtlElemValue *)elem_value, &value);
+    value->id = *elem_id;
+
+    priv = alsactl_card_get_instance_private(self);
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_WRITE, value) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsactl_card_read_elem_value:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @elem_value: (inout): A derivative of #ALSACtlElemValue.
+ * @error: A #GError.
+ *
+ * Read given value from element indicated by given ID.
+ */
+void alsactl_card_read_elem_value(ALSACtlCard *self,
+                                  const ALSACtlElemId *elem_id,
+                                  ALSACtlElemValue *const *elem_value,
+                                  GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_elem_value *value;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(*elem_value));
+
+    ctl_elem_value_refer_private(*elem_value, &value);
+    value->id = *elem_id;
+
+    priv = alsactl_card_get_instance_private(self);
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_READ, value) < 0)
+        generate_error(error, errno);
+}
+
 static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
 {
     ALSACtlCard *self = src->self;

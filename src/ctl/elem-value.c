@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "elem-value.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSACtlElemValuePrivate {
     struct snd_ctl_elem_value value;
@@ -64,4 +62,12 @@ static void alsactl_elem_value_init(ALSACtlElemValue *self)
 ALSACtlElemValue *alsactl_elem_value_new()
 {
     return g_object_new(ALSACTL_TYPE_ELEM_VALUE, NULL);
+}
+
+void ctl_elem_value_refer_private(ALSACtlElemValue *self,
+                                  struct snd_ctl_elem_value **value)
+{
+    ALSACtlElemValuePrivate *priv =
+                                alsactl_elem_value_get_instance_private(self);
+    *value = &priv->value;
 }
