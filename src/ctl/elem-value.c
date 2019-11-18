@@ -349,3 +349,52 @@ void alsactl_elem_value_get_iec60958(ALSACtlElemValue *self,
             (*user_data)[i] = value->value.iec958.subcode[i];
     }
 }
+
+/**
+ * alsactl_elem_value_set_int64:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count): The array for values of integer64 type.
+ * @value_count: The number of values up to 64.
+ *
+ * Copy the array for values of integer64 type into internal storage.
+ */
+void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
+                                  gsize value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer64.value));
+    for (i = 0; i < value_count; ++i)
+        value->value.integer64.value[i] = (long long)values[i];
+}
+
+/**
+ * alsactl_elem_value_get_int64:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count)(inout): The array for values of integer64
+ *          type.
+ * @value_count: The number of values up to 64.
+ *
+ * Copy the array for values of integer64 type from internal storage.
+ */
+void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
+                                  gint64 *const *values, gsize *value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer64.value));
+    for (i = 0; i < *value_count; ++i)
+        (*values)[i] = (gint64)value->value.integer64.value[i];
+}

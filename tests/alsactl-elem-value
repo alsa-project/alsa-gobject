@@ -25,6 +25,8 @@ methods = (
     'get_bytes',
     'set_iec60958',
     'get_iec60958',
+    'set_int64',
+    'get_int64',
 )
 signals = ()
 

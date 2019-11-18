@@ -76,6 +76,11 @@ void alsactl_elem_value_get_iec60958(ALSACtlElemValue *self,
                 guint8 *const *channel_status, gsize *channel_status_length,
                 guint8 *const *user_data, gsize *user_data_length);
 
+void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
+                                  gsize value_count);
+void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
+                                  gint64 *const *values, gsize *value_count);
+
 G_END_DECLS
 
 #endif
