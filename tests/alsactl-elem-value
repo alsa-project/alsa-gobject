@@ -17,6 +17,8 @@ props = ()
 methods = (
     'set_bool',
     'get_bool',
+    'set_int',
+    'get_int',
 )
 signals = ()
 

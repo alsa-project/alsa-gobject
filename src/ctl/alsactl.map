@@ -65,6 +65,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_value_new";
     "alsactl_elem_value_set_bool";
     "alsactl_elem_value_get_bool";
+    "alsactl_elem_value_set_int";
+    "alsactl_elem_value_get_int";
   local:
     *;
 };
