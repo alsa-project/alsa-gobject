@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <rawmidi/alsarawmidi-enums.h>
+#include <rawmidi/substream-info.h>
 
 G_BEGIN_DECLS
 
@@ -23,6 +24,12 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
                                        ALSARawmidiStreamDirection direction,
                                        guint **entries, gsize *entry_count,
                                        GError **error);
+
+void alsarawmidi_get_substream_info(guint card_id, guint device_id,
+                                    ALSARawmidiStreamDirection direction,
+                                    guint subdevice_id,
+                                    ALSARawmidiSubstreamInfo **substream_info,
+                                    GError **error);
 
 G_END_DECLS
 

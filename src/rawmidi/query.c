@@ -12,8 +12,6 @@
 
 #include <libudev.h>
 
-#include <sound/asound.h>
-
 // For error reporting.
 G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
 
@@ -395,4 +393,39 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
     for (i = 0; i < info.subdevices_count; ++i)
         (*entries)[i] = i;
     *entry_count = info.subdevices_count;
+}
+
+/**
+ * alsarawmidi_get_substream_info:
+ * @card_id: The numberical value for sound card to query.
+ * @device_id: The numerical value of rawmidi device to query.
+ * @direction: The direction of stream, one of ALSARawmidiStreamDirection.
+ * @subdevice_id: The numerical value of subdevice in rawmidi device.
+ * @substream_info: (out): The information of substream for the subdevice.
+ * @error: A #GError.
+ */
+void alsarawmidi_get_substream_info(guint card_id, guint device_id,
+                                    ALSARawmidiStreamDirection direction,
+                                    guint subdevice_id,
+                                    ALSARawmidiSubstreamInfo **substream_info,
+                                    GError **error)
+{
+    struct snd_rawmidi_info *info;
+
+    if (substream_info == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
+
+    rawmidi_substream_info_refer_private(*substream_info, &info);
+    info->device = device_id;
+    info->subdevice = subdevice_id;
+    info->stream = direction;
+    info->card = card_id;
+
+    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, error);
+    if (*error != NULL)
+        g_object_unref(*substream_info);
 }

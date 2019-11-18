@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "substream-info.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSARawmidiSubstreamInfoPrivate {
     struct snd_rawmidi_info info;
@@ -153,4 +151,13 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
 static void alsarawmidi_substream_info_init(ALSARawmidiSubstreamInfo *self)
 {
     return;
+}
+
+void rawmidi_substream_info_refer_private(ALSARawmidiSubstreamInfo *self,
+                                          struct snd_rawmidi_info **info)
+{
+    ALSARawmidiSubstreamInfoPrivate *priv =
+                        alsarawmidi_substream_info_get_instance_private(self);
+
+    *info = &priv->info;
 }
