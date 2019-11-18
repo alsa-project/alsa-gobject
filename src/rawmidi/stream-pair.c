@@ -324,3 +324,26 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsarawmidi_stream_pair_drop:
+ * @self: A #ALSARawmidiStreamPair.
+ * @direction: The direction of substream attached to the stream pair.
+ * @err: A #GError.
+ *
+ * Drop queued data in intermediate buffer immediately for substream attached
+ * to the pair of streams. In implementation of ALSA rawmidi core, the
+ * direction should be for output substream.
+ */
+void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
+                                        ALSARawmidiStreamDirection direction,
+                                        GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0)
+        generate_error(error, errno);
+}
