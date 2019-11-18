@@ -7,6 +7,7 @@
 
 #include <rawmidi/alsarawmidi-enums.h>
 #include <rawmidi/substream-info.h>
+#include <rawmidi/substream-params.h>
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,11 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamInfo **substream_info,
+                                GError **error);
+
+void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
+                                ALSARawmidiStreamDirection direction,
+                                ALSARawmidiSubstreamParams *substream_params,
                                 GError **error);
 
 G_END_DECLS

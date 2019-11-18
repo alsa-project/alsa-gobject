@@ -183,3 +183,31 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
         return;
     }
 }
+
+/**
+ * alsarawmidi_stream_pair_set_substream_params:
+ * @self: A #ALSARawmidiStreamPair.
+ * @direction: The direction of substream attached to the stream pair.
+ * @substream_params: The parameters of substream.
+ * @error: A #GError.
+ *
+ * Set parameters of substream for given direction, which is attached to the
+ * pair of streams.
+ */
+void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
+                                ALSARawmidiStreamDirection direction,
+                                ALSARawmidiSubstreamParams *substream_params,
+                                GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+    struct snd_rawmidi_params *params;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    rawmidi_substream_params_refer_private(substream_params, &params);
+
+    params->stream = direction;
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PARAMS, params) < 0)
+        generate_error(error, errno);
+}

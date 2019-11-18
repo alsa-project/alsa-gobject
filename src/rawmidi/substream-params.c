@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "substream-params.h"
+#include "privates.h"
 
 #include <unistd.h>
-
-#include <sound/asound.h>
 
 struct _ALSARawmidiSubstreamParamsPrivate {
     struct snd_rawmidi_params params;
@@ -112,4 +110,13 @@ static void alsarawmidi_substream_params_init(ALSARawmidiSubstreamParams *self)
 ALSARawmidiSubstreamParams *alsarawmidi_substream_params_new()
 {
     return g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_PARAMS, NULL);
+}
+
+void rawmidi_substream_params_refer_private(ALSARawmidiSubstreamParams *self,
+                                            struct snd_rawmidi_params **params)
+{
+    ALSARawmidiSubstreamParamsPrivate *priv =
+                        alsarawmidi_substream_params_get_instance_private(self);
+
+    *params = &priv->params;
 }
