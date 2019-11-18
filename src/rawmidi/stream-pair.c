@@ -240,3 +240,63 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_STATUS, status) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsarawmidi_stream_pair_read_from_substream:
+ * @self: A #ALSARawmidiStreamPair.
+ * @buf: (array length=buf_size)(inout): The buffer to copy data.
+ * @buf_size: The size of buffer.
+ * @error: A #GError.
+ *
+ * Copy data from intermediate buffer to given buffer for substream attached to
+ * the pair of streams. In a case that the instance is opened without
+ * O_NONBLOCK flag and the intermediate buffer has no data, call of the API
+ * is blocked till any data is available.
+ */
+void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
+                                        guint8 *const *buf, gsize *buf_size,
+                                        GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+    int len;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    len = read(priv->fd, *buf, *buf_size);
+    if (len < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *buf_size = len;
+}
+
+/**
+ * alsarawmidi_stream_pair_write_to_substream:
+ * @self: A #ALSARawmidiStreamPair.
+ * @buf: (array length=buf_size): The buffer to copy data.
+ * @buf_size: The size of buffer.
+ * @error: A #GError.
+ *
+ * Copy data from given buffer to intermediate buffer for substream attached to
+ * the pair of streams. In a case that the instance is opened without
+ * O_NONBLOCK flag and the intermediate buffer is full, call of the API is
+ * blocked till the buffer has space for the data.
+ */
+void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
+                                        const guint8 *buf, gsize buf_size,
+                                        GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+    int len;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    len = write(priv->fd, buf, buf_size);
+    if (len < 0) {
+        generate_error(error, errno);
+        return;
+    }
+}
