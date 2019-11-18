@@ -10,10 +10,12 @@ has_marshaller = false
 
 sources = files(
   'query.c',
+  'substream-info.c',
 )
 
 headers = files(
   'query.h',
+  'substream-info.h',
 )
 
 privates = files(

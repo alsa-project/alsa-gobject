@@ -7,6 +7,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_get_rawmidi_sysname";
     "alsarawmidi_get_rawmidi_devnode";
     "alsarawmidi_get_subdevice_id_list";
+
+    "alsarawmidi_substream_info_get_type";
   local:
     *;
 };
