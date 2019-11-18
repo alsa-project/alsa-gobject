@@ -20,6 +20,7 @@
 struct _ALSACtlCardPrivate {
     int fd;
     char *devnode;
+    gint subscribers;
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 
@@ -33,6 +34,7 @@ typedef struct {
 
 enum ctl_card_prop_type {
     CTL_CARD_PROP_DEVNODE = 1,
+    CTL_CARD_PROP_SUBSCRIBED,
     CTL_CARD_PROP_COUNT,
 };
 static GParamSpec *ctl_card_props[CTL_CARD_PROP_COUNT] = { NULL, };
@@ -47,6 +49,12 @@ static void ctl_card_get_property(GObject *obj, guint id, GValue *val,
     case CTL_CARD_PROP_DEVNODE:
         g_value_set_string(val, priv->devnode);
         break;
+    case CTL_CARD_PROP_SUBSCRIBED:
+    {
+        gboolean subscribed = g_atomic_int_get(&priv->subscribers) > 0;
+        g_value_set_boolean(val, subscribed);
+        break;
+    }
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
         break;
@@ -78,6 +86,12 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
                             "The full path of control character device.",
                             "",
                             G_PARAM_READABLE);
+
+    ctl_card_props[CTL_CARD_PROP_SUBSCRIBED] =
+        g_param_spec_boolean("subscribed", "subscribed",
+                             "Whether to be subscribed for event.",
+                             FALSE,
+                             G_PARAM_READABLE);
 
     g_object_class_install_properties(gobject_class, CTL_CARD_PROP_COUNT,
                                       ctl_card_props);
@@ -703,6 +717,13 @@ static gboolean ctl_card_dispatch_src(GSource *gsrc, GSourceFunc cb,
 static void ctl_card_finalize_src(GSource *gsrc)
 {
     CtlCardSource *src = (CtlCardSource *)gsrc;
+    ALSACtlCardPrivate *priv = alsactl_card_get_instance_private(src->self);
+
+    // Unsubscribe events.
+    if (g_atomic_int_dec_and_test(&priv->subscribers)) {
+        int subscribe = 0;
+        ioctl(priv->fd, SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS, &subscribe);
+    }
 
     g_free(src->buf);
     g_object_unref(src->self);
@@ -756,4 +777,16 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
+
+    // Subscribe any event.
+    {
+        int subscribe = 1;
+
+        g_atomic_int_inc(&priv->subscribers);
+
+        if (ioctl(priv->fd, SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS, &subscribe)) {
+            generate_error(error, errno);
+            g_source_unref(*gsrc);
+        }
+    }
 }

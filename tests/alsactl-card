@@ -12,6 +12,7 @@ from gi.repository import ALSACtl
 target = ALSACtl.Card()
 props = (
     'devnode',
+    'subscribed',
 )
 methods = (
     'new',
