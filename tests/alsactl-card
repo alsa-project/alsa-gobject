@@ -18,6 +18,7 @@ methods = (
     'open',
     'get_info',
     'get_elem_id_list',
+    'lock_elem',
 )
 signals = ()
 

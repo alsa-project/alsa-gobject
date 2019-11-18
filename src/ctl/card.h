@@ -58,6 +58,9 @@ void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
 void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
                                    GError **error);
 
+void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            gboolean lock, GError **error);
+
 G_END_DECLS
 
 #endif

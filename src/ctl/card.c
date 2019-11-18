@@ -225,3 +225,29 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
 
     deallocate_elem_ids(&list);
 }
+
+/**
+ * alsactl_card_lock_elem:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @lock: whether to lock or unlock the element.
+ * @error: A #GError.
+ *
+ * Lock/Unlock indicated element not to be written by the other processes.
+ */
+void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            gboolean lock, GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    int ret;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    priv = alsactl_card_get_instance_private(self);
+
+    if (lock)
+        ret = ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_LOCK, elem_id);
+    else
+        ret = ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_UNLOCK, elem_id);
+    if (ret < 0)
+        generate_error(error, errno);
+}
