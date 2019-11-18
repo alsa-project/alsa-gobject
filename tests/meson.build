@@ -9,6 +9,7 @@ tests = {
     'alsactl-elem-info',
     'alsactl-elem-info-bool',
     'alsactl-elem-info-int',
+    'alsactl-elem-info-enum',
   ],
 }
 

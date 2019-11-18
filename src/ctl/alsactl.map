@@ -37,6 +37,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsactl_elem_info_int_get_type";
     "alsactl_elem_info_int_new";
+
+    "alsactl_elem_info_enum_get_type";
   local:
     *;
 };
