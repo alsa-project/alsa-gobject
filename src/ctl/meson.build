@@ -17,6 +17,7 @@ sources = files(
   'elem-info-bool.c',
   'elem-info-int.c',
   'elem-info-enum.c',
+  'elem-info-bytes.c',
 )
 
 headers = files(
@@ -28,6 +29,7 @@ headers = files(
   'elem-info-bool.h',
   'elem-info-int.h',
   'elem-info-enum.h',
+  'elem-info-bytes.h',
 )
 
 privates = files(
