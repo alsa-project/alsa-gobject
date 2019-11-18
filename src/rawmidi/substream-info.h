@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <rawmidi/alsarawmidi-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSARAWMIDI_TYPE_SUBSTREAM_INFO (alsarawmidi_substream_info_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSARawmidiSubstreamInfo        ALSARawmidiSubstreamInfo;
 typedef struct _ALSARawmidiSubstreamInfoClass   ALSARawmidiSubstreamInfoClass;
+typedef struct _ALSARawmidiSubstreamInfoPrivate ALSARawmidiSubstreamInfoPrivate;
 
 struct _ALSARawmidiSubstreamInfo {
     GObject parent_instance;
+
+    ALSARawmidiSubstreamInfoPrivate *priv;
 };
 
 struct _ALSARawmidiSubstreamInfoClass {
