@@ -15,12 +15,21 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 struct _ALSACtlCardPrivate {
     int fd;
     char *devnode;
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
+
+typedef struct {
+    GSource src;
+    ALSACtlCard *self;
+    gpointer tag;
+    void *buf;
+    unsigned int buf_len;
+} CtlCardSource;
 
 enum ctl_card_prop_type {
     CTL_CARD_PROP_DEVNODE = 1,
@@ -632,4 +641,119 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0)
         generate_error(error, errno);
+}
+
+static gboolean ctl_card_prepare_src(GSource *src, gint *timeout)
+{
+    *timeout = 500;
+
+    // This source is not ready, let's poll(2).
+    return FALSE;
+}
+
+static gboolean ctl_card_check_src(GSource *gsrc)
+{
+    CtlCardSource *src = (CtlCardSource *)gsrc;
+    GIOCondition condition;
+
+    // Don't go to dispatch if nothing available. As an exception, return TRUE
+    // for POLLERR to call .dispatch for internal destruction.
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    return !!(condition & (G_IO_IN | G_IO_ERR));
+}
+
+static gboolean ctl_card_dispatch_src(GSource *gsrc, GSourceFunc cb,
+                                      gpointer user_data)
+{
+    CtlCardSource *src = (CtlCardSource *)gsrc;
+    ALSACtlCard *self = src->self;
+    ALSACtlCardPrivate *priv;
+    GIOCondition condition;
+    int len;
+    struct snd_ctl_event *ev;
+
+    priv = alsactl_card_get_instance_private(self);
+    if (priv->fd < 0)
+        return G_SOURCE_REMOVE;
+
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    if (condition & G_IO_ERR)
+        return G_SOURCE_REMOVE;
+
+    len = read(priv->fd, src->buf, src->buf_len);
+    if (len < 0) {
+        if (errno == EAGAIN)
+            return G_SOURCE_CONTINUE;
+
+        return G_SOURCE_REMOVE;
+    }
+
+    ev = src->buf;
+    while (len >= sizeof(*ev)) {
+        // TODO: handle the event.
+
+        len -= sizeof(*ev);
+	++ev;
+    }
+
+    // Just be sure to continue to process this source.
+    return G_SOURCE_CONTINUE;
+}
+
+static void ctl_card_finalize_src(GSource *gsrc)
+{
+    CtlCardSource *src = (CtlCardSource *)gsrc;
+
+    g_free(src->buf);
+    g_object_unref(src->self);
+}
+
+/**
+ * alsactl_card_create_source:
+ * @self: A #ALSACtlCard.
+ * @gsrc: (out): A #GSource to handle events from ALSA control character device.
+ * @error: A #GError.
+ *
+ * Allocate GSource structure to handle events from ALSA control character
+ * device.
+ */
+void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
+                                GError **error)
+{
+    static GSourceFuncs funcs = {
+            .prepare        = ctl_card_prepare_src,
+            .check          = ctl_card_check_src,
+            .dispatch       = ctl_card_dispatch_src,
+            .finalize       = ctl_card_finalize_src,
+    };
+    ALSACtlCardPrivate *priv;
+    CtlCardSource *src;
+    long page_size = sysconf(_SC_PAGESIZE);
+    void *buf;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    priv = alsactl_card_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    buf = g_try_malloc0(page_size);
+    if (buf == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    *gsrc = g_source_new(&funcs, sizeof(CtlCardSource));
+    src = (CtlCardSource *)(*gsrc);
+
+    g_source_set_name(*gsrc, "ALSACtlCard");
+    g_source_set_priority(*gsrc, G_PRIORITY_HIGH_IDLE);
+    g_source_set_can_recurse(*gsrc, TRUE);
+
+    src->self = g_object_ref(self);
+    src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
+    src->buf = buf;
+    src->buf_len = page_size;
 }

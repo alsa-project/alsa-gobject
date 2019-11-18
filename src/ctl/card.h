@@ -86,6 +86,9 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                GError **error);
 
+void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
+                                GError **error);
+
 G_END_DECLS
 
 #endif

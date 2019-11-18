@@ -26,6 +26,7 @@ methods = (
     'add_elems',
     'replace_elems',
     'remove_elems',
+    'create_source',
 )
 signals = ()
 
