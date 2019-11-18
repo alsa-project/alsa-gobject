@@ -13,6 +13,7 @@ target = ALSARawmidi.StreamPair()
 props = ()
 methods = (
     'new',
+    'open',
 )
 signals = ()
 

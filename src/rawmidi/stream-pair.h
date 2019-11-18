@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <rawmidi/alsarawmidi-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSARAWMIDI_TYPE_STREAM_PAIR    (alsarawmidi_stream_pair_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSARawmidiStreamPair           ALSARawmidiStreamPair;
 typedef struct _ALSARawmidiStreamPairClass      ALSARawmidiStreamPairClass;
+typedef struct _ALSARawmidiStreamPairPrivate    ALSARawmidiStreamPairPrivate;
 
 struct _ALSARawmidiStreamPair {
     GObject parent_instance;
+
+    ALSARawmidiStreamPairPrivate *priv;
 };
 
 struct _ALSARawmidiStreamPairClass {
@@ -43,6 +48,11 @@ struct _ALSARawmidiStreamPairClass {
 GType alsarawmidi_stream_pair_get_type(void) G_GNUC_CONST;
 
 ALSARawmidiStreamPair *alsarawmidi_stream_pair_new();
+
+void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
+                                  guint device_id, guint subdevice_id,
+                                  ALSARawmidiStreamPairInfoFlag access_modes,
+				  gint open_flag, GError **error);
 
 G_END_DECLS
 
