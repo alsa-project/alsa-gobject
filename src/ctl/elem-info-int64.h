@@ -44,6 +44,8 @@ struct _ALSACtlElemInfoInt64Class {
 
 GType alsactl_elem_info_int64_get_type(void) G_GNUC_CONST;
 
+ALSACtlElemInfoInt64 *alsactl_elem_info_int64_new();
+
 G_END_DECLS
 
 #endif
