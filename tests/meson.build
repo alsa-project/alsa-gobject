@@ -4,6 +4,7 @@
 tests = {
   'ctl': [
     'alsactl-enums',
+    'alsactl-card',
   ],
 }
 

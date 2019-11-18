@@ -10,6 +10,9 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_get_card_sysname";
     "alsactl_get_control_sysname";
     "alsactl_get_control_devnode";
+
+    "alsactl_card_get_type";
+    "alsactl_card_new";
   local:
     *;
 };
