@@ -5,6 +5,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <ctl/elem-id.h>
+
+#include <ctl/alsactl-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSACTL_TYPE_ELEM_INFO      (alsactl_elem_info_get_type())
@@ -31,9 +35,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSACtlElemInfo         ALSACtlElemInfo;
 typedef struct _ALSACtlElemInfoClass    ALSACtlElemInfoClass;
+typedef struct _ALSACtlElemInfoPrivate  ALSACtlElemInfoPrivate;
 
 struct _ALSACtlElemInfo {
     GObject parent_instance;
+
+    ALSACtlElemInfoPrivate *priv;
 };
 
 struct _ALSACtlElemInfoClass {
