@@ -33,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSACtlElemInfoEnum         ALSACtlElemInfoEnum;
 typedef struct _ALSACtlElemInfoEnumClass    ALSACtlElemInfoEnumClass;
+typedef struct _ALSACtlElemInfoEnumPrivate  ALSACtlElemInfoEnumPrivate;
 
 struct _ALSACtlElemInfoEnum {
     ALSACtlElemInfo parent_instance;
+
+    ALSACtlElemInfoEnumPrivate *priv;
 };
 
 struct _ALSACtlElemInfoEnumClass {
@@ -43,6 +46,9 @@ struct _ALSACtlElemInfoEnumClass {
 };
 
 GType alsactl_elem_info_enum_get_type(void) G_GNUC_CONST;
+
+ALSACtlElemInfoEnum *alsactl_elem_info_enum_new();
+
 G_END_DECLS
 
 #endif

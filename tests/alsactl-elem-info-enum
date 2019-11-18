@@ -10,8 +10,13 @@ gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
 target = ALSACtl.ElemInfoEnum()
-props = ()
-methods = ()
+props = (
+    'value-count',
+    'labels',
+)
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
