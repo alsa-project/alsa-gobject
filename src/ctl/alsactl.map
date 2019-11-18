@@ -19,6 +19,14 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_info_get_type";
 
     "alsactl_elem_id_get_type";
+    "alsactl_elem_id_new_by_numid";
+    "alsactl_elem_id_new_by_name";
+    "alsactl_elem_id_get_numid";
+    "alsactl_elem_id_get_iface";
+    "alsactl_elem_id_get_device_id";
+    "alsactl_elem_id_get_subdevice_id";
+    "alsactl_elem_id_get_name";
+    "alsactl_elem_id_get_index";
   local:
     *;
 };
