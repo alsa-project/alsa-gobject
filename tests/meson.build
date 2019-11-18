@@ -53,6 +53,7 @@ tests = {
     'alsarawmidi-enums',
     'alsarawmidi-substream-info',
     'alsarawmidi-stream-pair',
+    'alsarawmidi-substream-params',
   ],
 }
 

@@ -12,12 +12,14 @@ sources = files(
   'query.c',
   'substream-info.c',
   'stream-pair.c',
+  'substream-params.c',
 )
 
 headers = files(
   'query.h',
   'substream-info.h',
   'stream-pair.h',
+  'substream-params.h',
 )
 
 privates = files(
