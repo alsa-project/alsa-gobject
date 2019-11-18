@@ -24,6 +24,7 @@ methods = (
     'drain_substream',
     'drop_substream',
     'create_source',
+    'do_handle_messages',
 )
 signals = (
     'handle-messages',
