@@ -83,6 +83,10 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error);
 
+void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
+                                        ALSARawmidiStreamDirection direction,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif

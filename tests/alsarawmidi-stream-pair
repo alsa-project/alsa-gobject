@@ -22,6 +22,7 @@ methods = (
     'read_from_substream',
     'write_to_substream',
     'drain_substream',
+    'drop_substream',
 )
 signals = ()
 
