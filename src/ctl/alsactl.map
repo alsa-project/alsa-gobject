@@ -46,6 +46,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsactl_elem_info_iec60958_get_type";
     "alsactl_elem_info_iec60958_new";
+
+    "alsactl_elem_info_int64_get_type";
   local:
     *;
 };
