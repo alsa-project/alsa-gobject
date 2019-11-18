@@ -9,6 +9,7 @@
 
 #include "substream-info.h"
 #include "substream-params.h"
+#include "substream-status.h"
 
 #include <sound/asound.h>
 

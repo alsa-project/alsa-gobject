@@ -13,6 +13,7 @@ sources = files(
   'substream-info.c',
   'stream-pair.c',
   'substream-params.c',
+  'substream-status.c',
 )
 
 headers = files(
@@ -20,6 +21,7 @@ headers = files(
   'substream-info.h',
   'stream-pair.h',
   'substream-params.h',
+  'substream-status.h',
 )
 
 privates = files(
