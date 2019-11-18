@@ -16,6 +16,7 @@ props = (
 methods = (
     'new',
     'open',
+    'get_substream_info',
 )
 signals = ()
 
