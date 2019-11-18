@@ -5,7 +5,7 @@
 path = 'rawmidi'
 name = 'alsarawmidi'
 namespace = 'ALSARawmidi'
-has_enumerations = false
+has_enumerations = true
 has_marshaller = false
 
 sources = files()
