@@ -77,6 +77,13 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
                             gint32 *const *container, gsize *container_count,
                             GError **error);
 
+void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            guint elem_count, ALSACtlElemInfo *elem_info,
+                            GList **entries, GError **error);
+void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            guint elem_count, ALSACtlElemInfo *elem_info,
+                            GList **entries, GError **error);
+
 G_END_DECLS
 
 #endif

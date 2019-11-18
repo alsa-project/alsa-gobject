@@ -478,3 +478,137 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
 
     g_free(packet);
 }
+
+static int prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labels)
+{
+    unsigned int count;
+    unsigned int length;
+    char *pos;
+
+    for (count = 0; labels[count] != NULL; ++count) {
+        const gchar *label = labels[count];
+
+        if (strlen(label) >= 64)
+            return -EINVAL;
+
+        length += strlen(label) + 1;
+    }
+
+    if (length > 64 * 1024)
+        return -EINVAL;
+
+    pos = g_malloc0(length);
+    if (pos == NULL)
+        return -ENOMEM;
+    info->value.enumerated.names_ptr = (__u64)pos;
+    info->value.enumerated.names_length = length;
+
+    for (count = 0; labels[count] != NULL; ++count) {
+        const gchar *label = labels[count];
+        strcpy(pos, label);
+        pos[strlen(label)] = '\0';
+        pos += strlen(label) + 1;
+    }
+    info->value.enumerated.items = count;
+
+    return 0;
+}
+
+static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
+                                 guint elem_count, ALSACtlElemInfo *elem_info,
+                                 gboolean replace, GList **entries,
+                                 GError **error)
+{
+    struct snd_ctl_elem_info *info;
+    long request;
+    int i;
+
+    ctl_elem_info_refer_private(elem_info, &info);
+
+    info->id = *elem_id;
+
+    if (info->type == SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        const gchar **labels;
+        int err;
+
+        g_object_get(elem_info, "labels", &labels, NULL);
+        err = prepare_enum_names(info, labels);
+        g_strfreev((gchar **)labels);
+        if (err < 0) {
+            generate_error(error, -err);
+            return;
+        }
+    }
+
+    if (!replace)
+        request = SNDRV_CTL_IOCTL_ELEM_ADD;
+    else
+        request = SNDRV_CTL_IOCTL_ELEM_REPLACE;
+
+    info->owner = (__kernel_pid_t)elem_count;
+    if (ioctl(fd, request, info) < 0)
+        generate_error(error, errno);
+    g_free((void *)info->value.enumerated.names_ptr);
+    if (*error != NULL)
+        return;
+
+    for (i = 0; i < elem_count; ++i) {
+        ALSACtlElemId *entry = g_boxed_copy(ALSACTL_TYPE_ELEM_ID, &info->id);
+        *entries = g_list_append(*entries, (gpointer)entry);
+
+        ++info->id.numid;
+        ++info->id.index;
+    }
+}
+
+/**
+ * alsactl_card_add_elems:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @elem_count: The number of elements going to be added.
+ * @elem_info: A %ALSACtlElemInfo.
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of added element IDs.
+ * @error: A #GError.
+ *
+ * Add user-defined elements.
+ */
+void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            guint elem_count, ALSACtlElemInfo *elem_info,
+                            GList **entries, GError **error)
+{
+    ALSACtlCardPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
+    priv = alsactl_card_get_instance_private(self);
+
+    add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, FALSE,
+                         entries, error);
+}
+
+/**
+ * alsactl_card_replace_elems:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @elem_count: The number of elements going to be added.
+ * @elem_info: A %ALSACtlElemInfo.
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element IDs.
+ * @error: A #GError.
+ *
+ * Add user-defined elements instead of given elements.
+ */
+void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            guint elem_count, ALSACtlElemInfo *elem_info,
+                            GList **entries, GError **error)
+{
+    ALSACtlCardPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
+    priv = alsactl_card_get_instance_private(self);
+
+    add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE,
+                         entries, error);
+}

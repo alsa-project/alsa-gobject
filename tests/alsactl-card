@@ -23,6 +23,8 @@ methods = (
     'write_elem_tlv',
     'read_elem_tlv',
     'command_elem_tlv',
+    'add_elems',
+    'replace_elems',
 )
 signals = ()
 
