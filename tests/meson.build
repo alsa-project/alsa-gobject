@@ -8,6 +8,7 @@ tests = {
     'alsactl-card-info',
     'alsactl-elem-info',
     'alsactl-elem-info-bool',
+    'alsactl-elem-info-int',
   ],
 }
 
