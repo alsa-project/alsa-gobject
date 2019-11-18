@@ -49,6 +49,9 @@ tests = {
     'alsahwdep-enums',
     'alsahwdep-device-info',
   ],
+  'rawmidi': [
+    'alsarawmidi-enums',
+  ],
 }
 
 foreach path, scripts: tests
