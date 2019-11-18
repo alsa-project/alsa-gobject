@@ -5,7 +5,7 @@
 path = 'ctl'
 name = 'alsactl'
 namespace = 'ALSACtl'
-has_enumerations = false
+has_enumerations = true
 has_marshaller = false
 
 sources = files()

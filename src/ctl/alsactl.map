@@ -1,4 +1,10 @@
 ALSA_GOBJECT_0_0_0 {
+  global:
+    "alsactl_elem_type_get_type";
+    "alsactl_elem_iface_type_get_type";
+    "alsactl_elem_access_flag_get_type";
+    "alsactl_event_type_get_type";
+    "alsactl_event_mask_flag_get_type";
   local:
     *;
 };
