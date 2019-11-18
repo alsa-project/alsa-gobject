@@ -25,7 +25,9 @@ methods = (
     'drop_substream',
     'create_source',
 )
-signals = ()
+signals = (
+    'handle-messages',
+)
 
 if not test(target, props, methods, signals):
     exit(ENXIO)

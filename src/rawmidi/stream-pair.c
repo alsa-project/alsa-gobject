@@ -29,6 +29,12 @@ enum rawmidi_stream_pair_prop_type {
 };
 static GParamSpec *rawmidi_stream_pair_props[RAWMIDI_STREAM_PAIR_PROP_COUNT] = { NULL, };
 
+enum rawmidi_stream_pair_sig_type {
+    RAWMIDI_STREAM_PAIR_SIG_HANDLE_MESSAGES = 0,
+    RAWMIDI_STREAM_PAIR_SIG_COUNT,
+};
+static guint rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_COUNT] = { 0 };
+
 static void rawmidi_stream_pair_get_property(GObject *obj, guint id,
                                              GValue *val, GParamSpec *spec)
 {
@@ -75,6 +81,21 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
     g_object_class_install_properties(gobject_class,
                                       RAWMIDI_STREAM_PAIR_PROP_COUNT,
                                       rawmidi_stream_pair_props);
+
+    /**
+     * ALSARawmidiStreamPair::handle-messages:
+     * @self: A #ALSARawmidiStreamPair.
+     *
+     * When any input message is available, this event is emit.
+     */
+    rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_HANDLE_MESSAGES] =
+        g_signal_new("handle_messages",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0, NULL);
 }
 
 static void alsarawmidi_stream_pair_init(ALSARawmidiStreamPair *self)
