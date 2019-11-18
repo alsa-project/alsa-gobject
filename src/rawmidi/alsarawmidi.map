@@ -2,6 +2,8 @@ ALSA_GOBJECT_0_0_0 {
   global:
     "alsarawmidi_stream_direction_get_type";
     "alsarawmidi_stream_pair_info_flag_get_type";
+
+    "alsarawmidi_get_device_id_list";
   local:
     *;
 };
