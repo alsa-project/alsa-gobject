@@ -7,6 +7,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_event_mask_flag_get_type";
 
     "alsactl_get_card_id_list";
+    "alsactl_get_card_sysname";
   local:
     *;
 };
