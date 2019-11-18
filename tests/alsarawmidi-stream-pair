@@ -17,6 +17,7 @@ methods = (
     'new',
     'open',
     'get_substream_info',
+    'set_substream_params',
 )
 signals = ()
 
