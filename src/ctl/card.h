@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSACtlCard         ALSACtlCard;
 typedef struct _ALSACtlCardClass    ALSACtlCardClass;
+typedef struct _ALSACtlCardPrivate  ALSACtlCardPrivate;
 
 struct _ALSACtlCard {
     GObject parent_instance;
+
+    ALSACtlCardPrivate *priv;
 };
 
 struct _ALSACtlCardClass {
@@ -43,6 +46,8 @@ struct _ALSACtlCardClass {
 GType alsactl_card_get_type() G_GNUC_CONST;
 
 ALSACtlCard *alsactl_card_new();
+
+void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error);
 
 G_END_DECLS
 

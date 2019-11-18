@@ -13,6 +13,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsactl_card_get_type";
     "alsactl_card_new";
+    "alsactl_card_open";
   local:
     *;
 };
