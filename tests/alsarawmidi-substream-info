@@ -10,7 +10,18 @@ gi.require_version('ALSARawmidi', '0.0')
 from gi.repository import ALSARawmidi
 
 target = ALSARawmidi.SubstreamInfo()
-props = ()
+props = (
+    'device-id',
+    'subdevice-id',
+    'direction',
+    'card-id',
+    'flags',
+    'id',
+    'name',
+    'subdevice-name',
+    'subdevices-count',
+    'subdevices-avail',
+)
 methods = ()
 signals = ()
 
