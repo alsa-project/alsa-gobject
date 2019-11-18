@@ -19,6 +19,8 @@ methods = (
     'get_substream_info',
     'set_substream_params',
     'get_substream_status',
+    'read_from_substream',
+    'write_to_substream',
 )
 signals = ()
 

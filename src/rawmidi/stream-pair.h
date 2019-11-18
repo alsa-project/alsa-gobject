@@ -72,6 +72,13 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
                             ALSARawmidiSubstreamStatus *const *substream_status,
                             GError **error);
 
+void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
+                                        guint8 *const *buf, gsize *buf_size,
+                                        GError **error);
+void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
+                                        const guint8 *buf, gsize buf_size,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif
