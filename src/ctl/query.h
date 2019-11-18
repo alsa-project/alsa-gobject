@@ -7,6 +7,9 @@
 
 G_BEGIN_DECLS
 
+void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
+                              GError **error);
+
 G_END_DECLS
 
 #endif
