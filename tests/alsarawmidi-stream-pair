@@ -10,7 +10,9 @@ gi.require_version('ALSARawmidi', '0.0')
 from gi.repository import ALSARawmidi
 
 target = ALSARawmidi.StreamPair()
-props = ()
+props = (
+    'devnode',
+)
 methods = (
     'new',
     'open',
