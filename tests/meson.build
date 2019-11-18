@@ -54,6 +54,7 @@ tests = {
     'alsarawmidi-substream-info',
     'alsarawmidi-stream-pair',
     'alsarawmidi-substream-params',
+    'alsarawmidi-substream-status',
   ],
 }
 
