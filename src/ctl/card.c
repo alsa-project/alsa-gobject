@@ -612,3 +612,24 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE,
                          entries, error);
 }
+
+/**
+ * alsactl_card_remove_elems:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @error: A #GError.
+ *
+ * Remove user-defined elements.
+ */
+void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                               GError **error)
+{
+    ALSACtlCardPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    priv = alsactl_card_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0)
+        generate_error(error, errno);
+}

@@ -23,6 +23,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_command_elem_tlv";
     "alsactl_card_add_elems";
     "alsactl_card_replace_elems";
+    "alsactl_card_remove_elems";
 
     "alsactl_card_info_get_type";
 
