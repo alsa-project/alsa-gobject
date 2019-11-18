@@ -39,6 +39,12 @@ enum ctl_card_prop_type {
 };
 static GParamSpec *ctl_card_props[CTL_CARD_PROP_COUNT] = { NULL, };
 
+enum ctl_card_sig_type {
+    CTL_CARD_SIG_HANDLE_ELEM_EVENT = 0,
+    CTL_CARD_SIG_COUNT,
+};
+static guint ctl_card_sigs[CTL_CARD_SIG_COUNT] = { 0 };
+
 static void ctl_card_get_property(GObject *obj, guint id, GValue *val,
                                   GParamSpec *spec)
 {
@@ -95,6 +101,24 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
 
     g_object_class_install_properties(gobject_class, CTL_CARD_PROP_COUNT,
                                       ctl_card_props);
+
+    /**
+     * ALSACtlCard::handle-elem-event:
+     * @self: A #ALSACtlCard.
+     * @elem_id: (transfer none): A #ALSACtlElemId.
+     * @events: A set of #ALSACtlEventMaskFlag.
+     *
+     * When event occurs for any element, this signal is emit.
+     */
+    ctl_card_sigs[CTL_CARD_SIG_HANDLE_ELEM_EVENT] =
+        g_signal_new("handle-elem-event",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     alsactl_sigs_marshal_VOID__BOXED_FLAGS,
+                     G_TYPE_NONE, 2, ALSACTL_TYPE_ELEM_ID,
+                     ALSACTL_TYPE_EVENT_MASK_FLAG);
 }
 
 static void alsactl_card_init(ALSACtlCard *self)
@@ -707,7 +731,7 @@ static gboolean ctl_card_dispatch_src(GSource *gsrc, GSourceFunc cb,
         // TODO: handle the event.
 
         len -= sizeof(*ev);
-	++ev;
+        ++ev;
     }
 
     // Just be sure to continue to process this source.

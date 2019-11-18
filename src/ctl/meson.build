@@ -6,7 +6,7 @@ path = 'ctl'
 name = 'alsactl'
 namespace = 'ALSACtl'
 has_enumerations = true
-has_marshaller = false
+has_marshaller = true
 
 sources = files(
   'query.c',
@@ -78,6 +78,7 @@ if has_marshaller
     sources: '@0@-sigs-marshal.list'.format(name),
     stdinc: true,
     install_header: true,
+    install_dir: join_paths(get_option('includedir'), meson.project_name(), path),
   )
   sources += signal_marshallers
 endif

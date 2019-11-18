@@ -9,6 +9,8 @@
 #include <ctl/elem-id.h>
 #include <ctl/elem-info.h>
 
+#include <ctl/alsactl-sigs-marshal.h>
+
 G_BEGIN_DECLS
 
 #define ALSACTL_TYPE_CARD   (alsactl_card_get_type())

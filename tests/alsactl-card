@@ -29,7 +29,9 @@ methods = (
     'remove_elems',
     'create_source',
 )
-signals = ()
+signals = (
+    'handle-elem-event',
+)
 
 if not test(target, props, methods, signals):
     exit(ENXIO)
