@@ -10,7 +10,11 @@ gi.require_version('ALSARawmidi', '0.0')
 from gi.repository import ALSARawmidi
 
 target = ALSARawmidi.SubstreamParams()
-props = ()
+props = (
+    'buffer-size',
+    'avail-min',
+    'active-sensing',
+)
 methods = (
     'new',
 )
