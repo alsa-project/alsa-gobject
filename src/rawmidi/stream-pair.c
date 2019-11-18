@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 struct _ALSARawmidiStreamPairPrivate {
     int fd;
@@ -150,4 +151,35 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     }
 
     priv->devnode = devnode;
+}
+
+/**
+ * alsarawmidi_stream_pair_get_substream_info:
+ * @self: A #ALSARawmidiStreamPair.
+ * @direction: The direction of substream attached to the stream pair.
+ * @substream_info: (out): The information for requested substream.
+ * @error: A #GError.
+ *
+ * Get information of substream attached to the stream pair.
+ */
+void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
+                                ALSARawmidiStreamDirection direction,
+                                ALSARawmidiSubstreamInfo **substream_info,
+                                GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+    struct snd_rawmidi_info *info;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
+
+    rawmidi_substream_info_refer_private(*substream_info, &info);
+    info->stream = direction;
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_INFO, info) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*substream_info);
+        return;
+    }
 }
