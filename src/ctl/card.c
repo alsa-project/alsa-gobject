@@ -30,6 +30,7 @@ typedef struct {
     gpointer tag;
     void *buf;
     unsigned int buf_len;
+    GList *entries;
 } CtlCardSource;
 
 enum ctl_card_prop_type {
@@ -681,6 +682,44 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
         generate_error(error, errno);
 }
 
+static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
+{
+    ALSACtlCard *self = src->self;
+    GList *entry;
+
+    // Maintain local cache for addition of element.
+    if (ev->data.elem.mask & SNDRV_CTL_EVENT_MASK_ADD) {
+        ALSACtlElemId *elem_id =
+                        g_boxed_copy(ALSACTL_TYPE_ELEM_ID, &ev->data.elem.id);
+        src->entries = g_list_append(src->entries, (gpointer)elem_id);
+    }
+
+    for (entry = src->entries; entry != NULL; entry = entry->next) {
+        ALSACtlElemId *elem_id = (ALSACtlElemId *)entry->data;
+
+        if (ev->data.elem.id.numid == elem_id->numid) {
+            ALSACtlEventMaskFlag mask;
+
+            if (ev->data.elem.mask != SNDRV_CTL_EVENT_MASK_REMOVE)
+                mask = ev->data.elem.mask;
+            else
+                mask = ALSACTL_EVENT_MASK_FLAG_REMOVE;
+
+            g_signal_emit(self,
+                          ctl_card_sigs[CTL_CARD_SIG_HANDLE_ELEM_EVENT], 0,
+                          elem_id, mask);
+
+            // Maintain local cache for removal of element.
+            if (ev->data.elem.mask == SNDRV_CTL_EVENT_MASK_REMOVE) {
+                src->entries = g_list_delete_link(src->entries, entry);
+                g_boxed_free(ALSACTL_TYPE_ELEM_ID, elem_id);
+            }
+
+            break;
+        }
+    }
+}
+
 static gboolean ctl_card_prepare_src(GSource *src, gint *timeout)
 {
     *timeout = 500;
@@ -728,7 +767,8 @@ static gboolean ctl_card_dispatch_src(GSource *gsrc, GSourceFunc cb,
 
     ev = src->buf;
     while (len >= sizeof(*ev)) {
-        // TODO: handle the event.
+        if (ev->type == SNDRV_CTL_EVENT_ELEM)
+            handle_elem_event(src, ev);
 
         len -= sizeof(*ev);
         ++ev;
@@ -742,12 +782,19 @@ static void ctl_card_finalize_src(GSource *gsrc)
 {
     CtlCardSource *src = (CtlCardSource *)gsrc;
     ALSACtlCardPrivate *priv = alsactl_card_get_instance_private(src->self);
+    GList *entry;
 
     // Unsubscribe events.
     if (g_atomic_int_dec_and_test(&priv->subscribers)) {
         int subscribe = 0;
         ioctl(priv->fd, SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS, &subscribe);
     }
+
+    for (entry = src->entries; entry != NULL; entry = entry->next) {
+        ALSACtlElemId *elem_id = (ALSACtlElemId *)entry->data;
+        g_boxed_free(ALSACTL_TYPE_ELEM_ID, elem_id);
+    }
+    g_list_free(src->entries);
 
     g_free(src->buf);
     g_object_unref(src->self);
@@ -801,6 +848,12 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
+
+    alsactl_card_get_elem_id_list(self, &src->entries, error);
+    if (*error != NULL) {
+            g_source_unref(*gsrc);
+            return;
+    }
 
     // Subscribe any event.
     {
