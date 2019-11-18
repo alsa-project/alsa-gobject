@@ -28,6 +28,7 @@ methods = (
     'replace_elems',
     'remove_elems',
     'create_source',
+    'do_handle_elem_event',
 )
 signals = (
     'handle-elem-event',

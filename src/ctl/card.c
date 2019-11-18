@@ -114,7 +114,7 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
         g_signal_new("handle-elem-event",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     0,
+                     G_STRUCT_OFFSET(ALSACtlCardClass, handle_elem_event),
                      NULL, NULL,
                      alsactl_sigs_marshal_VOID__BOXED_FLAGS,
                      G_TYPE_NONE, 2, ALSACTL_TYPE_ELEM_ID,

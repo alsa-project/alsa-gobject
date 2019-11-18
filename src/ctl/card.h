@@ -47,6 +47,17 @@ struct _ALSACtlCard {
 
 struct _ALSACtlCardClass {
     GObjectClass parent_class;
+
+    /**
+     * ALSACtlCardClass::handle_elem_event:
+     * @self: A #ALSACtlCard.
+     * @elem_id: (transfer none): A #ALSACtlElemId.
+     * @events: A set of #ALSACtlEventMaskFlag.
+     *
+     * When event occurs for any element, this signal is emit.
+     */
+    void (*handle_elem_event)(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                              ALSACtlEventMaskFlag events);
 };
 
 GType alsactl_card_get_type() G_GNUC_CONST;
