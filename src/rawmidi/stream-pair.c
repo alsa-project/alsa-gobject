@@ -211,3 +211,32 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PARAMS, params) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsarawmidi_stream_pair_get_substream_status:
+ * @self: A #ALSARawmidiStreamPair.
+ * @direction: The direction of substream attached to the stream pair.
+ * @substream_status: (inout): The status of substream.
+ * @error: A #GError.
+ *
+ * Retrieve status of substream for given direction, which is attached to the
+ * pair of streams.
+ */
+void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
+                            ALSARawmidiStreamDirection direction,
+                            ALSARawmidiSubstreamStatus *const *substream_status,
+                            GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+    struct snd_rawmidi_status *status;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_if_fail(substream_status != NULL);
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    rawmidi_substream_status_refer_private(*substream_status, &status);
+
+    status->stream = direction;
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_STATUS, status) < 0)
+        generate_error(error, errno);
+}

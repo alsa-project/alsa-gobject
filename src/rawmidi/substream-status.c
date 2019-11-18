@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "substream-status.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSARawmidiSubstreamStatusPrivate {
     struct snd_rawmidi_status status;
@@ -73,4 +71,13 @@ static void alsarawmidi_substream_status_init(ALSARawmidiSubstreamStatus *self)
 ALSARawmidiSubstreamStatus *alsarawmidi_substream_status_new()
 {
     return g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_STATUS, NULL);
+}
+
+void rawmidi_substream_status_refer_private(ALSARawmidiSubstreamStatus *self,
+                                            struct snd_rawmidi_status **status)
+{
+    ALSARawmidiSubstreamStatusPrivate *priv =
+                        alsarawmidi_substream_status_get_instance_private(self);
+
+    *status = &priv->status;
 }

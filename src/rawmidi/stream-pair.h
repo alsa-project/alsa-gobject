@@ -8,6 +8,7 @@
 #include <rawmidi/alsarawmidi-enums.h>
 #include <rawmidi/substream-info.h>
 #include <rawmidi/substream-params.h>
+#include <rawmidi/substream-status.h>
 
 G_BEGIN_DECLS
 
@@ -65,6 +66,11 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamParams *substream_params,
                                 GError **error);
+
+void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
+                            ALSARawmidiStreamDirection direction,
+                            ALSARawmidiSubstreamStatus *const *substream_status,
+                            GError **error);
 
 G_END_DECLS
 
