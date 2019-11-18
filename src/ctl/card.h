@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <ctl/card-info.h>
+
 G_BEGIN_DECLS
 
 #define ALSACTL_TYPE_CARD   (alsactl_card_get_type())
@@ -48,6 +50,9 @@ GType alsactl_card_get_type() G_GNUC_CONST;
 ALSACtlCard *alsactl_card_new();
 
 void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error);
+
+void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
+                           GError **error);
 
 G_END_DECLS
 

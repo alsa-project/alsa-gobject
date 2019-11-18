@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "card-info.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSACtlCardInfoPrivate {
     struct snd_ctl_card_info info;
@@ -111,4 +109,12 @@ static void alsactl_card_info_class_init(ALSACtlCardInfoClass *klass)
 static void alsactl_card_info_init(ALSACtlCardInfo *self)
 {
     return;
+}
+
+void ctl_card_info_refer_private(ALSACtlCardInfo *self,
+                                 struct snd_ctl_card_info **info)
+{
+    ALSACtlCardInfoPrivate *priv = alsactl_card_info_get_instance_private(self);
+
+    *info = &priv->info;
 }

@@ -10,8 +10,6 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-#include <sound/asound.h>
-
 struct _ALSACtlCardPrivate {
     int fd;
     char *devnode;
@@ -115,4 +113,30 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error)
     }
 
     priv->devnode = devnode;
+}
+
+/**
+ * alsactl_card_get_info:
+ * @self: A #ALSACtlCard.
+ * @card_info: (out): A #ALSACtlCardInfo for the sound card.
+ * @error: A #GError.
+ *
+ * Get the information of sound card.
+ */
+void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
+                           GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_card_info *info;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    priv = alsactl_card_get_instance_private(self);
+
+    *card_info = g_object_new(ALSACTL_TYPE_CARD_INFO, NULL);
+
+    ctl_card_info_refer_private(*card_info, &info);
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_CARD_INFO, info) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*card_info);
+    }
 }
