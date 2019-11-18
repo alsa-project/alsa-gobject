@@ -5,8 +5,14 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 
 #include <libudev.h>
+
+#include <sound/asound.h>
 
 // For error reporting.
 G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
@@ -14,6 +20,7 @@ G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "midiC%u"
 #define RAWMIDI_SYSNAME_TEMPLATE    "midiC%uD%u"
+#define CTL_SYSNAME_TEMPLATE        "controlC%u"
 
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
@@ -295,4 +302,97 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
 
     udev_device_unref(dev);
     udev_unref(ctx);
+}
+
+static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
+                                      GError **error)
+{
+    unsigned int length;
+    char *sysname;
+    struct udev *ctx;
+    struct udev_device *dev;
+    const char *devnode;
+    int fd;
+
+    length = strlen(CTL_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
+    sysname = g_try_malloc0(length);
+    if (sysname == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    snprintf(sysname, length, CTL_SYSNAME_TEMPLATE, card_id);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        goto err_sysname;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
+    if (dev == NULL) {
+        generate_error(error, errno);
+        goto err_ctx;
+    }
+
+    devnode = udev_device_get_devnode(dev);
+    if (devnode == NULL) {
+        generate_error(error, ENODEV);
+        goto err_device;
+    }
+
+    fd = open(devnode, O_RDONLY);
+    if (fd < 0) {
+        generate_error(error, errno);
+        goto err_device;
+    }
+
+    if (ioctl(fd, request, data) < 0)
+        generate_error(error, errno);
+err_device:
+    udev_device_unref(dev);
+err_ctx:
+    udev_unref(ctx);
+err_sysname:
+    g_free(sysname);
+}
+
+/**
+ * alsarawmidi_get_subdevice_id_list:
+ * @card: The numberical value for sound card to query.
+ * @device: The numerical value of rawmidi device to query.
+ * @direction: The direction of stream to query, one of
+ *             ALSARawmidiStreamDirection.
+ * @entries: (array length=entry_count)(out): The list of card.
+ * @entry_count: The number of entries.
+ * @error: A #GError.
+ */
+void alsarawmidi_get_subdevice_id_list(guint card, guint device,
+                                       ALSARawmidiStreamDirection direction,
+                                       guint **entries, gsize *entry_count,
+                                       GError **error)
+{
+    struct snd_rawmidi_info info = {
+        .card = card,
+        .device = device,
+        .stream = direction,
+        .subdevice = 0,
+    };
+    int i;
+
+    g_return_if_fail(entries != NULL);
+    g_return_if_fail(entry_count != NULL);
+
+    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, error);
+    if (*error != NULL)
+        return;
+
+    *entries = g_try_malloc0_n(info.subdevices_count, sizeof(guint));
+    if (*entries == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    for (i = 0; i < info.subdevices_count; ++i)
+        (*entries)[i] = i;
+    *entry_count = info.subdevices_count;
 }
