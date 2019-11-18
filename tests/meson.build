@@ -11,6 +11,7 @@ tests = {
     'alsactl-elem-info-int',
     'alsactl-elem-info-enum',
     'alsactl-elem-info-bytes',
+    'alsactl-elem-info-iec60958',
   ],
 }
 
