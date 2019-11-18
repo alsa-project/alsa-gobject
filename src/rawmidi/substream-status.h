@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSARawmidiSubstreamStatus          ALSARawmidiSubstreamStatus;
 typedef struct _ALSARawmidiSubstreamStatusClass     ALSARawmidiSubstreamStatusClass;
+typedef struct _ALSARawmidiSubstreamStatusPrivate   ALSARawmidiSubstreamStatusPrivate;
 
 struct _ALSARawmidiSubstreamStatus {
     GObject parent_instance;
+
+    ALSARawmidiSubstreamStatusPrivate *priv;
 };
 
 struct _ALSARawmidiSubstreamStatusClass {
