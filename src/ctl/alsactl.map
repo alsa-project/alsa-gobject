@@ -18,6 +18,9 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_get_elem_id_list";
     "alsactl_card_lock_elem";
     "alsactl_card_get_elem_info";
+    "alsactl_card_write_elem_tlv";
+    "alsactl_card_read_elem_tlv";
+    "alsactl_card_command_elem_tlv";
 
     "alsactl_card_info_get_type";
 

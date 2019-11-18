@@ -339,3 +339,142 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     ctl_elem_info_refer_private(ALSACTL_ELEM_INFO(*elem_info), &info_ptr);
     *info_ptr = info;
 }
+
+/**
+ * alsactl_card_write_elem_tlv:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @container: (array length=container_count): The array with qudalets for
+ *             Type-Length-Value data.
+ * @container_count: The number of quadlets in the container.
+ * @error: A #GError.
+ */
+void alsactl_card_write_elem_tlv(ALSACtlCard *self,
+                            const ALSACtlElemId *elem_id,
+                            const gint32 *container, gsize container_count,
+                            GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_tlv *packet;
+    size_t container_size;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    priv = alsactl_card_get_instance_private(self);
+
+    // At least two quadlets should be included for type and length.
+    if (container == NULL || container_count < 2) {
+        generate_error(error, EINVAL);
+        return;
+    }
+    container_size = container_count * sizeof(*container);
+
+    packet = g_malloc0(sizeof(*packet) + container_size);
+    if (packet == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    packet->numid = elem_id->numid;
+    packet->length = container_size;
+    memcpy(packet->tlv, container, container_size);
+
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_WRITE, packet) < 0)
+        generate_error(error, errno);
+
+    g_free(packet);
+}
+
+/**
+ * alsactl_card_read_elem_tlv:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @container: (array length=container_count)(inout): The array with qudalets
+ *             for Type-Length-Value data.
+ * @container_count: The number of quadlets in the container.
+ * @error: A #GError.
+ */
+void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            gint32 *const *container, gsize *container_count,
+                            GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_tlv *packet;
+    size_t container_size;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    priv = alsactl_card_get_instance_private(self);
+
+    // At least two quadlets should be included for type and length.
+    if (*container == NULL || *container_count < 2) {
+        generate_error(error, EINVAL);
+        return;
+    }
+    container_size = *container_count * sizeof(**container);
+
+    packet = g_malloc0(sizeof(*packet) + container_size);
+    if (packet == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    packet->numid = elem_id->numid;
+    packet->length = container_size;
+
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_READ, packet) < 0)
+        generate_error(error, errno);
+
+    memcpy(*container, packet->tlv, packet->length);
+    *container_count = packet->length / sizeof(**container);
+
+    g_free(packet);
+}
+
+/**
+ * alsactl_card_command_elem_tlv:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @container: (array length=container_count)(inout): The array with qudalets
+ *             for Type-Length-Value data.
+ * @container_count: The number of quadlets in the container.
+ * @error: A #GError.
+ */
+void alsactl_card_command_elem_tlv(ALSACtlCard *self,
+                            const ALSACtlElemId *elem_id,
+                            gint32 *const *container, gsize *container_count,
+                            GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_tlv *packet;
+    size_t container_size;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    priv = alsactl_card_get_instance_private(self);
+
+    // At least two quadlets should be included for type and length.
+    if (*container == NULL || *container_count < 2) {
+        generate_error(error, EINVAL);
+        return;
+    }
+    container_size = *container_count * sizeof(**container);
+
+    packet = g_malloc0(sizeof(*packet) + container_size);
+    if (packet == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    packet->numid = elem_id->numid;
+    packet->length = container_size;
+    memcpy(packet->tlv, *container, container_size);
+
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_COMMAND, packet) < 0)
+        generate_error(error, errno);
+
+    memcpy(*container, packet->tlv, packet->length);
+    *container_count = packet->length / sizeof(**container);
+
+    g_free(packet);
+}

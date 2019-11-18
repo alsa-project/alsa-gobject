@@ -20,6 +20,9 @@ methods = (
     'get_elem_id_list',
     'lock_elem',
     'get_elem_info',
+    'write_elem_tlv',
+    'read_elem_tlv',
+    'command_elem_tlv',
 )
 signals = ()
 
