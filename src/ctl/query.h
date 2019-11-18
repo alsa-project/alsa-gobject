@@ -12,6 +12,8 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
 
 void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error);
 
+void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error);
+
 G_END_DECLS
 
 #endif

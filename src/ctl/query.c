@@ -10,6 +10,7 @@
 #include <libudev.h>
 
 #define CARD_SYSNAME_TEMPLATE       "card%u"
+#define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
 
 // For error handling.
 G_DEFINE_QUARK("alsactl-error", alsactl_error)
@@ -238,6 +239,33 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
     g_return_if_fail(sysname != NULL);
 
     allocate_sysname(&name, CARD_SYSNAME_TEMPLATE, card_id, error);
+    if (*error != NULL)
+        return;
+
+    if (!check_existence(name, error)) {
+        g_free(name);
+        return;
+    }
+
+    *sysname = name;
+}
+
+/**
+ * alsactl_get_control_sysname:
+ * @card_id: The numeridcal ID of sound card.
+ * @sysname: (out): The string for sysname of control device for the sound card.
+ * @error: A #GError.
+ *
+ * Allocate sysname of control device for the sound card and return it when
+ * it exists.
+ */
+void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
+{
+    char *name;
+
+    g_return_if_fail(sysname != NULL);
+
+    allocate_sysname(&name, CONTROL_SYSNAME_TEMPLATE, card_id, error);
     if (*error != NULL)
         return;
 
