@@ -19,6 +19,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_stream_pair_get_substream_status";
     "alsarawmidi_stream_pair_read_from_substream";
     "alsarawmidi_stream_pair_write_to_substream";
+    "alsarawmidi_stream_pair_drain_substream";
 
     "alsarawmidi_substream_params_get_type";
     "alsarawmidi_substream_params_new";

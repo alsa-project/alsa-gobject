@@ -79,6 +79,10 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                                         const guint8 *buf, gsize buf_size,
                                         GError **error);
 
+void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
+                                        ALSARawmidiStreamDirection direction,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif
