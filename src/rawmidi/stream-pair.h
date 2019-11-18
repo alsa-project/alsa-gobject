@@ -87,6 +87,9 @@ void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error);
 
+void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
+                                           GSource **gsrc, GError **error);
+
 G_END_DECLS
 
 #endif
