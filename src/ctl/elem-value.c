@@ -169,3 +169,53 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values,
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (gint32)value->value.integer.value[i];
 }
+
+/**
+ * alsactl_elem_value_set_enum:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count): The array for values of enumeration
+ *          index.
+ * @value_count: The number of values up to 128.
+ *
+ * Copy the array for values of enumeration index into internal storage.
+ */
+void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
+                                 const guint32 *values, gsize value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
+    for (i = 0; i < value_count; ++i)
+        value->value.integer.value[i] = (long)values[i];
+}
+
+/**
+ * alsactl_elem_value_get_enum:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count)(inout): The array for values of
+ *          enumeration index.
+ * @value_count: The number of values up to 128.
+ *
+ * Copy the array for values of enumeration index from internal storage.
+ */
+void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
+                                 guint32 *const *values, gsize *value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
+    for (i = 0; i < *value_count; ++i)
+        (*values)[i] = (guint32)value->value.integer.value[i];
+}

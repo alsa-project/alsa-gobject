@@ -19,6 +19,8 @@ methods = (
     'get_bool',
     'set_int',
     'get_int',
+    'set_enum',
+    'get_enum',
 )
 signals = ()
 
