@@ -9,6 +9,7 @@
 
 #include "substream-info.h"
 #include "substream-params.h"
+#include "substream-status.h"
 
 #include <sound/asound.h>
 
@@ -27,6 +28,9 @@ void rawmidi_select_subdevice(guint card_id, guint subdevice_id, GError **error)
 
 void rawmidi_substream_params_refer_private(ALSARawmidiSubstreamParams *self,
                                             struct snd_rawmidi_params **params);
+
+void rawmidi_substream_status_refer_private(ALSARawmidiSubstreamStatus *self,
+                                            struct snd_rawmidi_status **status);
 
 G_END_DECLS
 

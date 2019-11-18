@@ -18,6 +18,7 @@ methods = (
     'open',
     'get_substream_info',
     'set_substream_params',
+    'get_substream_status',
 )
 signals = ()
 
