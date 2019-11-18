@@ -13,7 +13,11 @@ target = ALSACtl.ElemValue()
 props = (
     'elem-id',
 )
-methods = ()
+props = ()
+methods = (
+    'set_bool',
+    'get_bool',
+)
 signals = ()
 
 if not test(target, props, methods, signals):

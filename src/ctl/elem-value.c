@@ -71,3 +71,52 @@ void ctl_elem_value_refer_private(ALSACtlElemValue *self,
                                 alsactl_elem_value_get_instance_private(self);
     *value = &priv->value;
 }
+
+/**
+ * alsactl_elem_value_set_bool:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count): The array for values of boolean type.
+ * @value_count: The number of values up to 128.
+ *
+ * Copy the array for values of boolean type into internal data.
+ */
+void alsactl_elem_value_set_bool(ALSACtlElemValue *self,
+                                 const gboolean *values, gsize value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
+    for (i = 0; i < value_count; ++i)
+        value->value.integer.value[i] = (long)values[i];
+}
+
+/**
+ * alsactl_elem_value_get_bool:
+ * @self: A #ALSACtlElemValue.
+ * @values: (array length=value_count)(inout): The array for values of boolean
+ *          type.
+ * @value_count: The number of values up to 128.
+ *
+ * Copy the array for values of boolean type from internal data.
+ */
+void alsactl_elem_value_get_bool(ALSACtlElemValue *self,
+                                 gboolean *const *values, gsize *value_count)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
+    for (i = 0; i < *value_count; ++i)
+        (*values)[i] = (gboolean)value->value.integer.value[i];
+}

@@ -49,6 +49,11 @@ GType alsactl_elem_value_get_type() G_GNUC_CONST;
 
 ALSACtlElemValue *alsactl_elem_value_new();
 
+void alsactl_elem_value_set_bool(ALSACtlElemValue *self,
+                                 const gboolean *values, gsize value_count);
+void alsactl_elem_value_get_bool(ALSACtlElemValue *self,
+                                 gboolean *const *values, gsize *value_count);
+
 G_END_DECLS
 
 #endif
