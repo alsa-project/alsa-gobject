@@ -33,6 +33,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_info_get_type";
 
     "alsactl_elem_info_bool_get_type";
+    "alsactl_elem_info_bool_new";
   local:
     *;
 };

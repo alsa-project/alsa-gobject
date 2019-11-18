@@ -9,6 +9,7 @@
 
 #include "card-info.h"
 #include "elem-id.h"
+#include "elem-info.h"
 
 #include <sound/asound.h>
 
@@ -22,6 +23,9 @@ GQuark alsactl_error_quark(void);
 
 void ctl_card_info_refer_private(ALSACtlCardInfo *self,
                                  struct snd_ctl_card_info **info);
+
+void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
+                                 struct snd_ctl_elem_info **info);
 
 G_END_DECLS
 

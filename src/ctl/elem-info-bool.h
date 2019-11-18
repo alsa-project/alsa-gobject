@@ -44,6 +44,8 @@ struct _ALSACtlElemInfoBoolClass {
 
 GType alsactl_elem_info_bool_get_type(void) G_GNUC_CONST;
 
+ALSACtlElemInfoBool *alsactl_elem_info_bool_new();
+
 G_END_DECLS
 
 #endif

@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "elem-info.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSACtlElemInfoPrivate {
     struct snd_ctl_elem_info info;
@@ -106,4 +104,12 @@ static void alsactl_elem_info_class_init(ALSACtlElemInfoClass *klass)
 static void alsactl_elem_info_init(ALSACtlElemInfo *self)
 {
     return;
+}
+
+void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
+                                 struct snd_ctl_elem_info **info)
+{
+    ALSACtlElemInfoPrivate *priv = alsactl_elem_info_get_instance_private(self);
+
+    *info = &priv->info;
 }
