@@ -64,6 +64,11 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
 void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
                                  guint32 *const *values, gsize *value_count);
 
+void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
+                                  const guint8 *values, gsize value_count);
+void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
+                                  guint8 *const *values, gsize *value_count);
+
 G_END_DECLS
 
 #endif
