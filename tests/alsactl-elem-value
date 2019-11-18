@@ -23,6 +23,8 @@ methods = (
     'get_enum',
     'set_bytes',
     'get_bytes',
+    'set_iec60958',
+    'get_iec60958',
 )
 signals = ()
 

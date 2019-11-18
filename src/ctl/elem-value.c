@@ -267,3 +267,85 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (guint8)value->value.bytes.data[i];
 }
+
+/**
+ * alsactl_elem_value_set_iec60958:
+ * @self: A #ALSACtlElemValue.
+ * @channel_status: (array length=channel_status_length)(nullable): The array of
+ *                  byte data for channel status bits in IEC 60958.
+ * @channel_status_length: The number of bytes in channel_status argument, up
+ *                         to 24.
+ * @user_data: (array length=user_data_length)(nullable): The array of byte data
+ *             for user data bits in IEC 60958.
+ * @user_data_length: The number of bytes in user_data argument, up to 147.
+ *
+ * Copy a pair of array for channel status and user data of IEC 60958 into
+ * internal storage.
+ */
+void alsactl_elem_value_set_iec60958(ALSACtlElemValue *self,
+                const guint8 *channel_status, gsize channel_status_length,
+                const guint8 *user_data, gsize user_data_length)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    if (channel_status != NULL) {
+        channel_status_length = MIN(channel_status_length,
+                                    G_N_ELEMENTS(value->value.iec958.status));
+        for (i = 0; i < channel_status_length; ++i)
+            value->value.iec958.status[i] = channel_status[i];
+    }
+
+    if (user_data != NULL) {
+        user_data_length = MIN(user_data_length,
+                               G_N_ELEMENTS(value->value.iec958.subcode));
+        for (i = 0; i < user_data_length; ++i)
+            value->value.iec958.subcode[i] = user_data[i];
+    }
+}
+
+/**
+ * alsactl_elem_value_get_iec60958:
+ * @self: A #ALSACtlElemValue.
+ * @channel_status: (array length=channel_status_length)(inout)(nullable): The
+ *                  array of byte data for channel status bits in IEC 60958.
+ * @channel_status_length: The number of bytes in channel_status argument, up
+ *                         to 24.
+ * @user_data: (array length=user_data_length)(inout)(nullable): The array of
+ *             byte data for user data bits in IEC 60958.
+ * @user_data_length: The number of bytes in user_data argument, up to 147.
+ *
+ * Copy a pair of array for channel status and user data of IEC 60958 from
+ * internal storage.
+ */
+void alsactl_elem_value_get_iec60958(ALSACtlElemValue *self,
+                guint8 *const *channel_status, gsize *channel_status_length,
+                guint8 *const *user_data, gsize *user_data_length)
+{
+    ALSACtlElemValuePrivate *priv;
+    struct snd_ctl_elem_value *value;
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
+    priv = alsactl_elem_value_get_instance_private(self);
+    value = &priv->value;
+
+    if (channel_status != NULL) {
+        *channel_status_length = MIN(*channel_status_length,
+                                     G_N_ELEMENTS(value->value.iec958.status));
+        for (i = 0; i < *channel_status_length; ++i)
+            (*channel_status)[i] = value->value.iec958.status[i];
+    }
+
+    if (user_data != NULL) {
+        *user_data_length = MIN(*user_data_length,
+                                G_N_ELEMENTS(value->value.iec958.subcode));
+        for (i = 0; i < *user_data_length; ++i)
+            (*user_data)[i] = value->value.iec958.subcode[i];
+    }
+}

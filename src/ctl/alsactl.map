@@ -71,6 +71,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_value_get_enum";
     "alsactl_elem_value_set_bytes";
     "alsactl_elem_value_get_bytes";
+    "alsactl_elem_value_set_iec60958";
+    "alsactl_elem_value_get_iec60958";
   local:
     *;
 };

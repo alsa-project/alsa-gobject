@@ -69,6 +69,13 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
 void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
                                   guint8 *const *values, gsize *value_count);
 
+void alsactl_elem_value_set_iec60958(ALSACtlElemValue *self,
+                const guint8 *channel_status, gsize channel_status_length,
+                const guint8 *user_data, gsize user_data_length);
+void alsactl_elem_value_get_iec60958(ALSACtlElemValue *self,
+                guint8 *const *channel_status, gsize *channel_status_length,
+                guint8 *const *user_data, gsize *user_data_length);
+
 G_END_DECLS
 
 #endif
