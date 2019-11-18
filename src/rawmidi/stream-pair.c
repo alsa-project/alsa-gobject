@@ -12,8 +12,31 @@
 
 struct _ALSARawmidiStreamPairPrivate {
     int fd;
+    char *devnode;
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYPE_OBJECT)
+
+enum rawmidi_stream_pair_prop_type {
+    RAWMIDI_STREAM_PAIR_PROP_DEVNODE = 1,
+    RAWMIDI_STREAM_PAIR_PROP_COUNT,
+};
+static GParamSpec *rawmidi_stream_pair_props[RAWMIDI_STREAM_PAIR_PROP_COUNT] = { NULL, };
+
+static void rawmidi_stream_pair_get_property(GObject *obj, guint id,
+                                             GValue *val, GParamSpec *spec)
+{
+    ALSARawmidiStreamPair *self = ALSARAWMIDI_STREAM_PAIR(obj);
+    ALSARawmidiStreamPairPrivate *priv =
+                            alsarawmidi_stream_pair_get_instance_private(self);
+    switch (id) {
+    case RAWMIDI_STREAM_PAIR_PROP_DEVNODE:
+        g_value_set_string(val, priv->devnode);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
 
 static void rawmidi_stream_pair_finalize(GObject *obj)
 {
@@ -21,8 +44,10 @@ static void rawmidi_stream_pair_finalize(GObject *obj)
     ALSARawmidiStreamPairPrivate *priv =
                             alsarawmidi_stream_pair_get_instance_private(self);
 
-    if (priv->fd >= 0)
+    if (priv->fd >= 0) {
         close(priv->fd);
+        g_free(priv->devnode);
+    }
 
     G_OBJECT_CLASS(alsarawmidi_stream_pair_parent_class)->finalize(obj);
 }
@@ -32,6 +57,17 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->finalize = rawmidi_stream_pair_finalize;
+    gobject_class->get_property = rawmidi_stream_pair_get_property;
+
+    rawmidi_stream_pair_props[RAWMIDI_STREAM_PAIR_PROP_DEVNODE] =
+        g_param_spec_string("devnode", "devnode",
+                            "The full path of rawmidi character device.",
+                            "",
+                            G_PARAM_READABLE);
+
+    g_object_class_install_properties(gobject_class,
+                                      RAWMIDI_STREAM_PAIR_PROP_COUNT,
+                                      rawmidi_stream_pair_props);
 }
 
 static void alsarawmidi_stream_pair_init(ALSARawmidiStreamPair *self)
@@ -107,8 +143,11 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     }
 
     priv->fd = open(devnode, open_flag);
-    if (priv->fd < 0)
+    if (priv->fd < 0) {
         generate_error(error, errno);
+        g_free(devnode);
+        return;
+    }
 
-    g_free(devnode);
+    priv->devnode = devnode;
 }
