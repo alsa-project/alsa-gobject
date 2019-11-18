@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "card.h"
 #include "query.h"
+#include "elem-info-bool.h"
+#include "elem-info-int.h"
+#include "elem-info-enum.h"
+#include "elem-info-bytes.h"
+#include "elem-info-iec60958.h"
+#include "elem-info-int64.h"
 #include "privates.h"
 
 #include <sys/types.h>
@@ -250,4 +256,86 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
         ret = ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_UNLOCK, elem_id);
     if (ret < 0)
         generate_error(error, errno);
+}
+
+/**
+ * alsactl_card_get_elem_info:
+ * @self: A #ALSACtlCard.
+ * @elem_id: A #ALSACtlElemId.
+ * @elem_info: (out): A %ALSACtlElemInfo.
+ * @error: A #GError.
+ *
+ * Get information of element corresponding to given id.
+ */
+void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                ALSACtlElemInfo **elem_info, GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_elem_info *info_ptr, info = {0};
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_if_fail(elem_id != NULL);
+    priv = alsactl_card_get_instance_private(self);
+
+    info.id = *elem_id;
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, &info)) {
+        generate_error(error, errno);
+        return;
+    }
+
+    if (info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        switch (info.type) {
+        case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
+            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BOOL, NULL);
+            break;
+        case SNDRV_CTL_ELEM_TYPE_INTEGER:
+            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT, NULL);
+            break;
+        case SNDRV_CTL_ELEM_TYPE_BYTES:
+            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BYTES, NULL);
+            break;
+        case SNDRV_CTL_ELEM_TYPE_IEC958:
+            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_IEC60958, NULL);
+            break;
+        case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT64, NULL);
+            break;
+        default:
+            generate_error(error, ENXIO);
+            return;
+        }
+    } else {
+        gchar **labels;
+        int i;
+
+        labels = g_malloc0_n(info.value.enumerated.items + 1, sizeof(*labels));
+        if (labels == NULL) {
+            generate_error(error, ENOMEM);
+            return;
+        }
+
+        for (i = 0; i < info.value.enumerated.items; ++i) {
+            info.value.enumerated.item = i;
+            if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, &info)) {
+                generate_error(error, errno);
+                g_strfreev(labels);
+                return;
+            }
+
+            labels[i] = strdup(info.value.enumerated.name);
+            if (labels[i] == NULL) {
+                generate_error(error, ENOMEM);
+                g_strfreev(labels);
+                return;
+            }
+        }
+        labels[info.value.enumerated.items] = NULL;
+
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_ENUM, "labels", labels,
+                                  NULL);
+        g_strfreev(labels);
+    }
+
+    ctl_elem_info_refer_private(ALSACTL_ELEM_INFO(*elem_info), &info_ptr);
+    *info_ptr = info;
 }

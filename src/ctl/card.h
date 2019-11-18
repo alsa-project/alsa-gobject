@@ -7,6 +7,7 @@
 
 #include <ctl/card-info.h>
 #include <ctl/elem-id.h>
+#include <ctl/elem-info.h>
 
 G_BEGIN_DECLS
 
@@ -60,6 +61,9 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
 
 void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             gboolean lock, GError **error);
+
+void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                ALSACtlElemInfo **elem_info, GError **error);
 
 G_END_DECLS
 
