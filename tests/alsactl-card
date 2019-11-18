@@ -17,6 +17,7 @@ methods = (
     'new',
     'open',
     'get_info',
+    'get_elem_id_list',
 )
 signals = ()
 

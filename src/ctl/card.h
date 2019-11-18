@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <ctl/card-info.h>
+#include <ctl/elem-id.h>
 
 G_BEGIN_DECLS
 
@@ -53,6 +54,9 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error);
 
 void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
                            GError **error);
+
+void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
+                                   GError **error);
 
 G_END_DECLS
 

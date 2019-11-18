@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "elem-id.h"
 #include "privates.h"
 
 ALSACtlElemId *ctl_elem_id_copy(const ALSACtlElemId *self)

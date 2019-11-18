@@ -140,3 +140,88 @@ void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
         g_object_unref(*card_info);
     }
 }
+
+static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
+                              GError **error)
+{
+    struct snd_ctl_elem_id *ids;
+
+    // Help for deallocation.
+    memset(list, 0, sizeof(*list));
+
+    // Get the number of elements in this control device.
+    if (ioctl(fd, SNDRV_CTL_IOCTL_ELEM_LIST, list) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    // No elements found.
+    if (list->count == 0)
+        return;
+
+    // Allocate spaces for these elements.
+    ids = calloc(list->count, sizeof(*ids));
+    if (!ids) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    list->offset = 0;
+    while (list->offset < list->count) {
+        // ALSA middleware has limitation of one operation.
+        // 1000 is enought less than the limitation.
+        list->space = MIN(list->count - list->offset, 1000);
+        list->pids = ids + list->offset;
+
+        // Get the IDs of elements in this control device.
+        if (ioctl(fd, SNDRV_CTL_IOCTL_ELEM_LIST, list) < 0) {
+            generate_error(error, errno);
+            free(ids);
+            list->pids = NULL;
+            return;
+        }
+
+        list->offset += list->space;
+    }
+    list->pids = ids;
+    list->space = list->count;
+}
+
+static inline void deallocate_elem_ids(struct snd_ctl_elem_list *list)
+{
+    if (list->pids!= NULL)
+        free(list->pids);
+}
+
+/**
+ * alsactl_card_get_elem_id_list:
+ * @self: A #ALSACtlCard.
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of entries for
+ *           ALSACtlElemId.
+ * @error: A #GError.
+ *
+ * Generate a list of ALSACtlElemId for ALSA control character device
+ * associated to the sound card.
+ */
+void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
+                                   GError **error)
+{
+    ALSACtlCardPrivate *priv;
+    struct snd_ctl_elem_list list = {0};
+    int i;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    priv = alsactl_card_get_instance_private(self);
+
+    allocate_elem_ids(priv->fd, &list, error);
+    if (*error != NULL)
+        return;
+
+    for (i = 0; i < list.count; ++i) {
+        struct snd_ctl_elem_id *id = list.pids + i;
+        ALSACtlElemId *elem_id = g_boxed_copy(ALSACTL_TYPE_ELEM_ID, id);
+        *entries = g_list_append(*entries, (gpointer)elem_id);
+    }
+
+    deallocate_elem_ids(&list);
+}

@@ -8,6 +8,7 @@
 #include <glib-object.h>
 
 #include "card-info.h"
+#include "elem-id.h"
 
 #include <sound/asound.h>
 
