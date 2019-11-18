@@ -402,6 +402,12 @@ static gboolean rawmidi_stream_pair_dispatch_src(GSource *gsrc, GSourceFunc cb,
     if (condition & G_IO_ERR)
         return G_SOURCE_REMOVE;
 
+    if (condition & G_IO_IN) {
+        g_signal_emit(self,
+                rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_HANDLE_MESSAGES],
+                0);
+    }
+
     // Just be sure to continue to process this source.
     return G_SOURCE_CONTINUE;
 }
