@@ -17,6 +17,12 @@ struct _ALSARawmidiStreamPairPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYPE_OBJECT)
 
+typedef struct {
+    GSource src;
+    ALSARawmidiStreamPair *self;
+    gpointer tag;
+} RawmidiStreamPairSource;
+
 enum rawmidi_stream_pair_prop_type {
     RAWMIDI_STREAM_PAIR_PROP_DEVNODE = 1,
     RAWMIDI_STREAM_PAIR_PROP_COUNT,
@@ -346,4 +352,93 @@ void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0)
         generate_error(error, errno);
+}
+
+static gboolean rawmidi_stream_pair_check_src(GSource *gsrc)
+{
+    RawmidiStreamPairSource *src = (RawmidiStreamPairSource *)gsrc;
+    GIOCondition condition;
+
+    // Don't go to dispatch if nothing available. As an exception, return TRUE
+    // for POLLERR to call .dispatch for internal destruction.
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    return !!(condition & (G_IO_IN | G_IO_ERR));
+}
+
+static gboolean rawmidi_stream_pair_dispatch_src(GSource *gsrc, GSourceFunc cb,
+                                                 gpointer user_data)
+{
+    RawmidiStreamPairSource *src = (RawmidiStreamPairSource *)gsrc;
+    ALSARawmidiStreamPair *self = src->self;
+    ALSARawmidiStreamPairPrivate *priv;
+    GIOCondition condition;
+
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+    if (priv->fd < 0)
+        return G_SOURCE_REMOVE;
+
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    if (condition & G_IO_ERR)
+        return G_SOURCE_REMOVE;
+
+    // Just be sure to continue to process this source.
+    return G_SOURCE_CONTINUE;
+}
+
+static void rawmidi_stream_pair_finalize_src(GSource *gsrc)
+{
+    RawmidiStreamPairSource *src = (RawmidiStreamPairSource *)gsrc;
+
+    g_object_unref(src->self);
+}
+
+/**
+ * alsarawmidi_stream_pair_create_source:
+ * @self: A #ALSARawmidiStreamPair.
+ * @gsrc: (out): A #GSource to handle events from ALSA rawmidi character device.
+ * @error: A #GError.
+ *
+ * Allocate GSource structure to handle events from ALSA rawmidi character
+ * device for input substream.
+ */
+void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
+                                           GSource **gsrc, GError **error)
+{
+    static GSourceFuncs funcs = {
+            .check          = rawmidi_stream_pair_check_src,
+            .dispatch       = rawmidi_stream_pair_dispatch_src,
+            .finalize       = rawmidi_stream_pair_finalize_src,
+    };
+    ALSARawmidiStreamPairPrivate *priv;
+    RawmidiStreamPairSource *src;
+    int access_modes;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    access_modes = fcntl(priv->fd, F_GETFL);
+    if (access_modes < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    if (!(access_modes & O_RDWR) && !(access_modes & O_WRONLY)) {
+        generate_error(error, ENOTSUP);
+        return;
+    }
+
+    *gsrc = g_source_new(&funcs, sizeof(RawmidiStreamPairSource));
+    src = (RawmidiStreamPairSource *)(*gsrc);
+
+    g_source_set_name(*gsrc, "ALSARawmidiStreamPair");
+    g_source_set_priority(*gsrc, G_PRIORITY_HIGH_IDLE);
+    g_source_set_can_recurse(*gsrc, TRUE);
+
+    src->self = g_object_ref(self);
+    src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
 }
