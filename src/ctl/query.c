@@ -276,3 +276,51 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
 
     *sysname = name;
 }
+
+/**
+ * alsactl_get_control_devnode:
+ * @card_id: The numerical ID of sound card.
+ * @devnode: (out): The string for devnode of control device for the sound card.
+ * @error: A #GError.
+ *
+ * Allocate string of devnode for control device of the sound card and return it
+ * if exists.
+ */
+void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
+{
+    char *sysname;
+    struct udev *ctx;
+    struct udev_device *dev;
+    const char *node;
+
+    g_return_if_fail(devnode != NULL);
+
+    allocate_sysname(&sysname, CONTROL_SYSNAME_TEMPLATE, card_id, error);
+    if (*error != NULL)
+        return;
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        g_free(sysname);
+        return;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
+    if (dev == NULL) {
+        generate_error(error, ENODEV);
+        g_free(sysname);
+        udev_unref(ctx);
+        return;
+    }
+    g_free(sysname);
+
+    node = udev_device_get_devnode(dev);
+    if (node != NULL)
+        *devnode = strdup(node);
+    else
+        generate_error(error, ENODEV);
+
+    udev_device_unref(dev);
+    udev_unref(ctx);
+}

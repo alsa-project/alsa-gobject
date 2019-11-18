@@ -14,6 +14,8 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error);
 
 void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error);
 
+void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error);
+
 G_END_DECLS
 
 #endif
