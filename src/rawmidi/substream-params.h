@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSARawmidiSubstreamParams          ALSARawmidiSubstreamParams;
 typedef struct _ALSARawmidiSubstreamParamsClass     ALSARawmidiSubstreamParamsClass;
+typedef struct _ALSARawmidiSubstreamParamsPrivate   ALSARawmidiSubstreamParamsPrivate;
 
 struct _ALSARawmidiSubstreamParams {
     GObject parent_instance;
+
+    ALSARawmidiSubstreamParamsPrivate *priv;
 };
 
 struct _ALSARawmidiSubstreamParamsClass {
