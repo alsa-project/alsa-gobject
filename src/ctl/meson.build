@@ -12,12 +12,14 @@ sources = files(
   'query.c',
   'card.c',
   'card-info.c',
+  'elem-id.c',
 )
 
 headers = files(
   'query.h',
   'card.h',
   'card-info.h',
+  'elem-id.h',
 )
 
 privates = files(

@@ -17,6 +17,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_get_info";
 
     "alsactl_card_info_get_type";
+
+    "alsactl_elem_id_get_type";
   local:
     *;
 };
