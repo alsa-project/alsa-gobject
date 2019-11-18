@@ -300,3 +300,27 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
         return;
     }
 }
+
+/**
+ * alsarawmidi_stream_pair_drain:
+ * @self: A #ALSARawmidiStreamPair.
+ * @direction: The direction of substream attached to the stream pair.
+ * @error: A #GError.
+ *
+ * Drain queued data in intermediate buffer for substream attached to the pair
+ * of streams. In a case that the instance is opened without O_NONBLOCK and the
+ * call is for output substream and any data is in the intermediate buffer, the
+ * call is blocked till no data is in the intermediate buffer.
+ */
+void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
+                                        ALSARawmidiStreamDirection direction,
+                                        GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0)
+        generate_error(error, errno);
+}
