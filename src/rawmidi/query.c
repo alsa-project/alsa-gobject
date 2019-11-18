@@ -13,6 +13,7 @@ G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
 
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "midiC%u"
+#define RAWMIDI_SYSNAME_TEMPLATE    "midiC%uD%u"
 
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
@@ -194,4 +195,49 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
 end:
     g_free(prefix);
     release_udev_enum(enumerator);
+}
+
+/**
+ * alsarawmidi_get_rawmidi_sysname:
+ * @card_id: The numeridcal ID of sound card.
+ * @device_id: The numerical ID of rawmidi device for the sound card.
+ * @sysname: (out): The string for sysname of rawmidi device.
+ * @error: A #GError.
+ *
+ * Allocate sysname for rawmidi device and return it when it exists.
+ */
+void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
+                                     char **sysname, GError **error)
+{
+    unsigned int length;
+    char *name;
+    struct udev *ctx;
+    struct udev_device *dev;
+
+    length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
+             calculate_digits(device_id) + 1;
+    name = g_try_malloc0(length);
+    if (name == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    snprintf(name, length, RAWMIDI_SYSNAME_TEMPLATE, card_id, device_id);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        g_free(name);
+        return;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
+    if (dev == NULL) {
+        generate_error(error, ENODEV);
+        g_free(name);
+    } else {
+        *sysname = name;
+        udev_device_unref(dev);
+    }
+
+    udev_unref(ctx);
 }

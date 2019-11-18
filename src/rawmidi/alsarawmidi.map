@@ -4,6 +4,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_stream_pair_info_flag_get_type";
 
     "alsarawmidi_get_device_id_list";
+    "alsarawmidi_get_rawmidi_sysname";
   local:
     *;
 };
