@@ -11,6 +11,7 @@
 #include <seq/client-pool.h>
 #include <seq/subscribe-data.h>
 #include <seq/queue-info.h>
+#include <seq/queue-status.h>
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,9 @@ void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
 void alsaseq_get_queue_info_by_name(const gchar *name,
                                     ALSASeqQueueInfo **queue_info,
                                     GError **error);
+
+void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
+                              GError **error);
 
 G_END_DECLS
 

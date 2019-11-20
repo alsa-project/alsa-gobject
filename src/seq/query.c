@@ -671,3 +671,44 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
 
     close(fd);
 }
+
+/**
+ * alsaseq_get_queue_status:
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @queue_status: (out): The current status of queue.
+ * @error: A #GError.
+ *
+ * Get current status of queue.
+ */
+void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
+                              GError **error)
+{
+    struct snd_seq_queue_status *status;
+    char *devnode;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *queue_status = g_object_new(ALSASEQ_TYPE_QUEUE_STATUS, NULL);
+    seq_queue_status_refer_private(*queue_status, &status);
+
+    status->queue = (int)queue_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS, status) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        g_object_unref(*queue_status);
+        return;
+    }
+
+    close(fd);
+}
