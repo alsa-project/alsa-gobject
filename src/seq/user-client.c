@@ -777,3 +777,80 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
         g_object_unref(*queue_tempo);
     }
 }
+
+/**
+ * alsaseq_user_client_set_queue_timer:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @queue_timer: The data of timer for queue.
+ * @error: A #GError.
+ *
+ * Set the data of timer for the queue.
+ */
+void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
+                                         guint queue_id,
+                                         ALSASeqQueueTimer *queue_timer,
+                                         GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_timer *timer;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    if (ALSASEQ_IS_QUEUE_TIMER_ALSA(queue_timer)) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    seq_queue_timer_refer_private(queue_timer, &timer);
+    timer->queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, timer) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsaseq_user_client_get_queue_timer:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @queue_timer: (out): The data of timer for queue.
+ * @error: A #GError.
+ *
+ * Get the data of timer for the queue.
+ */
+void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
+                                         guint queue_id,
+                                         ALSASeqQueueTimer **queue_timer,
+                                         GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_timer timer, *timer_ptr;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(queue_timer != NULL);
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    timer.queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER, &timer) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    switch (timer.type) {
+    case SNDRV_SEQ_TIMER_ALSA:
+        *queue_timer = ALSASEQ_QUEUE_TIMER(alsaseq_queue_timer_alsa_new());
+        break;
+    case SNDRV_SEQ_TIMER_MIDI_CLOCK:
+    case SNDRV_SEQ_TIMER_MIDI_TICK:
+    default:
+        // Not available.
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    seq_queue_timer_refer_private(*queue_timer, &timer_ptr);
+    *timer_ptr = timer;
+}

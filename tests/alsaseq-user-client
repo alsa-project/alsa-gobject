@@ -33,6 +33,8 @@ methods = (
     'set_queue_usage',
     'set_queue_tempo',
     'get_queue_tempo',
+    'set_queue_timer',
+    'get_queue_timer',
 )
 signals = ()
 
