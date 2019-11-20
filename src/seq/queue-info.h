@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqQueueInfo            ALSASeqQueueInfo;
 typedef struct _ALSASeqQueueInfoClass       ALSASeqQueueInfoClass;
+typedef struct _ALSASeqQueueInfoPrivate     ALSASeqQueueInfoPrivate;
 
 struct _ALSASeqQueueInfo {
     GObject parent_instance;
+
+    ALSASeqQueueInfoPrivate *priv;
 };
 
 struct _ALSASeqQueueInfoClass {
@@ -41,6 +44,8 @@ struct _ALSASeqQueueInfoClass {
 };
 
 GType alsaseq_queue_info_get_type() G_GNUC_CONST;
+
+ALSASeqQueueInfo *alsaseq_queue_info_new();
 
 G_END_DECLS
 
