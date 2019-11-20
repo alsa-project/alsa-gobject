@@ -515,3 +515,77 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
         return;
     }
 }
+
+/**
+ * alsaseq_get_queue_id_list:
+ * @entries: (array length=entry_count)(out): The array of elements for
+ *           numerical ID of queue.
+ * @entry_count: The number of entries.
+ * @error: A #GError.
+ *
+ * Get the list of queue in ALSA Sequencer.
+ */
+void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
+                               GError **error)
+{
+    char *devnode;
+    int fd;
+    struct snd_seq_system_info info = {0};
+    unsigned int maximum_count;
+    unsigned int count;
+    guint *list;
+    unsigned int index;
+    int i;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &info) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        return;
+    }
+    maximum_count = info.queues;
+    count = info.cur_queues;
+
+    if (count == 0) {
+        close(fd);
+        return;
+    }
+
+    list = g_try_malloc0_n(count, sizeof(*entries));
+    if (list == NULL) {
+        generate_error(error, ENOMEM);
+        close(fd);
+        return;
+    }
+
+    for (i = 0; i < maximum_count; ++i) {
+        struct snd_seq_queue_info info;
+
+        info.queue = i;
+        if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_INFO, &info) < 0)
+            continue;
+
+        list[index] = i;
+        if (++index >= count)
+            break;
+    }
+    close(fd);
+    if (index != count) {
+        generate_error(error, ENXIO);
+        g_free(list);
+        return;
+    }
+
+    *entries = list;
+    *entry_count = count;
+}

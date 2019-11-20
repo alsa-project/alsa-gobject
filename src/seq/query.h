@@ -38,6 +38,9 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
                                    ALSASeqQuerySubscribeType query_type,
                                    GList **entries, GError **error);
 
+void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
+                               GError **error);
+
 G_END_DECLS
 
 #endif
