@@ -41,6 +41,7 @@ tests = {
     'alsaseq-subscribe-data',
     'alsaseq-queue-info',
     'alsaseq-queue-status',
+    'alsaseq-queue-tempo',
   ],
 }
 
