@@ -45,6 +45,8 @@ struct _ALSASeqQueueTimerAlsaClass {
 
 GType alsaseq_queue_timer_alsa_get_type() G_GNUC_CONST;
 
+ALSASeqQueueTimerAlsa *alsaseq_queue_timer_alsa_new();
+
 G_END_DECLS
 
 #endif

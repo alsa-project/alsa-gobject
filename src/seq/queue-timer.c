@@ -87,3 +87,12 @@ static void alsaseq_queue_timer_init(ALSASeqQueueTimer *self)
 {
     return;
 }
+
+void seq_queue_timer_refer_private(ALSASeqQueueTimer *self,
+                                   struct snd_seq_queue_timer **timer)
+{
+    ALSASeqQueueTimerPrivate *priv =
+                                alsaseq_queue_timer_get_instance_private(self);
+
+    *timer = &priv->timer;
+}
