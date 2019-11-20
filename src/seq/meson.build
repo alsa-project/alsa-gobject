@@ -26,6 +26,7 @@ sources = files(
   'event-data-queue.c',
   'event-data-connect.c',
   'subscribe-data.c',
+  'queue-info.c',
 )
 
 headers = files(
@@ -46,6 +47,7 @@ headers = files(
   'event-data-queue.h',
   'event-data-connect.h',
   'subscribe-data.h',
+  'queue-info.h',
 )
 
 privates = files(

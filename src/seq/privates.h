@@ -13,6 +13,7 @@
 #include "client-pool.h"
 #include "event.h"
 #include "subscribe-data.h"
+#include "queue-info.h"
 
 #include <sound/asequencer.h>
 
