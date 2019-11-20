@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqQueueTempo           ALSASeqQueueTempo;
 typedef struct _ALSASeqQueueTempoClass      ALSASeqQueueTempoClass;
+typedef struct _ALSASeqQueueTempoPrivate    ALSASeqQueueTempoPrivate;
 
 struct _ALSASeqQueueTempo {
     GObject parent_instance;
+
+    ALSASeqQueueTempoPrivate *priv;
 };
 
 struct _ALSASeqQueueTempoClass {
@@ -41,6 +44,11 @@ struct _ALSASeqQueueTempoClass {
 };
 
 GType alsaseq_queue_tempo_get_type() G_GNUC_CONST;
+
+ALSASeqQueueTempo *alsaseq_queue_tempo_new();
+
+void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 **skew);
+void alsaseq_queue_tempo_set_skew(ALSASeqQueueTempo *self, const guint32 skew[2]);
 
 G_END_DECLS
 
