@@ -154,6 +154,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_queue_tempo_set_skew";
 
     "alsaseq_queue_timer_get_type";
+
+    "alsaseq_queue_timer_alsa_get_type";
   local:
     *;
 };
