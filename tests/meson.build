@@ -40,6 +40,7 @@ tests = {
     'alsaseq-event-variable',
     'alsaseq-subscribe-data',
     'alsaseq-queue-info',
+    'alsaseq-queue-status',
   ],
 }
 
