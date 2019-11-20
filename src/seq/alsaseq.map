@@ -59,6 +59,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_set_queue_usage";
     "alsaseq_user_client_set_queue_tempo";
     "alsaseq_user_client_get_queue_tempo";
+    "alsaseq_user_client_set_queue_timer";
+    "alsaseq_user_client_get_queue_timer";
 
     "alsaseq_addr_get_type";
     "alsaseq_addr_new";

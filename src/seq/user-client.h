@@ -14,6 +14,8 @@
 #include <seq/subscribe-data.h>
 #include <seq/queue-info.h>
 #include <seq/queue-tempo.h>
+#include <seq/queue-timer.h>
+#include <seq/queue-timer-alsa.h>
 
 G_BEGIN_DECLS
 
@@ -127,6 +129,15 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
 void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
                                 guint queue_id, ALSASeqQueueTempo **queue_tempo,
                                 GError **error);
+
+void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
+                                         guint queue_id,
+                                         ALSASeqQueueTimer *queue_timer,
+                                         GError **error);
+void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
+                                         guint queue_id,
+                                         ALSASeqQueueTimer **queue_timer,
+                                         GError **error);
 
 G_END_DECLS
 
