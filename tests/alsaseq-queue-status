@@ -10,8 +10,15 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.QueueStatus()
-props = ()
-methods = ()
+props = (
+    'queue-id',
+    'event-count',
+    'running',
+)
+methods = (
+    'get_tick_time',
+    'get_real_time',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
