@@ -29,6 +29,8 @@ methods = (
     'create_queue',
     'delete_queue',
     'update_queue',
+    'get_queue_usage',
+    'set_queue_usage',
 )
 signals = ()
 
