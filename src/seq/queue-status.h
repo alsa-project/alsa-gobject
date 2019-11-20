@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqQueueStatus          ALSASeqQueueStatus;
 typedef struct _ALSASeqQueueStatusClass     ALSASeqQueueStatusClass;
+typedef struct _ALSASeqQueueStatusPrivate   ALSASeqQueueStatusPrivate;
 
 struct _ALSASeqQueueStatus {
     GObject parent_instance;
+
+    ALSASeqQueueStatusPrivate *priv;
 };
 
 struct _ALSASeqQueueStatusClass {
@@ -41,6 +44,12 @@ struct _ALSASeqQueueStatusClass {
 };
 
 GType alsaseq_queue_status_get_type() G_GNUC_CONST;
+
+void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
+                                        guint *tick_time);
+
+void alsaseq_queue_status_get_real_time(ALSASeqQueueStatus *self,
+                                        const guint32 **real_time);
 
 G_END_DECLS
 
