@@ -28,6 +28,7 @@ sources = files(
   'subscribe-data.c',
   'queue-info.c',
   'queue-status.c',
+  'queue-tempo.c',
 )
 
 headers = files(
@@ -50,6 +51,7 @@ headers = files(
   'subscribe-data.h',
   'queue-info.h',
   'queue-status.h',
+  'queue-tempo.h',
 )
 
 privates = files(
