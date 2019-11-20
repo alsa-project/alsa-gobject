@@ -718,3 +718,62 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsaseq_user_client_set_queue_tempo:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @queue_tempo: The data of tempo for queue.
+ * @error: A #GError.
+ *
+ *
+ * Set the data of tempo to the queue.
+ */
+void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
+                                guint queue_id, ALSASeqQueueTempo *queue_tempo,
+                                GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_tempo *tempo;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_queue_tempo_refer_private(queue_tempo, &tempo);
+    tempo->queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO, tempo) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsaseq_user_client_get_queue_tempo:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @queue_tempo: (out): The data of tempo for queue.
+ * @error: A #GError.
+ *
+ * Get the data of tempo for the queue.
+ */
+void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
+                                guint queue_id, ALSASeqQueueTempo **queue_tempo,
+                                GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_tempo *tempo;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(queue_tempo != NULL);
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    *queue_tempo = g_object_new(ALSASEQ_TYPE_QUEUE_TEMPO, NULL);
+    seq_queue_tempo_refer_private(*queue_tempo, &tempo);
+
+    tempo->queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO, tempo) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*queue_tempo);
+    }
+}

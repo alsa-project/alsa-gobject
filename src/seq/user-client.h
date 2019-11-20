@@ -13,6 +13,7 @@
 #include <seq/event-variable.h>
 #include <seq/subscribe-data.h>
 #include <seq/queue-info.h>
+#include <seq/queue-tempo.h>
 
 G_BEGIN_DECLS
 
@@ -119,6 +120,14 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
 void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
                                          guint queue_id, gboolean use,
                                          GError **error);
+
+void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
+                                guint queue_id, ALSASeqQueueTempo *queue_tempo,
+                                GError **error);
+void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
+                                guint queue_id, ALSASeqQueueTempo **queue_tempo,
+                                GError **error);
+
 G_END_DECLS
 
 #endif

@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "queue-tempo.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqQueueTempoPrivate {
     struct snd_seq_queue_tempo tempo;
@@ -151,4 +149,13 @@ void alsaseq_queue_tempo_set_skew(ALSASeqQueueTempo *self, const guint32 skew[2]
 
     priv->tempo.skew_value = skew[0];
     priv->tempo.skew_base = skew[1];
+}
+
+void seq_queue_tempo_refer_private(ALSASeqQueueTempo *self,
+                                   struct snd_seq_queue_tempo **tempo)
+{
+    ALSASeqQueueTempoPrivate *priv =
+                                alsaseq_queue_tempo_get_instance_private(self);
+
+    *tempo = &priv->tempo;
 }
