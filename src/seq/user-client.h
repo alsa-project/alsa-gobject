@@ -113,6 +113,12 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
 void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
                                 ALSASeqQueueInfo *queue_info, GError **error);
 
+void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
+                                         guint queue_id, gboolean *use,
+                                         GError **error);
+void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
+                                         guint queue_id, gboolean use,
+                                         GError **error);
 G_END_DECLS
 
 #endif

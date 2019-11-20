@@ -661,3 +661,60 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsaseq_user_client_get_queue_usage:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @use: (out): Whether the client uses the queue or not.
+ * @error: A #GError.
+ *
+ * Get usage of the queue by the client.
+ */
+void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
+                                         guint queue_id, gboolean *use,
+                                         GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_client data = {0};
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    data.queue = (int)queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *use = data.used;
+}
+
+/**
+ * alsaseq_user_client_set_queue_usage:
+ * @self: A #ALSASeqUserClient.
+ * @queue_id: The numerical ID of queue, except for entries in
+ *            ALSASeqSpecificQueueId.
+ * @use: Whether to use the queue or not.
+ * @error: A #GError.
+ *
+ * Start the queue to use or not.
+ */
+void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
+                                         guint queue_id, gboolean use,
+                                         GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_queue_client data = {0};
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    data.queue = (int)queue_id;
+    data.client = priv->client_id;
+    data.used = use;
+
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0)
+        generate_error(error, errno);
+}
