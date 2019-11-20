@@ -26,6 +26,9 @@ methods = (
     'schedule_event',
     'create_source',
     'operate_subscription',
+    'create_queue',
+    'delete_queue',
+    'update_queue',
 )
 signals = ()
 

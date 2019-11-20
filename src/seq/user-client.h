@@ -12,6 +12,7 @@
 #include <seq/event-fixed.h>
 #include <seq/event-variable.h>
 #include <seq/subscribe-data.h>
+#include <seq/queue-info.h>
 
 G_BEGIN_DECLS
 
@@ -104,6 +105,13 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
                                               ALSASeqSubscribeData *subs_data,
                                               gboolean establish,
                                               GError **error);
+
+void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
+                                ALSASeqQueueInfo *queue_info, GError **error);
+void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
+                                      guint queue_id, GError **error);
+void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
+                                ALSASeqQueueInfo *queue_info, GError **error);
 
 G_END_DECLS
 
