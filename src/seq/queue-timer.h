@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_QUEUE_TIMER     (alsaseq_queue_timer_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqQueueTimer           ALSASeqQueueTimer;
 typedef struct _ALSASeqQueueTimerClass      ALSASeqQueueTimerClass;
+typedef struct _ALSASeqQueueTimerPrivate    ALSASeqQueueTimerPrivate;
 
 struct _ALSASeqQueueTimer {
     GObject parent_instance;
+
+    ALSASeqQueueTimerPrivate *priv;
 };
 
 struct _ALSASeqQueueTimerClass {

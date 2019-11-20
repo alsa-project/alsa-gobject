@@ -10,7 +10,10 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.QueueTimer
-props = ()
+props = (
+    'queue-id',
+    'type',
+)
 methods = ()
 signals = ()
 
