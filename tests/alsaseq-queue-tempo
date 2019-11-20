@@ -10,8 +10,16 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.QueueTempo()
-props = ()
-methods = ()
+props = (
+    'queue-id',
+    'tempo',
+    'resolution',
+)
+methods = (
+    'new',
+    'get_skew',
+    'set_skew',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
