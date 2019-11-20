@@ -28,6 +28,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_get_client_pool";
     "alsaseq_get_subscription_list";
     "alsaseq_get_queue_id_list";
+    "alsaseq_get_queue_info_by_id";
+    "alsaseq_get_queue_info_by_name";
 
     "alsaseq_system_info_get_type";
 

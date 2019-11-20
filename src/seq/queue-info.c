@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "queue-info.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqQueueInfoPrivate {
     struct snd_seq_queue_info info;
@@ -124,4 +122,13 @@ static void alsaseq_queue_info_init(ALSASeqQueueInfo *self)
 ALSASeqQueueInfo *alsaseq_queue_info_new()
 {
     return g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
+}
+
+void seq_queue_info_refer_private(ALSASeqQueueInfo *self,
+                                  struct snd_seq_queue_info **info)
+{
+    ALSASeqQueueInfoPrivate *priv =
+                                alsaseq_queue_info_get_instance_private(self);
+
+    *info = &priv->info;
 }

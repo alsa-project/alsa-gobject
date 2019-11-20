@@ -589,3 +589,85 @@ void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
     *entries = list;
     *entry_count = count;
 }
+
+/**
+ * alsaseq_get_queue_info_by_id:
+ * @queue_id: The numerical ID of queue, except for one of
+ *            ALSASeqSpecificQueueId.
+ * @queue_info: (out): The information of queue.
+ * @error: A #GError.
+ *
+ * Get the information of queue, according to the numerical ID.
+ */
+void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
+                                  GError **error)
+{
+    struct snd_seq_queue_info *info;
+    char *devnode;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
+    seq_queue_info_refer_private(*queue_info, &info);
+
+    info->queue = queue_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_INFO, info) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        g_object_unref(*queue_info);
+        return;
+    }
+
+    close(fd);
+}
+
+/**
+ * alsaseq_get_queue_info_by_name:
+ * @name: The name string of queue to query.
+ * @queue_info: (out): The information of queue.
+ * @error: A #GError.
+ *
+ * Get the information of queue, according to the name string.
+ */
+void alsaseq_get_queue_info_by_name(const gchar *name,
+                                    ALSASeqQueueInfo **queue_info,
+                                    GError **error)
+{
+    struct snd_seq_queue_info *info;
+    char *devnode;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
+    seq_queue_info_refer_private(*queue_info, &info);
+
+    strncpy(info->name, name, sizeof(info->name));
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE, info) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        g_object_unref(*queue_info);
+        return;
+    }
+
+    close(fd);
+}
