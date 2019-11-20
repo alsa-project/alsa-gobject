@@ -10,8 +10,13 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.QueueTimerAlsa()
-props = ()
-methods = ()
+props = (
+    'timer-device-id',
+    'resolution',
+)
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):

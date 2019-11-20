@@ -16,6 +16,7 @@
 #include "queue-info.h"
 #include "queue-status.h"
 #include "queue-tempo.h"
+#include "queue-timer.h"
 
 #include <sound/asequencer.h>
 
@@ -52,6 +53,9 @@ void seq_queue_status_refer_private(ALSASeqQueueStatus *self,
 
 void seq_queue_tempo_refer_private(ALSASeqQueueTempo *self,
                                    struct snd_seq_queue_tempo **tempo);
+
+void seq_queue_timer_refer_private(ALSASeqQueueTimer *self,
+                                   struct snd_seq_queue_timer **timer);
 
 G_END_DECLS
 

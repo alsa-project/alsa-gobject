@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/alsaseq-enums.h>
+#include <timer/device-id.h>
 
 G_BEGIN_DECLS
 
