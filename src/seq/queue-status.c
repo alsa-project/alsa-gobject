@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "queue-status.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqQueueStatusPrivate {
     struct snd_seq_queue_status status;
@@ -113,4 +111,13 @@ void alsaseq_queue_status_get_real_time(ALSASeqQueueStatus *self,
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
     *real_time = (const guint32 *)&priv->status.time;
+}
+
+void seq_queue_status_refer_private(ALSASeqQueueStatus *self,
+                                    struct snd_seq_queue_status **status)
+{
+    ALSASeqQueueStatusPrivate *priv =
+                                alsaseq_queue_status_get_instance_private(self);
+
+    *status = &priv->status;
 }

@@ -14,6 +14,7 @@
 #include "event.h"
 #include "subscribe-data.h"
 #include "queue-info.h"
+#include "queue-status.h"
 
 #include <sound/asequencer.h>
 
@@ -44,6 +45,9 @@ void seq_subscribe_data_refer_private(ALSASeqSubscribeData *self,
 
 void seq_queue_info_refer_private(ALSASeqQueueInfo *self,
                                   struct snd_seq_queue_info **info);
+
+void seq_queue_status_refer_private(ALSASeqQueueStatus *self,
+                                    struct snd_seq_queue_status **status);
 
 G_END_DECLS
 
