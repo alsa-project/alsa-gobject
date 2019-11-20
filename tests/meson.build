@@ -42,6 +42,7 @@ tests = {
     'alsaseq-queue-info',
     'alsaseq-queue-status',
     'alsaseq-queue-tempo',
+    'alsaseq-queue-timer',
   ],
 }
 
