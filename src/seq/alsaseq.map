@@ -132,6 +132,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_subscribe_data_new";
 
     "alsaseq_queue_info_get_type";
+    "alsaseq_queue_info_new";
   local:
     *;
 };
