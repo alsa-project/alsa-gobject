@@ -10,6 +10,7 @@
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
 #include <seq/subscribe-data.h>
+#include <seq/queue-info.h>
 
 G_BEGIN_DECLS
 
@@ -40,6 +41,12 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
 
 void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
                                GError **error);
+
+void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
+                                  GError **error);
+void alsaseq_get_queue_info_by_name(const gchar *name,
+                                    ALSASeqQueueInfo **queue_info,
+                                    GError **error);
 
 G_END_DECLS
 
