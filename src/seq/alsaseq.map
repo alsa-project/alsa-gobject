@@ -51,6 +51,9 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_schedule_event";
     "alsaseq_user_client_create_source";
     "alsaseq_user_client_operate_subscription";
+    "alsaseq_user_client_create_queue";
+    "alsaseq_user_client_delete_queue";
+    "alsaseq_user_client_update_queue";
 
     "alsaseq_addr_get_type";
     "alsaseq_addr_new";
