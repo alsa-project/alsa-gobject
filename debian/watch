@@ -1,0 +1,2 @@
+version=4
+opts=pgpsigurlmangle=s/$/.asc/ https://github.com/takaswie/alsa-gobject/releases .*/alsa-gobject-(\d\S*)\.(?:zip|tgz|tbz|txz|(?:tar\.(?:gz|bz2|xz)))

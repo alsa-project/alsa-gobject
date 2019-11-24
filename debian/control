@@ -1,0 +1,147 @@
+Source: alsa-gobject
+Section: libs
+Priority: optional
+Build-Depends: debhelper-compat (= 13),
+    meson (>= 0.32.0),
+    libglib2.0-dev (>= 2.32.0),
+    gtk-doc-tools (>= 1.18-2),
+    gobject-introspection (>= 1.32.1),
+    libgirepository1.0-dev (>= 1.32.1),
+    python3-gi
+Maintainer: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Standards-Version: 4.3.0
+
+Package: libalsactl0
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libglib2.0-0 (>= 2.32.0),
+Multi-Arch: same
+Description: An I/O library for ALSA control character device with GObject framework
+ This package contains an I/O library for ALSA control character device with
+ GObject framwork. This library produces a set of API for operations via the
+ character device, and GSource to dispatch any events in GMainContext.
+
+Package: gir1.2-alsactl-0.0
+Section: introspection
+Architecture: linux-any
+Depends: ${misc:Depends}, ${gir:Depends},
+    libalsactl0 (= ${binary:Version}),
+Description: GObject introspection data for libalsactl0
+ This package contains introspection data for the libalsactl0 library.
+ .
+ It can be used by packages using the GIRepository format to generate
+ dynamic/static bindings.
+
+Package: libalsarawmidi0
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libglib2.0-0 (>= 2.32.0),
+Multi-Arch: same
+Description: An I/O library for ALSA rawmidi character device with GObject framework
+ This package contains an I/O library for ALSA rawmidi character device with
+ GObject framwork. This library produces a set of API for operations via the
+ character device, and GSource to dispatch any events in GMainContext.
+
+Package: gir1.2-alsarawmidi-0.0
+Section: introspection
+Architecture: linux-any
+Depends: ${misc:Depends}, ${gir:Depends},
+    libalsarawmidi0 (= ${binary:Version}),
+Description: GObject introspection data for libalsarawmidi0
+ This package contains introspection data for the libalsarawmidi library.
+ .
+ It can be used by packages using the GIRepository format to generate
+ dynamic/static bindings.
+
+Package: libalsatimer0
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libglib2.0-0 (>= 2.32.0),
+Multi-Arch: same
+Description: An I/O library for ALSA timer character device with GObject framework
+ This package contains an I/O library for ALSA timer character device with
+ GObject framwork. This library produces a set of API for operations via the
+ character device, and GSource to dispatch any events in GMainContext.
+
+Package: gir1.2-alsatimer-0.0
+Section: introspection
+Architecture: linux-any
+Depends: ${misc:Depends}, ${gir:Depends},
+    libalsatimer0 (= ${binary:Version}),
+Description: GObject introspection data for libalsatimer0 library
+ This package contains introspection data for the libalsatimer0 library.
+ .
+ It can be used by packages using the GIRepository format to generate
+ dynamic/static bindings.
+
+Package: libalsaseq0
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libglib2.0-0 (>= 2.32.0),
+    libalsatimer0,
+Multi-Arch: same
+Description: An I/O library for ALSA sequencer character device with GObject framework
+ This package contains an I/O library for ALSA sequencer character device with
+ GObject framwork. This library produces a set of API for operations via the
+ character device, and GSource to dispatch any events in GMainContext.
+
+Package: gir1.2-alsaseq-0.0
+Section: introspection
+Architecture: linux-any
+Depends: ${misc:Depends}, ${gir:Depends},
+    libalsaseq0 (= ${binary:Version}),
+    libalsatimer0,
+    gir1.2-alsatimer-0.0,
+Description: GObject introspection data for libalsaseq0 library
+ This package contains introspection data for the libalsaseq0 library.
+ .
+ It can be used by packages using the GIRepository format to generate
+ dynamic/static bindings.
+
+Package: libalsahwdep0
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libglib2.0-0 (>= 2.32.0),
+Multi-Arch: same
+Description: An I/O library for ALSA hwdep character device with GObject framework
+ This package contains an I/O library for ALSA hwdep character device with
+ GObject framwork. This library produces a set of API for operations via the
+ character device, and GSource to dispatch any events in GMainContext.
+
+Package: gir1.2-alsahwdep-0.0
+Section: introspection
+Architecture: linux-any
+Depends: ${misc:Depends}, ${gir:Depends},
+    libalsaseq0 (= ${binary:Version}),
+Description: GObject introspection data for libalsahwdep0 library
+ This package contains introspection data for the libalsahwdep0 library.
+ .
+ It can be used by packages using the GIRepository format to generate
+ dynamic/static bindings.
+
+Package: alsa-gobject-dev
+Section: libdevel
+Architecture: linux-any
+Depends: ${misc:Depends},
+    libalsactl0 (= ${binary:Version}),
+    libalsarawmidi0 (= ${binary:Version}),
+    libalsatimer0 (= ${binary:Version}),
+    libalsaseq0 (= ${binary:Version}),
+    libglib2.0-dev (>= 2.32.0),
+    libgirepository1.0-dev (>= 1.32.1),
+    gir1.2-alsactl-0.0 (= ${binary:Version}),
+    gir1.2-alsarawmidi-0.0 (= ${binary:Version}),
+    gir1.2-alsatimer-0.0 (= ${binary:Version}),
+    gir1.2-alsaseq-0.0 (= ${binary:Version}),
+Description: A set of I/O library for ALSA chraracter devices with GObject framework (development file)
+ An alsa-gobject project aims to produce a set of I/O libraries with GObject
+ framework. These library supports any operations via the character devices,
+ and GSource to dispatch any event in GMainContext.
+ .
+ This package contains development files including C headers, documentation and
+ XML data for GIRepository.
