@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: alsa-gobject
+Source: https://github.com/takaswie/alsa-gobject
+
+Files: *
+Copyright: 2015-2017 Takashi Sakamoto <o-takashi@sakamocchi.jp>
+License: LGPL-3.0
+
+Files: debian/*
+Copyright:
+ 2019 Takashi Sakamoto <o-takashi@sakamocchi.jp>
+License: LGPL-3.0
+
+License: LGPL-3.0
+ On Debian GNU/Linux systems, the complete text of the LGPL 3.0
+ license can be found in `/usr/share/common-licenses/LGPL-3.0'.
