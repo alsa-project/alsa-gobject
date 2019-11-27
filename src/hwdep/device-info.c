@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "device-info.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSAHwdepDeviceInfoPrivate {
     struct snd_hwdep_info info;
@@ -27,19 +25,19 @@ static void hwdep_device_info_get_property(GObject *obj, guint id, GValue *val,
 
     switch (id) {
     case HWDEP_DEVICE_INFO_PROP_DEVICE_ID:
-        priv->info.device = g_value_get_uint(val);
+        g_value_set_uint(val, priv->info.device);
         break;
     case HWDEP_DEVICE_INFO_PROP_CARD_ID:
-        priv->info.card = g_value_get_int(val);
+        g_value_set_int(val, priv->info.card);
         break;
     case HWDEP_DEVICE_INFO_PROP_ID:
-        strncpy((char *)priv->info.id, g_value_get_string(val), sizeof(priv->info.id));
+        g_value_set_static_string(val, (char *)priv->info.id);
         break;
     case HWDEP_DEVICE_INFO_PROP_NAME:
-        strncpy((char *)priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        g_value_set_static_string(val, (char *)priv->info.name);
         break;
     case HWDEP_DEVICE_INFO_PROP_IFACE:
-        priv->info.iface = (int)g_value_get_enum(val);
+        g_value_set_enum(val, (ALSAHwdepIfaceType)priv->info.iface);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -95,4 +93,13 @@ static void alsahwdep_device_info_class_init(ALSAHwdepDeviceInfoClass *klass)
 static void alsahwdep_device_info_init(ALSAHwdepDeviceInfo *self)
 {
     return;
+}
+
+void hwdep_device_info_refer_private(ALSAHwdepDeviceInfo *self,
+                                     struct snd_hwdep_info **info)
+{
+    ALSAHwdepDeviceInfoPrivate *priv =
+                            alsahwdep_device_info_get_instance_private(self);
+
+    *info = &priv->info;
 }
