@@ -10,6 +10,9 @@ G_BEGIN_DECLS
 void alsahwdep_get_device_id_list(guint card_id, guint **entries,
                                   gsize *entry_count, GError **error);
 
+void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
+                                 char **sysname, GError **error);
+
 G_END_DECLS
 
 #endif

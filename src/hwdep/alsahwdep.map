@@ -3,6 +3,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsahwdep_iface_type_get_type";
 
     "alsahwdep_get_device_id_list";
+    "alsahwdep_get_hwdep_sysname";
   local:
     *;
 };
