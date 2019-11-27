@@ -5,7 +5,7 @@
 path = 'hwdep'
 name = 'alsahwdep'
 namespace = 'ALSAHwdep'
-has_enumerations = false
+has_enumerations = true
 has_marshaller = false
 
 sources = files()
