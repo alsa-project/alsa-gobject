@@ -10,7 +10,13 @@ gi.require_version('ALSAHwdep', '0.0')
 from gi.repository import ALSAHwdep
 
 target = ALSAHwdep.DeviceInfo()
-props = ()
+props = (
+    'device-id',
+    'card-id',
+    'id',
+    'name',
+    'iface',
+)
 methods = ()
 signals = ()
 
