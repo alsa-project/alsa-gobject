@@ -10,3 +10,4 @@ configure_file(
 subdir('ctl')
 subdir('timer')
 subdir('seq')
+subdir('hwdep')
