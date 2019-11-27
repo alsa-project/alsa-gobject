@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <hwdep/alsahwdep-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSAHWDEP_TYPE_DEVICE_INFO      (alsahwdep_device_info_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSAHwdepDeviceInfo         ALSAHwdepDeviceInfo;
 typedef struct _ALSAHwdepDeviceInfoClass    ALSAHwdepDeviceInfoClass;
+typedef struct _ALSAHwdepDeviceInfoPrivate  ALSAHwdepDeviceInfoPrivate;
 
 struct _ALSAHwdepDeviceInfo {
     GObject parent_instance;
+
+    ALSAHwdepDeviceInfoPrivate *priv;
 };
 
 struct _ALSAHwdepDeviceInfoClass {
