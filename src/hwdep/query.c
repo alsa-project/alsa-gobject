@@ -18,6 +18,7 @@ G_DEFINE_QUARK("alsahwdep-error", alsahwdep_error)
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "hwC%u"
 #define HWDEP_SYSNAME_TEMPLATE      "hwC%uD%u"
+#define CTL_SYSNAME_TEMPLATE        "controlC%u"
 
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
@@ -299,4 +300,81 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
 
     udev_device_unref(dev);
     udev_unref(ctx);
+}
+
+static void hwdep_perform_ctl_ioctl(guint card_id, long request, void *data,
+                                      GError **error)
+{
+    unsigned int length;
+    char *sysname;
+    struct udev *ctx;
+    struct udev_device *dev;
+    const char *devnode;
+    int fd;
+
+    length = strlen(CTL_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
+    sysname = g_try_malloc0(length);
+    if (sysname == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    snprintf(sysname, length, CTL_SYSNAME_TEMPLATE, card_id);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        goto err_sysname;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
+    if (dev == NULL) {
+        generate_error(error, errno);
+        goto err_ctx;
+    }
+
+    devnode = udev_device_get_devnode(dev);
+    if (devnode == NULL) {
+        generate_error(error, ENODEV);
+        goto err_device;
+    }
+
+    fd = open(devnode, O_RDONLY | O_NONBLOCK);
+    if (fd < 0) {
+        generate_error(error, errno);
+        goto err_device;
+    }
+
+    if (ioctl(fd, request, data) < 0)
+        generate_error(error, errno);
+err_device:
+    udev_device_unref(dev);
+err_ctx:
+    udev_unref(ctx);
+err_sysname:
+    g_free(sysname);
+}
+
+/**
+ * alsahwdep_get_device_info:
+ * @card_id: The numberical value for sound card to query.
+ * @device_id: The numerical value of hwdep device to query.
+ * @device_info: (out): The information of the device.
+ * @error: A #GError.
+ */
+void alsahwdep_get_device_info(guint card_id, guint device_id,
+                               ALSAHwdepDeviceInfo **device_info,
+                               GError **error)
+{
+    struct snd_hwdep_info *info;
+
+    g_return_if_fail(device_info != NULL);
+
+    *device_info = g_object_new(ALSAHWDEP_TYPE_DEVICE_INFO, NULL);
+    hwdep_device_info_refer_private(*device_info, &info);
+
+    info->device = device_id;
+    info->card = card_id;
+    hwdep_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_HWDEP_INFO, info, error);
+    if (*error != NULL)
+        g_object_unref(*device_info);
 }

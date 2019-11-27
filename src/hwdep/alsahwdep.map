@@ -5,6 +5,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsahwdep_get_device_id_list";
     "alsahwdep_get_hwdep_sysname";
     "alsahwdep_get_hwdep_devnode";
+    "alsahwdep_get_device_info";
 
     "alsahwdep_device_info_get_type";
   local:

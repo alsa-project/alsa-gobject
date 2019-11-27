@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <hwdep/device-info.h>
+
 G_BEGIN_DECLS
 
 void alsahwdep_get_device_id_list(guint card_id, guint **entries,
@@ -15,6 +17,10 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
 
 void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
                                  char **devnode, GError **error);
+
+void alsahwdep_get_device_info(guint card_id, guint device_id,
+                               ALSAHwdepDeviceInfo **device_info,
+                               GError **error);
 
 G_END_DECLS
 
