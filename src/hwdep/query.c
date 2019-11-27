@@ -17,6 +17,7 @@ G_DEFINE_QUARK("alsahwdep-error", alsahwdep_error)
 
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "hwC%u"
+#define HWDEP_SYSNAME_TEMPLATE      "hwC%uD%u"
 
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
@@ -198,4 +199,49 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
 end:
     g_free(prefix);
     release_udev_enum(enumerator);
+}
+
+/**
+ * alsahwdep_get_hwdep_sysname:
+ * @card_id: The numeridcal ID of sound card.
+ * @device_id: The numerical ID of hwdep device for the sound card.
+ * @sysname: (out): The string for sysname of hwdep device.
+ * @error: A #GError.
+ *
+ * Allocate sysname for hwdep device and return it when it exists.
+ */
+void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
+                                 char **sysname, GError **error)
+{
+    unsigned int length;
+    char *name;
+    struct udev *ctx;
+    struct udev_device *dev;
+
+    length = strlen(HWDEP_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
+             calculate_digits(device_id) + 1;
+    name = g_try_malloc0(length);
+    if (name == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    snprintf(name, length, HWDEP_SYSNAME_TEMPLATE, card_id, device_id);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        g_free(name);
+        return;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
+    if (dev == NULL) {
+        generate_error(error, ENODEV);
+        g_free(name);
+    } else {
+        *sysname = name;
+        udev_device_unref(dev);
+    }
+
+    udev_unref(ctx);
 }
