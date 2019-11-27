@@ -47,6 +47,7 @@ tests = {
   ],
   'hwdep': [
     'alsahwdep-enums',
+    'alsahwdep-device-info',
   ],
 }
 
