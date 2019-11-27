@@ -45,6 +45,9 @@ tests = {
     'alsaseq-queue-timer',
     'alsaseq-queue-timer-alsa',
   ],
+  'hwdep': [
+    'alsahwdep-enums',
+  ],
 }
 
 foreach path, scripts: tests
