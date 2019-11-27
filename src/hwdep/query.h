@@ -7,6 +7,9 @@
 
 G_BEGIN_DECLS
 
+void alsahwdep_get_device_id_list(guint card_id, guint **entries,
+                                  gsize *entry_count, GError **error);
+
 G_END_DECLS
 
 #endif

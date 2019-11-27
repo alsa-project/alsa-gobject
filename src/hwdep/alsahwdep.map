@@ -1,6 +1,8 @@
 ALSA_GOBJECT_0_0_0 {
   global:
     "alsahwdep_iface_type_get_type";
+
+    "alsahwdep_get_device_id_list";
   local:
     *;
 };
