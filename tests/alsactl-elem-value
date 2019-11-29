@@ -10,7 +10,9 @@ gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
 target = ALSACtl.ElemValue()
-props = ()
+props = (
+    'elem-id',
+)
 methods = ()
 signals = ()
 

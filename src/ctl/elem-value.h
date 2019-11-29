@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <ctl/elem-id.h>
+
 G_BEGIN_DECLS
 
 #define ALSACTL_TYPE_ELEM_VALUE     (alsactl_elem_value_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSACtlElemValue         ALSACtlElemValue;
 typedef struct _ALSACtlElemValueClass    ALSACtlElemValueClass;
+typedef struct _ALSACtlElemValuePrivate  ALSACtlElemValuePrivate;
 
 struct _ALSACtlElemValue {
     GObject parent_instance;
+
+    ALSACtlElemValuePrivate *priv;
 };
 
 struct _ALSACtlElemValueClass {
@@ -41,6 +46,8 @@ struct _ALSACtlElemValueClass {
 };
 
 GType alsactl_elem_value_get_type() G_GNUC_CONST;
+
+ALSACtlElemValue *alsactl_elem_value_new();
 
 G_END_DECLS
 

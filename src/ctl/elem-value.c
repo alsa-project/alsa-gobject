@@ -1,14 +1,67 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "elem-value.h"
 
-G_DEFINE_TYPE(ALSACtlElemValue, alsactl_elem_value, G_TYPE_OBJECT)
+#include <sound/asound.h>
+
+struct _ALSACtlElemValuePrivate {
+    struct snd_ctl_elem_value value;
+};
+G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemValue, alsactl_elem_value, G_TYPE_OBJECT)
+
+enum ctl_elem_value_prop_type {
+    CTL_ELEM_VALUE_PROP_ELEM_ID = 1,
+    CTL_ELEM_VALUE_PROP_COUNT,
+};
+static GParamSpec *ctl_elem_value_props[CTL_ELEM_VALUE_PROP_COUNT] = { NULL, };
+
+static void ctl_elem_value_get_property(GObject *obj, guint id, GValue *val,
+                                        GParamSpec *spec)
+{
+    ALSACtlElemValue *self = ALSACTL_ELEM_VALUE(obj);
+    ALSACtlElemValuePrivate *priv =
+                                alsactl_elem_value_get_instance_private(self);
+
+    switch (id) {
+    case CTL_ELEM_VALUE_PROP_ELEM_ID:
+    {
+        g_value_set_static_boxed(val, (const ALSACtlElemId *)&priv->value.id);
+        break;
+    }
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
 
 static void alsactl_elem_value_class_init(ALSACtlElemValueClass *klass)
 {
-    return;
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+
+    gobject_class->get_property = ctl_elem_value_get_property;
+
+    ctl_elem_value_props[CTL_ELEM_VALUE_PROP_ELEM_ID] =
+        g_param_spec_boxed("elem-id", "elem-id",
+                           "The identifier of element",
+                           ALSACTL_TYPE_ELEM_ID,
+                           G_PARAM_READABLE);
+
+    g_object_class_install_properties(gobject_class, CTL_ELEM_VALUE_PROP_COUNT,
+                                      ctl_elem_value_props);
 }
 
 static void alsactl_elem_value_init(ALSACtlElemValue *self)
 {
     return;
+}
+
+/**
+ * alsactl_elem_value_new:
+ *
+ * Allocate and return an instance of ALSACtlElemValue.
+ *
+ * Returns: (transfer full): A #ALSACtlElemValue.
+ */
+ALSACtlElemValue *alsactl_elem_value_new()
+{
+    return g_object_new(ALSACTL_TYPE_ELEM_VALUE, NULL);
 }
