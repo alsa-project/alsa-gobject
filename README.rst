@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/04/07
+2020/04/08
 Takashi Sakamoto
 
 Introduction
@@ -23,6 +23,8 @@ libalsaseq0
     For APIs to operate ALSA seq character device, depending on libalsatimer0
 libalsahwdep0
     For APIs to operate ALSA hwdep character device
+libalsarawmidi0
+    For APIs to operate ALSA rawmidi character device
 
 Namespaces of g-i produced by the project
 =========================================
@@ -35,6 +37,8 @@ ALSASeq-0.0
     For bindings to use libalsaseq0
 ALSAHwdep-0.0
     For bindings to use libalsahwdep0
+ALSARawmidi-0.0
+    For bindings to use libalsarawmidi0
 
 License
 =======
