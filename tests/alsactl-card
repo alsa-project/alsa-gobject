@@ -32,6 +32,7 @@ methods = (
 )
 signals = (
     'handle-elem-event',
+    'handle-disconnection',
 )
 
 if not test(target, props, methods, signals):

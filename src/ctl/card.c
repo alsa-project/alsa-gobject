@@ -42,6 +42,7 @@ static GParamSpec *ctl_card_props[CTL_CARD_PROP_COUNT] = { NULL, };
 
 enum ctl_card_sig_type {
     CTL_CARD_SIG_HANDLE_ELEM_EVENT = 0,
+    CTL_CARD_SIG_HANDLE_DISCONNECTION,
     CTL_CARD_SIG_COUNT,
 };
 static guint ctl_card_sigs[CTL_CARD_SIG_COUNT] = { 0 };
@@ -120,6 +121,24 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
                      alsactl_sigs_marshal_VOID__BOXED_FLAGS,
                      G_TYPE_NONE, 2, ALSACTL_TYPE_ELEM_ID,
                      ALSACTL_TYPE_EVENT_MASK_FLAG);
+
+    /**
+     * ALSACtlCard::handle-disconnection:
+     * @self: A #ALSACtlCard.
+     *
+     * When the sound card is not available anymore due to unbinding driver or
+     * hot unplugging, this signal is emit. The owner of this object should
+     * call g_object_free() as quickly as possible to release ALSA control
+     * character device.
+     */
+    ctl_card_sigs[CTL_CARD_SIG_HANDLE_DISCONNECTION] =
+        g_signal_new("handle-disconnection",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0, G_TYPE_NONE, 0);
 }
 
 static void alsactl_card_init(ALSACtlCard *self)
