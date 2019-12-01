@@ -418,8 +418,12 @@ static gboolean rawmidi_stream_pair_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
 
     condition = g_source_query_unix_fd(gsrc, src->tag);
-    if (condition & G_IO_ERR)
+    if (condition & G_IO_ERR) {
+        g_signal_emit(self,
+            rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_DISCONNECTION],
+            0, NULL);
         return G_SOURCE_REMOVE;
+    }
 
     if (condition & G_IO_IN) {
         g_signal_emit(self,
