@@ -58,6 +58,17 @@ struct _ALSACtlCardClass {
      */
     void (*handle_elem_event)(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                               ALSACtlEventMaskFlag events);
+
+    /**
+     * ALSACtlCardClass::handle_disconnection:
+     * @self: A #ALSACtlCard.
+     *
+     * When the sound card is not available anymore due to unbinding driver or
+     * hot unplugging, this signal is emit. The owner of this object should
+     * call g_object_free() as quickly as possible to release ALSA control
+     * character device.
+     */
+    void (*handle_disconnection)(ALSACtlCard *self);
 };
 
 GType alsactl_card_get_type() G_GNUC_CONST;

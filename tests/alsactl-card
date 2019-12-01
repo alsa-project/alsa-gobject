@@ -29,6 +29,7 @@ methods = (
     'remove_elems',
     'create_source',
     'do_handle_elem_event',
+    'do_handle_disconnection',
 )
 signals = (
     'handle-elem-event',

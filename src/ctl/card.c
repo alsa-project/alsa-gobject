@@ -135,7 +135,7 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
         g_signal_new("handle-disconnection",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     0,
+                     G_STRUCT_OFFSET(ALSACtlCardClass, handle_disconnection),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0, G_TYPE_NONE, 0);
