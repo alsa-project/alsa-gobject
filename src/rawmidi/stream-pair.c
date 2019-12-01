@@ -31,6 +31,7 @@ static GParamSpec *rawmidi_stream_pair_props[RAWMIDI_STREAM_PAIR_PROP_COUNT] = {
 
 enum rawmidi_stream_pair_sig_type {
     RAWMIDI_STREAM_PAIR_SIG_HANDLE_MESSAGES = 0,
+    RAWMIDI_STREAM_PAIR_SIG_DISCONNECTION,
     RAWMIDI_STREAM_PAIR_SIG_COUNT,
 };
 static guint rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_COUNT] = { 0 };
@@ -96,6 +97,24 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
                      NULL, NULL,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0, NULL);
+
+    /**
+     * ALSARawmidiStreamPair::handle-disconnection:
+     * @self: A #ALSARawmidiStreamPair.
+     *
+     * When the sound card is not available anymore due to unbinding driver or
+     * hot unplugging, this signal is emit. The owner of this object should
+     * call g_object_free() as quickly as possible to release ALSA rawmidi
+     * character device.
+     */
+    rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_DISCONNECTION] =
+        g_signal_new("handle-disconnection",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0, G_TYPE_NONE, 0);
 }
 
 static void alsarawmidi_stream_pair_init(ALSARawmidiStreamPair *self)
