@@ -54,6 +54,17 @@ struct _ALSARawmidiStreamPairClass {
      * When any input message in available, this event is emit.
      */
     void (*handle_messages)(ALSARawmidiStreamPair *self);
+
+    /**
+     * ALSARawmidiStreamPairClass::handle_disconnection:
+     * @self: A #ALSARawmidiStreamPair.
+     *
+     * When the sound card is not available anymore due to unbinding driver or
+     * hot unplugging, this signal is emit. The owner of this object should
+     * call g_object_free() as quickly as possible to release ALSA rawmidi
+     * character device.
+     */
+    void (*handle_disconnection)(ALSARawmidiStreamPair *self);
 };
 
 GType alsarawmidi_stream_pair_get_type(void) G_GNUC_CONST;

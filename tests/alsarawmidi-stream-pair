@@ -25,6 +25,7 @@ methods = (
     'drop_substream',
     'create_source',
     'do_handle_messages',
+    'do_handle_disconnection',
 )
 signals = (
     'handle-messages',
