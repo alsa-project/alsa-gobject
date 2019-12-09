@@ -155,6 +155,15 @@ query_subscribe_types = (
     'WRITE',
 )
 
+queue_timer_types = (
+    'ALSA',
+)
+
+remove_filter_flags = (
+    'INPUT',
+    'OUTPUT',
+)
+
 types = {
     ALSASeq.SpecificAddress:    specific_address_types,
     ALSASeq.SpecificClientId:   specific_client_id_types,
@@ -171,6 +180,8 @@ types = {
     ALSASeq.SpecificQueueId:    specific_queue_id_types,
     ALSASeq.PortSubscribeFlag:  port_subscribe_flags,
     ALSASeq.QuerySubscribeType: query_subscribe_types,
+    ALSASeq.QueueTimerType:     queue_timer_types,
+    ALSASeq.RemoveFilterFlag:   remove_filter_flags,
 }
 
 for obj, types in types.items():
