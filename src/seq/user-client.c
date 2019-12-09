@@ -854,3 +854,26 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
     seq_queue_timer_refer_private(*queue_timer, &timer_ptr);
     *timer_ptr = timer;
 }
+
+/**
+ * alsaseq_user_client_remove_events:
+ * @self: A #ALSASeqUserClient.
+ * @filter: A #ALSASeqRemoveFilter.
+ * @error: A #GError.
+ *
+ * Remove queued events according to the filter.
+ */
+void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
+                                       ALSASeqRemoveFilter *filter,
+                                       GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+}

@@ -35,6 +35,7 @@ methods = (
     'get_queue_tempo',
     'set_queue_timer',
     'get_queue_timer',
+    'remove_events',
 )
 signals = ()
 

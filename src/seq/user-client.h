@@ -16,6 +16,7 @@
 #include <seq/queue-tempo.h>
 #include <seq/queue-timer.h>
 #include <seq/queue-timer-alsa.h>
+#include <seq/remove-filter.h>
 
 G_BEGIN_DECLS
 
@@ -138,6 +139,10 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
                                          guint queue_id,
                                          ALSASeqQueueTimer **queue_timer,
                                          GError **error);
+
+void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
+                                       ALSASeqRemoveFilter *filter,
+                                       GError **error);
 
 G_END_DECLS
 
