@@ -72,6 +72,7 @@ libudev = dependency('libudev')
 dependencies = [
   gobject,
   libudev,
+  alsatimer_dependency,
 ]
 
 # Generate enumerations for GObject fashion.
