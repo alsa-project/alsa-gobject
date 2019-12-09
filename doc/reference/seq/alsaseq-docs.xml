@@ -40,6 +40,12 @@
         <xi:include href="xml/event-data-ctl.xml"/>
         <xi:include href="xml/event-data-queue.xml"/>
         <xi:include href="xml/event-data-connect.xml"/>
+        <xi:include href="xml/queue-info.xml"/>
+        <xi:include href="xml/queue-status.xml"/>
+        <xi:include href="xml/queue-tempo.xml"/>
+        <xi:include href="xml/queue-timer.xml"/>
+        <xi:include href="xml/queue-timer-alsa.xml"/>
+        <xi:include href="xml/remove-filter.xml"/>
     </chapter>
 
     <index id="index-all">
