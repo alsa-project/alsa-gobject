@@ -339,4 +339,27 @@ typedef enum {
     ALSASEQ_QUERY_SUBSCRIBE_TYPE_WRITE  = SNDRV_SEQ_QUERY_SUBS_WRITE,
 } ALSASeqQuerySubscribeType;
 
+/**
+ * ALSASeqQueueTimerType:
+ * @ALSASEQ_QUEUE_TIMER_TYPE_ALSA:          Any ALSA timer device.
+ *
+ * A set of enumerations for the type of timer source for the queue.
+ */
+typedef enum {
+    ALSASEQ_QUEUE_TIMER_TYPE_ALSA       = SNDRV_SEQ_TIMER_ALSA,
+} ALSASeqQueueTimerType;
+
+/**
+ * ALSASeqRemoveFilterFlag:
+ * @ALSASEQ_REMOVE_FILTER_FLAG_INPUT:   Flush of input queues.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT:  Flush of output queues.
+ *
+ * A set of flags of the mode of removal event.
+ */
+typedef enum /*< flags >*/
+{
+    ALSASEQ_REMOVE_FILTER_FLAG_INPUT    = SNDRV_SEQ_REMOVE_INPUT,
+    ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT   = SNDRV_SEQ_REMOVE_OUTPUT,
+} ALSASeqRemoveFilterFlag;
+
 #endif
