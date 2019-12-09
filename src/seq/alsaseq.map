@@ -161,6 +161,13 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_queue_timer_alsa_new";
 
     "alsaseq_remove_filter_get_type";
+    "alsaseq_remove_filter_new_with_dest_addr";
+    "alsaseq_remove_filter_new_with_note_channel";
+    "alsaseq_remove_filter_new_with_event_type";
+    "alsaseq_remove_filter_new_with_note";
+    "alsaseq_remove_filter_new_with_tag";
+    "alsaseq_remove_filter_new_with_tick_time";
+    "alsaseq_remove_filter_new_with_real_time";
   local:
     *;
 };
