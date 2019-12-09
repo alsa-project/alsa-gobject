@@ -31,6 +31,7 @@ sources = files(
   'queue-tempo.c',
   'queue-timer.c',
   'queue-timer-alsa.c',
+  'remove-filter.c',
 )
 
 headers = files(
@@ -56,6 +57,7 @@ headers = files(
   'queue-tempo.h',
   'queue-timer.h',
   'queue-timer-alsa.h',
+  'remove-filter.h',
 )
 
 privates = files(
