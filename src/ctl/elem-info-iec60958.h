@@ -44,6 +44,8 @@ struct _ALSACtlElemInfoIec60958Class {
 
 GType alsactl_elem_info_iec60958_get_type(void) G_GNUC_CONST;
 
+ALSACtlElemInfoIec60958 *alsactl_elem_info_iec60958_new();
+
 G_END_DECLS
 
 #endif

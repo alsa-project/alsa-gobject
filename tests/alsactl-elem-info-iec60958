@@ -11,7 +11,9 @@ from gi.repository import ALSACtl
 
 target = ALSACtl.ElemInfoIec60958()
 props = ()
-methods = ()
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
