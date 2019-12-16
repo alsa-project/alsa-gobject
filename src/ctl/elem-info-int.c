@@ -29,10 +29,10 @@ static void ctl_elem_info_int_set_property(GObject *obj, guint id,
         info->value.integer.min = (long)g_value_get_int(val);
         break;
     case CTL_ELEM_INFO_INT_PROP_MAX:
-        info->value.integer.min = (long)g_value_get_int(val);
+        info->value.integer.max = (long)g_value_get_int(val);
         break;
     case CTL_ELEM_INFO_INT_PROP_STEP:
-        info->value.integer.min = (long)g_value_get_int(val);
+        info->value.integer.step = (long)g_value_get_int(val);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
