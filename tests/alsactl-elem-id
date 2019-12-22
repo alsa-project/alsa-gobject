@@ -10,15 +10,15 @@ gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
 target = ALSACtl.ElemId()
-props = (
-    'numid',
-    'iface',
-    'device',
-    'subdevice',
-    'name',
-    'index',
+props = ()
+methods = (
+    'get_numid',
+    'get_iface',
+    'get_device',
+    'get_subdevice',
+    'get_name',
+    'get_index',
 )
-methods = ()
 signals = ()
 
 if not test(target, props, methods, signals):
