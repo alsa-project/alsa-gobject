@@ -18,6 +18,7 @@ methods = (
     'get_subdevice',
     'get_name',
     'get_index',
+    'equals',
 )
 signals = ()
 

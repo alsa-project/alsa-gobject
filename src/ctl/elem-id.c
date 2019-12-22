@@ -129,3 +129,25 @@ void alsactl_elem_id_get_index(const ALSACtlElemId *self, guint *index)
 {
     *index = self->index;
 }
+
+/**
+ * alsactl_elem_id_equal:
+ * @self: A #ALSACtlElemId.
+ * @target: A #ALSACtlElemId to compare.
+ *
+ * Returns: whether the given object indicates the same element.
+ */
+gboolean alsactl_elem_id_equal(const ALSACtlElemId *self,
+                               const ALSACtlElemId *target) {
+    const struct snd_ctl_elem_id *lhs, *rhs;
+
+    lhs = (const struct snd_ctl_elem_id *)self;
+    rhs = (const struct snd_ctl_elem_id *)target;
+
+    return lhs->numid == rhs->numid ||
+           (lhs->iface == rhs->iface &&
+            lhs->device == rhs->device &&
+            lhs->subdevice == rhs->subdevice &&
+            !strcmp((const char *)lhs->name, (const char *)rhs->name) &&
+            lhs->index == rhs->index);
+}

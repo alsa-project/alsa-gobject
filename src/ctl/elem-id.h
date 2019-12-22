@@ -31,6 +31,9 @@ void alsactl_elem_id_get_subdevice_id(const ALSACtlElemId *self,
 void alsactl_elem_id_get_name(const ALSACtlElemId *self, const gchar **name);
 void alsactl_elem_id_get_index(const ALSACtlElemId *self, guint *index);
 
+gboolean alsactl_elem_id_equal(const ALSACtlElemId *self,
+                               const ALSACtlElemId *target);
+
 G_END_DECLS
 
 #endif
