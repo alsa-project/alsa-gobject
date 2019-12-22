@@ -398,3 +398,23 @@ void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (gint64)value->value.integer64.value[i];
 }
+
+/**
+ * alsactl_elem_value_equal:
+ * @self: A #ALSACtlElemValue.
+ * @target: A #ALSACtlElemValue to compare.
+ *
+ * Returns: whether the given object includes the same values as the instance.
+ *          The other fields are ignored to be compared.
+ */
+gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self,
+                                  const ALSACtlElemValue *target) {
+    const ALSACtlElemValuePrivate *lhs, *rhs;
+
+    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE(self), FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE(target), FALSE);
+    lhs = alsactl_elem_value_get_instance_private((ALSACtlElemValue *)self);
+    rhs = alsactl_elem_value_get_instance_private((ALSACtlElemValue *)target);
+
+    return !memcmp(&lhs->value, &rhs->value, sizeof(lhs->value));
+}

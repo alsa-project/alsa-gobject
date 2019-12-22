@@ -27,6 +27,7 @@ methods = (
     'get_iec60958',
     'set_int64',
     'get_int64',
+    'equal',
 )
 signals = ()
 

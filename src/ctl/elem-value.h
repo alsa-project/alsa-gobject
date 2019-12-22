@@ -81,6 +81,9 @@ void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
 void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
                                   gint64 *const *values, gsize *value_count);
 
+gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self,
+                                  const ALSACtlElemValue *target);
+
 G_END_DECLS
 
 #endif

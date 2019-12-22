@@ -76,6 +76,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_value_get_iec60958";
     "alsactl_elem_value_set_int64";
     "alsactl_elem_value_get_int64";
+    "alsactl_elem_value_equal";
   local:
     *;
 };
