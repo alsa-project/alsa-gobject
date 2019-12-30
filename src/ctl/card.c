@@ -108,7 +108,7 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
      * ALSACtlCard::handle-elem-event:
      * @self: A #ALSACtlCard.
      * @elem_id: (transfer none): A #ALSACtlElemId.
-     * @events: A set of #ALSACtlEventMaskFlag.
+     * @events: A set of #ALSACtlElemEventMask.
      *
      * When event occurs for any element, this signal is emit.
      */
@@ -120,7 +120,7 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
                      NULL, NULL,
                      alsactl_sigs_marshal_VOID__BOXED_FLAGS,
                      G_TYPE_NONE, 2, ALSACTL_TYPE_ELEM_ID,
-                     ALSACTL_TYPE_EVENT_MASK_FLAG);
+                     ALSACTL_TYPE_ELEM_EVENT_MASK);
 
     /**
      * ALSACtlCard::handle-disconnection:
@@ -775,12 +775,12 @@ static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
         ALSACtlElemId *elem_id = (ALSACtlElemId *)entry->data;
 
         if (ev->data.elem.id.numid == elem_id->numid) {
-            ALSACtlEventMaskFlag mask;
+            ALSACtlElemEventMask mask;
 
             if (ev->data.elem.mask != SNDRV_CTL_EVENT_MASK_REMOVE)
                 mask = ev->data.elem.mask;
             else
-                mask = ALSACTL_EVENT_MASK_FLAG_REMOVE;
+                mask = ALSACTL_ELEM_EVENT_MASK_REMOVE;
 
             g_signal_emit(self,
                           ctl_card_sigs[CTL_CARD_SIG_HANDLE_ELEM_EVENT], 0,

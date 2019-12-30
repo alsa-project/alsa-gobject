@@ -53,12 +53,12 @@ struct _ALSACtlCardClass {
      * ALSACtlCardClass::handle_elem_event:
      * @self: A #ALSACtlCard.
      * @elem_id: (transfer none): A #ALSACtlElemId.
-     * @events: A set of #ALSACtlEventMaskFlag.
+     * @events: A set of #ALSACtlElemEventMask.
      *
      * When event occurs for any element, this signal is emit.
      */
     void (*handle_elem_event)(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                              ALSACtlEventMaskFlag events);
+                              ALSACtlElemEventMask events);
 
     /**
      * ALSACtlCardClass::handle_disconnection:

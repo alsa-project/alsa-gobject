@@ -43,7 +43,7 @@ event_types = (
     'ELEM',
 )
 
-event_mask_flags = (
+elem_event_mask_flags = (
     'VALUE',
     'INFO',
     'ADD',
@@ -57,7 +57,7 @@ types = {
     ALSACtl.ElemAccessFlag: elem_access_flags,
     ALSACtl.ElemAccessFlag: elem_access_flags,
     ALSACtl.EventType:      event_types,
-    ALSACtl.EventMaskFlag:  event_mask_flags,
+    ALSACtl.ElemEventMask:  elem_event_mask_flags,
 }
 
 for obj, types in types.items():

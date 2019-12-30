@@ -91,22 +91,22 @@ typedef enum
 } ALSACtlEventType;
 
 /**
- * ALSACtlEventMaskFlag:
- * @ALSACTL_EVENT_MASK_FLAG_VALUE:      The event notifies any change of value for the element.
- * @ALSACTL_EVENT_MASK_FLAG_INFO:       The event notifies any change of information for the element.
- * @ALSACTL_EVENT_MASK_FLAG_ADD:        The element notifies addition of the element.
- * @ALSACTL_EVENT_MASK_FLAG_TLV:        The element notifies any change of Type-Length-Value data for the element.
- * @ALSACTL_EVENT_MASK_FLAG_REMOVE:     The element notifies removal of the element.
+ * ALSACtlElemEventMask:
+ * @ALSACTL_ELEM_EVENT_MASK_VALUE:  The event notifies any change of value for the element.
+ * @ALSACTL_ELEM_EVENT_MASK_INFO:   The event notifies any change of information for the element.
+ * @ALSACTL_ELEM_EVENT_MASK_ADD:    The element notifies addition of the element.
+ * @ALSACTL_ELEM_EVENT_MASK_TLV:    The element notifies any change of Type-Length-Value data for the element.
+ * @ALSACTL_ELEM_EVENT_MASK_REMOVE: The element notifies removal of the element.
  *
  * A set of flags for the content of event for the element.
  */
 typedef enum /*< flags >*/
 {
-    ALSACTL_EVENT_MASK_FLAG_VALUE   = SNDRV_CTL_EVENT_MASK_VALUE,
-    ALSACTL_EVENT_MASK_FLAG_INFO    = SNDRV_CTL_EVENT_MASK_INFO,
-    ALSACTL_EVENT_MASK_FLAG_ADD     = SNDRV_CTL_EVENT_MASK_ADD,
-    ALSACTL_EVENT_MASK_FLAG_TLV     = SNDRV_CTL_EVENT_MASK_TLV,
-    ALSACTL_EVENT_MASK_FLAG_REMOVE  = SNDRV_CTL_EVENT_MASK_TLV << 1,
-} ALSACtlEventMaskFlag;
+    ALSACTL_ELEM_EVENT_MASK_VALUE   = SNDRV_CTL_EVENT_MASK_VALUE,
+    ALSACTL_ELEM_EVENT_MASK_INFO    = SNDRV_CTL_EVENT_MASK_INFO,
+    ALSACTL_ELEM_EVENT_MASK_ADD     = SNDRV_CTL_EVENT_MASK_ADD,
+    ALSACTL_ELEM_EVENT_MASK_TLV     = SNDRV_CTL_EVENT_MASK_TLV,
+    ALSACTL_ELEM_EVENT_MASK_REMOVE  = SNDRV_CTL_EVENT_MASK_TLV << 1,
+} ALSACtlElemEventMask;
 
 #endif
