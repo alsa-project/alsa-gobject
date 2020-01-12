@@ -190,9 +190,9 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
     priv = alsactl_elem_value_get_instance_private(self);
     value = &priv->value;
 
-    value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
+    value_count = MIN(value_count, G_N_ELEMENTS(value->value.enumerated.item));
     for (i = 0; i < value_count; ++i)
-        value->value.integer.value[i] = (long)values[i];
+        value->value.enumerated.item[i] = (unsigned int)values[i];
 }
 
 /**
@@ -215,9 +215,9 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
     priv = alsactl_elem_value_get_instance_private(self);
     value = &priv->value;
 
-    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
+    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.enumerated.item));
     for (i = 0; i < *value_count; ++i)
-        (*values)[i] = (guint32)value->value.integer.value[i];
+        (*values)[i] = (guint32)value->value.enumerated.item[i];
 }
 
 /**
