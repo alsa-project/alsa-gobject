@@ -32,6 +32,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_user_instance_open";
     "alsatimer_user_instance_attach";
     "alsatimer_user_instance_attach_as_slave";
+
+    "alsatimer_instance_info_get_type";
   local:
     *;
 };
