@@ -54,14 +54,12 @@ jobs:
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y git build-essential'
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y meson ninja-build libglib2.0-dev libudev-dev gobject-introspection libgirepository1.0-dev'
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y gtk-doc-tools python3-gi'
-    - name: Clone repository.
+    - name: Checkout repository.
+      uses: actions/checkout@v2
+    - name: Generate archive and expand it inner the container.
       run: |
-        sudo lxc exec builder -- su ubuntu -c "cd; git clone http://github.com/${GITHUB_REPOSITORY} local-repository"
-    - name: Generate archive.
-      run: |
-        sudo lxc exec builder -- su ubuntu -c "cd; cd local-repository; git archive --format=tar --prefix=dist/ ${GITHUB_SHA} | xz > ../archive.tar.xz"
-    - name: Expand archive.
-      run: |
+        git archive --format=tar --prefix=dist/ HEAD | xz > archive.tar.xz
+        sudo lxc file push archive.tar.xz builder/home/ubuntu/
         sudo lxc exec builder -- su ubuntu -c 'cd; tar xf archive.tar.xz'
     - name: Initialization for build
       run: |
