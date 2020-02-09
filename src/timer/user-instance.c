@@ -346,8 +346,12 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
 
     condition = g_source_query_unix_fd(gsrc, src->tag);
-    if (condition & G_IO_ERR)
+    if (condition & G_IO_ERR) {
+        g_signal_emit(self,
+            timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_DISCONNECTION],
+            0, NULL);
         return G_SOURCE_REMOVE;
+    }
 
     len = read(priv->fd, src->buf, src->buf_len);
     if (len < 0) {
