@@ -21,6 +21,7 @@ methods = (
     'get_status',
     'create_source',
     'do_handle_event',
+    'do_handle_disconnection',
 )
 signals = (
     'handle-event',

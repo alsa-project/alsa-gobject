@@ -57,6 +57,17 @@ struct _ALSATimerUserInstanceClass {
      */
     void (*handle_event)(ALSATimerUserInstance *self,
                          const ALSATimerEventData *event_data);
+
+    /**
+     * ALSATimerUserInstanceClass::handle_disconnection:
+     * @self: A #ALSATimerUserInstance.
+     *
+     * When the attached timer device is not available anymore due to unbinding
+     * driver or hot unplugging, this signal is emit. The owner of this object
+     * should call g_object_free() as quickly as possible to release ALSA timer
+     * character device.
+     */
+    void (*handle_disconnection)(ALSATimerUserInstance *self);
 };
 
 GType alsatimer_user_instance_get_type() G_GNUC_CONST;
