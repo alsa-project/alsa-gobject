@@ -10,9 +10,15 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.InstanceParams()
-props = ()
+props = (
+    'flags',
+    'interval',
+    'queue-size',
+)
 methods = (
     'new',
+    'set_event_filter',
+    'get_event_filter',
 )
 signals = ()
 
