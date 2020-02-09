@@ -25,6 +25,7 @@ tests = {
     'alsatimer-instance-params',
     'alsatimer-instance-status',
     'alsatimer-event-data',
+    'alsatimer-event-data-tick',
   ],
 }
 
