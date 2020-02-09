@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "instance-info.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSATimerInstanceInfoPrivate {
     struct snd_timer_info info;
@@ -94,4 +92,13 @@ static void alsatimer_instance_info_class_init(ALSATimerInstanceInfoClass *klass
 static void alsatimer_instance_info_init(ALSATimerInstanceInfo *self)
 {
     return;
+}
+
+void timer_instance_info_refer_private(ALSATimerInstanceInfo *self,
+                                     struct snd_timer_info **info)
+{
+    ALSATimerInstanceInfoPrivate *priv =
+                            alsatimer_instance_info_get_instance_private(self);
+
+    *info = &priv->info;
 }
