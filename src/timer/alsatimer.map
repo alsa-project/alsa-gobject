@@ -26,6 +26,9 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_device_params_get_type";
     "alsatimer_device_params_new";
+
+    "alsatimer_user_instance_get_type";
+    "alsatimer_user_instance_new";
   local:
     *;
 };
