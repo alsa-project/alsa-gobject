@@ -24,6 +24,7 @@ tests = {
     'alsatimer-instance-info',
     'alsatimer-instance-params',
     'alsatimer-instance-status',
+    'alsatimer-event-data',
   ],
 }
 
