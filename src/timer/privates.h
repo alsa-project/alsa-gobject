@@ -22,6 +22,9 @@ void timer_device_info_refer_private(ALSATimerDeviceInfo *self,
 void timer_device_status_refer_private(ALSATimerDeviceStatus *self,
                                        struct snd_timer_gstatus **status);
 
+void timer_device_params_refer_private(ALSATimerDeviceParams *self,
+                                       struct snd_timer_gparams **params);
+
 G_END_DECLS
 
 #endif

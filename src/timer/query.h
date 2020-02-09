@@ -8,6 +8,7 @@
 #include <timer/device-id.h>
 #include <timer/device-info.h>
 #include <timer/device-status.h>
+#include <timer/device-params.h>
 
 #include <timer/alsatimer-enums.h>
 
@@ -25,6 +26,10 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
 
 void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
                                  ALSATimerDeviceStatus **device_status,
+                                 GError **error);
+
+void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
+                                 const ALSATimerDeviceParams *device_params,
                                  GError **error);
 
 G_END_DECLS
