@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "device-status.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 struct _ALSATimerDeviceStatusPrivate {
     struct snd_timer_gstatus status;
@@ -75,4 +73,13 @@ static void alsatimer_device_status_class_init(ALSATimerDeviceStatusClass *klass
 static void alsatimer_device_status_init(ALSATimerDeviceStatus *self)
 {
     return;
+}
+
+void timer_device_status_refer_private(ALSATimerDeviceStatus *self,
+                                       struct snd_timer_gstatus **status)
+{
+    ALSATimerDeviceStatusPrivate *priv =
+                            alsatimer_device_status_get_instance_private(self);
+
+    *status = &priv->status;
 }
