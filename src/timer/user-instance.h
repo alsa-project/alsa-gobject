@@ -55,6 +55,11 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
                                     GError **error);
 
+void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
+                                        ALSATimerSlaveClass slave_class,
+                                        int slave_id,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif

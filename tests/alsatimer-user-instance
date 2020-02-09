@@ -15,6 +15,7 @@ methods = (
     'new',
     'open',
     'attach',
+    'attach_as_slave',
 )
 signals = ()
 
