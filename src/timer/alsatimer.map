@@ -43,6 +43,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_instance_params_get_event_filter";
 
     "alsatimer_instance_status_get_type";
+    "alsatimer_instance_status_get_timestamp";
   local:
     *;
 };

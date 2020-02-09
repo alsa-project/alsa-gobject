@@ -10,8 +10,15 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.InstanceStatus()
-props = ()
-methods = ()
+props = (
+    'interval',
+    'lost',
+    'overrun',
+    'queue-size',
+)
+methods = (
+    'get_timestamp',
+)
 signals = ()
 
 if not test(target, props, methods, signals):

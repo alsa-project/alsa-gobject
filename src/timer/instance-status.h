@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerInstanceStatus         ALSATimerInstanceStatus;
 typedef struct _ALSATimerInstanceStatusClass    ALSATimerInstanceStatusClass;
+typedef struct _ALSATimerInstanceStatusPrivate  ALSATimerInstanceStatusPrivate;
 
 struct _ALSATimerInstanceStatus {
     GObject parent_instance;
+
+    ALSATimerInstanceStatusPrivate *priv;
 };
 
 struct _ALSATimerInstanceStatusClass {
@@ -41,6 +44,9 @@ struct _ALSATimerInstanceStatusClass {
 };
 
 GType alsatimer_instance_status_get_type() G_GNUC_CONST;
+
+void alsatimer_instance_status_get_timestamp(ALSATimerInstanceStatus *self,
+                                             guint *tv_sec, guint *tv_nsec);
 
 G_END_DECLS
 
