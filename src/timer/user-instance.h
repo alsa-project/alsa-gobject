@@ -47,6 +47,16 @@ struct _ALSATimerUserInstance {
 
 struct _ALSATimerUserInstanceClass {
     GObjectClass parent_class;
+
+    /**
+     * ALSATimerUserInstanceClass::handle_event:
+     * @self: A #ALSATimerUserInstance.
+     * @event_data: (transfer none): An object derived from #ALSATimerEventData.
+     *
+     * When event occurs, this signal is emit.
+     */
+    void (*handle_event)(ALSATimerUserInstance *self,
+                         const ALSATimerEventData *event_data);
 };
 
 GType alsatimer_user_instance_get_type() G_GNUC_CONST;
