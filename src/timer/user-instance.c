@@ -480,3 +480,40 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsatimer_user_instance_pause:
+ * @self: A #ALSATimerUserInstance.
+ * @error: A #GError.
+ *
+ * Stop event emission.
+ */
+void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsatimer_user_instance_continue:
+ * @self: A #ALSATimerUserInstance.
+ * @error: A #GError.
+ *
+ * Stop event emission.
+ */
+void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
+                                      GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0)
+        generate_error(error, errno);
+}
