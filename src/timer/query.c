@@ -64,3 +64,42 @@ void alsatimer_get_sysname(char **sysname, GError **error)
 
     *sysname = name;
 }
+
+/**
+ * alsatimer_get_devnode:
+ * @devnode: (out): The string for devnode of ALSA Timer.
+ * @error: A #GError.
+ *
+ * Allocate string of devnode for ALSA Timer and return it if exists.
+ */
+void alsatimer_get_devnode(char **devnode, GError **error)
+{
+    struct udev *ctx;
+    struct udev_device *dev;
+    const char *node;
+
+    g_return_if_fail(devnode != NULL);
+
+    ctx = udev_new();
+    if (ctx == NULL) {
+        generate_error(error, errno);
+        return;
+    }
+
+    dev = udev_device_new_from_subsystem_sysname(ctx, "sound",
+                                                 TIMER_SYSNAME_TEMPLATE);
+    if (dev == NULL) {
+        generate_error(error, ENODEV);
+        udev_unref(ctx);
+        return;
+    }
+
+    node = udev_device_get_devnode(dev);
+    if (node != NULL)
+        *devnode = strdup(node);
+    else
+        generate_error(error, ENODEV);
+
+    udev_device_unref(dev);
+    udev_unref(ctx);
+}
