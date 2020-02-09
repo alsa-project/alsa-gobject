@@ -20,6 +20,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_device_id_get_subdevice_id";
 
     "alsatimer_device_info_get_type";
+
+    "alsatimer_device_status_get_type";
   local:
     *;
 };
