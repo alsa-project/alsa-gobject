@@ -27,6 +27,7 @@ typedef struct {
 
 enum timer_user_instance_sig_type {
     TIMER_USER_INSTANCE_SIG_HANDLE_EVENT = 0,
+    TIMER_USER_INSTANCE_SIG_HANDLE_DISCONNECTION,
     TIMER_USER_INSTANCE_SIG_COUNT,
 };
 static guint timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_COUNT] = { 0 };
@@ -64,6 +65,24 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
                      NULL, NULL,
                      g_cclosure_marshal_VOID__OBJECT,
                      G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA);
+
+    /**
+     * ALSATimerUserInstance::handle-disconnection:
+     * @self: A #ALSATimerUserInstance.
+     *
+     * When the attached timer device is not available anymore due to unbinding
+     * driver or hot unplugging, this signal is emit. The owner of this object
+     * should call g_object_free() as quickly as possible to release ALSA timer
+     * character device.
+     */
+    timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_DISCONNECTION] =
+        g_signal_new("handle-disconnection",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0, G_TYPE_NONE, 0);
 }
 
 static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
