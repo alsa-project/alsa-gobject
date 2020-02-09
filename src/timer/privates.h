@@ -3,6 +3,7 @@
 #define __ALSA_GOBJECT_ALSATIMER_PRIVATES__H__
 
 #include "device-info.h"
+#include "device-status.h"
 
 #include <sound/asound.h>
 
@@ -16,6 +17,9 @@ GQuark alsatimer_error_quark(void);
 
 void timer_device_info_refer_private(ALSATimerDeviceInfo *self,
                                      struct snd_timer_ginfo **info);
+
+void timer_device_status_refer_private(ALSATimerDeviceStatus *self,
+                                       struct snd_timer_gstatus **status);
 
 G_END_DECLS
 
