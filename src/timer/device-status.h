@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerDeviceStatus           ALSATimerDeviceStatus;
 typedef struct _ALSATimerDeviceStatusClass      ALSATimerDeviceStatusClass;
+typedef struct _ALSATimerDeviceStatusPrivate    ALSATimerDeviceStatusPrivate;
 
 struct _ALSATimerDeviceStatus {
     GObject parent_instance;
+
+    ALSATimerDeviceStatusPrivate *priv;
 };
 
 struct _ALSATimerDeviceStatusClass {
