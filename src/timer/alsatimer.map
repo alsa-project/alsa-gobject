@@ -11,6 +11,11 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_get_devnode";
 
     "alsatimer_device_id_get_type";
+    "alsatimer_device_id_new";
+    "alsatimer_device_id_get_class";
+    "alsatimer_device_id_get_card_id";
+    "alsatimer_device_id_get_device_id";
+    "alsatimer_device_id_get_subdevice_id";
   local:
     *;
 };
