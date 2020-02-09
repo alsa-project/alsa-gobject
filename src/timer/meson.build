@@ -18,6 +18,7 @@ sources = files(
   'instance-info.c',
   'instance-params.c',
   'instance-status.c',
+  'event-data.c',
 )
 
 headers = files(
@@ -30,6 +31,7 @@ headers = files(
   'instance-info.h',
   'instance-params.h',
   'instance-status.h',
+  'event-data.h',
 )
 
 privates = files(
