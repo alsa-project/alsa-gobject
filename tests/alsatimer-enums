@@ -51,6 +51,11 @@ event_types = (
     'MRESUME',
 )
 
+event_data_types = (
+    'TICK',
+    'TIMESTAMP',
+)
+
 types = {
     ALSATimer.Class:                class_types,
     ALSATimer.SlaveClass:           slave_class_types,
@@ -58,6 +63,7 @@ types = {
     ALSATimer.DeviceInfoFlag:       device_info_flags,
     ALSATimer.InstanceParamFlag:    instance_param_flags,
     ALSATimer.EventType:            event_types,
+    ALSATimer.EventDataType:        event_data_types,
 }
 
 for obj, types in types.items():

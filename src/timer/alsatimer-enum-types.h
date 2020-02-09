@@ -110,4 +110,16 @@ typedef enum
     ALSATIMER_EVENT_TYPE_MRESUME    = SNDRV_TIMER_EVENT_MRESUME,
 } ALSATimerEventType;
 
+/**
+ * ALSATimerEventDataType
+ * @ALSATIMER_EVENT_DATA_TYPE_TICK:         The data for tick event.
+ * @ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP:    The data for timestamp event.
+ *
+ * A set of enumerations for the type of event data.
+ */
+typedef enum {
+    ALSATIMER_EVENT_DATA_TYPE_TICK,
+    ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP,
+} ALSATimerEventDataType;
+
 #endif
