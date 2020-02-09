@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "../version.xml">
+]>
+
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+    <bookinfo>
+        <title>ALSATimer Reference Manual</title>
+    <releaseinfo>This document is for the ALSATimer library, version &version;.
+    </releaseinfo>
+    </bookinfo>
+
+    <chapter id="alsatimer-enumerations">
+        <title>ALSATimer enumerations</title>
+        <xi:include href="xml/alsatimer-enum-types.xml"/>
+    </chapter>
+
+    <chapter id="alsatimer-global-methods">
+        <title>ALSATimer global methods</title>
+        <xi:include href="xml/query.xml"/>
+    </chapter>
+
+    <chapter id="alsatimer-objects">
+        <title>ALSATimer objects</title>
+        <xi:include href="xml/device-id.xml"/>
+        <xi:include href="xml/device-info.xml"/>
+        <xi:include href="xml/device-status.xml"/>
+        <xi:include href="xml/device-params.xml"/>
+        <xi:include href="xml/user-instance.xml"/>
+        <xi:include href="xml/instance-info.xml"/>
+        <xi:include href="xml/instance-status.xml"/>
+        <xi:include href="xml/instance-params.xml"/>
+        <xi:include href="xml/event-data.xml"/>
+        <xi:include href="xml/event-data-tick.xml"/>
+        <xi:include href="xml/event-data-timestamp.xml"/>
+    </chapter>
+
+    <index id="index-all">
+        <title>Index of all symbols</title>
+        <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+    </index>
+
+    <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+
+</book>
