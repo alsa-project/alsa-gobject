@@ -7,6 +7,7 @@
 #include "device-params.h"
 #include "instance-info.h"
 #include "instance-params.h"
+#include "instance-status.h"
 
 #include <sound/asound.h>
 
@@ -32,6 +33,9 @@ void timer_instance_info_refer_private(ALSATimerInstanceInfo *self,
 
 void timer_instance_params_refer_private(ALSATimerInstanceParams *self,
                                          struct snd_timer_params **params);
+
+void timer_instance_status_refer_private(ALSATimerInstanceStatus *self,
+                                         struct snd_timer_status **status);
 
 G_END_DECLS
 

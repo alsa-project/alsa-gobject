@@ -109,3 +109,12 @@ void alsatimer_instance_status_get_timestamp(ALSATimerInstanceStatus *self,
     *tv_nsec = (guint)priv->status.tstamp.tv_nsec;
 
 }
+
+void timer_instance_status_refer_private(ALSATimerInstanceStatus *self,
+                                         struct snd_timer_status **status)
+{
+    ALSATimerInstanceStatusPrivate *priv =
+                        alsatimer_instance_status_get_instance_private(self);
+
+    *status = &priv->status;
+}

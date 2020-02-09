@@ -18,6 +18,7 @@ methods = (
     'attach_as_slave',
     'get_info',
     'set_params',
+    'get_status',
 )
 signals = ()
 
