@@ -10,7 +10,16 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.DeviceInfo()
-props = ()
+props = (
+    'flags',
+    'card-id',
+    'id',
+    'name',
+    'resolution',
+    'resolution-min',
+    'resolution-max',
+    'instance-count',
+)
 methods = ()
 signals = ()
 
