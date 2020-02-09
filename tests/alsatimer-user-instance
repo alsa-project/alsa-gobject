@@ -19,6 +19,7 @@ methods = (
     'get_info',
     'set_params',
     'get_status',
+    'create_source',
 )
 signals = ()
 

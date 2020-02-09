@@ -75,6 +75,9 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
                                     ALSATimerInstanceStatus **instance_status,
                                     GError **error);
 
+void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
+                                         GSource **gsrc, GError **error);
+
 G_END_DECLS
 
 #endif
