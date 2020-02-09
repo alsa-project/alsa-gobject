@@ -23,6 +23,12 @@ typedef struct {
     unsigned int buf_len;
 } TimerUserInstanceSource;
 
+enum timer_user_instance_sig_type {
+    TIMER_USER_INSTANCE_SIG_HANDLE_EVENT = 0,
+    TIMER_USER_INSTANCE_SIG_COUNT,
+};
+static guint timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_COUNT] = { 0 };
+
 static void timer_user_instance_finalize(GObject *obj)
 {
     ALSATimerUserInstance *self = ALSATIMER_USER_INSTANCE(obj);
@@ -40,6 +46,22 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->finalize = timer_user_instance_finalize;
+
+    /**
+     * ALSATimerUserInstance::handle-event:
+     * @self: A #ALSATimerUserInstance.
+     * @event_data: (transfer none): An object derived from #ALSATimerEventData.
+     *
+     * When event occurs for any element, this signal is emit.
+     */
+    timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT] =
+        g_signal_new("handle-event",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__OBJECT,
+                     G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA);
 }
 
 static void alsatimer_user_instance_init(ALSATimerUserInstance *self)

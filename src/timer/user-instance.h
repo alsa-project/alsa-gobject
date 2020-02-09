@@ -9,6 +9,7 @@
 #include <timer/instance-info.h>
 #include <timer/instance-params.h>
 #include <timer/instance-status.h>
+#include <timer/event-data.h>
 
 G_BEGIN_DECLS
 
