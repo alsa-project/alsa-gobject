@@ -156,3 +156,27 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
         g_object_unref(*instance_info);
     }
 }
+
+/**
+ * alsatimer_user_instance_set_params:
+ * @self: A #ALSATimerUserInstance.
+ * @instance_params: (inout): A #ALSATimerInstanceParams.
+ * @error: A #GError.
+ *
+ * Configure the instance with the parameters and return the latest parameters.
+ */
+void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
+                                ALSATimerInstanceParams *const *instance_params,
+                                GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+    struct snd_timer_params *params;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    timer_instance_params_refer_private(*instance_params, &params);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0)
+        generate_error(error, errno);
+}

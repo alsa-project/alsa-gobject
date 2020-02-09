@@ -7,6 +7,7 @@
 
 #include <timer/device-id.h>
 #include <timer/instance-info.h>
+#include <timer/instance-params.h>
 
 G_BEGIN_DECLS
 
@@ -64,6 +65,10 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
 void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
                                       ALSATimerInstanceInfo **instance_info,
                                       GError **error);
+
+void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
+                                ALSATimerInstanceParams *const *instance_params,
+                                GError **error);
 
 G_END_DECLS
 

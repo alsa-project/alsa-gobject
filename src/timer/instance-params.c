@@ -218,3 +218,12 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     *entries = list;
     *entry_count = count;
 }
+
+void timer_instance_params_refer_private(ALSATimerInstanceParams *self,
+                                         struct snd_timer_params **params)
+{
+    ALSATimerInstanceParamsPrivate *priv =
+                        alsatimer_instance_params_get_instance_private(self);
+
+    *params = &priv->params;
+}
