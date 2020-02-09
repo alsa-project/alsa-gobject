@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerUserInstance           ALSATimerUserInstance;
 typedef struct _ALSATimerUserInstanceClass      ALSATimerUserInstanceClass;
+typedef struct _ALSATimerUserInstancePrivate    ALSATimerUserInstancePrivate;
 
 struct _ALSATimerUserInstance {
     GObject parent_instance;
+
+    ALSATimerUserInstancePrivate *priv;
 };
 
 struct _ALSATimerUserInstanceClass {
@@ -43,6 +46,8 @@ struct _ALSATimerUserInstanceClass {
 GType alsatimer_user_instance_get_type() G_GNUC_CONST;
 
 ALSATimerUserInstance *alsatimer_user_instance_new();
+
+void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error);
 
 G_END_DECLS
 

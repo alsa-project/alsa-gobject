@@ -29,6 +29,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_user_instance_get_type";
     "alsatimer_user_instance_new";
+    "alsatimer_user_instance_open";
   local:
     *;
 };

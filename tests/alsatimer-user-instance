@@ -13,6 +13,7 @@ target = ALSATimer.UserInstance()
 props = ()
 methods = (
     'new',
+    'open',
 )
 signals = ()
 
