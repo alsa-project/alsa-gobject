@@ -94,3 +94,12 @@ ALSATimerDeviceParams *alsatimer_device_params_new()
 {
     return g_object_new(ALSATIMER_TYPE_DEVICE_PARAMS, NULL);
 }
+
+void timer_device_params_refer_private(ALSATimerDeviceParams *self,
+                                       struct snd_timer_gparams **params)
+{
+    ALSATimerDeviceParamsPrivate *priv =
+                            alsatimer_device_params_get_instance_private(self);
+
+    *params = &priv->params;
+}

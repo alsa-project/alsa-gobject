@@ -232,3 +232,42 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
 
     close(fd);
 }
+
+/**
+ * alsatimer_set_device_params:
+ * @device_id: A #ALSATimerDeviceId to identify the timer device.
+ * @device_params: The parameters of timer device.
+ * @error: A #GError.
+ *
+ * Set the given parameters to the timer indicated by the identifier.
+ */
+void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
+                                 const ALSATimerDeviceParams *device_params,
+                                 GError **error)
+{
+    char *devnode;
+    struct snd_timer_gparams *params;
+    int fd;
+
+    g_return_if_fail(device_id != NULL);
+    g_return_if_fail(device_params != NULL);
+
+    alsatimer_get_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    timer_device_params_refer_private((ALSATimerDeviceParams *)device_params,
+                                      &params);
+    params->tid = *device_id;
+    if (ioctl(fd, SNDRV_TIMER_IOCTL_GPARAMS, params) < 0)
+        generate_error(error, errno);
+
+    close(fd);
+}
