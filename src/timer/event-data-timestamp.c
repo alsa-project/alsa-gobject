@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data-timestamp.h"
+#include "privates.h"
 
 struct _ALSATimerEventDataTimestampPrivate {
     struct snd_timer_tread event;
@@ -80,4 +81,13 @@ void alsatimer_event_data_timestamp_get_timestamp(ALSATimerEventDataTimestamp *s
 
     *tv_sec = priv->event.tstamp.tv_sec;
     *tv_nsec = priv->event.tstamp.tv_nsec;
+}
+
+void timer_event_data_timestamp_set_data(ALSATimerEventDataTimestamp *self,
+                                         struct snd_timer_tread *data)
+{
+    ALSATimerEventDataTimestampPrivate *priv =
+                    alsatimer_event_data_timestamp_get_instance_private(self);
+
+    priv->event = *data;
 }

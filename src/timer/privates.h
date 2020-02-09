@@ -8,6 +8,9 @@
 #include "instance-info.h"
 #include "instance-params.h"
 #include "instance-status.h"
+#include "event-data.h"
+#include "event-data-tick.h"
+#include "event-data-timestamp.h"
 
 #include <sound/asound.h>
 
@@ -36,6 +39,12 @@ void timer_instance_params_refer_private(ALSATimerInstanceParams *self,
 
 void timer_instance_status_refer_private(ALSATimerInstanceStatus *self,
                                          struct snd_timer_status **status);
+
+void timer_event_data_tick_set_data(ALSATimerEventDataTick *self,
+                                    struct snd_timer_read *data);
+
+void timer_event_data_timestamp_set_data(ALSATimerEventDataTimestamp *self,
+                                         struct snd_timer_tread *data);
 
 G_END_DECLS
 
