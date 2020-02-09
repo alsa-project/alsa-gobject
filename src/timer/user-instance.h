@@ -106,6 +106,11 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error);
 
 void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error);
 
+void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error);
+
+void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
+                                      GError **error);
+
 G_END_DECLS
 
 #endif

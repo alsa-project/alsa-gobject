@@ -39,6 +39,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_user_instance_create_source";
     "alsatimer_user_instance_start";
     "alsatimer_user_instance_stop";
+    "alsatimer_user_instance_pause";
+    "alsatimer_user_instance_continue";
 
     "alsatimer_instance_info_get_type";
 
