@@ -10,7 +10,9 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.EventData
-props = ()
+props = (
+    'type',
+)
 methods = ()
 signals = ()
 
