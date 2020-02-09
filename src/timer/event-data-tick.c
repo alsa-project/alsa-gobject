@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data-tick.h"
+#include "privates.h"
 
 struct _ALSATimerEventDataTickPrivate {
     struct snd_timer_read event;
@@ -58,4 +59,13 @@ static void alsatimer_event_data_tick_class_init(ALSATimerEventDataTickClass *kl
 static void alsatimer_event_data_tick_init(ALSATimerEventDataTick *self)
 {
     return;
+}
+
+void timer_event_data_tick_set_data(ALSATimerEventDataTick *self,
+                                    struct snd_timer_read *data)
+{
+    ALSATimerEventDataTickPrivate *priv =
+                        alsatimer_event_data_tick_get_instance_private(self);
+
+    priv->event = *data;
 }

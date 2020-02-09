@@ -67,11 +67,13 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error);
 
 void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
+                                    ALSATimerEventDataType event_data_type,
                                     GError **error);
 
 void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
                                         ALSATimerSlaveClass slave_class,
                                         int slave_id,
+                                        ALSATimerEventDataType event_data_type,
                                         GError **error);
 
 void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,

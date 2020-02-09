@@ -122,7 +122,8 @@ ALSATimerInstanceParams *alsatimer_instance_params_new()
  * @entry_count: The number of elements in the above array.
  * @error: A #GError at failure.
  *
- * Set the list of ALSATimerEventType to filter events.
+ * Set the list of ALSATimerEventType to filter events. This parameter is only
+ * effective for target instance with ALSATimerEventDataType.TIMESTAMP.
  */
 void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
                                             const ALSATimerEventType *entries,
@@ -166,7 +167,8 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
  * @entry_count: The number of elements in the above array.
  * @error: A #GError at failure.
  *
- * Get the list of ALSATimerEventType to filter events.
+ * Get the list of ALSATimerEventType to filter events. This parameter is only
+ * effective for target instance with ALSATimerEventDataType.TIMESTAMP.
  */
 void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
                                             ALSATimerEventType **entries,

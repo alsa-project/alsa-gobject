@@ -12,6 +12,7 @@
 
 struct _ALSATimerUserInstancePrivate {
     int fd;
+    ALSATimerEventDataType event_data_type;
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYPE_OBJECT)
 
@@ -21,6 +22,7 @@ typedef struct {
     gpointer tag;
     void *buf;
     unsigned int buf_len;
+    ALSATimerEventData *event_data;
 } TimerUserInstanceSource;
 
 enum timer_user_instance_sig_type {
@@ -107,20 +109,30 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
  * alsatimer_user_instance_attach:
  * @self: A #ALSATimerUserInstance.
  * @device_id: A #ALSATimerDeviceId to which the instance is attached.
+ * @event_data_type: The type of event data, one of ALSATimerEventDataType.
  * @error: A #GError.
  *
  * Attach the instance to the timer device.
  */
 void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
+                                    ALSATimerEventDataType event_data_type,
                                     GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
+    int tread;
     struct snd_timer_select sel = {0};
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     g_return_if_fail(device_id != NULL);
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    tread = (int)event_data_type;
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+    priv->event_data_type = event_data_type;
 
     sel.id = *device_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
@@ -133,6 +145,7 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  * @slave_class: The class identifier of master instance, one of
  *               #ALSATimerSlaveClass.
  * @slave_id: The numerical identifier of master instance.
+ * @event_data_type: The type of event data, one of ALSATimerEventDataType.
  * @error: A #GError.
  *
  * Attach the instance to timer device as an slave to another instance indicated
@@ -145,13 +158,22 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
 void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
                                         ALSATimerSlaveClass slave_class,
                                         int slave_id,
+                                        ALSATimerEventDataType event_data_type,
                                         GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
+    int tread;
     struct snd_timer_select sel = {0};
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    tread = (int)event_data_type;
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
+        generate_error(error, errno);
+        return;
+    }
+    priv->event_data_type = event_data_type;
 
     sel.id.dev_class = SNDRV_TIMER_CLASS_SLAVE;
     sel.id.dev_sclass = slave_class;
@@ -238,6 +260,40 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     }
 }
 
+static void handle_tick_events(TimerUserInstanceSource *src, int len)
+{
+    struct snd_timer_read *ev = src->buf;
+
+    while (len >= sizeof(*ev)) {
+        ALSATimerEventDataTick *data = ALSATIMER_EVENT_DATA_TICK(src->event_data);
+
+        timer_event_data_tick_set_data(data, ev);
+        g_signal_emit(src->self,
+                timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT],
+                0, src->event_data);
+
+        len -= sizeof(*ev);
+        ++ev;
+    }
+}
+
+static void handle_timestamp_events(TimerUserInstanceSource *src, int len)
+{
+    struct snd_timer_tread *ev = src->buf;
+
+    while (len >= sizeof(*ev)) {
+        ALSATimerEventDataTimestamp *data = ALSATIMER_EVENT_DATA_TIMESTAMP(src->event_data);
+
+        timer_event_data_timestamp_set_data(data, ev);
+        g_signal_emit(src->self,
+                timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT],
+                0, src->event_data);
+
+        len -= sizeof(*ev);
+        ++ev;
+    }
+}
+
 static gboolean timer_user_instance_prepare_src(GSource *src, gint *timeout)
 {
     *timeout = 500;
@@ -282,6 +338,11 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
     }
 
+    if (priv->event_data_type == ALSATIMER_EVENT_DATA_TYPE_TICK)
+        handle_tick_events(src, len);
+    else
+        handle_timestamp_events(src, len);
+
     // Just be sure to continue to process this source.
     return G_SOURCE_CONTINUE;
 }
@@ -291,6 +352,7 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
     TimerUserInstanceSource *src = (TimerUserInstanceSource *)gsrc;
 
     g_free(src->buf);
+    g_object_unref(src->event_data);
     g_object_unref(src->self);
 }
 
@@ -313,6 +375,7 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
             .finalize       = timer_user_instance_finalize_src,
     };
     ALSATimerUserInstancePrivate *priv;
+    GType event_data_class;
     TimerUserInstanceSource *src;
     long page_size = sysconf(_SC_PAGESIZE);
     void *buf;
@@ -322,6 +385,18 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
 
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
+        return;
+    }
+
+    switch (priv->event_data_type) {
+    case ALSATIMER_EVENT_DATA_TYPE_TICK:
+        event_data_class = ALSATIMER_TYPE_EVENT_DATA_TICK;
+        break;
+    case ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP:
+        event_data_class = ALSATIMER_TYPE_EVENT_DATA_TIMESTAMP;
+        break;
+    default:
+        generate_error(error, EINVAL);
         return;
     }
 
@@ -342,4 +417,7 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
+
+    src->event_data = g_object_new(event_data_class,
+		                   "type", priv->event_data_type, NULL);
 }
