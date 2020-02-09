@@ -4,6 +4,14 @@
 
 #include <stdbool.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <stdbool.h>
+
+#include <sound/asound.h>
 
 #include <libudev.h>
 
@@ -102,4 +110,47 @@ void alsatimer_get_devnode(char **devnode, GError **error)
 
     udev_device_unref(dev);
     udev_unref(ctx);
+}
+
+/**
+ * alsatimer_get_device_id_list:
+ * @entries: (element-type ALSATimer.DeviceId)(out): The array with
+ *           entries of ALSATimerId.
+ * @error: A #GError.
+ *
+ */
+void alsatimer_get_device_id_list(GList **entries, GError **error)
+{
+    struct snd_timer_id id = {
+        .dev_class = -1,
+    };
+    char *devnode;
+    int fd;
+
+    g_return_if_fail(entries != NULL);
+
+    alsatimer_get_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    while (true) {
+        ALSATimerDeviceId *entry;
+
+        if (ioctl(fd, SNDRV_TIMER_IOCTL_NEXT_DEVICE, &id) < 0)
+            break;
+        if (id.dev_class == SNDRV_TIMER_CLASS_NONE)
+            break;
+
+        entry = g_boxed_copy(ALSATIMER_TYPE_DEVICE_ID, &id);
+        *entries = g_list_append(*entries, entry);
+    }
+
+    close(fd);
 }

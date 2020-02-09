@@ -9,6 +9,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_get_sysname";
     "alsatimer_get_devnode";
+    "alsatimer_get_device_id_list";
 
     "alsatimer_device_id_get_type";
     "alsatimer_device_id_new";

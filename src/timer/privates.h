@@ -2,6 +2,8 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSATIMER_PRIVATES__H__
 
+#include <sound/asound.h>
+
 G_BEGIN_DECLS
 
 GQuark alsatimer_error_quark(void);

@@ -5,11 +5,17 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <timer/device-id.h>
+
+#include <timer/alsatimer-enums.h>
+
 G_BEGIN_DECLS
 
 void alsatimer_get_sysname(char **sysname, GError **error);
 
 void alsatimer_get_devnode(char **devnode, GError **error);
+
+void alsatimer_get_device_id_list(GList **entries, GError **error);
 
 G_END_DECLS
 
