@@ -14,6 +14,7 @@ sources = files(
   'device-info.c',
   'device-status.c',
   'device-params.c',
+  'user-instance.c',
 )
 
 headers = files(
@@ -22,6 +23,7 @@ headers = files(
   'device-info.h',
   'device-status.h',
   'device-params.h',
+  'user-instance.h',
 )
 
 privates = files(

@@ -20,6 +20,7 @@ tests = {
     'alsatimer-device-info',
     'alsatimer-device-status',
     'alsatimer-device-params',
+    'alsatimer-user-instance',
   ],
 }
 
