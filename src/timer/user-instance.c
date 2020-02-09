@@ -444,3 +444,21 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     src->event_data = g_object_new(event_data_class,
 		                   "type", priv->event_data_type, NULL);
 }
+
+/**
+ * alsatimer_user_instance_start:
+ * @self: A #ALSATimerUserInstance.
+ * @error: A #GError.
+ *
+ * Start event emission.
+ */
+void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0)
+        generate_error(error, errno);
+}

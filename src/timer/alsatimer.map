@@ -37,6 +37,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_user_instance_set_params";
     "alsatimer_user_instance_get_status";
     "alsatimer_user_instance_create_source";
+    "alsatimer_user_instance_start";
 
     "alsatimer_instance_info_get_type";
 
