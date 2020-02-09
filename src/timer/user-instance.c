@@ -129,3 +129,30 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsatimer_user_instance_get_info:
+ * @self: A #ALSATimerUserInstance.
+ * @instance_info: (out): A #ALSATimerInstanceInfo.
+ * @error: A #GError.
+ *
+ * Return the information of device if attached to the instance.
+ */
+void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
+                                      ALSATimerInstanceInfo **instance_info,
+                                      GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+    struct snd_timer_info *info;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    *instance_info = g_object_new(ALSATIMER_TYPE_INSTANCE_INFO, NULL);
+    timer_instance_info_refer_private(*instance_info, &info);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_INFO, info) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*instance_info);
+    }
+}

@@ -5,6 +5,7 @@
 #include "device-info.h"
 #include "device-status.h"
 #include "device-params.h"
+#include "instance-info.h"
 
 #include <sound/asound.h>
 
@@ -24,6 +25,9 @@ void timer_device_status_refer_private(ALSATimerDeviceStatus *self,
 
 void timer_device_params_refer_private(ALSATimerDeviceParams *self,
                                        struct snd_timer_gparams **params);
+
+void timer_instance_info_refer_private(ALSATimerInstanceInfo *self,
+                                       struct snd_timer_info **info);
 
 G_END_DECLS
 
