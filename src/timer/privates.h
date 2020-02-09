@@ -4,6 +4,7 @@
 
 #include "device-info.h"
 #include "device-status.h"
+#include "device-params.h"
 
 #include <sound/asound.h>
 

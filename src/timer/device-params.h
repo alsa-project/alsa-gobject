@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <timer/device-id.h>
+
 G_BEGIN_DECLS
 
 #define ALSATIMER_TYPE_DEVICE_PARAMS    (alsatimer_device_params_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerDeviceParams           ALSATimerDeviceParams;
 typedef struct _ALSATimerDeviceParamsClass      ALSATimerDeviceParamsClass;
+typedef struct _ALSATimerDeviceParamsPrivate    ALSATimerDeviceParamsPrivate;
 
 struct _ALSATimerDeviceParams {
     GObject parent_instance;
+
+    ALSATimerDeviceParamsPrivate *priv;
 };
 
 struct _ALSATimerDeviceParamsClass {
@@ -41,6 +46,8 @@ struct _ALSATimerDeviceParamsClass {
 };
 
 GType alsatimer_device_params_get_type() G_GNUC_CONST;
+
+ALSATimerDeviceParams *alsatimer_device_params_new();
 
 G_END_DECLS
 
