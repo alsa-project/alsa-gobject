@@ -33,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerEventDataTimestamp         ALSATimerEventDataTimestamp;
 typedef struct _ALSATimerEventDataTimestampClass    ALSATimerEventDataTimestampClass;
+typedef struct _ALSATimerEventDataTimestampPrivate  ALSATimerEventDataTimestampPrivate;
 
 struct _ALSATimerEventDataTimestamp {
     ALSATimerEventData parent_instance;
+
+    ALSATimerEventDataTimestampPrivate *priv;
 };
 
 struct _ALSATimerEventDataTimestampClass {
@@ -43,6 +46,9 @@ struct _ALSATimerEventDataTimestampClass {
 };
 
 GType alsatimer_event_data_timestamp_get_type() G_GNUC_CONST;
+
+void alsatimer_event_data_timestamp_get_timestamp(ALSATimerEventDataTimestamp *self,
+                                                guint *tv_sec, guint *tv_nsec);
 
 G_END_DECLS
 
