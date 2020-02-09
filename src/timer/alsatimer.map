@@ -1,0 +1,4 @@
+ALSA_GOBJECT_0_0_0 {
+  local:
+    *;
+};
