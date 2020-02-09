@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2019/11/30
+2020/02/08
 Takashi Sakamoto
 
 Introduction
@@ -17,12 +17,16 @@ Libraries produced by the project
 
 libalsactl0
     For APIs to operate ALSA control character device
+libalsatimer0
+    For APIs to operate ALSA timer character device
 
 Namespaces of g-i produced by the project
 =========================================
 
 ALSACtl-0.0
     For bindings to use libalsactl0
+ALSATimer-0.0
+    For bindings to use libalsatimer0
 
 License
 =======
@@ -78,7 +82,7 @@ Design note
 ===========
 
 * These libraries are independent of alsa-lib, to operate memory objects in
-  kernel land directly without alsa-lib's configuration space.
+  kernel land directly by system calls without alsa-lib's configuration space.
 * The way to enumerate any device is based on sysfs, programmed with libudev1.
 
 Supplemental information for language bindings
