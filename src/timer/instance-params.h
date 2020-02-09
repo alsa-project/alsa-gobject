@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <timer/alsatimer-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSATIMER_TYPE_INSTANCE_PARAMS  (alsatimer_instance_params_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerInstanceParams         ALSATimerInstanceParams;
 typedef struct _ALSATimerInstanceParamsClass    ALSATimerInstanceParamsClass;
+typedef struct _ALSATimerInstanceParamsPrivate  ALSATimerInstanceParamsPrivate;
 
 struct _ALSATimerInstanceParams {
     GObject parent_instance;
+
+    ALSATimerInstanceParamsPrivate *priv;
 };
 
 struct _ALSATimerInstanceParamsClass {
@@ -43,6 +48,14 @@ struct _ALSATimerInstanceParamsClass {
 GType alsatimer_instance_params_get_type() G_GNUC_CONST;
 
 ALSATimerInstanceParams *alsatimer_instance_params_new();
+
+void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
+                                            const ALSATimerEventType *entries,
+                                            gsize entry_count, GError **error);
+
+void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
+                                            ALSATimerEventType **entries,
+                                            gsize *entry_count, GError **error);
 
 G_END_DECLS
 
