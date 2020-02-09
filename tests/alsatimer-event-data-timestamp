@@ -10,8 +10,13 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.EventDataTimestamp()
-props = ()
-methods = ()
+props = (
+    'event',
+    'value',
+)
+methods = (
+    'get_timestamp',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
