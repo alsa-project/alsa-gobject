@@ -9,6 +9,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_get_sysname";
     "alsatimer_get_devnode";
+
+    "alsatimer_device_id_get_type";
   local:
     *;
 };
