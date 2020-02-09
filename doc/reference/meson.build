@@ -8,3 +8,4 @@ configure_file(
 )
 
 subdir('ctl')
+subdir('timer')
