@@ -180,3 +180,30 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsatimer_user_instance_get_status:
+ * @self: A #ALSATimerUserInstance.
+ * @instance_status: (out): A #ALSATimerInstanceStatus.
+ * @error: A #GError.
+ *
+ * Get the latest status of instance.
+ */
+void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
+                                    ALSATimerInstanceStatus **instance_status,
+                                    GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+    struct snd_timer_status *status;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    *instance_status = g_object_new(ALSATIMER_TYPE_INSTANCE_STATUS, NULL);
+    timer_instance_status_refer_private(*instance_status, &status);
+
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*instance_status);
+    }
+}
