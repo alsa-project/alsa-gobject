@@ -5,7 +5,7 @@
 path = 'timer'
 name = 'alsatimer'
 namespace = 'ALSATimer'
-has_enumerations = false
+has_enumerations = true
 has_marshaller = false
 
 sources = files()
