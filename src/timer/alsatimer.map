@@ -41,6 +41,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_instance_params_new";
     "alsatimer_instance_params_set_event_filter";
     "alsatimer_instance_params_get_event_filter";
+
+    "alsatimer_instance_status_get_type";
   local:
     *;
 };

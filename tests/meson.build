@@ -23,6 +23,7 @@ tests = {
     'alsatimer-user-instance',
     'alsatimer-instance-info',
     'alsatimer-instance-params',
+    'alsatimer-instance-status',
   ],
 }
 
