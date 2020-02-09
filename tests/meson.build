@@ -19,6 +19,7 @@ tests = {
     'alsatimer-enums',
     'alsatimer-device-info',
     'alsatimer-device-status',
+    'alsatimer-device-params',
   ],
 }
 
