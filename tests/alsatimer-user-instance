@@ -20,6 +20,7 @@ methods = (
     'set_params',
     'get_status',
     'create_source',
+    'do_handle_event',
 )
 signals = (
     'handle-event',

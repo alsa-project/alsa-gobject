@@ -58,7 +58,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
         g_signal_new("handle-event",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     0,
+                     G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__OBJECT,
                      G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA);
