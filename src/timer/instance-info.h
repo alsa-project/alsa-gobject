@@ -5,7 +5,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include <device-id.h>
+#include <timer/alsatimer-enums.h>
 
 G_BEGIN_DECLS
 
@@ -33,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerInstanceInfo           ALSATimerInstanceInfo;
 typedef struct _ALSATimerInstanceInfoClass      ALSATimerInstanceInfoClass;
+typedef struct _ALSATimerInstanceInfoPrivate    ALSATimerInstanceInfoPrivate;
 
 struct _ALSATimerInstanceInfo {
     GObject parent_instance;
+
+    ALSATimerInstanceInfoPrivate *priv;
 };
 
 struct _ALSATimerInstanceInfoClass {
