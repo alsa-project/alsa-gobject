@@ -21,7 +21,9 @@ methods = (
     'get_status',
     'create_source',
 )
-signals = ()
+signals = (
+    'handle-event',
+)
 
 if not test(target, props, methods, signals):
     exit(ENXIO)
