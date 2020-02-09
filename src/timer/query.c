@@ -154,3 +154,42 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
 
     close(fd);
 }
+
+/**
+ * alsatimer_get_device_info:
+ * @device_id: A #ALSATimerDeviceId to identify the timer device.
+ * @device_info: (out): The information of timer device.
+ * @error: A #GError.
+ */
+void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
+                               ALSATimerDeviceInfo **device_info,
+                               GError **error)
+{
+    char *devnode;
+    struct snd_timer_ginfo *info;
+    int fd;
+
+    g_return_if_fail(device_id != NULL);
+
+    alsatimer_get_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *device_info = g_object_new(ALSATIMER_TYPE_DEVICE_INFO, NULL);
+    timer_device_info_refer_private(*device_info, &info);
+
+    info->tid = *device_id;
+    if (ioctl(fd, SNDRV_TIMER_IOCTL_GINFO, info) < 0) {
+        generate_error(error, errno);
+        g_object_unref(*device_info);
+    }
+
+    close(fd);
+}

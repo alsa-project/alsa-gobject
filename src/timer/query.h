@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <timer/device-id.h>
+#include <timer/device-info.h>
 
 #include <timer/alsatimer-enums.h>
 
@@ -17,6 +18,9 @@ void alsatimer_get_devnode(char **devnode, GError **error);
 
 void alsatimer_get_device_id_list(GList **entries, GError **error);
 
+void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
+                               ALSATimerDeviceInfo **device_info,
+                               GError **error);
 G_END_DECLS
 
 #endif
