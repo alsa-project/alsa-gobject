@@ -33,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSATimerEventDataTick          ALSATimerEventDataTick;
 typedef struct _ALSATimerEventDataTickClass     ALSATimerEventDataTickClass;
+typedef struct _ALSATimerEventDataTickPrivate   ALSATimerEventDataTickPrivate;
 
 struct _ALSATimerEventDataTick {
     ALSATimerEventData parent_instance;
+
+    ALSATimerEventDataTickPrivate *priv;
 };
 
 struct _ALSATimerEventDataTickClass {

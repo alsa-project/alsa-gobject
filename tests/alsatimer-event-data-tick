@@ -10,7 +10,10 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.EventDataTick()
-props = ()
+props = (
+    'resolution',
+    'ticks',
+)
 methods = ()
 signals = ()
 
