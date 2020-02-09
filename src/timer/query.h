@@ -9,6 +9,8 @@ G_BEGIN_DECLS
 
 void alsatimer_get_sysname(char **sysname, GError **error);
 
+void alsatimer_get_devnode(char **devnode, GError **error);
+
 G_END_DECLS
 
 #endif

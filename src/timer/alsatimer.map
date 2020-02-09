@@ -8,6 +8,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_event_type_get_type";
 
     "alsatimer_get_sysname";
+    "alsatimer_get_devnode";
   local:
     *;
 };
