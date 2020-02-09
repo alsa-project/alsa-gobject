@@ -23,6 +23,7 @@ methods = (
     'do_handle_event',
     'do_handle_disconnection',
     'start',
+    'stop',
 )
 signals = (
     'handle-event',
