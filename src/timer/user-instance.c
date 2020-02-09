@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include <errno.h>
 
 struct _ALSATimerUserInstancePrivate {
@@ -70,4 +71,28 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error)
 ALSATimerUserInstance *alsatimer_user_instance_new()
 {
     return g_object_new(ALSATIMER_TYPE_USER_INSTANCE, NULL);
+}
+
+/**
+ * alsatimer_user_instance_attach:
+ * @self: A #ALSATimerUserInstance.
+ * @device_id: A #ALSATimerDeviceId to which the instance is attached.
+ * @error: A #GError.
+ *
+ * Attach the instance to the timer device.
+ */
+void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
+                                    ALSATimerDeviceId *device_id,
+                                    GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+    struct snd_timer_select sel = {0};
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_if_fail(device_id != NULL);
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    sel.id = *device_id;
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
+        generate_error(error, errno);
 }

@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <timer/device-id.h>
+
 G_BEGIN_DECLS
 
 #define ALSATIMER_TYPE_USER_INSTANCE    (alsatimer_user_instance_get_type())
@@ -48,6 +50,10 @@ GType alsatimer_user_instance_get_type() G_GNUC_CONST;
 ALSATimerUserInstance *alsatimer_user_instance_new();
 
 void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error);
+
+void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
+                                    ALSATimerDeviceId *device_id,
+                                    GError **error);
 
 G_END_DECLS
 
