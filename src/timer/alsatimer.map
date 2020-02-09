@@ -6,6 +6,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_device_info_flag_get_type";
     "alsatimer_instance_param_flag_get_type";
     "alsatimer_event_type_get_type";
+
+    "alsatimer_get_sysname";
   local:
     *;
 };

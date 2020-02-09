@@ -7,6 +7,8 @@
 
 G_BEGIN_DECLS
 
+void alsatimer_get_sysname(char **sysname, GError **error);
+
 G_END_DECLS
 
 #endif
