@@ -8,11 +8,17 @@ namespace = 'ALSATimer'
 has_enumerations = true
 has_marshaller = false
 
-sources = files()
+sources = files(
+  'query.c',
+)
 
-headers = files()
+headers = files(
+  'query.h',
+)
 
-privates = files()
+privates = files(
+  'privates.h',
+)
 
 #
 # Common part except for identifier of dependency.
