@@ -22,6 +22,7 @@ tests = {
     'alsatimer-device-params',
     'alsatimer-user-instance',
     'alsatimer-instance-info',
+    'alsatimer-instance-params',
   ],
 }
 
