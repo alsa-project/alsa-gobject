@@ -15,6 +15,9 @@ tests = {
     'alsactl-elem-info-int64',
     'alsactl-elem-value',
   ],
+  'timer': [
+    'alsatimer-enums',
+  ],
 }
 
 foreach path, scripts: tests
