@@ -778,14 +778,6 @@ static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
                   elem_id, mask);
 }
 
-static gboolean ctl_card_prepare_src(GSource *src, gint *timeout)
-{
-    *timeout = 500;
-
-    // This source is not ready, let's poll(2).
-    return FALSE;
-}
-
 static gboolean ctl_card_check_src(GSource *gsrc)
 {
     CtlCardSource *src = (CtlCardSource *)gsrc;
@@ -868,7 +860,6 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
                                 GError **error)
 {
     static GSourceFuncs funcs = {
-            .prepare        = ctl_card_prepare_src,
             .check          = ctl_card_check_src,
             .dispatch       = ctl_card_dispatch_src,
             .finalize       = ctl_card_finalize_src,
