@@ -74,7 +74,8 @@ GType alsatimer_user_instance_get_type() G_GNUC_CONST;
 
 ALSATimerUserInstance *alsatimer_user_instance_new();
 
-void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error);
+void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
+                                  GError **error);
 
 void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
