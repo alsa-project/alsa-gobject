@@ -161,11 +161,13 @@ ALSACtlCard *alsactl_card_new()
  * alsactl_card_open:
  * @self: A #ALSACtlCard.
  * @card_id: The numerical ID of sound card.
+ * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
  * @error: A #GError.
  *
  * Open ALSA control character device for the sound card.
  */
-void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error)
+void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
+                       GError **error)
 {
     ALSACtlCardPrivate *priv;
     char *devnode;
@@ -177,7 +179,8 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, GError **error)
     if (*error != NULL)
         return;
 
-    priv->fd = open(devnode, O_RDONLY | O_NONBLOCK);
+    open_flag |= O_RDONLY;
+    priv->fd = open(devnode, open_flag);
     if (priv->fd < 0) {
         generate_error(error, errno);
         g_free(devnode);
