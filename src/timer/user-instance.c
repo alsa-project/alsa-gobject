@@ -96,11 +96,13 @@ static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
 /**
  * alsatimer_user_instance_open:
  * @self: A #ALSATimerUserInstance.
+ * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
  * @error: A #GError.
  *
  * Open ALSA Timer character device to allocate queue.
  */
-void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error)
+void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
+                                  GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     char *devnode;
@@ -112,7 +114,8 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, GError **error)
     if (*error != NULL)
         return;
 
-    priv->fd = open(devnode, O_RDONLY);
+    open_flag |= O_RDONLY;
+    priv->fd = open(devnode, open_flag);
     g_free(devnode);
     if (priv->fd < 0) {
         generate_error(error, errno);
