@@ -316,14 +316,6 @@ static void handle_timestamp_events(TimerUserInstanceSource *src, int len)
     }
 }
 
-static gboolean timer_user_instance_prepare_src(GSource *src, gint *timeout)
-{
-    *timeout = 500;
-
-    // This source is not ready, let's poll(2).
-    return FALSE;
-}
-
 static gboolean timer_user_instance_check_src(GSource *gsrc)
 {
     TimerUserInstanceSource *src = (TimerUserInstanceSource *)gsrc;
@@ -395,7 +387,6 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
                                          GSource **gsrc, GError **error)
 {
     static GSourceFuncs funcs = {
-            .prepare        = timer_user_instance_prepare_src,
             .check          = timer_user_instance_check_src,
             .dispatch       = timer_user_instance_dispatch_src,
             .finalize       = timer_user_instance_finalize_src,
