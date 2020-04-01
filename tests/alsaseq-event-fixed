@@ -13,6 +13,7 @@ target = ALSASeq.EventFixed()
 props = (
     'result-data',
     'note-data',
+    'ctl-data',
 )
 methods = (
     'new',

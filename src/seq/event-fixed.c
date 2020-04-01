@@ -9,6 +9,7 @@ G_DEFINE_TYPE(ALSASeqEventFixed, alsaseq_event_fixed, ALSASEQ_TYPE_EVENT)
 enum seq_event_fixed_prop_type {
     SEQ_EVENT_FIXED_PROP_RESULT_DATA = 1,
     SEQ_EVENT_FIXED_PROP_NOTE_DATA,
+    SEQ_EVENT_FIXED_PROP_CTL_DATA,
     SEQ_EVENT_FIXED_PROP_COUNT,
 };
 static GParamSpec *seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_COUNT] = { NULL, };
@@ -33,6 +34,13 @@ static void seq_event_fixed_set_property(GObject *obj, guint id,
         ALSASeqEventDataNote *data = g_value_get_boxed(val);
         if (data != NULL)
             ev->data.note = *data;
+        break;
+    }
+    case SEQ_EVENT_FIXED_PROP_CTL_DATA:
+    {
+        ALSASeqEventDataCtl *data = g_value_get_boxed(val);
+        if (data != NULL)
+            ev->data.control = *data;
         break;
     }
     default:
@@ -80,6 +88,13 @@ static void alsaseq_event_fixed_class_init(ALSASeqEventFixedClass *klass)
                            "The data of note type. This shares the same "
                            "storage between the other properties",
                            ALSASEQ_TYPE_EVENT_DATA_NOTE,
+                           G_PARAM_READWRITE);
+
+    seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_CTL_DATA] =
+        g_param_spec_boxed("ctl-data", "ctl-data",
+                           "The data of ctl type. This shares the same "
+                           "storage between the other properties",
+                           ALSASEQ_TYPE_EVENT_DATA_CTL,
                            G_PARAM_READWRITE);
 
     g_object_class_install_properties(gobject_class,
