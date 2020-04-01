@@ -17,6 +17,16 @@ typedef struct snd_seq_ev_ctrl ALSASeqEventDataCtl;
 
 GType alsaseq_event_data_ctl_get_type() G_GNUC_CONST;
 
+guint8 alsaseq_event_data_ctl_get_channel(ALSASeqEventDataCtl *self);
+void alsaseq_event_data_ctl_set_channel(ALSASeqEventDataCtl *self,
+                                        guint8 channel);
+
+guint alsaseq_event_data_ctl_get_param(ALSASeqEventDataCtl *self);
+void alsaseq_event_data_ctl_set_param(ALSASeqEventDataCtl *self, guint param);
+
+gint alsaseq_event_data_ctl_get_value(ALSASeqEventDataCtl *self);
+void alsaseq_event_data_ctl_set_value(ALSASeqEventDataCtl *self, gint value);
+
 G_END_DECLS
 
 #endif

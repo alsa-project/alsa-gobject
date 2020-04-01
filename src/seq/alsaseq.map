@@ -90,6 +90,12 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_note_set_duration";
 
     "alsaseq_event_data_ctl_get_type";
+    "alsaseq_event_data_ctl_get_channel";
+    "alsaseq_event_data_ctl_set_channel";
+    "alsaseq_event_data_ctl_get_param";
+    "alsaseq_event_data_ctl_set_param";
+    "alsaseq_event_data_ctl_get_value";
+    "alsaseq_event_data_ctl_set_value";
   local:
     *;
 };
