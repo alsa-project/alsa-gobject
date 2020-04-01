@@ -24,6 +24,7 @@ methods = (
     'set_pool',
     'get_pool',
     'schedule_event',
+    'create_source',
 )
 signals = ()
 

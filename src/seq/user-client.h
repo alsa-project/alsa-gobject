@@ -85,6 +85,9 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
 void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
                                         ALSASeqEvent *event, GError **error);
 
+void alsaseq_user_client_create_source(ALSASeqUserClient *self,
+                                       GSource **gsrc, GError **error);
+
 G_END_DECLS
 
 #endif
