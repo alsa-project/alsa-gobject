@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/event.h>
+#include <seq/event-data-result.h>
 
 G_BEGIN_DECLS
 
