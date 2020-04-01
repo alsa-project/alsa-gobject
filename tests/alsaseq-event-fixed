@@ -15,6 +15,7 @@ props = (
     'note-data',
     'ctl-data',
     'queue-data',
+    'addr-data',
 )
 methods = (
     'new',
