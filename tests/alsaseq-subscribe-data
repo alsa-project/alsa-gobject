@@ -10,8 +10,15 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.SubscribeData()
-props = ()
-methods = ()
+props = (
+    'sender',
+    'dest',
+    'flag',
+    'queue-id',
+)
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
