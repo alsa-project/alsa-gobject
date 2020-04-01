@@ -15,6 +15,12 @@ typedef struct snd_seq_addr ALSASeqAddr;
 
 GType alsaseq_addr_get_type() G_GNUC_CONST;
 
+ALSASeqAddr *alsaseq_addr_new(guint8 client_id, guint8 port_id);
+
+void alsaseq_addr_get_client_id(const ALSASeqAddr *self, guint8 *client_id);
+
+void alsaseq_addr_get_port_id(const ALSASeqAddr *self, guint8 *port_id);
+
 G_END_DECLS
 
 #endif
