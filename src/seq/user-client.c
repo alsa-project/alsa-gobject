@@ -122,3 +122,55 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
         priv->fd = -1;
     }
 }
+
+/**
+ * alsaseq_user_client_set_info:
+ * @self: A #ALSASeqUserClient.
+ * @client_info: A #ALSASeqClientInfo.
+ * @error: A #GError.
+ *
+ * Get client information.
+ */
+void alsaseq_user_client_set_info(ALSASeqUserClient *self,
+                                  ALSASeqClientInfo *client_info,
+                                  GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_client_info *info;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_client_info_refer_private(client_info, &info);
+    info->client = priv->client_id;
+    info->type = USER_CLIENT;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_INFO, info) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsaseq_user_client_get_info:
+ * @self: A #ALSASeqUserClient.
+ * @client_info: (inout): A #ALSASeqClientInfo.
+ * @error: A #GError.
+ *
+ * Set client information.
+ */
+void alsaseq_user_client_get_info(ALSASeqUserClient *self,
+                                  ALSASeqClientInfo *const *client_info,
+                                  GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_client_info *info;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(client_info != NULL);
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_client_info_refer_private(*client_info, &info);
+    info->client = priv->client_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
+        generate_error(error, errno);
+}

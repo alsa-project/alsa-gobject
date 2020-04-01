@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/client-info.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_USER_CLIENT     (alsaseq_user_client_get_type())
@@ -49,6 +51,13 @@ ALSASeqUserClient *alsaseq_user_client_new();
 
 void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
                               GError **error);
+
+void alsaseq_user_client_set_info(ALSASeqUserClient *self,
+                                  ALSASeqClientInfo *client_info,
+                                  GError **error);
+void alsaseq_user_client_get_info(ALSASeqUserClient *self,
+                                  ALSASeqClientInfo *const *client_info,
+                                  GError **error);
 
 G_END_DECLS
 

@@ -16,6 +16,8 @@ props = (
 methods = (
     'new',
     'open',
+    'set_info',
+    'get_info',
 )
 signals = ()
 
