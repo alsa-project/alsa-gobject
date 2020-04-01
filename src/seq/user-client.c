@@ -30,6 +30,12 @@ enum seq_user_client_prop_type {
 };
 static GParamSpec *seq_user_client_props[SEQ_USER_CLIENT_PROP_COUNT] = { NULL, };
 
+enum seq_user_client_sig_type {
+    SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT = 0,
+    SEQ_USER_CLIENT_SIG_TYPE_COUNT,
+};
+static guint seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_COUNT] = { 0 };
+
 static void seq_user_client_get_property(GObject *obj, guint id, GValue *val,
                                          GParamSpec *spec)
 {
@@ -76,6 +82,22 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
     g_object_class_install_properties(gobject_class,
                                       SEQ_USER_CLIENT_PROP_COUNT,
                                       seq_user_client_props);
+
+    /**
+     * ALSASeqUserClient::handle-event:
+     * @self: A #ALSASeqUserClient.
+     * @event: (transfer none): A #ALSASeqEvent or derived objects.
+     *
+     * When event occurs, this signal is emit with an object for the event.
+     */
+    seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT] =
+        g_signal_new("handle-event",
+                     G_OBJECT_CLASS_TYPE(klass),
+                     G_SIGNAL_RUN_LAST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__OBJECT,
+                     G_TYPE_NONE, 1, ALSASEQ_TYPE_EVENT);
 }
 
 static void alsaseq_user_client_init(ALSASeqUserClient *self)
