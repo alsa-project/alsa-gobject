@@ -23,6 +23,7 @@ sources = files(
   'event-data-result.c',
   'event-data-note.c',
   'event-data-ctl.c',
+  'event-data-queue.c',
 )
 
 headers = files(
@@ -40,6 +41,7 @@ headers = files(
   'event-data-result.h',
   'event-data-note.h',
   'event-data-ctl.h',
+  'event-data-queue.h',
 )
 
 privates = files(

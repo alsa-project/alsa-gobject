@@ -96,6 +96,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_ctl_set_param";
     "alsaseq_event_data_ctl_get_value";
     "alsaseq_event_data_ctl_set_value";
+
+    "alsaseq_event_data_queue_get_type";
   local:
     *;
 };
