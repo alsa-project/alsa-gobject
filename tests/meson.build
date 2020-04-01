@@ -36,6 +36,7 @@ tests = {
     'alsaseq-port-info',
     'alsaseq-client-pool',
     'alsaseq-event',
+    'alsaseq-event-fixed',
   ],
 }
 
