@@ -31,6 +31,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_user_client_get_type";
     "alsaseq_user_client_new";
+    "alsaseq_user_client_open";
   local:
     *;
 };
