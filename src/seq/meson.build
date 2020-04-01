@@ -18,6 +18,7 @@ sources = files(
   'client-pool.c',
   'tstamp.c',
   'event.c',
+  'event-fixed.c',
 )
 
 headers = files(
@@ -30,6 +31,7 @@ headers = files(
   'client-pool.h',
   'tstamp.h',
   'event.h',
+  'event-fixed.h',
 )
 
 privates = files(

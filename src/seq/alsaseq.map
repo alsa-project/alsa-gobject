@@ -60,6 +60,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_tstamp_set_real_time";
 
     "alsaseq_event_get_type";
+
+    "alsaseq_event_fixed_get_type";
   local:
     *;
 };
