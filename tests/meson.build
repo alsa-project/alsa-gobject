@@ -34,6 +34,7 @@ tests = {
     'alsaseq-client-info',
     'alsaseq-user-client',
     'alsaseq-port-info',
+    'alsaseq-client-pool',
   ],
 }
 
