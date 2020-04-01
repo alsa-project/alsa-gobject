@@ -33,6 +33,7 @@ tests = {
     'alsaseq-system-info',
     'alsaseq-client-info',
     'alsaseq-user-client',
+    'alsaseq-port-info',
   ],
 }
 
