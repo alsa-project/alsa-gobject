@@ -3,6 +3,11 @@
 #include "privates.h"
 
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <libudev.h>
 
@@ -93,4 +98,46 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
 
     udev_device_unref(dev);
     udev_unref(ctx);
+}
+
+/**
+ * alsaseq_get_system_info:
+ * @system_info: (out): The information of ALSA Sequencer.
+ * @error: A #GError.
+ *
+ * Get information of ALSA Sequencer.
+ */
+void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
+{
+    char *devnode;
+    struct snd_seq_system_info *info;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    *system_info = g_object_new(ALSASEQ_TYPE_SYSTEM_INFO, NULL);
+    seq_system_info_refer_private(*system_info, &info);
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        g_object_unref(*system_info);
+        *system_info = NULL;
+        return;
+    }
+
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, info) < 0)
+        generate_error(error, errno);
+    close(fd);
+    if (*error != NULL) {
+        g_object_unref(*system_info);
+        *system_info = NULL;
+        return;
+    }
+
+    // Decrement count for the above connection.
+    --info->cur_clients;
 }

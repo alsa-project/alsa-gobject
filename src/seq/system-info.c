@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "system-info.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqSystemInfoPrivate {
     struct snd_seq_system_info info;
@@ -108,4 +106,13 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
 static void alsaseq_system_info_init(ALSASeqSystemInfo *self)
 {
     return;
+}
+
+void seq_system_info_refer_private(ALSASeqSystemInfo *self,
+                                   struct snd_seq_system_info **info)
+{
+    ALSASeqSystemInfoPrivate *priv =
+                                alsaseq_system_info_get_instance_private(self);
+
+    *info = &priv->info;
 }
