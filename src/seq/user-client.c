@@ -261,3 +261,54 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, info) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsaseq_user_client_set_pool:
+ * @self: A #ALSASeqUserClient.
+ * @client_pool: A #ALSASeqClientPool to be configured for the client.
+ * @error: A #GError.
+ *
+ * Configure memory pool in the client.
+ */
+void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
+                                  ALSASeqClientPool *client_pool,
+                                  GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_client_pool *pool;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_client_pool_refer_private(client_pool, &pool);
+    pool->client = priv->client_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_POOL, pool) < 0)
+        generate_error(error, errno);
+}
+
+/**
+ * alsaseq_user_client_get_pool:
+ * @self: A #ALSASeqUserClient.
+ * @client_pool: (inout): A #ALSASeqClientPool to be configured for the client.
+ * @error: A #GError.
+ *
+ * Get information of memory pool in the client.
+ */
+void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
+                                  ALSASeqClientPool *const *client_pool,
+                                  GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_client_pool *pool;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(*client_pool != NULL);
+    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_client_pool_refer_private(*client_pool, &pool);
+    pool->client = priv->client_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0)
+        generate_error(error, errno);
+}
