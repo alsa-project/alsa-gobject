@@ -10,9 +10,21 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.ClientInfo()
-props = ()
+props = (
+    'client-id',
+    'type',
+    'name',
+    'filter-attributes',
+    'use-filter',
+    'port-count',
+    'lost-count',
+    'card-id',
+    'process-id',
+)
 methods = (
     'new',
+    'set_event_filter',
+    'get_event_filter',
 )
 signals = ()
 
