@@ -10,6 +10,7 @@
 #include "system-info.h"
 #include "client-info.h"
 #include "port-info.h"
+#include "client-pool.h"
 
 #include <sound/asequencer.h>
 
@@ -29,6 +30,9 @@ void seq_client_info_refer_private(ALSASeqClientInfo *self,
 
 void seq_port_info_refer_private(ALSASeqPortInfo *self,
                                  struct snd_seq_port_info **info);
+
+void seq_client_pool_refer_private(ALSASeqClientPool *self,
+                                   struct snd_seq_client_pool **pool);
 
 G_END_DECLS
 

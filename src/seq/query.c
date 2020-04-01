@@ -387,3 +387,45 @@ void alsaseq_get_port_info(guint client_id, guint port_id,
         *port_info = NULL;
     }
 }
+
+/**
+ * alsaseq_get_client_pool:
+ * @client_id: The numerical ID of client to query. One of
+ *             ALSASeqSpecificClientId is available as well as any numerical
+ *             value.
+ * @client_pool: (out): The information of memory pool for the client.
+ * @error: A #GError.
+ *
+ * Get statistical information of memory pool for the given client.
+ */
+void alsaseq_get_client_pool(gint client_id, ALSASeqClientPool **client_pool,
+                             GError **error)
+{
+    char *devnode;
+    int fd;
+    struct snd_seq_client_pool *pool;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    *client_pool = g_object_new(ALSASEQ_TYPE_CLIENT_POOL, NULL);
+    seq_client_pool_refer_private(*client_pool, &pool);
+
+    pool->client = client_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        g_object_unref(*client_pool);
+        return;
+    }
+
+    close(fd);
+}

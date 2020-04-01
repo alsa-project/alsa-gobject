@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "client-pool.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqClientPoolPrivate {
     struct snd_seq_client_pool pool;
@@ -139,4 +137,13 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
 static void alsaseq_client_pool_init(ALSASeqClientPool *self)
 {
     return;
+}
+
+void seq_client_pool_refer_private(ALSASeqClientPool *self,
+                                   struct snd_seq_client_pool **pool)
+{
+    ALSASeqClientPoolPrivate *priv =
+                                alsaseq_client_pool_get_instance_private(self);
+
+    *pool = &priv->pool;
 }
