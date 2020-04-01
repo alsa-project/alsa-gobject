@@ -78,6 +78,16 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_result_set_result";
 
     "alsaseq_event_data_note_get_type";
+    "alsaseq_event_data_note_get_channel";
+    "alsaseq_event_data_note_set_channel";
+    "alsaseq_event_data_note_get_note";
+    "alsaseq_event_data_note_set_note";
+    "alsaseq_event_data_note_get_velocity";
+    "alsaseq_event_data_note_set_velocity";
+    "alsaseq_event_data_note_get_off_velocity";
+    "alsaseq_event_data_note_set_off_velocity";
+    "alsaseq_event_data_note_get_duration";
+    "alsaseq_event_data_note_set_duration";
   local:
     *;
 };
