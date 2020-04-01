@@ -16,6 +16,14 @@ struct _ALSASeqUserClientPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT)
 
+typedef struct {
+    GSource src;
+    ALSASeqUserClient *self;
+    gpointer tag;
+    void *buf;
+    size_t buf_len;
+} UserClientSource;
+
 enum seq_user_client_prop_type {
     SEQ_USER_CLIENT_PROP_CLIENT_ID = 1,
     SEQ_USER_CLIENT_PROP_COUNT,
@@ -370,4 +378,102 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
 
     if (ptr != NULL)
         g_free(ptr);
+}
+
+static gboolean seq_user_client_check_src(GSource *gsrc)
+{
+    UserClientSource *src = (UserClientSource *)gsrc;
+    GIOCondition condition;
+
+    // Don't go to dispatch if nothing available. As an exception, return TRUE
+    // for POLLERR to call .dispatch for internal destruction.
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    return !!(condition & (G_IO_IN | G_IO_ERR));
+}
+
+static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
+                                             gpointer user_data)
+{
+    UserClientSource *src = (UserClientSource *)gsrc;
+    ALSASeqUserClient *self = src->self;
+    ALSASeqUserClientPrivate *priv;
+    GIOCondition condition;
+    int len;
+
+    priv = alsaseq_user_client_get_instance_private(self);
+    if (priv->fd < 0)
+        return G_SOURCE_REMOVE;
+
+    condition = g_source_query_unix_fd(gsrc, src->tag);
+    if (condition & G_IO_ERR)
+        return G_SOURCE_REMOVE;
+
+    len = read(priv->fd, src->buf, src->buf_len);
+    if (len < 0) {
+        if (errno == EAGAIN)
+            return G_SOURCE_CONTINUE;
+
+        return G_SOURCE_REMOVE;
+    }
+
+    // TODO: dispatch event.
+
+    // Just be sure to continue to process this source.
+    return G_SOURCE_CONTINUE;
+}
+
+static void seq_user_client_finalize_src(GSource *gsrc)
+{
+    UserClientSource *src = (UserClientSource *)gsrc;
+
+    g_free(src->buf);
+    g_object_unref(src->self);
+}
+
+/**
+ * alsaseq_user_client_create_source:
+ * @self: A #ALSASeqUserClient.
+ * @gsrc: (out): A #GSource to handle events from ALSA seq character device.
+ * @error: A #GError.
+ *
+ * Allocate GSource structure to handle events from ALSA seq character device.
+ */
+void alsaseq_user_client_create_source(ALSASeqUserClient *self,
+                                       GSource **gsrc, GError **error)
+{
+    static GSourceFuncs funcs = {
+            .check          = seq_user_client_check_src,
+            .dispatch       = seq_user_client_dispatch_src,
+            .finalize       = seq_user_client_finalize_src,
+    };
+    ALSASeqUserClientPrivate *priv;
+    UserClientSource *src;
+    void *buf;
+    long page_size = sysconf(_SC_PAGESIZE);
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    buf = g_try_malloc0(page_size);
+    if (buf == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    *gsrc = g_source_new(&funcs, sizeof(*src));
+    src = (UserClientSource *)(*gsrc);
+
+    g_source_set_name(*gsrc, "ALSASeqUserClient");
+    g_source_set_priority(*gsrc, G_PRIORITY_HIGH_IDLE);
+    g_source_set_can_recurse(*gsrc, TRUE);
+
+    src->self = g_object_ref(self);
+    src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
+    src->buf = buf;
+    src->buf_len = page_size;
 }
