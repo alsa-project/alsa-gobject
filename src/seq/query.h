@@ -9,6 +9,7 @@
 #include <seq/client-info.h>
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
+#include <seq/subscribe-data.h>
 
 G_BEGIN_DECLS
 
@@ -32,6 +33,10 @@ void alsaseq_get_port_info(guint client_id, guint port_id,
 
 void alsaseq_get_client_pool(gint client_id, ALSASeqClientPool **client_pool,
                              GError **error);
+
+void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
+                                   ALSASeqQuerySubscribeType query_type,
+                                   GList **entries, GError **error);
 
 G_END_DECLS
 

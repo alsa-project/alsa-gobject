@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "subscribe-data.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 struct _ALSASeqSubscribeDataPrivate {
     struct snd_seq_port_subscribe data;
@@ -131,4 +129,13 @@ static void alsaseq_subscribe_data_init(ALSASeqSubscribeData *self)
 ALSASeqSubscribeData *alsaseq_subscribe_data_new()
 {
     return g_object_new(ALSASEQ_TYPE_SUBSCRIBE_DATA, NULL);
+}
+
+void seq_subscribe_data_refer_private(ALSASeqSubscribeData *self,
+                                      struct snd_seq_port_subscribe **data)
+{
+    ALSASeqSubscribeDataPrivate *priv =
+                            alsaseq_subscribe_data_get_instance_private(self);
+
+    *data = &priv->data;
 }

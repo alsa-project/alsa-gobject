@@ -429,3 +429,89 @@ void alsaseq_get_client_pool(gint client_id, ALSASeqClientPool **client_pool,
 
     close(fd);
 }
+
+static void fill_data_with_result(struct snd_seq_port_subscribe *data,
+                                  struct snd_seq_query_subs *query)
+{
+    if (query->type == SNDRV_SEQ_QUERY_SUBS_READ) {
+        data->sender = query->root;
+        data->dest = query->addr;
+    } else {
+        data->sender = query->addr;
+        data->dest = query->root;
+    }
+    data->queue = query->queue;
+    data->flags = query->flags;
+}
+
+/**
+ * alsaseq_get_subscription_list:
+ * @addr: A #ALSASeqAddr to query.
+ * @query_type: The type of query, one of #ALSASeqQuerySubscribeType.
+ * @entries: (element-type ALSASeq.SubscribeData)(out): The array with element
+ *           for subscription data.
+ * @error: A #GError.
+ *
+ * Get the list of subscription for given address and query type.
+ */
+void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
+                                   ALSASeqQuerySubscribeType query_type,
+                                   GList **entries, GError **error)
+{
+    char *devnode;
+    int fd;
+    struct snd_seq_query_subs query = {0};
+    unsigned int count;
+    unsigned int index;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    g_object_get((gpointer)addr, "client-id", &query.root.client,
+                 "port-id", &query.root.port, NULL);
+    query.type = query_type;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_SUBS, &query) < 0) {
+        if (errno != ENOENT)
+            generate_error(error, errno);
+        close(fd);
+        return;
+    }
+    count = query.num_subs;
+
+    index = 0;
+    while (index < count) {
+        ALSASeqSubscribeData *subs_data =
+                                g_object_new(ALSASEQ_TYPE_SUBSCRIBE_DATA, NULL);
+        struct snd_seq_port_subscribe *data;
+
+        seq_subscribe_data_refer_private(subs_data, &data);
+        fill_data_with_result(data, &query);
+
+        *entries = g_list_append(*entries, (gpointer)subs_data);
+        ++index;
+
+        ++query.index;
+        if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_SUBS, &query) < 0) {
+            if (errno != ENOENT)
+                generate_error(error, errno);
+            break;
+        }
+    }
+
+    close(fd);
+
+    if (index != count)
+        generate_error(error, ENXIO);
+    if (*error != NULL) {
+        g_list_free_full(*entries, g_object_unref);
+        return;
+    }
+}
