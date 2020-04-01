@@ -9,6 +9,7 @@
 #include <seq/event-data-result.h>
 #include <seq/event-data-note.h>
 #include <seq/event-data-ctl.h>
+#include <seq/event-data-queue.h>
 
 G_BEGIN_DECLS
 
