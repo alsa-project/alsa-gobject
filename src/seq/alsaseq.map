@@ -88,6 +88,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_note_set_off_velocity";
     "alsaseq_event_data_note_get_duration";
     "alsaseq_event_data_note_set_duration";
+
+    "alsaseq_event_data_ctl_get_type";
   local:
     *;
 };
