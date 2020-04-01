@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/system-info.h>
+#include <seq/client-info.h>
 
 G_BEGIN_DECLS
 
@@ -17,6 +18,9 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error);
 
 void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
                                 GError **error);
+
+void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
+			     GError **error);
 
 G_END_DECLS
 

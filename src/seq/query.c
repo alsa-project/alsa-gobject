@@ -225,3 +225,46 @@ void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
     *entries = list;
     *entry_count = count;
 }
+
+/**
+ * alsaseq_get_client_info:
+ * @client_id: The numerical ID of client to query. One of
+ *             ALSASeqSpecificClientId is available as well as any numerical
+ *             value.
+ * @client_info: (out): A #ALSASeqClientInfo for the client.
+ * @error: A #GError.
+ *
+ * Get the information of client according to the numerical ID.
+ */
+void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
+                             GError **error)
+{
+    char *devnode;
+    struct snd_seq_client_info *info;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    *client_info = g_object_new(ALSASEQ_TYPE_CLIENT_INFO, NULL);
+    seq_client_info_refer_private(*client_info, &info);
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        g_object_unref(*client_info);
+        *client_info = NULL;
+        return;
+    }
+
+    info->client = client_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
+        generate_error(error, errno);
+    close(fd);
+    if (*error != NULL) {
+        g_object_unref(*client_info);
+        *client_info = NULL;
+    }
+}
