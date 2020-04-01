@@ -22,6 +22,8 @@ methods = (
     'new',
     'get_byte_data',
     'set_byte_data',
+    'get_quadlet_data',
+    'set_quadlet_data',
 )
 signals = ()
 
