@@ -32,6 +32,7 @@ tests = {
     'alsaseq-enums',
     'alsaseq-system-info',
     'alsaseq-client-info',
+    'alsaseq-user-client',
   ],
 }
 

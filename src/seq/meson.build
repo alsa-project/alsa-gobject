@@ -12,12 +12,14 @@ sources = files(
   'query.c',
   'system-info.c',
   'client-info.c',
+  'user-client.c',
 )
 
 headers = files(
   'query.h',
   'system-info.h',
   'client-info.h',
+  'user-client.h',
 )
 
 privates = files(
