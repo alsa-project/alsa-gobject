@@ -5,6 +5,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/addr.h>
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_PORT_INFO      (alsaseq_port_info_get_type())
@@ -31,9 +34,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqPortInfo         ALSASeqPortInfo;
 typedef struct _ALSASeqPortInfoClass    ALSASeqPortInfoClass;
+typedef struct _ALSASeqPortInfoPrivate  ALSASeqPortInfoPrivate;
 
 struct _ALSASeqPortInfo {
     GObject parent_instance;
+
+    ALSASeqPortInfoPrivate *priv;
 };
 
 struct _ALSASeqPortInfoClass {
