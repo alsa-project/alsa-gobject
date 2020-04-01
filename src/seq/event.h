@@ -5,6 +5,11 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/addr.h>
+#include <seq/tstamp.h>
+
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_EVENT     (alsaseq_event_get_type())
@@ -31,9 +36,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqEvent        ALSASeqEvent;
 typedef struct _ALSASeqEventClass   ALSASeqEventClass;
+typedef struct _ALSASeqEventPrivate ALSASeqEventPrivate;
 
 struct _ALSASeqEvent {
     GObject parent_instance;
+
+    ALSASeqEventPrivate *priv;
 };
 
 struct _ALSASeqEventClass {

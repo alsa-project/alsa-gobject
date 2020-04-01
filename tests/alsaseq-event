@@ -10,7 +10,17 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.Event
-props = ()
+props = (
+    'type',
+    'timestamp-mode',
+    'time-mode',
+    'priority-mode',
+    'tag',
+    'queue-id',
+    'tstamp',
+    'src-addr',
+    'dst-addr',
+)
 methods = ()
 signals = ()
 

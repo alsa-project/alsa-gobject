@@ -11,6 +11,7 @@
 #include "client-info.h"
 #include "port-info.h"
 #include "client-pool.h"
+#include "event.h"
 
 #include <sound/asequencer.h>
 
