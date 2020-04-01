@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/alsaseq-enums.h>
+
 #include <sound/asequencer.h>
 
 G_BEGIN_DECLS
@@ -14,6 +16,16 @@ G_BEGIN_DECLS
 typedef struct snd_seq_result ALSASeqEventDataResult;
 
 GType alsaseq_event_data_result_get_type() G_GNUC_CONST;
+
+ALSASeqEventType alsaseq_event_data_result_get_event(ALSASeqEventDataResult *self);
+
+void alsaseq_event_data_result_set_event(ALSASeqEventDataResult *self,
+                                         ALSASeqEventType event_type);
+
+gint alsaseq_event_data_result_get_result(ALSASeqEventDataResult *self);
+
+void alsaseq_event_data_result_set_result(ALSASeqEventDataResult *self,
+                                          gint result);
 
 G_END_DECLS
 
