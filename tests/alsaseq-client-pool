@@ -10,7 +10,14 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.ClientPool()
-props = ()
+props = (
+    'client-id',
+    'output-pool',
+    'input-pool',
+    'output-room',
+    'output-free',
+    'input-free',
+)
 methods = ()
 signals = ()
 

@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqClientPool           ALSASeqClientPool;
 typedef struct _ALSASeqClientPoolClass      ALSASeqClientPoolClass;
+typedef struct _ALSASeqClientPoolPrivate    ALSASeqClientPoolPrivate;
 
 struct _ALSASeqClientPool {
     GObject parent_instance;
+
+    ALSASeqClientPoolPrivate *priv;
 };
 
 struct _ALSASeqClientPoolClass {
