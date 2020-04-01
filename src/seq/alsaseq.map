@@ -122,6 +122,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_connect_set_dst";
 
     "alsaseq_subscribe_data_get_type";
+    "alsaseq_subscribe_data_new";
   local:
     *;
 };

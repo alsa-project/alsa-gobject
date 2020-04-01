@@ -5,6 +5,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/addr.h>
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_SUBSCRIBE_DATA     (alsaseq_subscribe_data_get_type())
@@ -31,9 +34,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqSubscribeData            ALSASeqSubscribeData;
 typedef struct _ALSASeqSubscribeDataClass       ALSASeqSubscribeDataClass;
+typedef struct _ALSASeqSubscribeDataPrivate     ALSASeqSubscribeDataPrivate;
 
 struct _ALSASeqSubscribeData {
     GObject parent_instance;
+
+    ALSASeqSubscribeData *priv;
 };
 
 struct _ALSASeqSubscribeDataClass {
@@ -41,6 +47,8 @@ struct _ALSASeqSubscribeDataClass {
 };
 
 GType alsaseq_subscribe_data_get_type() G_GNUC_CONST;
+
+ALSASeqSubscribeData *alsaseq_subscribe_data_new();
 
 G_END_DECLS
 
