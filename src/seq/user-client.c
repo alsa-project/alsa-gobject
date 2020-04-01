@@ -312,3 +312,62 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0)
         generate_error(error, errno);
 }
+
+/**
+ * alsaseq_user_client_schedule_event:
+ * @self: A #ALSASeqUserClient.
+ * @event: An instance of #ALSASeqEvent to schedule.
+ * @error: A #GError.
+ *
+ * Deliver the event immediately, or schedule it into memory pool of the client.
+ */
+void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
+                                        ALSASeqEvent *event, GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_event *ev;
+    ssize_t len;
+    guint8 *ptr;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_EVENT(event));
+    priv = alsaseq_user_client_get_instance_private(self);
+    seq_event_refer_private(event, &ev);
+
+    switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_FIXED:
+        ptr = NULL;
+        len = sizeof(*ev);
+        break;
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+        if (ev->data.ext.len == 0 || ev->data.ext.ptr == NULL) {
+            generate_error(error, EINVAL);
+            return;
+        }
+
+        len = sizeof(*ev) + ev->data.ext.len;
+        ptr = g_malloc0(len);
+        if (ptr == NULL) {
+            generate_error(error, ENOMEM);
+            return;
+        }
+
+        memcpy(ptr, ev, sizeof(*ev));
+        memcpy(ptr + sizeof(*ev), ev->data.ext.ptr, ev->data.ext.len);
+
+        ev = (struct snd_seq_event *)ptr;
+        break;
+    case SNDRV_SEQ_EVENT_LENGTH_VARUSR:
+        // Unsupported since it handles raw pointer which is difficult to
+        // be exposed by interfaces capable for g-i.
+    default:
+        break;
+    }
+
+    len = write(priv->fd, ev, len);
+    if (len < 0)
+        generate_error(error, errno);
+
+    if (ptr != NULL)
+        g_free(ptr);
+}

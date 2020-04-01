@@ -23,6 +23,7 @@ methods = (
     'delete_port',
     'set_pool',
     'get_pool',
+    'schedule_event',
 )
 signals = ()
 
