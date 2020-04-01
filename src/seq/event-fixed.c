@@ -13,6 +13,7 @@ enum seq_event_fixed_prop_type {
     SEQ_EVENT_FIXED_PROP_QUEUE_DATA,
     SEQ_EVENT_FIXED_PROP_ADDR_DATA,
     SEQ_EVENT_FIXED_PROP_CONNECT_DATA,
+    SEQ_EVENT_FIXED_PROP_TSTAMP_DATA,
     SEQ_EVENT_FIXED_PROP_COUNT,
 };
 static GParamSpec *seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_COUNT] = { NULL, };
@@ -67,6 +68,13 @@ static void seq_event_fixed_set_property(GObject *obj, guint id,
             ev->data.connect = *data;
         break;
     }
+    case SEQ_EVENT_FIXED_PROP_TSTAMP_DATA:
+    {
+        ALSASeqTstamp *data = g_value_get_boxed(val);
+        if (data != NULL)
+            ev->data.time = *data;
+        break;
+    }
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
         break;
@@ -98,6 +106,9 @@ static void seq_event_fixed_get_property(GObject *obj, guint id, GValue *val,
         break;
     case SEQ_EVENT_FIXED_PROP_CONNECT_DATA:
         g_value_set_static_boxed(val, &ev->data.connect);
+        break;
+    case SEQ_EVENT_FIXED_PROP_TSTAMP_DATA:
+        g_value_set_static_boxed(val, &ev->data.time);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -152,6 +163,13 @@ static void alsaseq_event_fixed_class_init(ALSASeqEventFixedClass *klass)
                            "The data of connect type. This shares the same "
                            "storage between the other properties",
                            ALSASEQ_TYPE_EVENT_DATA_CONNECT,
+                           G_PARAM_READWRITE);
+
+    seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_TSTAMP_DATA] =
+        g_param_spec_boxed("tstamp-data", "tstamp-data",
+                           "The data of timestamp type. This shares the same "
+                           "storage between the other properties",
+                           ALSASEQ_TYPE_TSTAMP,
                            G_PARAM_READWRITE);
 
     g_object_class_install_properties(gobject_class,
