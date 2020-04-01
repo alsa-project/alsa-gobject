@@ -35,6 +35,8 @@ void seq_port_info_refer_private(ALSASeqPortInfo *self,
 void seq_client_pool_refer_private(ALSASeqClientPool *self,
                                    struct snd_seq_client_pool **pool);
 
+void seq_event_refer_private(ALSASeqEvent *self, struct snd_seq_event **ev);
+
 G_END_DECLS
 
 #endif
