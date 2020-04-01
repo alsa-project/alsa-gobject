@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <stdbool.h>
 
 #include <libudev.h>
 
@@ -140,4 +141,87 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 
     // Decrement count for the above connection.
     --info->cur_clients;
+}
+
+/**
+ * alsaseq_get_client_id_list:
+ * @entries: (array length=entry_count)(out): The array with elements for
+ *           numerical ID of client. One of ALSASeqSpecificClientId can be
+ *           included in result as well as any numerical value.
+ * @entry_count: The number of entries.
+ * @error: A #GError.
+ *
+ * Get the list of clients as the numerical ID.
+ */
+void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
+                                GError **error)
+{
+    char *devnode;
+    int my_id;
+    struct snd_seq_system_info system_info = {0};
+    unsigned int count;
+    guint *list;
+    unsigned int index;
+    struct snd_seq_client_info client_info = {0};
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &my_id) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        return;
+    }
+
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &system_info) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        return;
+    }
+
+    // Exclude myself.
+    count = system_info.cur_clients - 1;
+    if (count == 0)  {
+        *entry_count = 0;
+        close(fd);
+        return;
+    }
+
+    list = g_try_malloc0_n(count, sizeof(guint));
+    if (list == NULL) {
+        *entry_count = 0;
+        close(fd);
+        return;
+    }
+    index = 0;
+
+    client_info.client = -1;
+    while (index < count) {
+        if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT, &client_info) < 0)
+            break;
+
+        if (client_info.client != my_id) {
+            list[index] = client_info.client;
+            ++index;
+        }
+    }
+    close(fd);
+
+    if (index != count) {
+        generate_error(error, ENXIO);
+        g_free(list);
+        return;
+    }
+
+    *entries = list;
+    *entry_count = count;
 }
