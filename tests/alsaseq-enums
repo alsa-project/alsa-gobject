@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+
+from sys import exit
+import gi
+gi.require_version('ALSASeq', '0.0')
+from gi.repository import ALSASeq
+
+specific_address_types = (
+    'UNKNOWN',
+    'SUBSCRIBERS',
+    'BROADCAST',
+)
+
+specific_client_id_types= (
+    'SYSTEM',
+    'DUMMY',
+    'OSS',
+)
+
+client_types = (
+    'NONE',
+    'USER',
+    'KERNEL',
+)
+
+filter_attr_flags = (
+    'BROADCAST',
+    'MULTICAST',
+    'BOUNCE',
+)
+
+specific_port_id_types = (
+    'TIMER',
+    'ANNOUNCE',
+)
+
+port_cap_flags = (
+    'READ',
+    'WRITE',
+    'DUPLEX',
+    'SUBS_READ',
+    'SUBS_WRITE',
+    'NO_EXPORT',
+)
+
+port_attr_flags = (
+    'SPECIFIC',
+    'MIDI_GENERIC',
+    'MIDI_GM',
+    'MIDI_GS',
+    'MIDI_XG',
+    'MIDI_MT32',
+    'MIDI_GM2',
+    'HARDWARE',
+    'SOFTWARE',
+    'SYNTHESIZER',
+    'PORT',
+    'APPLICATION',
+)
+
+event_types = (
+    'SYSTEM',
+    'RESULT',
+    'NOTE',
+    'NOTEON',
+    'NOTEOFF',
+    'KEYPRESS',
+    'CONTROLLER',
+    'PGMCHANGE',
+    'CHANPRESS',
+    'PITCHBEND',
+    'CONTROL14',
+    'NONREGPARAM',
+    'REGPARAM',
+    'SONGPOS',
+    'SONGSEL',
+    'QFRAME',
+    'TIMESIGN',
+    'KEYSIGN',
+    'START',
+    'CONTINUE',
+    'STOP',
+    'SETPOS_TICK',
+    'SETPOS_TIME',
+    'TEMPO',
+    'CLOCK',
+    'TICK',
+    'QUEUE_SKEW',
+    'TUNE_REQUEST',
+    'RESET',
+    'SENSING',
+    'ECHO',
+    'OSS',
+    'CLIENT_START',
+    'CLIENT_EXIT',
+    'CLIENT_CHANGE',
+    'PORT_START',
+    'PORT_EXIT',
+    'PORT_CHANGE',
+    'PORT_SUBSCRIBED',
+    'PORT_UNSUBSCRIBED',
+    'USR0',
+    'USR1',
+    'USR2',
+    'USR3',
+    'USR4',
+    'USR5',
+    'USR6',
+    'USR7',
+    'USR8',
+    'USR9',
+    'SYSEX',
+    'BOUNCE',
+    'USR_VAR0',
+    'USR_VAR1',
+    'USR_VAR2',
+    'USR_VAR3',
+    'USR_VAR4',
+    'NONE',
+)
+
+event_timestamp_mode_types = (
+    'TICK',
+    'REAL',
+)
+
+event_time_mode_types = (
+    'ABS',
+    'REL',
+)
+
+event_length_mode_types = (
+    'FIXED',
+    'VARIABLE',
+    'POINTER',
+)
+
+event_priority_mode_types = (
+    'NORMAL',
+    'HIGH',
+)
+
+specific_queue_id_types = (
+    'DIRECT',
+)
+
+port_subscribe_flags = (
+    'EXCLUSIVE',
+    'TIMESTAMP',
+    'TIME_REAL',
+)
+
+query_subscribe_types = (
+    'READ',
+    'WRITE',
+)
+
+types = {
+    ALSASeq.SpecificAddress:    specific_address_types,
+    ALSASeq.SpecificClientId:   specific_client_id_types,
+    ALSASeq.ClientType:         client_types,
+    ALSASeq.FilterAttrFlag:     filter_attr_flags,
+    ALSASeq.SpecificPortId:     specific_port_id_types,
+    ALSASeq.PortCapFlag:        port_cap_flags,
+    ALSASeq.PortAttrFlag:       port_attr_flags,
+    ALSASeq.EventType:          event_types,
+    ALSASeq.EventTimestampMode: event_timestamp_mode_types,
+    ALSASeq.EventTimeMode:      event_time_mode_types,
+    ALSASeq.EventLengthMode:    event_length_mode_types,
+    ALSASeq.EventPriorityMode:  event_priority_mode_types,
+    ALSASeq.SpecificQueueId:    specific_queue_id_types,
+    ALSASeq.PortSubscribeFlag:  port_subscribe_flags,
+    ALSASeq.QuerySubscribeType: query_subscribe_types,
+}
+
+for obj, types in types.items():
+    for t in types:
+        if not hasattr(obj, t):
+            print('Enumerator {0} is not produced.'.format(t))
+            exit(1)

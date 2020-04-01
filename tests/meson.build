@@ -28,6 +28,9 @@ tests = {
     'alsatimer-event-data-tick',
     'alsatimer-event-data-timestamp',
   ],
+  'seq': [
+    'alsaseq-enums',
+  ],
 }
 
 foreach path, scripts: tests
