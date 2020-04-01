@@ -33,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqEventVariable        ALSASeqEventVariable;
 typedef struct _ALSASeqEventVariableClass   ALSASeqEventVariableClass;
+typedef struct _ALSASeqEventVariablePrivate ALSASeqEventVariablePrivate;
 
 struct _ALSASeqEventVariable {
     ALSASeqEvent parent_instance;
+
+    ALSASeqEventVariablePrivate *priv;
 };
 
 struct _ALSASeqEventVariableClass {
@@ -44,6 +47,13 @@ struct _ALSASeqEventVariableClass {
 
 GType alsaseq_event_variable_get_type() G_GNUC_CONST;
 
+ALSASeqEventVariable *alsaseq_event_variable_new(ALSASeqEventType event_type,
+                                                 GError **error);
+
+void alsaseq_event_variable_get_data(ALSASeqEventVariable *self,
+                                     const guint8 **data, gsize *size);
+void alsaseq_event_variable_set_data(ALSASeqEventVariable *self,
+                                     const guint8 *data, gsize size);
 G_END_DECLS
 
 #endif

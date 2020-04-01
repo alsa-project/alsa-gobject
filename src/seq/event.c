@@ -232,3 +232,9 @@ static void alsaseq_event_init(ALSASeqEvent *self)
 {
     return;
 }
+
+void seq_event_refer_private(ALSASeqEvent *self, struct snd_seq_event **ev)
+{
+    ALSASeqEventPrivate *priv = alsaseq_event_get_instance_private(self);
+    *ev = &priv->ev;
+}
