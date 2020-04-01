@@ -18,6 +18,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_get_seq_sysname";
     "alsaseq_get_seq_devnode";
+
+    "alsaseq_system_info_get_type";
   local:
     *;
 };
