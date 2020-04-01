@@ -21,6 +21,8 @@ methods = (
     'create_port',
     'update_port',
     'delete_port',
+    'set_pool',
+    'get_pool',
 )
 signals = ()
 
