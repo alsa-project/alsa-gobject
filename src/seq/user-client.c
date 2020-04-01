@@ -557,3 +557,36 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     src->buf = buf;
     src->buf_len = page_size;
 }
+
+/**
+ * alsaseq_user_client_operate_subscription:
+ * @self: A #ALSASeqUserClient.
+ * @subs_data: A #ALSASeqSubscribeData.
+ * @establish: Whether to establish subscription between two ports, or break it.
+ * @error: A #GError.
+ *
+ * Operate subscription between two ports pointed by the data.
+ */
+void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
+                                         ALSASeqSubscribeData *subs_data,
+                                         gboolean establish,
+                                         GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    struct snd_seq_port_subscribe *data;
+    long request;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data));
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    seq_subscribe_data_refer_private(subs_data, &data);
+
+    if (establish)
+        request = SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT;
+    else
+        request = SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT;
+
+    if (ioctl(priv->fd, request, data) < 0)
+        generate_error(error, errno);
+}

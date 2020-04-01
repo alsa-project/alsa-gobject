@@ -9,6 +9,7 @@
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
 #include <seq/event.h>
+#include <seq/subscribe-data.h>
 
 G_BEGIN_DECLS
 
@@ -96,6 +97,11 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
 
 void alsaseq_user_client_create_source(ALSASeqUserClient *self,
                                        GSource **gsrc, GError **error);
+
+void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
+                                              ALSASeqSubscribeData *subs_data,
+                                              gboolean establish,
+                                              GError **error);
 
 G_END_DECLS
 

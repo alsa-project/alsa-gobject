@@ -45,6 +45,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_get_pool";
     "alsaseq_user_client_schedule_event";
     "alsaseq_user_client_create_source";
+    "alsaseq_user_client_operate_subscription";
 
     "alsaseq_addr_get_type";
     "alsaseq_addr_new";

@@ -25,6 +25,7 @@ methods = (
     'get_pool',
     'schedule_event',
     'create_source',
+    'operate_subscription',
 )
 signals = ()
 
