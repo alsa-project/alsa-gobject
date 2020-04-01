@@ -1,4 +1,20 @@
 ALSA_GOBJECT_0_0_0 {
+  global:
+    "alsaseq_specific_address_get_type";
+    "alsaseq_specific_client_id_get_type";
+    "alsaseq_client_type_get_type";
+    "alsaseq_filter_attr_flag_get_type";
+    "alsaseq_specific_port_id_get_type";
+    "alsaseq_port_cap_flag_get_type";
+    "alsaseq_port_attr_flag_get_type";
+    "alsaseq_event_type_get_type";
+    "alsaseq_event_timestamp_mode_get_type";
+    "alsaseq_event_time_mode_get_type";
+    "alsaseq_event_length_mode_get_type";
+    "alsaseq_event_priority_mode_get_type";
+    "alsaseq_specific_queue_id_get_type";
+    "alsaseq_port_subscribe_flag_get_type";
+    "alsaseq_query_subscribe_type_get_type";
   local:
     *;
 };
