@@ -14,6 +14,7 @@ props = (
     'result-data',
     'note-data',
     'ctl-data',
+    'queue-data',
 )
 methods = (
     'new',
