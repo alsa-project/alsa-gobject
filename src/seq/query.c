@@ -268,3 +268,76 @@ void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
         *client_info = NULL;
     }
 }
+
+/**
+ * alsaseq_get_port_id_list:
+ * @client_id: The numerical ID of client to query. One of
+ *             ALSASeqSpecificClientId is available as well as any numerical
+ *             value.
+ * @entries: (array length=entry_count)(out): The array with elements for
+ *           numerical ID of port. One of ALSASeqSpecificPortId is available as
+ *           well as any numerical value.
+ * @entry_count: The number of entries in the array.
+ * @error: A #GError.
+ *
+ * Get the list of numerical IDs for port added by the client.
+ */
+void alsaseq_get_port_id_list(guint client_id, guint **entries,
+                              gsize *entry_count, GError **error)
+{
+    char *devnode;
+    struct snd_seq_client_info client_info = {0};
+    unsigned int count;
+    guint *list;
+    unsigned int index;
+    struct snd_seq_port_info port_info = {0};
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    client_info.client = client_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, &client_info) < 0) {
+        generate_error(error, errno);
+        close(fd);
+        return;
+    }
+
+    count = client_info.num_ports;
+    list = g_try_malloc0_n(count, sizeof(*list));
+    if (list == NULL) {
+        generate_error(error, ENOMEM);
+        close(fd);
+        return;
+    }
+    index = 0;
+
+    port_info.addr.client = client_id;
+    port_info.addr.port = -1;
+    while (index < count) {
+        if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT, &port_info) < 0) {
+            break;
+        }
+
+        list[index] = port_info.addr.port;
+        ++index;
+    }
+    close(fd);
+
+    if (index != count) {
+        generate_error(error, ENXIO);
+        g_free(list);
+        return;
+    }
+
+    *entries = list;
+    *entry_count = count;
+}
