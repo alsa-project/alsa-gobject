@@ -16,6 +16,7 @@ sources = files(
   'addr.c',
   'port-info.c',
   'client-pool.c',
+  'tstamp.c',
 )
 
 headers = files(
@@ -26,6 +27,7 @@ headers = files(
   'addr.h',
   'port-info.h',
   'client-pool.h',
+  'tstamp.h',
 )
 
 privates = files(
