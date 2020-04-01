@@ -7,6 +7,8 @@
 
 G_BEGIN_DECLS
 
+void alsaseq_get_seq_sysname(gchar **sysname, GError **error);
+
 G_END_DECLS
 
 #endif
