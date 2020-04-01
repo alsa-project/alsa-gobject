@@ -70,6 +70,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_variable_new";
     "alsaseq_event_variable_get_data";
     "alsaseq_event_variable_set_data";
+
+    "alsaseq_event_data_result_get_type";
   local:
     *;
 };
