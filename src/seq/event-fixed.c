@@ -11,6 +11,7 @@ enum seq_event_fixed_prop_type {
     SEQ_EVENT_FIXED_PROP_NOTE_DATA,
     SEQ_EVENT_FIXED_PROP_CTL_DATA,
     SEQ_EVENT_FIXED_PROP_QUEUE_DATA,
+    SEQ_EVENT_FIXED_PROP_ADDR_DATA,
     SEQ_EVENT_FIXED_PROP_COUNT,
 };
 static GParamSpec *seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_COUNT] = { NULL, };
@@ -51,6 +52,13 @@ static void seq_event_fixed_set_property(GObject *obj, guint id,
             ev->data.queue = *data;
         break;
     }
+    case SEQ_EVENT_FIXED_PROP_ADDR_DATA:
+    {
+        ALSASeqAddr *data = g_value_get_boxed(val);
+        if (data != NULL)
+            ev->data.addr = *data;
+        break;
+    }
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
         break;
@@ -76,6 +84,9 @@ static void seq_event_fixed_get_property(GObject *obj, guint id, GValue *val,
         break;
     case SEQ_EVENT_FIXED_PROP_QUEUE_DATA:
         g_value_set_static_boxed(val, &ev->data.queue);
+        break;
+    case SEQ_EVENT_FIXED_PROP_ADDR_DATA:
+        g_value_set_static_boxed(val, &ev->data.addr);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -116,6 +127,13 @@ static void alsaseq_event_fixed_class_init(ALSASeqEventFixedClass *klass)
                            "The data of queue type. This shares the same "
                            "storage between the other properties",
                            ALSASEQ_TYPE_EVENT_DATA_QUEUE,
+                           G_PARAM_READWRITE);
+
+    seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_ADDR_DATA] =
+        g_param_spec_boxed("addr-data", "addr-data",
+                           "The data of addr type. This shares the same "
+                           "storage between the other properties",
+                           ALSASEQ_TYPE_ADDR,
                            G_PARAM_READWRITE);
 
     g_object_class_install_properties(gobject_class,
