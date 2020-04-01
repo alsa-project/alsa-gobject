@@ -17,6 +17,7 @@ sources = files(
   'port-info.c',
   'client-pool.c',
   'tstamp.c',
+  'event.c',
 )
 
 headers = files(
@@ -28,6 +29,7 @@ headers = files(
   'port-info.h',
   'client-pool.h',
   'tstamp.h',
+  'event.h',
 )
 
 privates = files(

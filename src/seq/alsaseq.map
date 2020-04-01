@@ -58,6 +58,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_tstamp_set_tick_time";
     "alsaseq_tstamp_get_real_time";
     "alsaseq_tstamp_set_real_time";
+
+    "alsaseq_event_get_type";
   local:
     *;
 };
