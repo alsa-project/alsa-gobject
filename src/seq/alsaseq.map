@@ -17,6 +17,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_query_subscribe_type_get_type";
 
     "alsaseq_get_seq_sysname";
+    "alsaseq_get_seq_devnode";
   local:
     *;
 };
