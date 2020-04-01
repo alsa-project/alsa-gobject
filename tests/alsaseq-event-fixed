@@ -12,6 +12,7 @@ from gi.repository import ALSASeq
 target = ALSASeq.EventFixed()
 props = (
     'result-data',
+    'note-data',
 )
 methods = (
     'new',

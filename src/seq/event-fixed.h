@@ -7,6 +7,7 @@
 
 #include <seq/event.h>
 #include <seq/event-data-result.h>
+#include <seq/event-data-note.h>
 
 G_BEGIN_DECLS
 
