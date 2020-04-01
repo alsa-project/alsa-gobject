@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/client-info.h>
+#include <seq/port-info.h>
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,18 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
 void alsaseq_user_client_get_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *const *client_info,
                                   GError **error);
+
+void alsaseq_user_client_create_port(ALSASeqUserClient *self,
+                                     ALSASeqPortInfo *port_info,
+                                     guint8 *port_id, GError **error);
+
+void alsaseq_user_client_update_port(ALSASeqUserClient *self,
+                                     ALSASeqPortInfo *port_info,
+                                     guint8 port_id, GError **error);
+
+void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
+                                     ALSASeqPortInfo *port_info,
+                                     guint8 port_id, GError **error);
 
 G_END_DECLS
 
