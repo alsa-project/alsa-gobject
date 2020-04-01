@@ -25,6 +25,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_client_info_get_type";
     "alsaseq_client_info_new";
+    "alsaseq_client_info_set_event_filter";
+    "alsaseq_client_info_get_event_filter";
   local:
     *;
 };

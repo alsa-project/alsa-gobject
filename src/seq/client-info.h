@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_CLIENT_INFO     (alsaseq_client_info_get_type())
@@ -31,9 +33,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqClientInfo           ALSASeqClientInfo;
 typedef struct _ALSASeqClientInfoClass      ALSASeqClientInfoClass;
+typedef struct _ALSASeqClientInfoPrivate    ALSASeqClientInfoPrivate;
 
 struct _ALSASeqClientInfo {
     GObject parent_instance;
+
+    ALSASeqClientInfoPrivate *priv;
 };
 
 struct _ALSASeqClientInfoClass {
@@ -43,6 +48,16 @@ struct _ALSASeqClientInfoClass {
 GType alsaseq_client_info_get_type() G_GNUC_CONST;
 
 ALSASeqClientInfo *alsaseq_client_info_new();
+
+void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
+                                          const ALSASeqEventType *event_types,
+                                          gsize event_type_count,
+                                          GError **error);
+
+void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
+                                          ALSASeqEventType **event_types,
+                                          gsize *event_type_count,
+                                          GError **error);
 
 G_END_DECLS
 

@@ -1,11 +1,179 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "client-info.h"
+#include "privates.h"
 
-G_DEFINE_TYPE(ALSASeqClientInfo, alsaseq_client_info, G_TYPE_OBJECT)
+#include <errno.h>
+
+struct _ALSASeqClientInfoPrivate {
+    struct snd_seq_client_info info;
+};
+G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqClientInfo, alsaseq_client_info, G_TYPE_OBJECT)
+
+enum seq_client_info_prop_type {
+    SEQ_CLIENT_INFO_PROP_CLIENT_ID = 1,
+    SEQ_CLIENT_INFO_PROP_CLIENT_TYPE,
+    SEQ_CLIENT_INFO_PROP_NAME,
+    SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS,
+    SEQ_CLIENT_INFO_PROP_USE_FILTER,
+    SEQ_CLIENT_INFO_PROP_PORT_COUNT,
+    SEQ_CLIENT_INFO_PROP_LOST_COUNT,
+    SEQ_CLIENT_INFO_PROP_CARD_ID,
+    SEQ_CLIENT_INFO_PROP_PROCESS_ID,
+    SEQ_CLIENT_INFO_PROP_COUNT,
+};
+static GParamSpec *seq_client_info_props[SEQ_CLIENT_INFO_PROP_COUNT] = { NULL, };
+
+static void seq_client_info_set_property(GObject *obj, guint id,
+                                         const GValue *val, GParamSpec *spec)
+{
+    ALSASeqClientInfo *self = ALSASEQ_CLIENT_INFO(obj);
+    ALSASeqClientInfoPrivate *priv =
+                                alsaseq_client_info_get_instance_private(self);
+
+    switch (id) {
+    case SEQ_CLIENT_INFO_PROP_CLIENT_ID:
+        priv->info.client = g_value_get_int(val);
+        break;
+    case SEQ_CLIENT_INFO_PROP_CLIENT_TYPE:
+        priv->info.type = (snd_seq_client_type_t)g_value_get_enum(val);
+        break;
+    case SEQ_CLIENT_INFO_PROP_NAME:
+        strncpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        break;
+    case SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS:
+        priv->info.filter &= SNDRV_SEQ_FILTER_USE_EVENT;
+        priv->info.filter |= (unsigned int)g_value_get_flags(val);
+        break;
+    case SEQ_CLIENT_INFO_PROP_USE_FILTER:
+        priv->info.filter &= ~SNDRV_SEQ_FILTER_USE_EVENT;
+        if (g_value_get_boolean(val))
+            priv->info.filter |= SNDRV_SEQ_FILTER_USE_EVENT;
+        break;
+    case SEQ_CLIENT_INFO_PROP_LOST_COUNT:
+        priv->info.event_lost = g_value_get_int(val);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
+
+static void seq_client_info_get_property(GObject *obj, guint id, GValue *val,
+                                         GParamSpec *spec)
+{
+    ALSASeqClientInfo *self = ALSASEQ_CLIENT_INFO(obj);
+    ALSASeqClientInfoPrivate *priv =
+                                alsaseq_client_info_get_instance_private(self);
+
+    switch (id) {
+    case SEQ_CLIENT_INFO_PROP_CLIENT_ID:
+        g_value_set_int(val, priv->info.client);
+        break;
+    case SEQ_CLIENT_INFO_PROP_CLIENT_TYPE:
+        g_value_set_enum(val, (ALSASeqClientType)priv->info.type);
+        break;
+    case SEQ_CLIENT_INFO_PROP_NAME:
+        g_value_set_static_string(val, priv->info.name);
+        break;
+    case SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS:
+        g_value_set_flags(val, (ALSASeqFilterAttrFlag)
+                          (priv->info.filter & SNDRV_SEQ_FILTER_USE_EVENT));
+        break;
+    case SEQ_CLIENT_INFO_PROP_USE_FILTER:
+        g_value_set_boolean(val,
+                            !!(priv->info.filter & SNDRV_SEQ_FILTER_USE_EVENT));
+        break;
+    case SEQ_CLIENT_INFO_PROP_PORT_COUNT:
+        g_value_set_int(val, priv->info.num_ports);
+        break;
+    case SEQ_CLIENT_INFO_PROP_LOST_COUNT:
+        g_value_set_int(val, priv->info.event_lost);
+        break;
+    case SEQ_CLIENT_INFO_PROP_CARD_ID:
+        g_value_set_int(val, priv->info.card);
+        break;
+    case SEQ_CLIENT_INFO_PROP_PROCESS_ID:
+        g_value_set_int64(val, (gint64)priv->info.pid);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
 
 static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
 {
-    return;
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+
+    gobject_class->set_property = seq_client_info_set_property;
+    gobject_class->get_property = seq_client_info_get_property;
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_ID] =
+        g_param_spec_int("client-id", "client-id",
+                         "The numerical ID of client. One of "
+                         "ALSASeqSpecificClientId is available as well as "
+                         "any numerical value.",
+                         0, G_MAXINT,
+                         0,
+                         G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_TYPE] =
+        g_param_spec_enum("type", "type",
+                         "The type of client, one of ALSASeqClientType.",
+                         ALSASEQ_TYPE_CLIENT_TYPE,
+                         ALSASEQ_CLIENT_TYPE_NONE,
+                         G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_NAME] =
+        g_param_spec_string("name", "name",
+                            "The name of client.",
+                            "",
+                            G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS] =
+        g_param_spec_flags("filter-attributes", "filter-attributes",
+                           "The attributes for event filter.",
+                           ALSASEQ_TYPE_FILTER_ATTR_FLAG,
+                           0,
+                           G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_USE_FILTER] =
+        g_param_spec_boolean("use-filter", "use-filter",
+                             "Whether using filter to receive event or not.",
+                             FALSE,
+                             G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_PORT_COUNT] =
+        g_param_spec_int("port-count", "port-count",
+                         "The number of ports opened by the client.",
+                         0, G_MAXINT,
+                         0,
+                         G_PARAM_READABLE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_LOST_COUNT] =
+        g_param_spec_int("lost-count", "lost-count",
+                         "The number of lost events.",
+                         0, G_MAXINT,
+                         0,
+                         G_PARAM_READABLE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_CARD_ID] =
+        g_param_spec_int("card-id", "card-id",
+                         "The numerical ID of sound card.",
+                         G_MININT, G_MAXINT,
+                         -1,
+                         G_PARAM_READWRITE);
+
+    seq_client_info_props[SEQ_CLIENT_INFO_PROP_PROCESS_ID] =
+        g_param_spec_long("process-id", "process-id",
+                          "The process ID for uset client, otherwise -1.",
+                          G_MINLONG, G_MAXLONG,
+                          -1,
+                          G_PARAM_READABLE);
+
+    g_object_class_install_properties(gobject_class,
+                                      SEQ_CLIENT_INFO_PROP_COUNT,
+                                      seq_client_info_props);
 }
 
 static void alsaseq_client_info_init(ALSASeqClientInfo *self)
@@ -21,4 +189,104 @@ static void alsaseq_client_info_init(ALSASeqClientInfo *self)
 ALSASeqClientInfo *alsaseq_client_info_new()
 {
     return g_object_new(ALSASEQ_TYPE_CLIENT_INFO, NULL);
+}
+
+/**
+ * alsaseq_client_info_set_event_filter:
+ * @self: A #ALSASeqClientInfo.
+ * @event_types: (array length=event_type_count): The array with elements for
+ *               the type of event to listen.
+ * @event_type_count: The number of elements for the type of event.
+ * @error: A #GError.
+ *
+ * Set the list of type of events configured to be listen.
+ */
+void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
+                                          const ALSASeqEventType *event_types,
+                                          gsize event_type_count,
+                                          GError **error)
+{
+    ALSASeqClientInfoPrivate *priv;
+    int i;
+
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
+    priv = alsaseq_client_info_get_instance_private(self);
+
+    memset(priv->info.event_filter, 0, sizeof(priv->info.event_filter));
+
+    if (event_types == NULL)
+        return;
+
+    for (i = 0; i < event_type_count; ++i) {
+        ALSASeqEventType event_type = (int)event_types[i];
+        unsigned int order = event_type / (sizeof(priv->info.event_filter[0]) * 8);
+        unsigned int idx = event_type % (sizeof(priv->info.event_filter[0]) * 8);
+
+        if (order < G_N_ELEMENTS(priv->info.event_filter))
+            priv->info.event_filter[order] |= 1u << idx;
+    }
+}
+
+/**
+ * alsaseq_client_info_get_event_filter:
+ * @self: A #ALSASeqClientInfo.
+ * @event_types: (array length=event_type_count)(out): The array with elements
+ *               for the type of event to listen.
+ * @event_type_count: The number of elements for the type of event.
+ * @error: A #GError.
+ *
+ * Get the list of type of events configured to be listen.
+ */
+void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
+                                          ALSASeqEventType **event_types,
+                                          gsize *event_type_count,
+                                          GError **error)
+{
+    ALSASeqClientInfoPrivate *priv;
+    unsigned int count;
+    unsigned int index;
+    int i;
+
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
+    priv = alsaseq_client_info_get_instance_private(self);
+
+    if (event_types == NULL || event_type_count == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    count = 0;
+    for (i = 0; i < SNDRV_SEQ_EVENT_NONE + 1; ++i) {
+        unsigned int order = i / (sizeof(priv->info.event_filter[0]) * 8);
+        unsigned int idx = i % (sizeof(priv->info.event_filter[0]) * 8);
+
+        if (order < G_N_ELEMENTS(priv->info.event_filter) &&
+            priv->info.event_filter[order] & (1u << idx))
+            ++count;
+    }
+
+    if (count == 0) {
+        *event_types = NULL;
+        *event_type_count = 0;
+        return;
+    }
+
+    *event_types = g_try_malloc0_n(count, sizeof(*event_types));
+    if (*event_types == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+    *event_type_count = count;
+
+    index = 0;
+    for (i = 0; i < SNDRV_SEQ_EVENT_NONE + 1; ++i) {
+        unsigned int order = i / (sizeof(priv->info.event_filter[0]) * 8);
+        unsigned int idx = i % (sizeof(priv->info.event_filter[0]) * 8);
+
+        if (order < G_N_ELEMENTS(priv->info.event_filter) &&
+            priv->info.event_filter[order] & (1u << idx)) {
+            (*event_types)[index] = (ALSASeqEventType)i;
+            ++index;
+        }
+    }
 }
