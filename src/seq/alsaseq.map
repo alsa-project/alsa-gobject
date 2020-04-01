@@ -76,6 +76,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_result_set_event";
     "alsaseq_event_data_result_get_result";
     "alsaseq_event_data_result_set_result";
+
+    "alsaseq_event_data_note_get_type";
   local:
     *;
 };
