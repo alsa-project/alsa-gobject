@@ -19,6 +19,7 @@ sources = files(
   'tstamp.c',
   'event.c',
   'event-fixed.c',
+  'event-variable.c',
 )
 
 headers = files(
@@ -32,6 +33,7 @@ headers = files(
   'tstamp.h',
   'event.h',
   'event-fixed.h',
+  'event-variable.h',
 )
 
 privates = files(
