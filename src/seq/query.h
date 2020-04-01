@@ -5,11 +5,15 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/system-info.h>
+
 G_BEGIN_DECLS
 
 void alsaseq_get_seq_sysname(gchar **sysname, GError **error);
 
 void alsaseq_get_seq_devnode(gchar **devnode, GError **error);
+
+void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error);
 
 G_END_DECLS
 
