@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "port-info.h"
+#include "privates.h"
 
 struct _ALSASeqPortInfoPrivate {
     struct snd_seq_port_info info;
@@ -248,4 +248,12 @@ static void alsaseq_port_info_init(ALSASeqPortInfo *self)
 ALSASeqPortInfo *alsaseq_port_info_new()
 {
     return g_object_new(ALSASEQ_TYPE_PORT_INFO, NULL);
+}
+
+void seq_port_info_refer_private(ALSASeqPortInfo *self,
+                                 struct snd_seq_port_info **info)
+{
+    ALSASeqPortInfoPrivate *priv = alsaseq_port_info_get_instance_private(self);
+
+    *info = &priv->info;
 }

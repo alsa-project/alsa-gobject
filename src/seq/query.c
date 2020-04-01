@@ -341,3 +341,49 @@ void alsaseq_get_port_id_list(guint client_id, guint **entries,
     *entries = list;
     *entry_count = count;
 }
+
+/**
+ * alsaseq_get_port_info:
+ * @client_id: The numerical ID of client to query. One of
+ *             ALSASeqSpecificClientId is available as well as any numerica
+ *             value.
+ * @port_id: The numerical ID of port in the client. One of
+ *           ALSASeqSpecificPortId is available as well as any numerical value.
+ * @port_info: (out): A #ALSASeqPortInfo for the port.
+ * @error: A #GError.
+ *
+ * Get the information of port in client.
+ */
+void alsaseq_get_port_info(guint client_id, guint port_id,
+                           ALSASeqPortInfo **port_info, GError **error)
+{
+    char *devnode;
+    struct snd_seq_port_info *info;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return;
+
+    *port_info = g_object_new(ALSASEQ_TYPE_PORT_INFO, NULL);
+    seq_port_info_refer_private(*port_info, &info);
+
+    fd = open(devnode, O_RDONLY);
+    g_free(devnode);
+    if (fd < 0) {
+        generate_error(error, errno);
+        g_object_unref(*port_info);
+        *port_info = NULL;
+        return;
+    }
+
+    info->addr.client = client_id;
+    info->addr.port = port_id;
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_PORT_INFO, info) < 0)
+        generate_error(error, errno);
+    close(fd);
+    if (*error != NULL) {
+        g_object_unref(*port_info);
+        *port_info = NULL;
+    }
+}
