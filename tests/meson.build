@@ -37,6 +37,7 @@ tests = {
     'alsaseq-client-pool',
     'alsaseq-event',
     'alsaseq-event-fixed',
+    'alsaseq-event-variable',
   ],
 }
 
