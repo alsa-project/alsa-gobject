@@ -13,6 +13,7 @@ target = ALSASeq.UserClient()
 props = ()
 methods = (
     'new',
+    'open',
 )
 signals = ()
 

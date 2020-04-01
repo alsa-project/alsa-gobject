@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqUserClient           ALSASeqUserClient;
 typedef struct _ALSASeqUserClientClass      ALSASeqUserClientClass;
+typedef struct _ALSASeqUserClientPrivate    ALSASeqUserClientPrivate;
 
 struct _ALSASeqUserClient {
     GObject parent_instance;
+
+    ALSASeqUserClientPrivate *priv;
 };
 
 struct _ALSASeqUserClientClass {
@@ -43,6 +46,9 @@ struct _ALSASeqUserClientClass {
 GType alsaseq_user_client_get_type() G_GNUC_CONST;
 
 ALSASeqUserClient *alsaseq_user_client_new();
+
+void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
+                              GError **error);
 
 G_END_DECLS
 
