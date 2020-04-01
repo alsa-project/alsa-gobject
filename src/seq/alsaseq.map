@@ -21,6 +21,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_get_system_info";
     "alsaseq_get_client_id_list";
     "alsaseq_get_client_info";
+    "alsaseq_get_port_id_list";
 
     "alsaseq_system_info_get_type";
 
