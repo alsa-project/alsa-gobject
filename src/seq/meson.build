@@ -11,11 +11,13 @@ has_marshaller = false
 sources = files(
   'query.c',
   'system-info.c',
+  'client-info.c',
 )
 
 headers = files(
   'query.h',
   'system-info.h',
+  'client-info.h',
 )
 
 privates = files(

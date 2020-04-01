@@ -31,6 +31,7 @@ tests = {
   'seq': [
     'alsaseq-enums',
     'alsaseq-system-info',
+    'alsaseq-client-info',
   ],
 }
 

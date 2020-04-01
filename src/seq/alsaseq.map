@@ -22,6 +22,9 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_get_client_id_list";
 
     "alsaseq_system_info_get_type";
+
+    "alsaseq_client_info_get_type";
+    "alsaseq_client_info_new";
   local:
     *;
 };
