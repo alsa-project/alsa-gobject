@@ -16,6 +16,29 @@ struct _ALSASeqUserClientPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT)
 
+enum seq_user_client_prop_type {
+    SEQ_USER_CLIENT_PROP_CLIENT_ID = 1,
+    SEQ_USER_CLIENT_PROP_COUNT,
+};
+static GParamSpec *seq_user_client_props[SEQ_USER_CLIENT_PROP_COUNT] = { NULL, };
+
+static void seq_user_client_get_property(GObject *obj, guint id, GValue *val,
+                                         GParamSpec *spec)
+{
+    ALSASeqUserClient *self = ALSASEQ_USER_CLIENT(obj);
+    ALSASeqUserClientPrivate *priv =
+                                alsaseq_user_client_get_instance_private(self);
+
+    switch (id) {
+    case SEQ_USER_CLIENT_PROP_CLIENT_ID:
+        g_value_set_uchar(val, (guint8)priv->client_id);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
+
 static void seq_user_client_finalize(GObject *obj)
 {
     ALSASeqUserClient *self = ALSASEQ_USER_CLIENT(obj);
@@ -33,6 +56,18 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->finalize = seq_user_client_finalize;
+    gobject_class->get_property = seq_user_client_get_property;
+
+    seq_user_client_props[SEQ_USER_CLIENT_PROP_CLIENT_ID] =
+        g_param_spec_uchar("client-id", "client-id",
+                           "The numerical ID of the client.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READABLE);
+
+    g_object_class_install_properties(gobject_class,
+                                      SEQ_USER_CLIENT_PROP_COUNT,
+                                      seq_user_client_props);
 }
 
 static void alsaseq_user_client_init(ALSASeqUserClient *self)
