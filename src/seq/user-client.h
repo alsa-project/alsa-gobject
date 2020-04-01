@@ -8,6 +8,7 @@
 #include <seq/client-info.h>
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
+#include <seq/event.h>
 
 G_BEGIN_DECLS
 
@@ -80,6 +81,9 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
 void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
                                   ALSASeqClientPool *const *client_pool,
                                   GError **error);
+
+void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
+                                        ALSASeqEvent *event, GError **error);
 
 G_END_DECLS
 

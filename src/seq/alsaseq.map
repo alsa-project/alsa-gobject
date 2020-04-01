@@ -42,6 +42,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_delete_port";
     "alsaseq_user_client_set_pool";
     "alsaseq_user_client_get_pool";
+    "alsaseq_user_client_schedule_event";
 
     "alsaseq_addr_get_type";
     "alsaseq_addr_new";
