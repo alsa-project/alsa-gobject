@@ -10,7 +10,19 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.PortInfo()
-props = ()
+props = (
+    'name',
+    'caps',
+    'attrs',
+    'midi-channels',
+    'midi-voices',
+    'synth-voices',
+    'read-users',
+    'write-users',
+    'timestamp-overwrite',
+    'timestamp-mode',
+    'queue-id',
+)
 methods = (
     'new',
 )
