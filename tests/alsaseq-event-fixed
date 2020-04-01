@@ -20,6 +20,8 @@ props = (
 )
 methods = (
     'new',
+    'get_byte_data',
+    'set_byte_data',
 )
 signals = ()
 

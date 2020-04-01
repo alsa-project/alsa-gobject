@@ -194,3 +194,44 @@ ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
                         "length-mode", ALSASEQ_EVENT_LENGTH_MODE_FIXED,
                         NULL);
 }
+
+/**
+ * alsaseq_event_fixed_get_byte_data:
+ * @self: A #ALSASeqEventFixed.
+ *
+ * Refer to the 12 byte data for the event.
+ *
+ * Returns: (array fixed-size=12)(transfer none): The 12 byte data for the
+ *          event. The lifetime of the object is the same as the event itself.
+ */
+const guint8 *alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self)
+{
+    ALSASeqEvent *parent;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_FIXED(self), NULL);
+    parent = ALSASEQ_EVENT(self);
+    seq_event_refer_private(parent, &ev);
+
+    return ev->data.raw8.d;
+}
+
+/**
+ * alsaseq_event_fixed_set_byte_data:
+ * @self: A #ALSASeqEventFixed.
+ * @data: (array fixed-size=12)(transfer none): The 12 byte data for the event.
+ *
+ * Copy the 12 byte data for the event.
+ */
+void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
+                                       const guint8 data[12])
+{
+    ALSASeqEvent *parent;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_FIXED(self));
+    parent = ALSASEQ_EVENT(self);
+    seq_event_refer_private(parent, &ev);
+
+    memcpy(ev->data.raw8.d, data, sizeof(ev->data.raw8.d));
+}
