@@ -235,3 +235,44 @@ void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
 
     memcpy(ev->data.raw8.d, data, sizeof(ev->data.raw8.d));
 }
+
+/**
+ * alsaseq_event_fixed_get_quadlet_data:
+ * @self: A #ALSASeqEventFixed.
+ *
+ * Get the 3 quadlet data for the event.
+ *
+ * Returns: (array fixed-size=3)(transfer none): The 3 quadlet data for the
+ *          event. The lifetime of the object is the same as the event itself.
+ */
+const guint32 *alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self)
+{
+    ALSASeqEvent *parent;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_FIXED(self), NULL);
+    parent = ALSASEQ_EVENT(self);
+    seq_event_refer_private(parent, &ev);
+
+    return ev->data.raw32.d;
+}
+
+/**
+ * alsaseq_event_fixed_set_quadlet_data:
+ * @self: A #ALSASeqEventFixed.
+ * @data: (array fixed-size=3)(transfer none): The 3 quadlet data for the event.
+ *
+ * Copy the 3 quadlet data for the event.
+ */
+void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
+                                          const guint32 data[3])
+{
+    ALSASeqEvent *parent;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_FIXED(self));
+    parent = ALSASEQ_EVENT(self);
+    seq_event_refer_private(parent, &ev);
+
+    memcpy(ev->data.raw32.d, data, sizeof(ev->data.raw32.d));
+}
