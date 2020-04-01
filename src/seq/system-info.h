@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqSystemInfo           ALSASeqSystemInfo;
 typedef struct _ALSASeqSystemInfoClass      ALSASeqSystemInfoClass;
+typedef struct _ALSASeqSystemInfoPrivate    ALSASeqSystemInfoPrivate;
 
 struct _ALSASeqSystemInfo {
     GObject parent_instance;
+
+    ALSASeqSystemInfoPrivate *priv;
 };
 
 struct _ALSASeqSystemInfoClass {

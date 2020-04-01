@@ -10,7 +10,14 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.SystemInfo()
-props = ()
+props = (
+    'maximum-queue-count',
+    'maximum-client-count',
+    'maximum-port-count',
+    'maximum-channel-count',
+    'current-client-count',
+    'current-queue-count',
+)
 methods = ()
 signals = ()
 
