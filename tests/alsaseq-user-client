@@ -18,6 +18,9 @@ methods = (
     'open',
     'set_info',
     'get_info',
+    'create_port',
+    'update_port',
+    'delete_port',
 )
 signals = ()
 
