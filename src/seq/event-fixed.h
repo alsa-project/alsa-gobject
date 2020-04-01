@@ -44,6 +44,9 @@ struct _ALSASeqEventFixedClass {
 
 GType alsaseq_event_fixed_get_type() G_GNUC_CONST;
 
+ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
+                                           GError **error);
+
 G_END_DECLS
 
 #endif
