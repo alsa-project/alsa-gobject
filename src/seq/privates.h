@@ -8,6 +8,7 @@
 #include <glib-object.h>
 
 #include "system-info.h"
+#include "client-info.h"
 
 #include <sound/asequencer.h>
 
@@ -21,6 +22,9 @@ GQuark alsaseq_error_quark(void);
 
 void seq_system_info_refer_private(ALSASeqSystemInfo *self,
                                    struct snd_seq_system_info **info);
+
+void seq_client_info_refer_private(ALSASeqClientInfo *self,
+                                   struct snd_seq_client_info **info);
 
 G_END_DECLS
 
