@@ -46,6 +46,15 @@ struct _ALSASeqUserClient {
 
 struct _ALSASeqUserClientClass {
     GObjectClass parent_class;
+
+    /**
+     * ALSASeqUserClientClass::handle_event:
+     * @self: A #ALSASeqUserClient.
+     * @event: (transfer none): A #ALSASeqEvent or derived objects.
+     *
+     * When event occurs, this signal is emit with an object for the event.
+     */
+    void (*handle_event)(ALSASeqUserClient *self, const ALSASeqEvent *event);
 };
 
 GType alsaseq_user_client_get_type() G_GNUC_CONST;

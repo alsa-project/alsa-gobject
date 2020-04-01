@@ -94,7 +94,7 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
         g_signal_new("handle-event",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     0,
+                     G_STRUCT_OFFSET(ALSASeqUserClientClass, handle_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__OBJECT,
                      G_TYPE_NONE, 1, ALSASEQ_TYPE_EVENT);
