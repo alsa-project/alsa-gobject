@@ -10,7 +10,9 @@ gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target = ALSASeq.EventFixed()
-props = ()
+props = (
+    'result-data',
+)
 methods = (
     'new',
 )

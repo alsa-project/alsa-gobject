@@ -6,9 +6,67 @@
 
 G_DEFINE_TYPE(ALSASeqEventFixed, alsaseq_event_fixed, ALSASEQ_TYPE_EVENT)
 
+enum seq_event_fixed_prop_type {
+    SEQ_EVENT_FIXED_PROP_RESULT_DATA = 1,
+    SEQ_EVENT_FIXED_PROP_COUNT,
+};
+static GParamSpec *seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_COUNT] = { NULL, };
+
+static void seq_event_fixed_set_property(GObject *obj, guint id,
+                                         const GValue *val, GParamSpec *spec)
+{
+    ALSASeqEvent *parent = ALSASEQ_EVENT(obj);
+    struct snd_seq_event *ev;
+    seq_event_refer_private(parent, &ev);
+
+    switch (id) {
+    case SEQ_EVENT_FIXED_PROP_RESULT_DATA:
+    {
+        ALSASeqEventDataResult *data = g_value_get_boxed(val);
+        if (data != NULL)
+            ev->data.result = *data;
+        break;
+    }
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
+
+static void seq_event_fixed_get_property(GObject *obj, guint id, GValue *val,
+                                         GParamSpec *spec)
+{
+    ALSASeqEvent *parent = ALSASEQ_EVENT(obj);
+    struct snd_seq_event *ev;
+    seq_event_refer_private(parent, &ev);
+
+    switch (id) {
+    case SEQ_EVENT_FIXED_PROP_RESULT_DATA:
+        g_value_set_static_boxed(val, &ev->data.result);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
+
 static void alsaseq_event_fixed_class_init(ALSASeqEventFixedClass *klass)
 {
-    return;
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+
+    gobject_class->set_property = seq_event_fixed_set_property;
+    gobject_class->get_property = seq_event_fixed_get_property;
+
+    seq_event_fixed_props[SEQ_EVENT_FIXED_PROP_RESULT_DATA] =
+        g_param_spec_boxed("result-data", "result-data",
+                           "The data of result type. This shares the same "
+                           "storage between the other properties",
+                           ALSASEQ_TYPE_EVENT_DATA_RESULT,
+                           G_PARAM_READWRITE);
+
+    g_object_class_install_properties(gobject_class,
+                                      SEQ_EVENT_FIXED_PROP_COUNT,
+                                      seq_event_fixed_props);
 }
 
 static void alsaseq_event_fixed_init(ALSASeqEventFixed *self)
