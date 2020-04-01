@@ -38,6 +38,7 @@ tests = {
     'alsaseq-event',
     'alsaseq-event-fixed',
     'alsaseq-event-variable',
+    'alsaseq-subscribe-data',
   ],
 }
 
