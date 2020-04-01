@@ -15,6 +15,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_specific_queue_id_get_type";
     "alsaseq_port_subscribe_flag_get_type";
     "alsaseq_query_subscribe_type_get_type";
+
+    "alsaseq_get_seq_sysname";
   local:
     *;
 };
