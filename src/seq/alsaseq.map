@@ -98,6 +98,18 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_ctl_set_value";
 
     "alsaseq_event_data_queue_get_type";
+    "alsaseq_event_data_queue_get_queue_id";
+    "alsaseq_event_data_queue_set_queue_id";
+    "alsaseq_event_data_queue_get_value_param";
+    "alsaseq_event_data_queue_set_value_param";
+    "alsaseq_event_data_queue_get_tstamp_param";
+    "alsaseq_event_data_queue_set_tstamp_param";
+    "alsaseq_event_data_queue_get_position_param";
+    "alsaseq_event_data_queue_set_position_param";
+    "alsaseq_event_data_queue_get_skew_param";
+    "alsaseq_event_data_queue_set_skew_param";
+    "alsaseq_event_data_queue_get_quadlet_param";
+    "alsaseq_event_data_queue_set_quadlet_param";
   local:
     *;
 };
