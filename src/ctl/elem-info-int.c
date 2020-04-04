@@ -112,7 +112,7 @@ static void alsactl_elem_info_int_init(ALSACtlElemInfoInt *self)
 }
 
 /**
- * alsactl_elem_info_int:
+ * alsactl_elem_info_int_new:
  *
  * Allocate and return an instance of ALSACtlElemInfoInt.
  *
