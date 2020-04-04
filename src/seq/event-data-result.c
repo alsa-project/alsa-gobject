@@ -11,14 +11,14 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataResult, alsaseq_event_data_result, seq_event
 /**
  * alsaseq_event_data_result_get_event:
  * @self: A #ALSASeqEventDataResult.
+ * @event_type: (out): The type of event in which the data results.
  *
  * Get the type of event in which the data results.
- *
- * Returns: The type of event in which the data results.
  */
-ALSASeqEventType alsaseq_event_data_result_get_event(ALSASeqEventDataResult *self)
+void alsaseq_event_data_result_get_event(ALSASeqEventDataResult *self,
+                                         ALSASeqEventType *event_type)
 {
-    return (ALSASeqEventType)self->event;
+    *event_type = (ALSASeqEventType)self->event;
 }
 
 /**
@@ -37,14 +37,14 @@ void alsaseq_event_data_result_set_event(ALSASeqEventDataResult *self,
 /**
  * alsaseq_event_data_result_get_result:
  * @self: A #ALSASeqEventDataResult.
+ * @result: (out): the status of the event.
  *
  * Get the status of event.
- *
- * Returns: the status of the event.
  */
-gint alsaseq_event_data_result_get_result(ALSASeqEventDataResult *self)
+void alsaseq_event_data_result_get_result(ALSASeqEventDataResult *self,
+                                          gint *result)
 {
-    return self->result;
+    *result = self->result;
 }
 
 /**
