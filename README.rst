@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/04/01
+2020/04/04
 Takashi Sakamoto
 
 Introduction
@@ -20,7 +20,7 @@ libalsactl0
 libalsatimer0
     For APIs to operate ALSA timer character device
 libalsaseq0
-    For APIs to operate ALSA seq character device
+    For APIs to operate ALSA seq character device, depending on libalsatimer0
 
 Namespaces of g-i produced by the project
 =========================================
