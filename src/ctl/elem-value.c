@@ -57,7 +57,7 @@ static void alsactl_elem_value_init(ALSACtlElemValue *self)
  *
  * Allocate and return an instance of ALSACtlElemValue.
  *
- * Returns: (transfer full): A #ALSACtlElemValue.
+ * Returns: A #ALSACtlElemValue.
  */
 ALSACtlElemValue *alsactl_elem_value_new()
 {
