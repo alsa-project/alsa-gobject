@@ -237,12 +237,12 @@ const guint8 *alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self)
 /**
  * alsaseq_event_fixed_set_byte_data:
  * @self: A #ALSASeqEventFixed.
- * @data: (array fixed-size=12)(transfer none): The 12 byte data for the event.
+ * @bytes: (array fixed-size=12)(transfer none): The 12 byte data for the event.
  *
  * Copy the 12 byte data for the event.
  */
 void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
-                                       const guint8 data[12])
+                                       const guint8 bytes[12])
 {
     ALSASeqEvent *parent;
     struct snd_seq_event *ev;
@@ -251,7 +251,7 @@ void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
     parent = ALSASEQ_EVENT(self);
     seq_event_refer_private(parent, &ev);
 
-    memcpy(ev->data.raw8.d, data, sizeof(ev->data.raw8.d));
+    memcpy(ev->data.raw8.d, bytes, sizeof(ev->data.raw8.d));
 }
 
 /**
@@ -278,12 +278,13 @@ const guint32 *alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self)
 /**
  * alsaseq_event_fixed_set_quadlet_data:
  * @self: A #ALSASeqEventFixed.
- * @data: (array fixed-size=3)(transfer none): The 3 quadlet data for the event.
+ * @quadlets: (array fixed-size=3)(transfer none): The 3 quadlet data for the
+ *            event.
  *
  * Copy the 3 quadlet data for the event.
  */
 void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
-                                          const guint32 data[3])
+                                          const guint32 quadlets[3])
 {
     ALSASeqEvent *parent;
     struct snd_seq_event *ev;
@@ -292,5 +293,5 @@ void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
     parent = ALSASEQ_EVENT(self);
     seq_event_refer_private(parent, &ev);
 
-    memcpy(ev->data.raw32.d, data, sizeof(ev->data.raw32.d));
+    memcpy(ev->data.raw32.d, quadlets, sizeof(ev->data.raw32.d));
 }
