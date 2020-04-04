@@ -18,7 +18,7 @@ GType alsaseq_tstamp_get_type() G_GNUC_CONST;
 void alsaseq_tstamp_get_tick_time(ALSASeqTstamp *self, guint32 *tick_time);
 void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time);
 
-const guint32 *alsaseq_tstamp_get_real_time(ALSASeqTstamp *self);
+void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 **tstamp);
 void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 tstamp[2]);
 
 G_END_DECLS
