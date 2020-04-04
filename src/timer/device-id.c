@@ -17,7 +17,7 @@ G_DEFINE_BOXED_TYPE(ALSATimerDeviceId, alsatimer_device_id, timer_device_id_copy
  *
  * Allocate and return an instance of ALSATimerDeviceId.
  *
- * Returns: (transfer full): A #ALSATimerDeviceId.
+ * Returns: A #ALSATimerDeviceId.
  */
 ALSATimerDeviceId *alsatimer_device_id_new(ALSATimerClass class,
                                            gint card_id, gint device_id,
