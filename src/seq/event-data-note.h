@@ -15,22 +15,26 @@ typedef struct snd_seq_ev_note ALSASeqEventDataNote;
 
 GType alsaseq_event_data_note_get_type() G_GNUC_CONST;
 
-guint8 alsaseq_event_data_note_get_channel(ALSASeqEventDataNote *self);
+void alsaseq_event_data_note_get_channel(ALSASeqEventDataNote *self,
+                                         guint8 *channel);
 void alsaseq_event_data_note_set_channel(ALSASeqEventDataNote *self,
                                          guint8 channel);
 
-guint8 alsaseq_event_data_note_get_note(ALSASeqEventDataNote *self);
+void alsaseq_event_data_note_get_note(ALSASeqEventDataNote *self, guint8 *note);
 void alsaseq_event_data_note_set_note(ALSASeqEventDataNote *self, guint8 note);
 
-guint8 alsaseq_event_data_note_get_velocity(ALSASeqEventDataNote *self);
+void alsaseq_event_data_note_get_velocity(ALSASeqEventDataNote *self,
+                                          guint8 *velocity);
 void alsaseq_event_data_note_set_velocity(ALSASeqEventDataNote *self,
                                           guint8 velocity);
 
-guint8 alsaseq_event_data_note_get_off_velocity(ALSASeqEventDataNote *self);
+void alsaseq_event_data_note_get_off_velocity(ALSASeqEventDataNote *self,
+                                              guint8 *off_velocity);
 void alsaseq_event_data_note_set_off_velocity(ALSASeqEventDataNote *self,
                                               guint8 off_velocity);
 
-guint8 alsaseq_event_data_note_get_duration(ALSASeqEventDataNote *self);
+void alsaseq_event_data_note_get_duration(ALSASeqEventDataNote *self,
+                                          guint8 *duration);
 void alsaseq_event_data_note_set_duration(ALSASeqEventDataNote *self,
                                           guint8 duration);
 
