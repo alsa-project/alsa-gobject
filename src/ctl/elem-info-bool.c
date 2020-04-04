@@ -75,7 +75,7 @@ static void alsactl_elem_info_bool_init(ALSACtlElemInfoBool *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoBool.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoBool.
+ * Returns: A #ALSACtlElemInfoBool.
  */
 ALSACtlElemInfoBool *alsactl_elem_info_bool_new()
 {

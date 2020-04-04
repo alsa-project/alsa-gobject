@@ -14,7 +14,7 @@ G_DEFINE_BOXED_TYPE(ALSACtlElemId, alsactl_elem_id, ctl_elem_id_copy, g_free);
  *
  * Allocates and return an instance of ALSACtlElemId by the numerical ID.
  *
- * Returns: (transfer full): A #ALSACtlElemId.
+ * Returns: A #ALSACtlElemId.
  */
 ALSACtlElemId *alsactl_elem_id_new_by_numid(guint numid)
 {

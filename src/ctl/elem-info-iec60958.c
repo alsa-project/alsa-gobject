@@ -18,7 +18,7 @@ static void alsactl_elem_info_iec60958_init(ALSACtlElemInfoIec60958 *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoIec60958.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoIec60958.
+ * Returns: A #ALSACtlElemInfoIec60958.
  */
 ALSACtlElemInfoIec60958 *alsactl_elem_info_iec60958_new()
 {
