@@ -11,14 +11,14 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataQueue, alsaseq_event_data_queue, seq_event_d
 /**
  * alsaseq_event_data_queue_get_queue_id:
  * @self: A #ALSASeqEventDataQueue.
+ * @queue_id: (out): the numerical ID of queue for the event.
  *
  * Get the numerical ID of queue for the event.
- *
- * Returns: the numerical ID of queue for the event.
  */
-guint8 alsaseq_event_data_queue_get_queue_id(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_queue_id(ALSASeqEventDataQueue *self,
+                                           guint8 *queue_id)
 {
-    return self->queue;
+    *queue_id = self->queue;
 }
 
 /**
@@ -37,14 +37,14 @@ void alsaseq_event_data_queue_set_queue_id(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_value_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @value: (out): The value as param of the queue event.
  *
  * Get the value as param of the queue event.
- *
- * Returns: the value as param of the queue event.
  */
-gint alsaseq_event_data_queue_get_value_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_value_param(ALSASeqEventDataQueue *self,
+                                              gint *value)
 {
-    return self->param.value;
+    *value = self->param.value;
 }
 
 /**
@@ -63,14 +63,14 @@ void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_tstamp_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @tstamp: (out)(transfer none): The timestamp as param of the queue event.
  *
  * Get the timestamp as param of the queue event.
- *
- * Returns: (transfer none): the timestamp as param of the queue event.
  */
-const ALSASeqTstamp *alsaseq_event_data_queue_get_tstamp_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_tstamp_param(ALSASeqEventDataQueue *self,
+                                               const ALSASeqTstamp **tstamp)
 {
-    return &self->param.time;
+    *tstamp = &self->param.time;
 }
 
 /**
@@ -89,14 +89,14 @@ void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_position_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @position: (out): The position as param of the queue event.
  *
  * Get the position as param of the queue event.
- *
- * Returns: the position as param of the queue event.
  */
-guint alsaseq_event_data_queue_get_position_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_position_param(ALSASeqEventDataQueue *self,
+                                                 guint *position)
 {
-    return self->param.position;
+    *position = self->param.position;
 }
 
 /**
@@ -115,15 +115,17 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_skew_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @skew: (array fixed-size=2)(out)(transfer none): The skew as param of the
+ *        queue event. The first element is for 'value' and another is for 'base'.
  *
  * Get the skew as param of the queue event.
- *
- * Returns: (transfer none)(array fixed-size=2): the skew as param of the queue
- *          event. The first element is for 'value' and another is for 'base'.
  */
-const guint *alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
+                                             const guint **skew)
 {
-    return (const guint *)&self->param.skew;
+    // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
+    // supported ABIs.
+    *skew = (const guint *)&self->param.skew;
 }
 
 /**
@@ -144,21 +146,21 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_quadlet_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @quadlets: (array fixed-size=2)(out)(transfer none): Two quadlets as param of
+ *            the queue event.
  *
  * Get two quadlets as param of the queue event.
- *
- * Returns: (transfer none)(array fixed-size=2): two quadlets as param of the
- *          queue event.
  */
-const guint32 *alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
+                                                const guint32 **quadlets)
 {
-    return self->param.d32;
+    *quadlets = self->param.d32;
 }
 
 /**
  * alsaseq_event_data_queue_set_quadlets_param:
  * @self: A #ALSASeqEventDataQueue.
- * @quadlets: (array fixed-size=2)(transfer none): two quadlets as param of the
+ * @quadlets: (array fixed-size=2)(transfer none): Two quadlets as param of the
  *            queue event.
  *
  * Set two quadlets as param of the queue event.
@@ -172,15 +174,15 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_byte_param:
  * @self: A #ALSASeqEventDataQueue.
+ * @bytes: (array fixed-size=8)(out)(transfer none): Eight bytes as param of the
+ *          queue event.
  *
  * Get eight bytes as param of the queue event.
- *
- * Returns: (transfer none)(array fixed-size=8): eight bytes as param of the
- *          queue event.
  */
-const guint8 *alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self)
+void alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self,
+                                             const guint8 **bytes)
 {
-    return self->param.d8;
+    *bytes = self->param.d8;
 }
 
 /**
