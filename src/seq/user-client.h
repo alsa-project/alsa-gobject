@@ -9,6 +9,8 @@
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
 #include <seq/event.h>
+#include <seq/event-fixed.h>
+#include <seq/event-variable.h>
 #include <seq/subscribe-data.h>
 
 G_BEGIN_DECLS
