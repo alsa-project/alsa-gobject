@@ -43,7 +43,7 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
 
 const guint8 *alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self);
 void alsaseq_event_data_queue_set_byte_param(ALSASeqEventDataQueue *self,
-                                             const guint32 bytes[8]);
+                                             const guint8 bytes[8]);
 
 G_END_DECLS
 

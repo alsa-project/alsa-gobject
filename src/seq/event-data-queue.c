@@ -192,7 +192,7 @@ const guint8 *alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *sel
  * Set eight quadlets as param of the queue event.
  */
 void alsaseq_event_data_queue_set_byte_param(ALSASeqEventDataQueue *self,
-                                             const guint32 bytes[8])
+                                             const guint8 bytes[8])
 {
     memcpy(self->param.d8, bytes, sizeof(self->param.d8));
 }
