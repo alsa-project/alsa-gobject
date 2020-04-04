@@ -35,17 +35,16 @@ void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time)
 /**
  * alsaseq_tstamp_get_real_time:
  * @self: A #ALSASeqTstamp.
+ * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two
+ *          elements for sec part and nsec part of real time.
  *
  * Refer to the time as wall-clock time.
- *
- * Returns: (array fixed-size=2)(transfer none): The array with two elements
- *          for sec part and nsec part of real time.
  */
-const guint32 *alsaseq_tstamp_get_real_time(ALSASeqTstamp *self)
+void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 **tstamp)
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
-    return (guint32 *)&self->time;
+    *tstamp = (guint32 *)&self->time;
 }
 
 
