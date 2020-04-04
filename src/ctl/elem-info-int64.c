@@ -116,7 +116,7 @@ static void alsactl_elem_info_int64_init(ALSACtlElemInfoInt64 *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoInt64.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoInt64.
+ * Returns: A #ALSACtlElemInfoInt64.
  */
 ALSACtlElemInfoInt64 *alsactl_elem_info_int64_new()
 {

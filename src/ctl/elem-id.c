@@ -37,7 +37,7 @@ ALSACtlElemId *alsactl_elem_id_new_by_numid(guint numid)
  *
  * Allocates and return an instance of ALSACtlElemId by the name.
  *
- * Returns: (transfer full): A #ALSACtlElemId.
+ * Returns: A #ALSACtlElemId.
  */
 ALSACtlElemId *alsactl_elem_id_new_by_name(ALSACtlElemIfaceType iface,
                                            guint device_id, guint subdevice_id,
