@@ -216,22 +216,22 @@ ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
 /**
  * alsaseq_event_fixed_get_byte_data:
  * @self: A #ALSASeqEventFixed.
+ * @bytes: (array fixed-size=12)(out)(transfer none): The 12 byte data for the
+ *         event. The lifetime of the object is the same as the event itself.
  *
  * Refer to the 12 byte data for the event.
- *
- * Returns: (array fixed-size=12)(transfer none): The 12 byte data for the
- *          event. The lifetime of the object is the same as the event itself.
  */
-const guint8 *alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self)
+void alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self,
+                                       const guint8 **bytes)
 {
     ALSASeqEvent *parent;
     struct snd_seq_event *ev;
 
-    g_return_val_if_fail(ALSASEQ_IS_EVENT_FIXED(self), NULL);
+    g_return_if_fail(ALSASEQ_IS_EVENT_FIXED(self));
     parent = ALSASEQ_EVENT(self);
     seq_event_refer_private(parent, &ev);
 
-    return ev->data.raw8.d;
+    *bytes = ev->data.raw8.d;
 }
 
 /**
@@ -257,22 +257,23 @@ void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
 /**
  * alsaseq_event_fixed_get_quadlet_data:
  * @self: A #ALSASeqEventFixed.
+ * @quadlets: (array fixed-size=3)(out)(transfer none): The 3 quadlet data for
+ *            the event. The lifetime of the object is the same as the event
+ *            itself.
  *
  * Get the 3 quadlet data for the event.
- *
- * Returns: (array fixed-size=3)(transfer none): The 3 quadlet data for the
- *          event. The lifetime of the object is the same as the event itself.
  */
-const guint32 *alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self)
+void alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self,
+                                          const guint32 **quadlets)
 {
     ALSASeqEvent *parent;
     struct snd_seq_event *ev;
 
-    g_return_val_if_fail(ALSASEQ_IS_EVENT_FIXED(self), NULL);
+    g_return_if_fail(ALSASEQ_IS_EVENT_FIXED(self));
     parent = ALSASEQ_EVENT(self);
     seq_event_refer_private(parent, &ev);
 
-    return ev->data.raw32.d;
+    *quadlets = ev->data.raw32.d;
 }
 
 /**

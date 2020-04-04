@@ -52,11 +52,13 @@ GType alsaseq_event_fixed_get_type() G_GNUC_CONST;
 ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
                                            GError **error);
 
-const guint8 *alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self);
+void alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self,
+                                       const guint8 **bytes);
 void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
                                        const guint8 bytes[12]);
 
-const guint32 *alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self);
+void alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self,
+                                          const guint32 **quadlets);
 void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
                                           const guint32 quadlets[3]);
 
