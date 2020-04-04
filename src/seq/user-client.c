@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "user-client.h"
 #include "query.h"
-#include "event-fixed.h"
-#include "event-variable.h"
 #include "privates.h"
 
 #include <sys/types.h>
