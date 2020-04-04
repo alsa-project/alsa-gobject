@@ -15,7 +15,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqAddr, alsaseq_addr, seq_addr_copy, g_free)
  *
  * Allocate and return an instance of ALSASeqAddr.
  *
- * Returns: (transfer full): A #ALSASeqAddr.
+ * Returns: A #ALSASeqAddr.
  */
 ALSASeqAddr *alsaseq_addr_new(guint8 client_id, guint8 port_id)
 {
