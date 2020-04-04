@@ -43,7 +43,7 @@ static void alsaseq_event_variable_init(ALSASeqEventVariable *self)
  *
  * Allocate and return an instance of #ALSASeqEventVariable class.
  *
- * Returns: (transfer full): A #ALSASeqEventVariable.
+ * Returns: A #ALSASeqEventVariable.
  */
 ALSASeqEventVariable *alsaseq_event_variable_new(ALSASeqEventType event_type,
                                                  GError **error)

@@ -189,7 +189,7 @@ static void alsaseq_event_fixed_init(ALSASeqEventFixed *self)
  *
  * Allocate and returns an instance of #ALSASeqEventFixed class.
  *
- * Returns: (transfer full): A #ALSASeqEventFixed.
+ * Returns: A #ALSASeqEventFixed.
  */
 ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
                                            GError **error)

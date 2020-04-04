@@ -124,7 +124,7 @@ static void alsaseq_subscribe_data_init(ALSASeqSubscribeData *self)
  *
  * Allocates and returns the instance of ALSASeqSubscribeData class.
  *
- * Returns: (transfer full): A #ALSASeqSubscribeData.
+ * Returns: A #ALSASeqSubscribeData.
  */
 ALSASeqSubscribeData *alsaseq_subscribe_data_new()
 {
