@@ -11,14 +11,14 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataConnect, alsaseq_event_data_connect, seq_eve
 /**
  * alsaseq_event_data_connect_get_src:
  * @self: A #ALSASeqEventDataConnect.
+ * @src: (out)(transfer none): The source of connection event.
  *
  * Get the source of connection event.
- *
- * Returns: (transfer none): The source of connection event.
  */
-const ALSASeqAddr *alsaseq_event_data_connect_get_src(ALSASeqEventDataConnect *self)
+void alsaseq_event_data_connect_get_src(ALSASeqEventDataConnect *self,
+                                        const ALSASeqAddr **src)
 {
-    return &self->sender;
+    *src = &self->sender;
 }
 
 /**
@@ -37,14 +37,14 @@ void alsaseq_event_data_connect_set_src(ALSASeqEventDataConnect *self,
 /**
  * alsaseq_event_data_connect_get_dst:
  * @self: A #ALSASeqEventDataConnect.
+ * @dst: (out)(transfer none): The destination of connection event.
  *
- * Get the source of connection event.
- *
- * Returns: (transfer none): The source of connection event.
+ * Get the destination of connection event.
  */
-const ALSASeqAddr *alsaseq_event_data_connect_get_dst(ALSASeqEventDataConnect *self)
+void alsaseq_event_data_connect_get_dst(ALSASeqEventDataConnect *self,
+                                        const ALSASeqAddr **dst)
 {
-    return &self->dest;
+    *dst = &self->dest;
 }
 
 /**
