@@ -11,14 +11,14 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataNote, alsaseq_event_data_note, seq_event_dat
 /**
  * alsaseq_event_data_note_get_channel:
  * @self: A #ALSASeqEventDataNote.
+ * @channel: (out): The value of channel in the note event.
  *
  * Get the value of channel in the note event.
- *
- * Returns: the value of channel in the note event.
  */
-guint8 alsaseq_event_data_note_get_channel(ALSASeqEventDataNote *self)
+void alsaseq_event_data_note_get_channel(ALSASeqEventDataNote *self,
+                                         guint8 *channel)
 {
-    return self->channel;
+    *channel = self->channel;
 }
 
 /**
@@ -37,14 +37,13 @@ void alsaseq_event_data_note_set_channel(ALSASeqEventDataNote *self,
 /**
  * alsaseq_event_data_note_get_note:
  * @self: A #ALSASeqEventDataNote.
+ * @note: (out): The value of note in the note event.
  *
  * Get the value of note in the note event.
- *
- * Returns: the value of note in the note event.
  */
-guint8 alsaseq_event_data_note_get_note(ALSASeqEventDataNote *self)
+void alsaseq_event_data_note_get_note(ALSASeqEventDataNote *self, guint8 *note)
 {
-    return self->note;
+    *note = self->note;
 }
 
 /**
@@ -62,14 +61,14 @@ void alsaseq_event_data_note_set_note(ALSASeqEventDataNote *self, guint8 note)
 /**
  * alsaseq_event_data_note_get_velocity:
  * @self: A #ALSASeqEventDataNote.
+ * @velocity: (out): The value of velocity in the note event.
  *
  * Get the value of velocity in the note event.
- *
- * Returns: the value of velocity in the note event.
  */
-guint8 alsaseq_event_data_note_get_velocity(ALSASeqEventDataNote *self)
+void alsaseq_event_data_note_get_velocity(ALSASeqEventDataNote *self,
+                                          guint8 *velocity)
 {
-    return self->velocity;
+    *velocity = self->velocity;
 }
 
 /**
@@ -88,14 +87,14 @@ void alsaseq_event_data_note_set_velocity(ALSASeqEventDataNote *self,
 /**
  * alsaseq_event_data_note_get_off_velocity:
  * @self: A #ALSASeqEventDataNote.
+ * @off_velocity: (out): The value of off-velocity in the note event.
  *
  * Get the value of off-velocity in the note event.
- *
- * Returns: the value of off-velocity in the note event.
  */
-guint8 alsaseq_event_data_note_get_off_velocity(ALSASeqEventDataNote *self)
+void alsaseq_event_data_note_get_off_velocity(ALSASeqEventDataNote *self,
+                                              guint8 *off_velocity)
 {
-    return self->off_velocity;
+    *off_velocity = self->off_velocity;
 }
 
 /**
@@ -114,14 +113,14 @@ void alsaseq_event_data_note_set_off_velocity(ALSASeqEventDataNote *self,
 /**
  * alsaseq_event_data_note_get_duration:
  * @self: A #ALSASeqEventDataNote.
+ * @duration: (out): The value of duratino in the note event.
  *
  * Get the value of duration in the note event.
- *
- * Returns: the value of duratino in the note event.
  */
-guint8 alsaseq_event_data_note_get_duration(ALSASeqEventDataNote *self)
+void alsaseq_event_data_note_get_duration(ALSASeqEventDataNote *self,
+                                          guint8 *duration)
 {
-    return self->duration;
+    *duration = self->duration;
 }
 
 /**
