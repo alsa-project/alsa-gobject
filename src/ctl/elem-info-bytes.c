@@ -75,7 +75,7 @@ static void alsactl_elem_info_bytes_init(ALSACtlElemInfoBytes *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoBytes.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoBytes.
+ * Returns: A #ALSACtlElemInfoBytes.
  */
 ALSACtlElemInfoBytes *alsactl_elem_info_bytes_new()
 {

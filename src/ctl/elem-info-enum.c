@@ -110,7 +110,7 @@ static void alsactl_elem_info_enum_init(ALSACtlElemInfoEnum *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoEnum.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoEnum.
+ * Returns: A #ALSACtlElemInfoEnum.
  */
 ALSACtlElemInfoEnum *alsactl_elem_info_enum_new()
 {

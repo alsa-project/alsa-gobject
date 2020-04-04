@@ -116,7 +116,7 @@ static void alsactl_elem_info_int_init(ALSACtlElemInfoInt *self)
  *
  * Allocate and return an instance of ALSACtlElemInfoInt.
  *
- * Returns: (transfer full): A #ALSACtlElemInfoInt.
+ * Returns: A #ALSACtlElemInfoInt.
  */
 ALSACtlElemInfoInt *alsactl_elem_info_int_new()
 {
