@@ -116,6 +116,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_queue_set_skew_param";
     "alsaseq_event_data_queue_get_quadlet_param";
     "alsaseq_event_data_queue_set_quadlet_param";
+    "alsaseq_event_data_queue_get_byte_param";
+    "alsaseq_event_data_queue_set_byte_param";
 
     "alsaseq_event_data_connect_get_type";
     "alsaseq_event_data_connect_get_src";
