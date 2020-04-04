@@ -17,11 +17,13 @@ typedef struct snd_seq_connect ALSASeqEventDataConnect;
 
 GType alsaseq_event_data_connect_get_type() G_GNUC_CONST;
 
-const ALSASeqAddr *alsaseq_event_data_connect_get_src(ALSASeqEventDataConnect *self);
+void alsaseq_event_data_connect_get_src(ALSASeqEventDataConnect *self,
+                                        const ALSASeqAddr **src);
 void alsaseq_event_data_connect_set_src(ALSASeqEventDataConnect *self,
                                         const ALSASeqAddr *src);
 
-const ALSASeqAddr *alsaseq_event_data_connect_get_dst(ALSASeqEventDataConnect *self);
+void alsaseq_event_data_connect_get_dst(ALSASeqEventDataConnect *self,
+                                        const ALSASeqAddr **dst);
 void alsaseq_event_data_connect_set_dst(ALSASeqEventDataConnect *self,
                                         const ALSASeqAddr *dst);
 
