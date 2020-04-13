@@ -35,29 +35,29 @@ void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time)
 /**
  * alsaseq_tstamp_get_real_time:
  * @self: A #ALSASeqTstamp.
- * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two
- *          elements for sec part and nsec part of real time.
+ * @real_time: (array fixed-size=2)(out)(transfer none): The array with two
+ *             elements for sec part and nsec part of real time.
  *
  * Refer to the time as wall-clock time.
  */
-void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 **tstamp)
+void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, guint32 *real_time[2])
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
-    *tstamp = (guint32 *)&self->tstamp.time;
+    *real_time = (guint32 *)&self->tstamp.time;
 }
 
 
 /**
  * alsaseq_tstamp_set_real_time:
  * @self: A #ALSASeqTstamp.
- * @tstamp: (array fixed-size=2)(transfer none): The array with two elements for
- *          sec part and nsec part of real time.
+ * @real_time: (array fixed-size=2)(transfer none): The array with two elements
+ *             for sec part and nsec part of real time.
  *
  * Copy the time as wall-clock time.
  */
-void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 tstamp[2])
+void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 real_time[2])
 {
-    self->tstamp.time.tv_sec = tstamp[0];
-    self->tstamp.time.tv_nsec = tstamp[1];
+    self->tstamp.time.tv_sec = real_time[0];
+    self->tstamp.time.tv_nsec = real_time[1];
 }

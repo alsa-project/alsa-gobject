@@ -14,7 +14,7 @@ G_BEGIN_DECLS
 // The usage of union is inconvenient to some programming languages which has
 // no support to handle it. Let's use wrapper structure.
 typedef struct {
-    union snd_seq_timestamp time;
+    union snd_seq_timestamp tstamp;
 } ALSASeqTstamp;
 
 GType alsaseq_tstamp_get_type() G_GNUC_CONST;
@@ -22,8 +22,8 @@ GType alsaseq_tstamp_get_type() G_GNUC_CONST;
 void alsaseq_tstamp_get_tick_time(ALSASeqTstamp *self, guint32 *tick_time);
 void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time);
 
-void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 **tstamp);
-void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 tstamp[2]);
+void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, guint32 *real_time[2]);
+void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 real_time[2]);
 
 G_END_DECLS
 
