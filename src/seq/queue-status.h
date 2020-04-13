@@ -49,7 +49,7 @@ void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
                                         guint *tick_time);
 
 void alsaseq_queue_status_get_real_time(ALSASeqQueueStatus *self,
-                                        const guint32 **real_time);
+                                        const guint32 *real_time[2]);
 
 G_END_DECLS
 

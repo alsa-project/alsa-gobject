@@ -101,7 +101,7 @@ void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
  * Get time as wall-clock time.
  */
 void alsaseq_queue_status_get_real_time(ALSASeqQueueStatus *self,
-                                        const guint32 **real_time)
+                                        const guint32 *real_time[2])
 {
     ALSASeqQueueStatusPrivate *priv;
 
