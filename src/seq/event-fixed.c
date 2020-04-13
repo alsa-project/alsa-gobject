@@ -72,7 +72,7 @@ static void seq_event_fixed_set_property(GObject *obj, guint id,
     {
         ALSASeqTstamp *data = g_value_get_boxed(val);
         if (data != NULL)
-            ev->data.time = *data;
+            ev->data.time = data->tstamp;
         break;
     }
     default:
@@ -108,7 +108,9 @@ static void seq_event_fixed_get_property(GObject *obj, guint id, GValue *val,
         g_value_set_static_boxed(val, &ev->data.connect);
         break;
     case SEQ_EVENT_FIXED_PROP_TSTAMP_DATA:
-        g_value_set_static_boxed(val, &ev->data.time);
+        // MEMO: I wish the structure has no padding in its head in all of
+	// supported ABIs.
+        g_value_set_static_boxed(val, (ALSASeqTstamp *)&ev->data.time);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
