@@ -66,6 +66,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_addr_new";
     "alsaseq_addr_get_client_id";
     "alsaseq_addr_get_port_id";
+    "alsaseq_addr_equal";
 
     "alsaseq_port_info_get_type";
     "alsaseq_port_info_new";
