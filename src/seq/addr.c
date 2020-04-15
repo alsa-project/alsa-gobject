@@ -50,3 +50,20 @@ void alsaseq_addr_get_port_id(const ALSASeqAddr *self, guint8 *port_id)
 {
     *port_id = self->port;
 }
+
+/**
+ * alsaseq_addr_equal:
+ * @self: A #ALSASeqAddr.
+ * @target: A #ALSASeqAddr to compare.
+ *
+ * Returns: whether the given object indicates the same element.
+ */
+gboolean alsaseq_addr_equal(const ALSASeqAddr *self, const ALSASeqAddr *target)
+{
+    const struct snd_seq_addr *lhs, *rhs;
+
+    lhs = (const struct snd_seq_addr *)self;
+    rhs = (const struct snd_seq_addr *)target;
+
+    return lhs->client == rhs->client && lhs->port == rhs->port;
+}

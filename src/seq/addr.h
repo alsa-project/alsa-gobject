@@ -21,6 +21,8 @@ void alsaseq_addr_get_client_id(const ALSASeqAddr *self, guint8 *client_id);
 
 void alsaseq_addr_get_port_id(const ALSASeqAddr *self, guint8 *port_id);
 
+gboolean alsaseq_addr_equal(const ALSASeqAddr *self, const ALSASeqAddr *target);
+
 G_END_DECLS
 
 #endif
