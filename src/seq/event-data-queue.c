@@ -154,7 +154,7 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
  * Get two quadlets as param of the queue event.
  */
 void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
-                                                const guint32 **quadlets)
+                                                const guint32 *quadlets[2])
 {
     *quadlets = self->param.d32;
 }
