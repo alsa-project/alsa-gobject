@@ -47,7 +47,7 @@ GType alsaseq_queue_tempo_get_type() G_GNUC_CONST;
 
 ALSASeqQueueTempo *alsaseq_queue_tempo_new();
 
-void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 **skew);
+void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2]);
 void alsaseq_queue_tempo_set_skew(ALSASeqQueueTempo *self, const guint32 skew[2]);
 
 G_END_DECLS

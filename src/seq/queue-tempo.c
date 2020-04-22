@@ -119,7 +119,7 @@ ALSASeqQueueTempo *alsaseq_queue_tempo_new()
  *
  * Refer to numerator and denominator of skew.
  */
-void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 **skew)
+void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2])
 {
     ALSASeqQueueTempoPrivate *priv;
 
