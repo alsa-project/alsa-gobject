@@ -60,7 +60,7 @@ static void seq_event_set_property(GObject *obj, guint id, const GValue *val,
     {
         ALSASeqTstamp *tstamp = g_value_get_boxed(val);
         if (tstamp != NULL)
-            ev->time = tstamp->tstamp;
+            ev->time = *tstamp;
         break;
     }
     case SEQ_EVENT_PROP_SRC_ADDR:
@@ -129,9 +129,7 @@ static void seq_event_get_property(GObject *obj, guint id, GValue *val,
         g_value_set_uchar(val, ev->queue);
         break;
     case SEQ_EVENT_PROP_TSTAMP:
-        // MEMO: I wish the structure has no padding in its head in all of
-	// supported ABIs.
-        g_value_set_static_boxed(val, (ALSASeqTstamp *)&ev->time);
+        g_value_set_static_boxed(val, &ev->time);
         break;
     case SEQ_EVENT_PROP_SRC_ADDR:
         g_value_set_static_boxed(val, &ev->source);

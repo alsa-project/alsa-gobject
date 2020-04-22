@@ -70,9 +70,7 @@ void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
 void alsaseq_event_data_queue_get_tstamp_param(ALSASeqEventDataQueue *self,
                                                const ALSASeqTstamp **tstamp)
 {
-    // MEMO: I wish the structure has no padding in its head in all of supported
-    // ABIs.
-    *tstamp = (const ALSASeqTstamp *)&self->param.time;
+    *tstamp = &self->param.time;
 }
 
 /**
@@ -85,7 +83,7 @@ void alsaseq_event_data_queue_get_tstamp_param(ALSASeqEventDataQueue *self,
 void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
                                                const ALSASeqTstamp *tstamp)
 {
-    self->param.time = tstamp->tstamp;
+    self->param.time = *tstamp;
 }
 
 /**
