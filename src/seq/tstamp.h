@@ -11,11 +11,7 @@ G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_TSTAMP   (alsaseq_tstamp_get_type())
 
-// The usage of union is inconvenient to some programming languages which has
-// no support to handle it. Let's use wrapper structure.
-typedef struct {
-    union snd_seq_timestamp tstamp;
-} ALSASeqTstamp;
+typedef union snd_seq_timestamp ALSASeqTstamp;
 
 GType alsaseq_tstamp_get_type() G_GNUC_CONST;
 

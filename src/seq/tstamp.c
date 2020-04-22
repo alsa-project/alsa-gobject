@@ -17,7 +17,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqTstamp, alsaseq_tstamp, seq_tstamp_copy, g_free)
  */
 void alsaseq_tstamp_get_tick_time(ALSASeqTstamp *self, guint32 *tick_time)
 {
-    *tick_time = self->tstamp.tick;
+    *tick_time = self->tick;
 }
 
 /**
@@ -29,7 +29,7 @@ void alsaseq_tstamp_get_tick_time(ALSASeqTstamp *self, guint32 *tick_time)
  */
 void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time)
 {
-    self->tstamp.tick = tick_time;
+    self->tick = tick_time;
 }
 
 /**
@@ -44,7 +44,7 @@ void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 *real_time[
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
-    *real_time = (guint32 *)&self->tstamp.time;
+    *real_time = (guint32 *)&self->time;
 }
 
 
@@ -58,6 +58,6 @@ void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 *real_time[
  */
 void alsaseq_tstamp_set_real_time(ALSASeqTstamp *self, const guint32 real_time[2])
 {
-    self->tstamp.time.tv_sec = real_time[0];
-    self->tstamp.time.tv_nsec = real_time[1];
+    self->time.tv_sec = real_time[0];
+    self->time.tv_nsec = real_time[1];
 }
