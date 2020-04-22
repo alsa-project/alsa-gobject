@@ -117,10 +117,11 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_skew_param:
  * @self: A #ALSASeqEventDataQueue.
- * @skew: (array fixed-size=2)(out)(transfer none): The skew as param of the
- *        queue event. The first element is for 'value' and another is for 'base'.
+ * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements
+ *        for numerator and denominator of fraction for skew.
  *
- * Get the skew as param of the queue event.
+ * Refer to numerator and denominator of fraction for skew as the parameter of
+ * queue event.
  */
 void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
                                              const guint *skew[2])
@@ -133,10 +134,11 @@ void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_set_skew_param:
  * @self: A #ALSASeqEventDataQueue.
- * @skew: (array fixed-size=2)(transfer none): the skew as param of the queue
- *        event. The first element is for 'value' and another is for 'base'.
+ * @skew: (array fixed-size=2)(transfer none): The array with two elements for
+ *        numerator and denominator of fraction for skew.
  *
- * Set the skew as param of the queue event.
+ * Copy numerator and denominator of fraction for skew from the given buffer as
+ * the parameter of queue event.
  */
 void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
                                              const guint skew[2])

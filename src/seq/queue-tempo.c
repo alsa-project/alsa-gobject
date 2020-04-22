@@ -117,7 +117,7 @@ ALSASeqQueueTempo *alsaseq_queue_tempo_new()
  * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements
  *        for numerator and denominator of fraction for skew.
  *
- * Refer to numerator and denominator of skew.
+ * Refer to numerator and denominator of fraction for skew.
  */
 void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2])
 {
@@ -138,7 +138,7 @@ void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2
  * @skew: (array fixed-size=2)(transfer none): The array with two elements for
  *        numerator and denominator of fraction for skew.
  *
- * Copy numerator and denominator of skew.
+ * Copy numerator and denominator of fraction for skew.
  */
 void alsaseq_queue_tempo_set_skew(ALSASeqQueueTempo *self, const guint32 skew[2])
 {
