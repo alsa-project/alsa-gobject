@@ -182,7 +182,7 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
  * Get eight bytes as param of the queue event.
  */
 void alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self,
-                                             const guint8 **bytes)
+                                             const guint8 *bytes[8])
 {
     *bytes = self->param.d8;
 }
