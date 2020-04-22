@@ -58,7 +58,7 @@ void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
                                        const guint8 bytes[12]);
 
 void alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self,
-                                          const guint32 **quadlets);
+                                          const guint32 *quadlets[3]);
 void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
                                           const guint32 quadlets[3]);
 
