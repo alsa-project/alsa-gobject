@@ -224,7 +224,7 @@ ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
  * Refer to the 12 byte data for the event.
  */
 void alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self,
-                                       const guint8 **bytes)
+                                       const guint8 *bytes[12])
 {
     ALSASeqEvent *parent;
     struct snd_seq_event *ev;
