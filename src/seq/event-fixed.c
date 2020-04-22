@@ -260,11 +260,10 @@ void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
 /**
  * alsaseq_event_fixed_get_quadlet_data:
  * @self: A #ALSASeqEventFixed.
- * @quadlets: (array fixed-size=3)(out)(transfer none): The 3 quadlet data for
- *            the event. The lifetime of the object is the same as the event
- *            itself.
+ * @quadlets: (array fixed-size=3)(out)(transfer none): The array with three
+ *            elements for quadlets as the data of event.
  *
- * Get the 3 quadlet data for the event.
+ * Refer to three quadlet as the data of event.
  */
 void alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self,
                                           const guint32 *quadlets[3])
@@ -282,10 +281,10 @@ void alsaseq_event_fixed_get_quadlet_data(ALSASeqEventFixed *self,
 /**
  * alsaseq_event_fixed_set_quadlet_data:
  * @self: A #ALSASeqEventFixed.
- * @quadlets: (array fixed-size=3)(transfer none): The 3 quadlet data for the
- *            event.
+ * @quadlets: (array fixed-size=3)(transfer none): The array with three elements
+ *            for quadlets for the data of event.
  *
- * Copy the 3 quadlet data for the event.
+ * Copy three quadlets from the given buffer as the data of event.
  */
 void alsaseq_event_fixed_set_quadlet_data(ALSASeqEventFixed *self,
                                           const guint32 quadlets[3])

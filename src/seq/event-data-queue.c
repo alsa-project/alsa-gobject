@@ -150,10 +150,10 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_quadlet_param:
  * @self: A #ALSASeqEventDataQueue.
- * @quadlets: (array fixed-size=2)(out)(transfer none): Two quadlets as param of
- *            the queue event.
+ * @quadlets: (array fixed-size=2)(out)(transfer none): The array with two
+ *            elements for quadlets as the parameter of queue event.
  *
- * Get two quadlets as param of the queue event.
+ * Refer to two quadlets as the parameter of queue event.
  */
 void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
                                                 const guint32 *quadlets[2])
@@ -164,10 +164,10 @@ void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_set_quadlet_param:
  * @self: A #ALSASeqEventDataQueue.
- * @quadlets: (array fixed-size=2)(transfer none): Two quadlets as param of the
- *            queue event.
+ * @quadlets: (array fixed-size=2)(transfer none): The array with two elements
+ *            for quadlets as the parameter of queue event.
  *
- * Set two quadlets as param of the queue event.
+ * Set two quadlets from the given buffer as the parameter of queue event.
  */
 void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
                                                 const guint32 quadlets[2])
