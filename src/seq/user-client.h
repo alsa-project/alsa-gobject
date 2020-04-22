@@ -58,7 +58,7 @@ struct _ALSASeqUserClientClass {
     /**
      * ALSASeqUserClientClass::handle_event:
      * @self: A #ALSASeqUserClient.
-     * @event: (transfer none): A #ALSASeqEvent or derived objects.
+     * @event: (transfer none): An object derived from #ALSASeqEvent.
      *
      * When event occurs, this signal is emit with an object for the event.
      */
