@@ -43,7 +43,7 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
                                              const guint skew[2]);
 
 void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
-                                                const guint32 **quadlets);
+                                                const guint32 *quadlets[2]);
 void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
                                                 const guint32 quadlets[2]);
 
