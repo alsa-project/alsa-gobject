@@ -218,10 +218,10 @@ ALSASeqEventFixed *alsaseq_event_fixed_new(ALSASeqEventType event_type,
 /**
  * alsaseq_event_fixed_get_byte_data:
  * @self: A #ALSASeqEventFixed.
- * @bytes: (array fixed-size=12)(out)(transfer none): The 12 byte data for the
- *         event. The lifetime of the object is the same as the event itself.
+ * @bytes: (array fixed-size=12)(out)(transfer none): The array with twelve
+ *         elements for byte data of the event.
  *
- * Refer to the 12 byte data for the event.
+ * Refer to the twelve bytes as the data of event.
  */
 void alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self,
                                        const guint8 *bytes[12])
@@ -239,9 +239,10 @@ void alsaseq_event_fixed_get_byte_data(ALSASeqEventFixed *self,
 /**
  * alsaseq_event_fixed_set_byte_data:
  * @self: A #ALSASeqEventFixed.
- * @bytes: (array fixed-size=12)(transfer none): The 12 byte data for the event.
+ * @bytes: (array fixed-size=12)(transfer none): The array with twelve elements
+ *         for byte data of the event.
  *
- * Copy the 12 byte data for the event.
+ * Copy the twelve bytes from the given buffer as the data of event.
  */
 void alsaseq_event_fixed_set_byte_data(ALSASeqEventFixed *self,
                                        const guint8 bytes[12])

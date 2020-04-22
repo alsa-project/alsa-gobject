@@ -178,10 +178,10 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_get_byte_param:
  * @self: A #ALSASeqEventDataQueue.
- * @bytes: (array fixed-size=8)(out)(transfer none): Eight bytes as param of the
- *          queue event.
+ * @bytes: (array fixed-size=8)(out)(transfer none): The array with eight
+ *         elements for bytes parameter of the queue event.
  *
- * Get eight bytes as param of the queue event.
+ * Refer to eight bytes as the parameter of queue event.
  */
 void alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self,
                                              const guint8 *bytes[8])
@@ -192,10 +192,10 @@ void alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self,
 /**
  * alsaseq_event_data_queue_set_byte_param:
  * @self: A #ALSASeqEventDataQueue.
- * @bytes: (array fixed-size=8)(transfer none): eight bytes as param of the
- *        queue event.
+ * @bytes: (array fixed-size=8)(transfer none): The array with eight elements
+ *         for bytes parameter of the queue event.
  *
- * Set eight quadlets as param of the queue event.
+ * Copy eight bytes from the given buffer as the parameter of queue event.
  */
 void alsaseq_event_data_queue_set_byte_param(ALSASeqEventDataQueue *self,
                                              const guint8 bytes[8])
