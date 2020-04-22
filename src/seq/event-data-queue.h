@@ -38,7 +38,7 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
                                                  guint position);
 
 void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
-                                             const guint **skew);
+                                             const guint *skew[2]);
 void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
                                              const guint skew[2]);
 

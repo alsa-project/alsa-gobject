@@ -123,7 +123,7 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
  * Get the skew as param of the queue event.
  */
 void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
-                                             const guint **skew)
+                                             const guint *skew[2])
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
