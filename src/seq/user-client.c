@@ -218,7 +218,7 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
  */
 void alsaseq_user_client_create_port(ALSASeqUserClient *self,
                                      ALSASeqPortInfo *port_info,
-                                     guint8 *port_id, GError **error)
+                                     const guint8 *port_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_info *info;
