@@ -269,28 +269,23 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
 /**
  * alsaseq_user_client_delete_port:
  * @self: A #ALSASeqUserClient.
- * @port_info: A #ALSASeqPortInfo.
  * @port_id: The numerical ID of port.
  * @error: A #GError.
  *
  * Delete a port from the client.
  */
 void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
                                      guint8 port_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
-    struct snd_seq_port_info *info;
+    struct snd_seq_port_info info = {0};
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
-    seq_port_info_refer_private(port_info, &info);
-
-    info->addr.client = priv->client_id;
-    info->addr.port = port_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, info) < 0)
+    info.addr.client = priv->client_id;
+    info.addr.port = port_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, &info) < 0)
         generate_error(error, errno);
 }
 
