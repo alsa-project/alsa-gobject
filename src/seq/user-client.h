@@ -88,7 +88,6 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
                                      guint8 port_id, GError **error);
 
 void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
                                      guint8 port_id, GError **error);
 
 void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
