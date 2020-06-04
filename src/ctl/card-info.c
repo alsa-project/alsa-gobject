@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: card-info
+ * @Title: ALSACtlCardInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     sound card
+ *
+ * A #ALSACtlCardInfo is a GObject-derived object to represent information of
+ * sound card. A call of alsactl_card_get_info() returns an instance of the
+ * object.
+ */
 struct _ALSACtlCardInfoPrivate {
     struct snd_ctl_card_info info;
 };

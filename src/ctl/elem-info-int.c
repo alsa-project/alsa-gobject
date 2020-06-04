@@ -2,6 +2,18 @@
 #include "elem-info-int.h"
 #include "privates.h"
 
+/**
+ * SECTION: elem-info-int
+ * @Title: ALSACtlElemInfoInt
+ * @Short_description: A GObject-derived object to represent the information
+ *                     of integer type of element
+ *
+ * A #ALSACtlElemInfoInt is a GObject-derived object to represent the
+ * information of integer type of element, which contains integer values. The
+ * object inherits methods and properties of #ALSACtlElemInfo. A call of
+ * alsactl_card_get_elem_info() can returns the instance of object, or a call
+ * of alsactl_card_add_elems() requires the instance of object as argument.
+ */
 G_DEFINE_TYPE(ALSACtlElemInfoInt, alsactl_elem_info_int, ALSACTL_TYPE_ELEM_INFO)
 
 enum ctl_elem_info_int_prop_type {

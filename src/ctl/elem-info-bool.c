@@ -2,6 +2,18 @@
 #include "elem-info-bool.h"
 #include "privates.h"
 
+/**
+ * SECTION: elem-info-bool
+ * @Title: ALSACtlElemInfoBool
+ * @Short_description: A GObject-derived object to represent the information
+ *                     of boolean type of element
+ *
+ * A #ALSACtlElemInfoBool is a GObject-derived object to represent the
+ * information of boolean type of element, which contains boolean values. The
+ * object inherits methods and properties of #ALSACtlElemInfo. The call of
+ * alsactl_card_get_elem_info() can returns the instance of object, or the call
+ * of alsactl_card_add_elems() requires the instance of object as argument.
+ */
 G_DEFINE_TYPE(ALSACtlElemInfoBool, alsactl_elem_info_bool, ALSACTL_TYPE_ELEM_INFO)
 
 enum ctl_elem_info_bool_prop_type {

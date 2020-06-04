@@ -1,6 +1,15 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: elem-info
+ * @Title: ALSACtlElemInfoInt
+ * @Short_description: An abstract object to represent the common information
+ *                     of any type of element
+ *
+ * A #ALSACtlElemInfo is an abstract object to represent the common information
+ * of any type of element.
+ */
 struct _ALSACtlElemInfoPrivate {
     struct snd_ctl_elem_info info;
 };

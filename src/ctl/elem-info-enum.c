@@ -2,6 +2,18 @@
 #include "elem-info-enum.h"
 #include "privates.h"
 
+/**
+ * SECTION: elem-info-enum
+ * @Title: ALSACtlElemInfoEnum
+ * @Short_description: A GObject-derived object to represent the information
+ *                     of enumeration type of element
+ *
+ * A #ALSACtlElemInfoEnum is a GObject-derived object to represent the
+ * information of enumeration type of element. The object inherits methods and
+ * properties of #ALSACtlElemInfo. The call of alsactl_card_get_elem_info() can
+ * returns the instance of object, or The call of alsactl_card_add_elems()
+ * requires the instance of object as argument.
+ */
 struct _ALSACtlElemInfoEnumPrivate {
     const gchar **labels;     // should have sentinel member with NULL value.
 };

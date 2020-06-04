@@ -12,6 +12,15 @@
     </releaseinfo>
     </bookinfo>
 
+    <chapter id="introduction">
+        <title>Introduction</title>
+        <para>This library is designed for applications to manipulate ALSA
+        control character device and operate functionality on sound card
+        abstracted as element. Event dispatching is based on GLib's GMainContext
+        and GMainLoop with created GSource.
+        </para>
+    </chapter>
+
     <chapter id="alsactl-enumerations">
         <title>ALSACtl enumerations</title>
         <xi:include href="xml/alsactl-enum-types.xml"/>
@@ -25,7 +34,6 @@
     <chapter id="alsactl-objects">
         <title>ALSACtl objects</title>
         <xi:include href="xml/card.xml"/>
-	<xi:include href="xml/alsactl-sigs-marshal.xml"/>
         <xi:include href="xml/card-info.xml"/>
         <xi:include href="xml/elem-id.xml"/>
         <xi:include href="xml/elem-info.xml"/>
@@ -36,6 +44,7 @@
         <xi:include href="xml/elem-info-iec60958.xml"/>
         <xi:include href="xml/elem-info-int64.xml"/>
         <xi:include href="xml/elem-value.xml"/>
+        <xi:include href="xml/alsactl-sigs-marshal.xml"/>
     </chapter>
 
     <index id="index-all">

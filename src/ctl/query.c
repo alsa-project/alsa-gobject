@@ -12,6 +12,12 @@
 #define CARD_SYSNAME_TEMPLATE       "card%u"
 #define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
 
+/**
+ * SECTION: query
+ * @Title: Global functions in ALSACtl
+ * @Short_description: Global functions in ALSACtl
+ */
+
 // For error handling.
 G_DEFINE_QUARK("alsactl-error", alsactl_error)
 
