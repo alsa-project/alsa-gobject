@@ -17,6 +17,15 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+/**
+ * SECTION: card
+ * @Title: ALSACtlCard
+ * @Short_description: An GObject-derived object to represent sound card
+ *
+ * A #ALSACtlCard is a GObject-derived object to represent sound card.
+ * Applications use the instance of object to manipulate functionalities on
+ * sound card.
+ */
 struct _ALSACtlCardPrivate {
     int fd;
     char *devnode;
@@ -417,6 +426,9 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *             Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
  * @error: A #GError.
+ *
+ * Write the given array of bytes as Type/Length/Value data for element pointed
+ * by the identifier.
  */
 void alsactl_card_write_elem_tlv(ALSACtlCard *self,
                             const ALSACtlElemId *elem_id,
@@ -462,6 +474,9 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
  *             for Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
  * @error: A #GError.
+ *
+ * Read Type/Length/Value data from element pointed by the identifier and fulfil
+ * the given array of bytes with the data.
  */
 void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             gint32 *const *container, gsize *container_count,
@@ -508,6 +523,9 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *             for Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
  * @error: A #GError.
+ *
+ * Command the given array of bytes as Type/Length/Value data for  element
+ * pointed by the identifier.
  */
 void alsactl_card_command_elem_tlv(ALSACtlCard *self,
                             const ALSACtlElemId *elem_id,
@@ -639,7 +657,7 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
  * @entries: (element-type ALSACtl.ElemId)(out): The list of added element IDs.
  * @error: A #GError.
  *
- * Add user-defined elements.
+ * Add the user-defined elements and return the list of their identifier.
  */
 void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             guint elem_count, ALSACtlElemInfo *elem_info,
@@ -665,7 +683,7 @@ void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element IDs.
  * @error: A #GError.
  *
- * Add user-defined elements instead of given elements.
+ * Add user-defined elements to replace the existent ones.
  */
 void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             guint elem_count, ALSACtlElemInfo *elem_info,
@@ -688,7 +706,7 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @elem_id: A #ALSACtlElemId.
  * @error: A #GError.
  *
- * Remove user-defined elements.
+ * Remove user-defined elements pointed by the identifier.
  */
 void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                GError **error)

@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: elem-value
+ * @Title: ALSACtlElemValue
+ * @Short_description: A boxed object to represent the container of array of
+ *                     values for any type of element.
+ *
+ * A #ALSACtlElemValue is boxed object to represent the container of values for
+ * any type of element. The arrays of values for each type of element shares the
+ * same storage, thus it's important for applications to distinguish the type of
+ * element in advance of accesing the array. The object is used for the call of
+ * alsactl_card_write_elem_value() and alsactl_card_read_elem_value().
+ */
 struct _ALSACtlElemValuePrivate {
     struct snd_ctl_elem_value value;
 };

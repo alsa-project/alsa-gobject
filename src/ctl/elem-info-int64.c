@@ -2,6 +2,18 @@
 #include "elem-info-int64.h"
 #include "privates.h"
 
+/**
+ * SECTION: elem-info-int64
+ * @Title: ALSACtlElemInfoInt64
+ * @Short_description: A GObject-derived object to represent the information
+ *                     of integer64 type of element
+ *
+ * A #ALSACtlElemInfoInt64 is a GObject-derived object to represent the
+ * information of integer type of element, which contains 64 bit integer values.
+ * The object inherits methods and properties of #ALSACtlElemInfo. A call of
+ * alsactl_card_get_elem_info() can returns the instance of object, or a call
+ * of alsactl_card_add_elems() requires the instance of object as argument.
+ */
 G_DEFINE_TYPE(ALSACtlElemInfoInt64, alsactl_elem_info_int64, ALSACTL_TYPE_ELEM_INFO)
 
 enum ctl_elem_info_int64_prop_type {

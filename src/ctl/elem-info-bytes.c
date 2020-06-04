@@ -2,6 +2,18 @@
 #include "elem-info-bytes.h"
 #include "privates.h"
 
+/**
+ * SECTION: elem-info-bytes
+ * @Title: ALSACtlElemInfoBytes
+ * @Short_description: A GObject-derived object to represent the information
+ *                     of bytes type of element
+ *
+ * A #ALSACtlElemInfoBytes is a GObject-derived object to represent the
+ * information of bytes type of element, which contains byte values. The object
+ * inherits methods and properties of #ALSACtlElemInfo. The call of
+ * alsactl_card_get_elem_info() can returns the instance of object, or the call
+ * of alsactl_card_add_elems() requires the instance of object as argument.
+ */
 G_DEFINE_TYPE(ALSACtlElemInfoBytes, alsactl_elem_info_bytes, ALSACTL_TYPE_ELEM_INFO)
 
 enum ctl_elem_info_bytes_prop_type {
