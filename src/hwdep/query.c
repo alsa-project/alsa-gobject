@@ -12,6 +12,13 @@
 
 #include <libudev.h>
 
+/**
+ * SECTION: query
+ * @Title: Global functions in ALSAHwdep
+ * @Short_description: Global functions available without holding any file
+ *                     descriptor
+ */
+
 // For error handling.
 G_DEFINE_QUARK("alsahwdep-error", alsahwdep_error)
 
