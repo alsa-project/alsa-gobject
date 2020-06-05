@@ -15,7 +15,8 @@
 /**
  * SECTION: query
  * @Title: Global functions in ALSACtl
- * @Short_description: Global functions in ALSACtl
+ * @Short_description: Global functions available without holding any file
+ *                     descriptor
  */
 
 // For error handling.

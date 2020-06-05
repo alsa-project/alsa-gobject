@@ -10,8 +10,10 @@
  * A #ALSACtlElemValue is boxed object to represent the container of values for
  * any type of element. The arrays of values for each type of element shares the
  * same storage, thus it's important for applications to distinguish the type of
- * element in advance of accesing the array. The object is used for the call of
+ * element in advance of accessing the array. The object is used for the call of
  * alsactl_card_write_elem_value() and alsactl_card_read_elem_value().
+ *
+ * The object wraps 'struct snd_ctl_elem_value' in UAPI of Linux sound subsystem.
  */
 struct _ALSACtlElemValuePrivate {
     struct snd_ctl_elem_value value;

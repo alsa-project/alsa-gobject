@@ -9,6 +9,8 @@
  *
  * A #ALSACtlElemInfo is an abstract object to represent the common information
  * of any type of element.
+ *
+ * The object wraps 'struct snd_ctl_elem_info' in UAPI of Linux sound subsystem.
  */
 struct _ALSACtlElemInfoPrivate {
     struct snd_ctl_elem_info info;

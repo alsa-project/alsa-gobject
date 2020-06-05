@@ -6,10 +6,12 @@
  * @Title: ALSACtlElemId
  * @Short_description: A boxed object to represent the identifier of element.
  *
- * A #ALSACtlElemId is an boxed object to represent the identifier of element.
+ * A #ALSACtlElemId is a boxed object to represent the identifier of element.
  * It points to a element by two ways; by the numerical ID, or by the
  * combination of the type of interface, the numerical ID of device, the
  * numerical ID of subdevice, the name, and the index.
+ *
+ * The object wraps 'struct snd_ctl_elem_id' in UAPI of Linux sound subsystem.
  */
 ALSACtlElemId *ctl_elem_id_copy(const ALSACtlElemId *self)
 {
