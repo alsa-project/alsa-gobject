@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: device-info
+ * @Title: ALSAHwdepDeviceInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     ALSA hwdep device.
+ *
+ * A #ALSAHwdepDeviceInfo is a GObject-derived object to represent information
+ * of ALSA hwdep device. The call of alsahwdep_get_device_info() returns an
+ * instance of the object.
+ *
+ * The object wraps 'struct snd_hwdep_info' in UAPI of Linux sound subsystem.
+ */
 struct _ALSAHwdepDeviceInfoPrivate {
     struct snd_hwdep_info info;
 };
