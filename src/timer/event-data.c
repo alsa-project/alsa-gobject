@@ -1,6 +1,15 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data.h"
 
+/**
+ * SECTION: event-data
+ * @Title: ALSATimerEventData
+ * @Short_description: A GObject-derived abstract object to represent common
+ *                     data of event
+ *
+ * A #ALSATimerEventData is a GObject-derived abstract object to represent
+ * common data of event.
+ */
 struct _ALSATimerEventDataPrivate {
     ALSATimerEventDataType type;
 };

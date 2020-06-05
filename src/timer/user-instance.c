@@ -10,6 +10,19 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 
+/**
+ * SECTION: user-instance
+ * @Title: ALSATimerUserInstance
+ * @Short_description: A GObject-derived object to represent user instance
+ *
+ * A #ALSATimerUserInstance is a GObject-derived object to represent information
+ * of user instance attached to any timer device or the other instance as slave.
+ * After calling alsatimer_user_instance_open(), the object maintains file
+ * descriptor till object destruction. After calling
+ * alsatimer_user_instance_attach() or alsatimer_user_instance_attach_as_slave(),
+ * the user instance is attached to any timer device or the other instance as
+ * slave.
+ */
 struct _ALSATimerUserInstancePrivate {
     int fd;
     ALSATimerEventDataType event_data_type;

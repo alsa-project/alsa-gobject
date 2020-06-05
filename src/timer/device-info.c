@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: device-info
+ * @Title: ALSATimerDeviceInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     timer device.
+ *
+ * A #ALSATimerDeviceInfo is a GObject-derived object to represent information
+ * of timer device. The call of alsatimer_get_device_info() returns an instance
+ * of the object according to the identifier of timer device.
+ *
+ * The object wraps 'struct snd_timer_ginfo' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerDeviceInfoPrivate {
     struct snd_timer_ginfo info;
 };

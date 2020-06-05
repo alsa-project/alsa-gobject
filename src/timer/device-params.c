@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: device-params
+ * @Title: ALSATimerDeviceParams
+ * @Short_description: A GObject-derived object to represent parameter of timer
+ *                     device.
+ *
+ * A #ALSATimerDeviceParams is a GObject-derived object to represent parameter
+ * of timer device. The call of alsatimer_set_device_params() requires the
+ * instance of object.
+ *
+ * The object wraps 'struct snd_timer_gparams' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerDeviceParamsPrivate {
     struct snd_timer_gparams params;
 };
