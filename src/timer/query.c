@@ -17,6 +17,13 @@
 
 #define TIMER_SYSNAME_TEMPLATE  "timer"
 
+/**
+ * SECTION: query
+ * @Title: Global functions in ALSATimer
+ * @Short_description: Global functions available without holding any
+ *                     file descriptor
+ */
+
 // For error handling.
 G_DEFINE_QUARK("alsatimer-error", alsatimer_error)
 

@@ -3,6 +3,19 @@
 
 #include <sound/asound.h>
 
+/**
+ * SECTION: instance-status
+ * @Title: ALSATimerInstanceStatus
+ * @Short_description: A GObject-derived object to represent status of user
+ *                     instance
+ *
+ * A #ALSATimerInstanceStatus is a GObject-derived object to represent status
+ * of user instance attached to any timer device or the other instance as slave.
+ * The call of alsatimer_user_instance_get_status() returns the instance of
+ * object.
+ *
+ * The object wraps 'struct snd_timer_status' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerInstanceStatusPrivate {
     struct snd_timer_status status;
 };

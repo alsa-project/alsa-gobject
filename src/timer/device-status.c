@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: device-status
+ * @Title: ALSATimerDeviceStatus
+ * @Short_description: A GObject-derived object to represent status of timer
+ *                     device.
+ *
+ * A #ALSATimerDeviceStatus is a GObject-derived object to represent status of
+ * timer device. The call of alsatimer_get_device_status() returns the instance
+ * of object.
+ *
+ * The object wraps 'struct snd_timer_gstatus' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerDeviceStatusPrivate {
     struct snd_timer_gstatus status;
 };

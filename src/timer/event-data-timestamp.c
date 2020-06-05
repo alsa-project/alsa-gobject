@@ -2,6 +2,21 @@
 #include "event-data-timestamp.h"
 #include "privates.h"
 
+/**
+ * SECTION: event-data-timestamp
+ * @Title: ALSATimerEventDataTimestamp
+ * @Short_description: A GObject-derived object to represent event of timer with
+ *                     timestamp
+ *
+ * A #ALSATimerEventDataTimestamp is a GObject-derived object to represent
+ * event of timer with timestamp. The instance of object is passed to handler for
+ * 'handle-event' GObject signal in ALSATimerUserInstance when it's available.
+ * The source of timestamp is decided by 'timer_tstamp_monotonic' option of
+ * 'snd-timer' kernel module. The object inherits properties of
+ * #ALSATimerEventData.
+ *
+ * The object wraps 'struct snd_timer_read' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerEventDataTimestampPrivate {
     struct snd_timer_tread event;
 };

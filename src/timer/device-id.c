@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "device-id.h"
 
+/**
+ * SECTION: device-id
+ * @Title: ALSATimerDeviceId
+ * @Short_description: A boxed object to represent the identifier of timer
+ *                     device.
+ *
+ * A #ALSATimerDeviceId is a boxed object to represent the identifier of timer
+ * device. The identifier mainly consists of the class of timer device. The
+ * other members; the numerical ID of card, device, and subdevice are optional
+ * according to the class of timer device.
+ *
+ * The object wraps 'struct snd_timer_id' in UAPI of Linux sound subsystem.
+ */
 ALSATimerDeviceId *timer_device_id_copy(const ALSATimerDeviceId *self)
 {
     return g_memdup(self, sizeof(*self));

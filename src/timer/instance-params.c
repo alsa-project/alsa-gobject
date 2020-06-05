@@ -6,6 +6,19 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: instance-params
+ * @Title: ALSATimerInstanceParams
+ * @Short_description: A GObject-derived object to represent parameters of user
+ *                     instance
+ *
+ * A #ALSATimerInstanceParams is a GObject-derived object to represent
+ * parameters of user instance attached to any timer device or the other
+ * instance as slave. The call of alsatimer_user_instance_set_params() requires
+ * the instance of object.
+ *
+ * The object wraps 'struct snd_timer_params' in UAPI of Linux sound subsystem.
+ */
 struct _ALSATimerInstanceParamsPrivate{
     struct snd_timer_params params;
 };
