@@ -25,6 +25,8 @@
  * A #ALSACtlCard is a GObject-derived object to represent sound card.
  * Applications use the instance of object to manipulate functionalities on
  * sound card.
+ * After the call of alsactl_card_open() for the numerical ID of sound card,
+ * the object maintains file descriptor till object destruction.
  */
 struct _ALSACtlCardPrivate {
     int fd;

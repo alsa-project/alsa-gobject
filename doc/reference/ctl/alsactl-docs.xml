@@ -15,10 +15,10 @@
     <chapter id="introduction">
         <title>Introduction</title>
         <para>This library is designed for applications to manipulate ALSA
-        control character device and operate functionality on sound card
-        abstracted as element. Event dispatching is based on GLib's GMainContext
-        and GMainLoop with created GSource.
-        </para>
+        control character device and operate control functionality abstracted
+        as card and element. ALSACtlCard represent the card. It holds file
+        descriptor and creates GSource for event dispatching by GLib's
+        GMainContext/GMainLoop.</para>
     </chapter>
 
     <chapter id="alsactl-enumerations">

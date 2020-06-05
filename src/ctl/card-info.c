@@ -8,8 +8,10 @@
  *                     sound card
  *
  * A #ALSACtlCardInfo is a GObject-derived object to represent information of
- * sound card. A call of alsactl_card_get_info() returns an instance of the
+ * sound card. The call of alsactl_card_get_info() returns an instance of the
  * object.
+ *
+ * The object wraps 'struct snd_ctl_card_info' in UAPI of Linux sound subsystem.
  */
 struct _ALSACtlCardInfoPrivate {
     struct snd_ctl_card_info info;
