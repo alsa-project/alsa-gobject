@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "addr.h"
 
+/**
+ * SECTION: addr
+ * @Title: ALSASeqAddr
+ * @Short_description: A boxed object to represent address in ALSA Sequencer.
+ *
+ * A #ALSASeqAddr is a boxed object to represent address in ALSA Sequencer. The
+ * address consists of two parts; the numerical ID of client and port.
+ *
+ * The object wraps 'struct snd_seq_addr' in UAPI of Linux sound subsystem.
+ */
 ALSASeqAddr *seq_addr_copy(const ALSASeqAddr *self)
 {
     return g_memdup(self, sizeof(*self));

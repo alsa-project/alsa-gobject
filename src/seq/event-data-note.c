@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data-note.h"
 
+/**
+ * SECTION: event-data-note
+ * @Title: ALSASeqEventDataNote
+ * @Short_description: A boxed object to represent data of note event
+ *
+ * A #ALSASeqEventDataNote is a boxed object to represent data of note event.
+ * The instance of object is one of data properties in #ALSASeqEventFixed.
+ *
+ * The object wraps 'struct snd_seq_ev_note' in UAPI of Linux sound subsystem.
+ */
 ALSASeqEventDataNote *seq_event_data_note_copy(const ALSASeqEventDataNote *self)
 {
     return g_memdup(self, sizeof(*self));

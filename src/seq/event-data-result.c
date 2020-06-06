@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data-result.h"
 
+/**
+ * SECTION: event-data-result
+ * @Title: ALSASeqEventDataResult
+ * @Short_description: A boxed object to represent data of result event
+ *
+ * A #ALSASeqEventDataResult is a boxed object to represent data of result
+ * event. The instance of object is one of data properties in
+ * #ALSASeqEventFixed.
+ *
+ * The object wraps 'struct snd_seq_result' in UAPI of Linux sound subsystem.
+ */
 ALSASeqEventDataResult *seq_event_data_result_copy(const ALSASeqEventDataResult *self)
 {
     return g_memdup(self, sizeof(*self));

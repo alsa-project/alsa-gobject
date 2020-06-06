@@ -4,6 +4,17 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: event-variable
+ * @Title: ALSASeqEventVariable
+ * @Short_description: A GObject-derived object to represent event with the
+ *                     various kind of variable-size data.
+ *
+ * A #ALSASeqEventVariable is a GObject-derived object to represent event with
+ * the various kind of variable-size data. The object has accessor methods for
+ * the variable-size data.
+ * The object inherits properties and methods from #ALSASeqEvent.
+ */
 struct _ALSASeqEventVariablePrivate {
     void *data;
 };

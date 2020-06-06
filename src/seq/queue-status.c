@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: queue-status
+ * @Title: ALSASeqQueueStatus
+ * @Short_description: A GObject-derived object to represent status of queue
+ *
+ * A #ALSASeqQueueStatus is a GObject-derived object to represent status of
+ * queue. The call of alsaseq_get_queue_status() returns the instance of object.
+ *
+ * The object wraps 'struct snd_seq_queue_status' in UAPI of Linux sound
+ * subsystem.
+ */
 struct _ALSASeqQueueStatusPrivate {
     struct snd_seq_queue_status status;
 };

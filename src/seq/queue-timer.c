@@ -3,6 +3,18 @@
 
 #include <sound/asequencer.h>
 
+/**
+ * SECTION: queue-timer
+ * @Title: ALSASeqQueueTimer
+ * @Short_description: A GObject-derived abstract object to represent timer for
+ *                     queue
+ *
+ * A #ALSASeqQueueTimer is a GObject-derived abstract object to represent common
+ * properties and methods of timer for queue. Applications can use derived
+ * object; ALSASeqQueueTimerAlsa.
+ *
+ * The object wraps 'struct snd_seq_queue_timer' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqQueueTimerPrivate {
     struct snd_seq_queue_timer timer;
 };

@@ -4,6 +4,20 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: remove-filter
+ * @Title: ALSASeqRemoveFilter
+ * @Short_description: A boxed object to represent filter to remove scheduled
+ *                     event in queue
+ *
+ * A #ALSASeqRemoveFilter is a boxed object to represent filter to remove
+ * scheduled event in queue. The call of alsaseq_user_client_remove_events()
+ * requires the instance of object. In the object, data shares the same storage,
+ * thus it's not possible to use several purposes.
+ *
+ * The object wraps 'struct snd_seq_remove_events' in UAPI of Linux sound
+ * subsystem.
+ */
 ALSASeqRemoveFilter *seq_remove_filter_copy(const ALSASeqRemoveFilter *self)
 {
     return g_memdup(self, sizeof(*self));

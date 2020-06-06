@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event-data-ctl.h"
 
+/**
+ * SECTION: event-data-ctl
+ * @Title: ALSASeqEventDataCtl
+ * @Short_description: A boxed object to represent data of control event
+ *
+ * A #ALSASeqEventDataCtl is a boxed object to represent data of control
+ * event. The instance of object is one of data properties in
+ * #ALSASeqEventFixed.
+ *
+ * The object wraps 'struct snd_seq_ev_ctrl' in UAPI of Linux sound subsystem.
+ */
 ALSASeqEventDataCtl *seq_event_data_ctl_copy(const ALSASeqEventDataCtl *self)
 {
     return g_memdup(self, sizeof(*self));

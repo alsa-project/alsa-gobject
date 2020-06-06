@@ -10,6 +10,22 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 
+/**
+ * SECTION: user-client
+ * @Title: ALSASeqUserClient
+ * @Short_description: A GObject-derived object to represent user client
+ *
+ * A #ALSASeqUserClient is a GObject-derived object to represent user client.
+ * Any port can be added to the client as destination or source for any event.
+ *
+ * When the call of alsaseq_user_client_open(), the object maintain file
+ * descriptor till object destruction. The call of
+ * alsaseq_user_client_create_source() returns the instance of GSource. Once
+ * attached to the GSource, GMainContext/GMainLoop is available as event
+ * dispatcher. The #handle-event GObject signal is emitted in the event
+ * dispatcher to notify the event. The call of
+ * alsaseq_user_client_schedule_event() schedules event with given parameters.
+ */
 struct _ALSASeqUserClientPrivate {
     int fd;
     int client_id;

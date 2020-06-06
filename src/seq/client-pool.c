@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: client-pool
+ * @Title: ALSASeqClientPool
+ * @Short_description: A GObject-derived object to represent information of
+ *                     pool owned by client.
+ *
+ * A #ALSASeqClientPool is a GObject-derived object to represent information of
+ * pool owned by client. The call of alsaseq_get_client_pool() returns the
+ * instance of object. The call of alsaseq_user_client_set_pool() and
+ * alsaseq_user_client_get_pool() require the instance of object.
+ *
+ * The object wraps 'struct snd_seq_client_pool' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqClientPoolPrivate {
     struct snd_seq_client_pool pool;
 };

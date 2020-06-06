@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: system-info
+ * @Title: ALSASeqSystemInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     ALSA Sequencer
+ *
+ * A #ALSASeqSystemInfo is a GObject-derived object to represent information of
+ * ALSA Sequencer. The call of alsaseq_get_system_info() returns the instance of
+ * object.
+ *
+ * The object wraps 'struct snd_seq_system_info' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqSystemInfoPrivate {
     struct snd_seq_system_info info;
 };
