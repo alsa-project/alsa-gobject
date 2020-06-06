@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "tstamp.h"
 
+/**
+ * SECTION: tstamp
+ * @Title: ALSASeqTstamp
+ * @Short_description: A boxed object to represent timestamp
+ *
+ * A #ALSASeqTstamp is a boxed object to represent timestamp. The object shares
+ * storage for two types of time; tick time and real time.
+ *
+ * The object wraps 'struct snd_seq_timestamp' in UAPI of Linux sound subsystem.
+ */
 ALSASeqTstamp *seq_tstamp_copy(const ALSASeqTstamp *self)
 {
     return g_memdup(self, sizeof(*self));

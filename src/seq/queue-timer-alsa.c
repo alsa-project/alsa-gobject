@@ -2,6 +2,17 @@
 #include "queue-timer-alsa.h"
 #include "privates.h"
 
+/**
+ * SECTION: queue-timer-alsa
+ * @Title: ALSASeqQueueTimerAlsa
+ * @Short_description: A GObject-derived object to represent timer instance for
+ *                     queue
+ *
+ * A #ALSASeqQueueTimerAlsa is a GObject-derived object to represent timer
+ * instance for queue. The instance belongs to ALSA timer functionality and is
+ * pointed by the identifier as property of the object. The object inherits
+ * properties and methods from #ALSASeqQueueTimer.
+ */
 G_DEFINE_TYPE(ALSASeqQueueTimerAlsa, alsaseq_queue_timer_alsa, ALSASEQ_TYPE_QUEUE_TIMER)
 
 enum seq_queue_timer_alsa_prop_type {

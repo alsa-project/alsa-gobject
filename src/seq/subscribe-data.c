@@ -1,6 +1,20 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: subscribe-data
+ * @Title: ALSASeqSubscribeData
+ * @Short_description: A GObject-derived object to represent data for
+ *                     subscription between ports.
+ *
+ * A #ALSASeqSubscribeData is a GObject-derived object to represent data for
+ * subscription between a pair of ports. The call of
+ * alsaseq_get_subscription_list() returns the list of data. The call of
+ * alsaseq_user_client_operate_subscription() requires the instance of object.
+ *
+ * The object wraps 'struct snd_seq_port_subscribe' in UAPI of Linux sound
+ * subsystem.
+ */
 struct _ALSASeqSubscribeDataPrivate {
     struct snd_seq_port_subscribe data;
 };

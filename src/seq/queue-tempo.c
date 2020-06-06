@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: queue-tempo
+ * @Title: ALSASeqQueueTempo
+ * @Short_description: A GObject-derived object to represent tempo of queue
+ *
+ * A #ALSASeqQueueTempo is a GObject-derived object to represent tempo of queue.
+ * The call of alsaseq_get_queue_status() returns the instance of object.
+ *
+ * The object wraps 'struct snd_seq_queue_tempo' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqQueueTempoPrivate {
     struct snd_seq_queue_tempo tempo;
 };

@@ -3,6 +3,19 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: client-info
+ * @Title: ALSASeqClientInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     client.
+ *
+ * A #ALSASeqClientInfo is a GObject-derived object to represent information of
+ * client. The call of alsaseq_get_client_info() returns the instance of object.
+ * The call of alsaseq_user_client_set_info() and alsaseq_user_client_get_info()
+ * require the instance of object.
+ *
+ * The object wraps 'struct snd_seq_client_info' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqClientInfoPrivate {
     struct snd_seq_client_info info;
 };

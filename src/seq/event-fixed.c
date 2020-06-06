@@ -4,6 +4,16 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: event-fixed
+ * @Title: ALSASeqEventFixed
+ * @Short_description: A GObject-derived object to represent event with the
+ *                     various kind of fixed-size data.
+ *
+ * A #ALSASeqEventFixed is a GObject-derived object to represent event with the
+ * various kind of fixed-size data. The object has several properties to access
+ * to the data. The object inherits properties and methods from #ALSASeqEvent.
+ */
 G_DEFINE_TYPE(ALSASeqEventFixed, alsaseq_event_fixed, ALSASEQ_TYPE_EVENT)
 
 enum seq_event_fixed_prop_type {

@@ -3,6 +3,17 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: event
+ * @Title: ALSASeqEvent
+ * @Short_description: A GObject-derived abstract object to represent any event
+ *
+ * A #ALSASeqEvent is a GObject-derived abstract object to represent common
+ * properties and method for any event. Applications can use derived object;
+ * #ALSASeqEventFixed and #ALSASeqEventVariable.
+ *
+ * The object wraps 'struct snd_seq_event' in UAPI of Linux sound subsystem.
+ */
 struct _ALSASeqEventPrivate {
     struct snd_seq_event ev;
 };
