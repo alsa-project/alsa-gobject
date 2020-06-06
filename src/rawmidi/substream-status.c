@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: substream-status
+ * @Title: ALSARawmidiSubstreamStatus
+ * @Short_description: A GObject-derived object to represent status of substream
+ *
+ * A #ALSARawmidiSubstreamStatus is a GObject-derived object to represent status
+ * of substream attached to the pair of stream. The call of
+ * alsarawmidi_stream_pair_get_substream_status() returns the instance of
+ * object.
+ *
+ * The object wraps 'struct snd_rawmidi_status' in UAPI of Linux sound subsystem.
+ */
 struct _ALSARawmidiSubstreamStatusPrivate {
     struct snd_rawmidi_status status;
 };

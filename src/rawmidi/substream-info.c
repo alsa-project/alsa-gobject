@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+/**
+ * SECTION: substream-info
+ * @Title: ALSARawmidiSubstreamInfo
+ * @Short_description: A GObject-derived object to represent information of
+ *                     substream
+ *
+ * A #ALSARawmidiSubstreamInfo is a GObject-derived object to represent
+ * information of substream attached to the pair of streams. The call of
+ * alsarawmidi_stream_pair_get_substream_info() or
+ * alsarawmidi_get_substream_info() return the instance of object.
+ *
+ * The object wraps 'struct snd_rawmidi_info' in UAPI of Linux sound subsystem.
+ */
 struct _ALSARawmidiSubstreamInfoPrivate {
     struct snd_rawmidi_info info;
 };

@@ -12,6 +12,13 @@
 
 #include <libudev.h>
 
+/**
+ * SECTION: query
+ * @Title: Global functions in ALSARawmidi
+ * @Short_description: Global functions available without holding any file
+ *                     descriptor
+ */
+
 // For error reporting.
 G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
 

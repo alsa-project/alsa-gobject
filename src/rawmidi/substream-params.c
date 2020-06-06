@@ -3,6 +3,19 @@
 
 #include <unistd.h>
 
+/**
+ * SECTION: substream-params
+ * @Title: ALSARawmidiSubstreamParams
+ * @Short_description: A GObject-derived object to represent parameters of
+ *                     substream.
+ *
+ * A #ALSARawmidiSubstreamParams is a GObject-derived object to represent
+ * parameters of substream attached to the pair of streams. The call of
+ * alsarawmidi_stream_pair_set_substream_params() requires the instance of
+ * object.
+ *
+ * The object wraps 'struct snd_rawmidi_params' in UAPI of Linux sound subsystem.
+ */
 struct _ALSARawmidiSubstreamParamsPrivate {
     struct snd_rawmidi_params params;
 };

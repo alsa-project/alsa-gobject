@@ -11,6 +11,29 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+/**
+ * SECTION: stream-pair
+ * @Title: ALSARawmidiStreamPair
+ * @Short_description: A GObject-derived object to represent a pair of Rawmidi
+ *                     stream.
+ *
+ * A #ALSARawmidiStreamPair is a GObject-derived object to represent a pair
+ * of Rawmidi stream to which substreams are attached. The substream is pointed
+ * by the combination of the numerical ID of device, subdevice, and direction.
+ * When the call of alsarawmidi_stream_pair_open() with the combination,
+ * corresponding substreams are attached to the object. Then the object maintains
+ * file descriptor till object destruction. The call of
+ * alsarawmidi_stream_pair_create_source() returns the instance of GSource. Once
+ * attached to the GSource, GMainContext/GMainLoop is available as event
+ * dispatcher. The 'handle-messages' GObject signal is emit in the event
+ * dispatcher to notify the intermediate buffer of capture substream has
+ * available messages. The call of alsarawmidi_stream_pair_read_from_substream()
+ * fills the given buffer with the available messages. The call of
+ * alsarawmidi_stream_pair_write_to_substream() write messages in the given
+ * buffer into the intermediate buffer of playback substream. The call of
+ * alsarawmidi_stream_pair_get_substream_status() is available to check the
+ * space in the intermediate buffer according to direction argument.
+ */
 struct _ALSARawmidiStreamPairPrivate {
     int fd;
     char *devnode;
