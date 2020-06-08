@@ -17,6 +17,7 @@
 #include "queue-status.h"
 #include "queue-tempo.h"
 #include "queue-timer.h"
+#include "event-cntr.h"
 
 #include <sound/asequencer.h>
 

@@ -171,6 +171,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_remove_filter_new_with_real_time";
 
     "alsaseq_event_cntr_get_type";
+    "alsaseq_event_cntr_new";
   local:
     *;
 };
