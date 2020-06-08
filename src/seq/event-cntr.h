@@ -31,9 +31,12 @@ G_BEGIN_DECLS
 
 typedef struct _ALSASeqEventCntr            ALSASeqEventCntr;
 typedef struct _ALSASeqEventCntrClass       ALSASeqEventCntrClass;
+typedef struct _ALSASeqEventCntrPrivate     ALSASeqEventCntrPrivate;
 
 struct _ALSASeqEventCntr {
     GObject parent_instance;
+
+    ALSASeqEventCntrPrivate *priv;
 };
 
 struct _ALSASeqEventCntrClass {
@@ -41,6 +44,8 @@ struct _ALSASeqEventCntrClass {
 };
 
 GType alsaseq_event_cntr_get_type() G_GNUC_CONST;
+
+ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error);
 
 G_END_DECLS
 

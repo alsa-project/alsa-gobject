@@ -11,7 +11,9 @@ from gi.repository import ALSASeq
 
 target = ALSASeq.EventCntr()
 props = ()
-methods = ()
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):
