@@ -7,7 +7,7 @@
  * @Short_description: A boxed object to represent data of note event
  *
  * A #ALSASeqEventDataNote is a boxed object to represent data of note event.
- * The instance of object is one of data properties in #ALSASeqEventFixed.
+ * The instance of object is one of data properties in event.
  *
  * The object wraps 'struct snd_seq_ev_note' in UAPI of Linux sound subsystem.
  */

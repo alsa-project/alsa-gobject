@@ -81,13 +81,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_event_get_type";
 
-    "alsaseq_event_fixed_get_type";
-    "alsaseq_event_fixed_new";
-    "alsaseq_event_fixed_get_byte_data";
-    "alsaseq_event_fixed_set_byte_data";
-    "alsaseq_event_fixed_get_quadlet_data";
-    "alsaseq_event_fixed_set_quadlet_data";
-
     "alsaseq_event_data_result_get_type";
     "alsaseq_event_data_result_get_event";
     "alsaseq_event_data_result_set_event";
