@@ -46,6 +46,8 @@ methods = (
     'set_blob_data',
     'get_queue_data',
     'set_queue_data',
+    'get_tstamp_data',
+    'set_tstamp_data',
 )
 signals = ()
 

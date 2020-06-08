@@ -1258,3 +1258,65 @@ void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
 
     ev->data.queue = *(struct snd_seq_ev_queue_control *)data;
 }
+
+/**
+ * alsaseq_event_cntr_get_tstamp_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (out)(transfer none): The timestamp data of event.
+ * @error: A #GError.
+ *
+ * Get the timestamp data of event pointed by the index.
+ */
+void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqTstamp **data, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    *data = (const ALSASeqTstamp *)&ev->data.time;
+}
+
+/**
+ * alsaseq_event_cntr_set_tstamp_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: The timestamp data of event.
+ * @error: A #GError.
+ *
+ * Copy the timestamp data to the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqTstamp *data, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    ensure_fixed_length_event(priv, ev, error);
+    if (*error != NULL)
+        return;
+
+    ev->data.time = *(union snd_seq_timestamp *)data;
+}
