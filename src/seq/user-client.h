@@ -59,11 +59,16 @@ struct _ALSASeqUserClientClass {
     /**
      * ALSASeqUserClientClass::handle_event:
      * @self: A #ALSASeqUserClient.
-     * @event: (transfer none): An object derived from #ALSASeqEvent.
+     * @ev_cntr: (transfer none): The instance of ALSASeqEventCntr which
+     *             points to the batch of events.
      *
-     * When event occurs, this signal is emit with an object for the event.
+     * When event occurs, this signal is emit with the instance of object which
+     * points to a batch of events. The instance should not be passed directly
+     * to alsaseq_user_client_schedule_event() again because its memory
+     * alignment is different for events with blob data.
      */
-    void (*handle_event)(ALSASeqUserClient *self, const ALSASeqEvent *event);
+    void (*handle_event)(ALSASeqUserClient *self,
+                         const ALSASeqEventCntr *ev_cntr);
 };
 
 GType alsaseq_user_client_get_type() G_GNUC_CONST;

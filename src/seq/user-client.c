@@ -38,8 +38,6 @@ typedef struct {
     gpointer tag;
     void *buf;
     size_t buf_len;
-    ALSASeqEventFixed *ev_fixed;
-    ALSASeqEventVariable *ev_var;
     ALSASeqEventCntr *ev_cntr;
 } UserClientSource;
 
@@ -105,9 +103,13 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
     /**
      * ALSASeqUserClient::handle-event:
      * @self: A #ALSASeqUserClient.
-     * @event: (transfer none): An object derived from #ALSASeqEvent.
+     * @ev_cntr: (transfer none): The instance of ALSASeqEventCntr which
+     *             points to the batch of events.
      *
-     * When event occurs, this signal is emit with an object for the event.
+     * When event occurs, this signal is emit with the instance of object which
+     * points to a batch of events. The instance should not be passed directly
+     * to alsaseq_user_client_schedule_event() again because its memory
+     * alignment is different for events with blob data.
      */
     seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT] =
         g_signal_new("handle-event",
@@ -116,7 +118,7 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
                      G_STRUCT_OFFSET(ALSASeqUserClientClass, handle_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__OBJECT,
-                     G_TYPE_NONE, 1, ALSASEQ_TYPE_EVENT);
+                     G_TYPE_NONE, 1, ALSASEQ_TYPE_EVENT_CNTR);
 }
 
 static void alsaseq_user_client_init(ALSASeqUserClient *self)
@@ -435,8 +437,6 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
     ALSASeqUserClientPrivate *priv;
     GIOCondition condition;
     int len;
-    guint8 *buf;
-    struct snd_seq_event *event;
 
     priv = alsaseq_user_client_get_instance_private(self);
     if (priv->fd < 0)
@@ -456,53 +456,9 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
 
     seq_event_cntr_set_buf(src->ev_cntr, src->buf, len);
 
-    buf = src->buf;
-    while (len >= sizeof(*event)) {
-        struct snd_seq_event *data_ptr;
-        ALSASeqEvent *ev;
-
-        event = (struct snd_seq_event *)buf;
-
-        buf += sizeof(*event);
-        len -= sizeof(*event);
-
-        // For variable length of event.
-        switch (event->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
-        case SNDRV_SEQ_EVENT_LENGTH_FIXED:
-            ev = ALSASEQ_EVENT(src->ev_fixed);
-            break;
-        case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
-        {
-            unsigned int length = event->data.ext.len;
-            unsigned int offset = (length + sizeof(*event) - 1) / sizeof(*event);
-
-            // MEMO: Although ALSA Sequencer core never truncate the event,
-            // let's skip it for safe.
-            if (length == 0 || len < offset)
-                break;
-
-            event->data.ext.ptr = buf;
-            buf += offset;
-            len -= offset;
-
-            ev = ALSASEQ_EVENT(src->ev_var);
-            break;
-        }
-        case SNDRV_SEQ_EVENT_LENGTH_VARUSR:
-            // Unsupported since it handles raw pointer which is difficult to
-            // be exposed by interfaces capable for g-i.
-        default:
-            continue;
-        }
-
-        // Copy event cell (= 28 bytes).
-        seq_event_refer_private(ev, &data_ptr);
-        *data_ptr = *event;
-
-        g_signal_emit(self,
-                    seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT],
-                    0, ev);
-    }
+    g_signal_emit(self,
+                seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT],
+                0, src->ev_cntr);
 
     // Just be sure to continue to process this source.
     return G_SOURCE_CONTINUE;
@@ -512,8 +468,6 @@ static void seq_user_client_finalize_src(GSource *gsrc)
 {
     UserClientSource *src = (UserClientSource *)gsrc;
 
-    g_object_unref(src->ev_fixed);
-    g_object_unref(src->ev_var);
     g_object_unref(src->ev_cntr);
 
     g_free(src->buf);
@@ -558,8 +512,6 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     *gsrc = g_source_new(&funcs, sizeof(*src));
     src = (UserClientSource *)(*gsrc);
 
-    src->ev_fixed = g_object_new(ALSASEQ_TYPE_EVENT_FIXED, NULL);
-    src->ev_var = g_object_new(ALSASEQ_TYPE_EVENT_VARIABLE, NULL);
     src->ev_cntr = g_object_new(ALSASEQ_TYPE_EVENT_CNTR, NULL);
 
     g_source_set_name(*gsrc, "ALSASeqUserClient");
