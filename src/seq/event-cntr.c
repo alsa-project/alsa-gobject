@@ -787,3 +787,97 @@ void alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index,
 
     ev->source = *src;
 }
+
+static void ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv,
+                                      struct snd_seq_event *ev, GError **error)
+{
+    if (!priv->allocated) {
+        generate_error(error, ENOBUFS);
+        return;
+    }
+
+    switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+    {
+        // Truncate blob area.
+        guint8 *pos = (guint8 *)ev;
+        guint8 *next_ev = pos + sizeof(*ev) + ev->data.ext.len;
+        ptrdiff_t to_tail = priv->length - (next_ev - priv->buf);
+
+        memcpy(pos + sizeof(*ev), next_ev, to_tail);
+
+        priv->length -= ev->data.ext.len;
+        break;
+    }
+    default:
+        break;
+    }
+
+    ev->data.ext.ptr = NULL;
+    ev->data.ext.len = 0;
+
+    ev->flags &= ~SNDRV_SEQ_EVENT_LENGTH_MASK;
+    ev->flags |= SNDRV_SEQ_EVENT_LENGTH_FIXED;
+}
+
+/**
+ * alsaseq_event_cntr_get_note_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (out)(transfer none): The note data of event.
+ * @error: A #GError.
+ *
+ * Get the note data of event pointed by the index.
+ */
+void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataNote **data, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    *data = (const ALSASeqEventDataNote *)&ev->data.note;
+}
+
+/**
+ * alsaseq_event_cntr_set_note_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: The note data of event.
+ * @error: A #GError.
+ *
+ * Copy the note data to the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataNote *data, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    ensure_fixed_length_event(priv, ev, error);
+    if (*error != NULL)
+        return;
+
+    ev->data.note = *(struct snd_seq_ev_note *)data;
+}

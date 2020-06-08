@@ -34,6 +34,8 @@ methods = (
     'set_dst',
     'get_src',
     'set_src',
+    'get_note_data',
+    'set_note_data',
 )
 signals = ()
 
