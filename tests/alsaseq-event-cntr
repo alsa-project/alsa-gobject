@@ -26,6 +26,8 @@ methods = (
     'set_priority_mode',
     'get_tag',
     'set_tag',
+    'get_queue_id',
+    'set_queue_id',
 )
 signals = ()
 

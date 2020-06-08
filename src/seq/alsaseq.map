@@ -186,6 +186,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_priority_mode";
     "alsaseq_event_cntr_get_tag";
     "alsaseq_event_cntr_set_tag";
+    "alsaseq_event_cntr_get_queue_id";
+    "alsaseq_event_cntr_set_queue_id";
   local:
     *;
 };
