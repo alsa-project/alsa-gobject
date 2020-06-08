@@ -210,6 +210,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_tstamp_data";
     "alsaseq_event_cntr_get_addr_data";
     "alsaseq_event_cntr_set_addr_data";
+    "alsaseq_event_cntr_get_connect_data";
+    "alsaseq_event_cntr_set_connect_data";
   local:
     *;
 };

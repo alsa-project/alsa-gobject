@@ -158,6 +158,11 @@ void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
                                     const ALSASeqAddr *data, GError **error);
 
+void alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
+                        const ALSASeqEventDataConnect **data, GError **error);
+void alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
+                        const ALSASeqEventDataConnect *data, GError **error);
+
 G_END_DECLS
 
 #endif

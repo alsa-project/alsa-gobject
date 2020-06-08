@@ -48,6 +48,8 @@ methods = (
     'set_queue_data',
     'get_tstamp_data',
     'set_tstamp_data',
+    'get_connect_data',
+    'set_connect_data',
 )
 signals = ()
 
