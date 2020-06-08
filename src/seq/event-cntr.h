@@ -11,6 +11,7 @@
 #include <seq/event-data-note.h>
 #include <seq/event-data-ctl.h>
 #include <seq/event-data-queue.h>
+#include <seq/event-data-connect.h>
 
 G_BEGIN_DECLS
 
@@ -151,6 +152,11 @@ void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
                                     const ALSASeqTstamp **data, GError **error);
 void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
                                     const ALSASeqTstamp *data, GError **error);
+
+void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqAddr **data, GError **error);
+void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqAddr *data, GError **error);
 
 G_END_DECLS
 
