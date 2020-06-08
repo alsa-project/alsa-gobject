@@ -176,6 +176,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_calculate_pool_consumption";
     "alsaseq_event_cntr_get_event_type";
     "alsaseq_event_cntr_set_event_type";
+    "alsaseq_event_cntr_get_tstamp_mode";
+    "alsaseq_event_cntr_set_tstamp_mode";
   local:
     *;
 };
