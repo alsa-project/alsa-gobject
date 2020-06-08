@@ -190,6 +190,10 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_queue_id";
     "alsaseq_event_cntr_get_tstamp";
     "alsaseq_event_cntr_set_tstamp";
+    "alsaseq_event_cntr_get_dst";
+    "alsaseq_event_cntr_set_dst";
+    "alsaseq_event_cntr_get_src";
+    "alsaseq_event_cntr_set_src";
   local:
     *;
 };

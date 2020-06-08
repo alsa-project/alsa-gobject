@@ -30,6 +30,10 @@ methods = (
     'set_queue_id',
     'get_tstamp',
     'set_tstamp',
+    'get_dst',
+    'set_dst',
+    'get_src',
+    'set_src',
 )
 signals = ()
 

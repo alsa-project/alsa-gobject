@@ -7,6 +7,7 @@
 
 #include <seq/alsaseq-enums.h>
 #include <seq/tstamp.h>
+#include <seq/addr.h>
 
 G_BEGIN_DECLS
 
@@ -100,6 +101,16 @@ void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
                                 const ALSASeqTstamp **tstamp, GError **error);
 void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
                                     const ALSASeqTstamp *tstamp, GError **error);
+
+void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr **dst, GError **error);
+void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr *dst, GError **error);
+
+void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr **src, GError **error);
+void alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr *src, GError **error);
 
 G_END_DECLS
 
