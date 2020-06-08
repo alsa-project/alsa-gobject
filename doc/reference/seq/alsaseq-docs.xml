@@ -43,7 +43,6 @@
         <xi:include href="xml/event-cntr.xml"/>
         <xi:include href="xml/event.xml"/>
         <xi:include href="xml/event-fixed.xml"/>
-        <xi:include href="xml/event-variable.xml"/>
         <xi:include href="xml/tstamp.xml"/>
         <xi:include href="xml/event-data-result.xml"/>
         <xi:include href="xml/event-data-note.xml"/>

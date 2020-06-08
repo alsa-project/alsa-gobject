@@ -37,7 +37,6 @@ tests = {
     'alsaseq-client-pool',
     'alsaseq-event',
     'alsaseq-event-fixed',
-    'alsaseq-event-variable',
     'alsaseq-subscribe-data',
     'alsaseq-queue-info',
     'alsaseq-queue-status',
