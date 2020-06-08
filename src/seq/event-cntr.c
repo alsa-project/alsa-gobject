@@ -74,3 +74,82 @@ ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error)
 
     return self;
 }
+
+static gsize calculate_event_size(struct snd_seq_event *ev, gboolean aligned)
+{
+    gsize size = sizeof(*ev);
+
+    switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+    {
+        const struct snd_seq_ev_ext *ext = &ev->data.ext;
+        if (aligned)
+            size += ext->len;
+        else
+            size += (ext->len + sizeof(*ev) - 1) / sizeof(*ev) * sizeof(*ev);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return size;
+}
+
+struct event_iterator {
+    guint8 *buf;
+    gsize length;
+    gboolean aligned;
+
+    gsize offset;
+};
+
+static void event_iterator_init(struct event_iterator *iter, guint8 *buf,
+                                gsize length, gboolean aligned)
+{
+    iter->buf = buf;
+    iter->length = length;
+    iter->aligned = aligned;
+
+    iter->offset = 0;
+}
+
+static struct snd_seq_event *event_iterator_next(struct event_iterator *iter)
+{
+    struct snd_seq_event *ev;
+    gsize ev_size;
+
+    if (iter->offset + sizeof(*ev) > iter->length)
+        return NULL;
+    ev = (struct snd_seq_event *)(iter->buf + iter->offset);
+
+    ev_size = calculate_event_size(ev, iter->aligned);
+    if (iter->offset + ev_size > iter->length)
+        return NULL;
+    iter->offset += ev_size;
+
+    return ev;
+}
+
+/**
+ * alsaseq_event_cntr_count_events:
+ * @self: A #ALSASeqEventCntr.
+ * @count: (out): The count of stored events.
+ *
+ * count stored events.
+ */
+void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    *count = 0;
+    while ((ev = event_iterator_next(&iter)))
+        ++(*count);
+}
