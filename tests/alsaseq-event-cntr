@@ -17,6 +17,8 @@ methods = (
     'calculate_pool_consumption',
     'get_event_type',
     'set_event_type',
+    'get_tstamp_mode',
+    'set_tstamp_mode',
 )
 signals = ()
 
