@@ -21,6 +21,7 @@ methods = (
     'set_tstamp_mode',
     'get_time_mode',
     'set_time_mode',
+    'get_length_mode',
 )
 signals = ()
 

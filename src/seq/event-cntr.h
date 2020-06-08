@@ -74,6 +74,10 @@ void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
                                         ALSASeqEventTimeMode mode,
                                         GError **error);
 
+void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
+                                          ALSASeqEventLengthMode *mode,
+                                          GError **error);
+
 G_END_DECLS
 
 #endif
