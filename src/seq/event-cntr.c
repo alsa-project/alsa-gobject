@@ -667,3 +667,123 @@ void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
 
     ev->time = *tstamp;
 }
+
+/**
+ * alsaseq_event_cntr_get_dst:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @dst: (out)(transfer none): The destination of event.
+ * @error: A #GError.
+ *
+ * Get the destination of event pointed by index.
+ */
+void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr **dst, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *dst = (const ALSASeqAddr *)&ev->dest;
+}
+
+/**
+ * alsaseq_event_cntr_set_dst:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @dst: The destination of event.
+ * @error: A #GError.
+ *
+ * Set the destination of event pointed by index.
+ */
+void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr *dst, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->dest = *dst;
+}
+
+/**
+ * alsaseq_event_cntr_get_src:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @src: (out)(transfer none): The source of event.
+ * @error: A #GError.
+ *
+ * Get the destination of event pointed by index.
+ */
+void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr **src, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *src = (const ALSASeqAddr *)&ev->source;
+}
+
+/**
+ * alsaseq_event_cntr_set_src:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @src: The source of event.
+ * @error: A #GError.
+ *
+ * Set the destination of event pointed by index.
+ */
+void alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index,
+                                  const ALSASeqAddr *src, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->source = *src;
+}
