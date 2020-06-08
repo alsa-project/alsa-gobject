@@ -10,7 +10,6 @@
 #include <seq/client-pool.h>
 #include <seq/event.h>
 #include <seq/event-fixed.h>
-#include <seq/event-variable.h>
 #include <seq/subscribe-data.h>
 #include <seq/queue-info.h>
 #include <seq/queue-tempo.h>
