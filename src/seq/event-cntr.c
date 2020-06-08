@@ -389,3 +389,34 @@ void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
     ev->flags &= ~SNDRV_SEQ_TIME_MODE_MASK;
     ev->flags |= (unsigned char)mode;
 }
+
+/**
+ * alsaseq_event_cntr_get_length_mode:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @mode: (out): The mode of length, one of #ALSASeqEventLengthMode.
+ * @error: A #GError.
+ *
+ * Get the mode of length for the event pointed by the index.
+ */
+void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
+                                          ALSASeqEventLengthMode *mode,
+                                          GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *mode = (ALSASeqEventLengthMode)(ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK);
+}
