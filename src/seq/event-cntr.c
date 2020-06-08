@@ -153,3 +153,37 @@ void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count)
     while ((ev = event_iterator_next(&iter)))
         ++(*count);
 }
+
+/**
+ * alsaseq_event_cntr_calculate_pool_consumption:
+ * @self: A #ALSASeqEventCntr.
+ * @count: The amount of events for calculation.
+ * @cells: (out): The amount of cells to be consumed in pool.
+ * @error: A #GError.
+ *
+ * Calculate the amount of cells in client pool to be consumed by a part
+ * of events in the container.
+ */
+void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
+                                    gsize count, gsize *cells, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+    gsize total;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    *cells = 0;
+    total = 0;
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    while ((ev = event_iterator_next(&iter))) {
+        gsize size = calculate_event_size(ev, TRUE);
+        *cells += size /sizeof(*ev);
+
+        if (total == count)
+            break;
+        ++total;
+    }
+}

@@ -173,6 +173,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_get_type";
     "alsaseq_event_cntr_new";
     "alsaseq_event_cntr_count_events";
+    "alsaseq_event_cntr_calculate_pool_consumption";
   local:
     *;
 };

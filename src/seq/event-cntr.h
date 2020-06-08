@@ -49,6 +49,9 @@ ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error);
 
 void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count);
 
+void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
+				gsize count, gsize *cells, GError **error);
+
 G_END_DECLS
 
 #endif
