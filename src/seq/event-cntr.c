@@ -1555,3 +1555,20 @@ void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
     priv->buf = buf;
     priv->length = length;
 }
+
+void seq_event_cntr_get_buf(ALSASeqEventCntr *self, gsize count,
+                              const guint8 **buf, gsize *length)
+{
+    ALSASeqEventCntrPrivate *priv =
+                                alsaseq_event_cntr_get_instance_private(self);
+    struct event_iterator iter;
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    if (event_iterator_find(&iter, count - 1) != NULL) {
+        *buf = priv->buf;
+        *length = iter.offset;
+    } else {
+        *buf = NULL;
+        *length = 0;
+    }
+}
