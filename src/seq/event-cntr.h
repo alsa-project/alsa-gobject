@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/alsaseq-enums.h>
+#include <seq/tstamp.h>
 
 G_BEGIN_DECLS
 
@@ -94,6 +95,11 @@ void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
                                        guint8 *queue_id, GError **error);
 void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
                                        guint8 queue_id, GError **error);
+
+void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
+                                const ALSASeqTstamp **tstamp, GError **error);
+void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqTstamp *tstamp, GError **error);
 
 G_END_DECLS
 
