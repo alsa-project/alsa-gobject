@@ -10,6 +10,7 @@
 #include <seq/addr.h>
 #include <seq/event-data-note.h>
 #include <seq/event-data-ctl.h>
+#include <seq/event-data-queue.h>
 
 G_BEGIN_DECLS
 
@@ -140,6 +141,11 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
                                         const guint8 *data, gsize size,
                                         GError **error);
+
+void alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataQueue **data, GError **error);
+void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataQueue *data, GError **error);
 
 G_END_DECLS
 
