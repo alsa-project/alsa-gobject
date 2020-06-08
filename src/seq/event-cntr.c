@@ -820,6 +820,57 @@ static void ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv,
     ev->flags |= SNDRV_SEQ_EVENT_LENGTH_FIXED;
 }
 
+static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
+                                struct snd_seq_event *ev, const guint8 *data,
+                                gsize size, GError **error)
+{
+    guint8 *pos = (guint8 *)ev;
+    ptrdiff_t from_head = pos + sizeof(*ev) - priv->buf;
+    ptrdiff_t to_tail;
+    guint8 *next_ev;
+    guint8 *new;
+
+    if (!priv->allocated) {
+        generate_error(error, ENOBUFS);
+        return;
+    }
+
+    switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+        // Expand or shrink total area for new blob.
+        next_ev = pos + sizeof(*ev) + ev->data.ext.len;
+        break;
+    default:
+        // Expand total area with blob size.
+        next_ev = pos + sizeof(*ev);
+        break;
+    }
+
+    to_tail = priv->length - (next_ev - priv->buf);
+
+    new = g_try_malloc(from_head + size + to_tail);
+    if (new == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    memcpy(new, priv->buf, from_head);
+    memcpy(new + from_head, data, size);
+    memcpy(new + from_head + size, next_ev, to_tail);
+
+    g_free(priv->buf);
+    priv->buf = new;
+    priv->length = from_head + size + to_tail;
+
+    from_head -= sizeof(*ev);
+    pos = priv->buf + from_head;
+    ev = (struct snd_seq_event *)pos;
+    ev->data.ext.len = size;
+
+    ev->flags &= ~SNDRV_SEQ_EVENT_LENGTH_MASK;
+    ev->flags |= SNDRV_SEQ_EVENT_LENGTH_VARIABLE;
+}
+
 /**
  * alsaseq_event_cntr_get_note_data:
  * @self: A #ALSASeqEventCntr.
@@ -1068,4 +1119,80 @@ void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
         return;
 
     memcpy(ev->data.raw32.d, data, sizeof(ev->data.raw32.d));
+}
+
+/**
+ * alsaseq_event_cntr_get_blob_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (array length=size)(out)(transfer none): The pointer to blob data.
+ * @size: The size of data.
+ * @error: A #GError.
+ *
+ * Refer to the blob data of event.
+ */
+void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 **data, gsize *size,
+                                        GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+    {
+        const struct snd_seq_ev_ext *ext = &ev->data.ext;
+        if (priv->allocated)
+            *data = ((guint8 *)ev) + sizeof(*ev);
+        else
+            *data = ext->ptr;
+        *size = ext->len;
+        break;
+    }
+    default:
+        generate_error(error, ENODATA);
+        break;
+    }
+}
+
+/**
+ * alsaseq_event_cntr_set_blob_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (array length=size): The pointer to blob data for the event.
+ * @size: The size of data.
+ * @error: A #GError.
+ *
+ * Copy the quadlet data to the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 *data, gsize size,
+                                        GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    ensure_variable_length_event(priv, ev, data, size, error);
 }

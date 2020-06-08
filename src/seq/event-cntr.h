@@ -134,6 +134,13 @@ void alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
                                         const guint32 data[3], GError **error);
 
+void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 **data, gsize *size,
+                                        GError **error);
+void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 *data, gsize size,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif
