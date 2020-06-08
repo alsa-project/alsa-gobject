@@ -483,3 +483,63 @@ void alsaseq_event_cntr_set_priority_mode(
     ev->flags &= ~SNDRV_SEQ_PRIORITY_MASK;
     ev->flags |= (unsigned char)mode;
 }
+
+/**
+ * alsaseq_event_cntr_get_tag:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @tag: (out): The tag assigned to the event.
+ * @error: A #GError.
+ *
+ * Get the tag assignd to the event pointed by the index.
+ */
+void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
+                                  gint8 *tag, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *tag = ev->tag;
+}
+
+/**
+ * alsaseq_event_cntr_set_tag:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @tag: The tag going to be assignd to the event.
+ * @error: A #GError.
+ *
+ * Get the tag assignd to the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
+                                  gint8 tag, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->tag = tag;
+}
