@@ -28,6 +28,8 @@ methods = (
     'set_tag',
     'get_queue_id',
     'set_queue_id',
+    'get_tstamp',
+    'set_tstamp',
 )
 signals = ()
 

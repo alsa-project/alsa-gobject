@@ -605,3 +605,65 @@ void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
 
     ev->queue = queue_id;
 }
+
+/**
+ * alsaseq_event_cntr_get_tstamp:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @tstamp: (out)(transfer none): The timestamp for the event. The content is
+ *          affected by the mode of tstamping.
+ * @error: A #GError.
+ *
+ * Get the timestamp of event pointed by index.
+ */
+void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
+                                const ALSASeqTstamp **tstamp, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *tstamp = (const ALSASeqTstamp *)&ev->time;
+}
+
+/**
+ * alsaseq_event_cntr_set_tstamp:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @tstamp: The timestamp for the event. The content is affected by the mode of
+ *          tstamping.
+ * @error: A #GError.
+ *
+ * Set the timestamp for the event pointed by index.
+ */
+void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
+                                    const ALSASeqTstamp *tstamp, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->time = *tstamp;
+}
