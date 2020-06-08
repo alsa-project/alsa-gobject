@@ -124,6 +124,11 @@ void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
                             const ALSASeqEventDataCtl *data, GError **error);
 
+void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 *data[12], GError **error);
+void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 data[12], GError **error);
+
 G_END_DECLS
 
 #endif

@@ -198,6 +198,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_note_data";
     "alsaseq_event_cntr_get_ctl_data";
     "alsaseq_event_cntr_set_ctl_data";
+    "alsaseq_event_cntr_get_byte_data";
+    "alsaseq_event_cntr_set_byte_data";
   local:
     *;
 };
