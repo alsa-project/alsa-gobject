@@ -58,6 +58,9 @@ void seq_queue_tempo_refer_private(ALSASeqQueueTempo *self,
 void seq_queue_timer_refer_private(ALSASeqQueueTimer *self,
                                    struct snd_seq_queue_timer **timer);
 
+void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
+                              gsize length);
+
 G_END_DECLS
 
 #endif

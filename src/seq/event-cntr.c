@@ -1546,3 +1546,12 @@ void alsaseq_event_cntr_set_result_data(ALSASeqEventCntr *self, gsize index,
 
     ev->data.result = *(struct snd_seq_result *)data;
 }
+
+void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
+                              gsize length)
+{
+    ALSASeqEventCntrPrivate *priv =
+                                alsaseq_event_cntr_get_instance_private(self);
+    priv->buf = buf;
+    priv->length = length;
+}
