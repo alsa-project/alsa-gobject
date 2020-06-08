@@ -9,6 +9,7 @@
 #include <seq/tstamp.h>
 #include <seq/addr.h>
 #include <seq/event-data-note.h>
+#include <seq/event-data-ctl.h>
 
 G_BEGIN_DECLS
 
@@ -117,6 +118,11 @@ void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
                             const ALSASeqEventDataNote **data, GError **error);
 void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
                             const ALSASeqEventDataNote *data, GError **error);
+
+void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataCtl **data, GError **error);
+void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
+                            const ALSASeqEventDataCtl *data, GError **error);
 
 G_END_DECLS
 

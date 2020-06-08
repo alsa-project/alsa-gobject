@@ -36,6 +36,8 @@ methods = (
     'set_src',
     'get_note_data',
     'set_note_data',
+    'get_ctl_data',
+    'set_ctl_data',
 )
 signals = ()
 
