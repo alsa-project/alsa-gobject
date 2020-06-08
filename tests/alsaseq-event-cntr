@@ -19,6 +19,8 @@ methods = (
     'set_event_type',
     'get_tstamp_mode',
     'set_tstamp_mode',
+    'get_time_mode',
+    'set_time_mode',
 )
 signals = ()
 
