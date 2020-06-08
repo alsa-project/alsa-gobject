@@ -131,6 +131,21 @@ static struct snd_seq_event *event_iterator_next(struct event_iterator *iter)
     return ev;
 }
 
+static struct snd_seq_event *event_iterator_find(struct event_iterator *iter,
+                                                 gsize index)
+{
+    struct snd_seq_event *ev;
+    gsize count = 0;
+
+    while ((ev = event_iterator_next(iter))) {
+        if (index == count)
+            return ev;
+        ++count;
+    }
+
+    return NULL;
+}
+
 /**
  * alsaseq_event_cntr_count_events:
  * @self: A #ALSASeqEventCntr.
@@ -186,4 +201,65 @@ void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
             break;
         ++total;
     }
+}
+
+/**
+ * alsaseq_event_cntr_get_event_type:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to refer to.
+ * @ev_type: (out): The type of event.
+ * @error: A #GError.
+ *
+ * Get the type of event pointed by the index.
+ */
+void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
+                                    ALSASeqEventType *ev_type, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *ev_type = (ALSASeqEventType)ev->type;
+}
+
+/**
+ * alsaseq_event_cntr_set_event_type:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @ev_type: A #ALSASeqEventType.
+ * @error: A #GError.
+ *
+ * Set the type to event pointed by the index;
+ */
+void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
+                                         gsize index, ALSASeqEventType ev_type,
+                                         GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->type = (snd_seq_event_type_t)ev_type;
 }
