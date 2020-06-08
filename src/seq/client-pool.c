@@ -8,7 +8,8 @@
  *                     pool owned by client.
  *
  * A #ALSASeqClientPool is a GObject-derived object to represent information of
- * pool owned by client. The call of alsaseq_get_client_pool() returns the
+ * pool owned by client. The pool consists of a batch of cells to store message
+ * contents in kernel space. The call of alsaseq_get_client_pool() returns the
  * instance of object. The call of alsaseq_user_client_set_pool() and
  * alsaseq_user_client_get_pool() require the instance of object.
  *
@@ -109,35 +110,40 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
         g_param_spec_int("output-pool", "output-pool",
-                         "The total size of memory pool in output direction.",
+                         "The total number of cells in memory pool for output "
+			 "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_POOL] =
         g_param_spec_int("input-pool", "input-pool",
-                         "The total size of memory pool in input direction.",
+                         "The total number of cells in memory pool for input "
+			 "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM] =
         g_param_spec_int("output-room", "output-room",
-                         "The size of memory pool for blocking operation.",
+                         "The number of cells in memory pool for output "
+			 "direction to block user process.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_FREE] =
         g_param_spec_int("output-free", "output-free",
-                         "The free size of memory pool in output direction.",
+                         "The free number of cells in memory pool for output "
+			 "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_FREE] =
         g_param_spec_int("input-free", "input-free",
-                         "The free size of memory pool in input direction.",
+                         "The free number of cells in memory pool for input "
+			 "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
