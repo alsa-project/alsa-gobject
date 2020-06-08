@@ -13,6 +13,7 @@ target = ALSASeq.EventCntr()
 props = ()
 methods = (
     'new',
+    'count_events',
 )
 signals = ()
 

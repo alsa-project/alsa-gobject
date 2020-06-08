@@ -47,6 +47,8 @@ GType alsaseq_event_cntr_get_type() G_GNUC_CONST;
 
 ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error);
 
+void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count);
+
 G_END_DECLS
 
 #endif
