@@ -194,6 +194,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_dst";
     "alsaseq_event_cntr_get_src";
     "alsaseq_event_cntr_set_src";
+    "alsaseq_event_cntr_get_note_data";
+    "alsaseq_event_cntr_set_note_data";
   local:
     *;
 };
