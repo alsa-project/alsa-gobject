@@ -326,3 +326,66 @@ void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
     ev->flags &= ~SNDRV_SEQ_TIME_STAMP_MASK;
     ev->flags |= (unsigned char)mode;
 }
+
+/**
+ * alsaseq_event_cntr_get_time_mode:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @mode: (out): The mode of time, one of #ALSASeqEventTimeMode.
+ * @error: A #GError.
+ *
+ * Get the mode of time for the event pointed by the index.
+ */
+void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
+                                        ALSASeqEventTimeMode *mode,
+                                        GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *mode = (ALSASeqEventTimeMode)(ev->flags & SNDRV_SEQ_TIME_MODE_MASK);
+}
+
+/**
+ * alsaseq_event_cntr_set_time_mode:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @mode: The mode of time, one of #ALSASeqEventTimeMode.
+ * @error: A #GError.
+ *
+ * Set the mode of time for the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
+                                        ALSASeqEventTimeMode mode,
+                                        GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->flags &= ~SNDRV_SEQ_TIME_MODE_MASK;
+    ev->flags |= (unsigned char)mode;
+}

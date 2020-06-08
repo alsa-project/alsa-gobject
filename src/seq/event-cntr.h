@@ -66,6 +66,14 @@ void alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
                                           ALSASeqEventTimestampMode mode,
                                           GError **error);
+
+void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
+                                        ALSASeqEventTimeMode *mode,
+                                        GError **error);
+void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
+                                        ALSASeqEventTimeMode mode,
+                                        GError **error);
+
 G_END_DECLS
 
 #endif
