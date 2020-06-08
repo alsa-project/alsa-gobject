@@ -943,3 +943,65 @@ void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
 
     ev->data.control = *(struct snd_seq_ev_ctrl *)data;
 }
+
+/**
+ * alsaseq_event_cntr_get_byte_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (array fixed-size=12)(out)(transfer none): The byte data of event.
+ * @error: A #GError.
+ *
+ * Get the byte data of event pointed by the index.
+ */
+void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 *data[12], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    *data = ev->data.raw8.d;
+}
+
+/**
+ * alsaseq_event_cntr_set_byte_data:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @data: (array fixed-size=12): The byte data of event.
+ * @error: A #GError.
+ *
+ * Copy the byte data to the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
+                                        const guint8 data[12], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, EINVAL);
+        return;
+    }
+
+    ensure_fixed_length_event(priv, ev, error);
+    if (*error != NULL)
+        return;
+
+    memcpy(ev->data.raw8.d, data, sizeof(ev->data.raw8.d));
+}

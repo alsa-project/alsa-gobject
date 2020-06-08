@@ -38,6 +38,8 @@ methods = (
     'set_note_data',
     'get_ctl_data',
     'set_ctl_data',
+    'get_byte_data',
+    'set_byte_data',
 )
 signals = ()
 
