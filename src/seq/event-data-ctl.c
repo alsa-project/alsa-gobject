@@ -7,8 +7,7 @@
  * @Short_description: A boxed object to represent data of control event
  *
  * A #ALSASeqEventDataCtl is a boxed object to represent data of control
- * event. The instance of object is one of data properties in
- * #ALSASeqEventFixed.
+ * event. The instance of object is one of data properties in event.
  *
  * The object wraps 'struct snd_seq_ev_ctrl' in UAPI of Linux sound subsystem.
  */
