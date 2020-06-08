@@ -8,7 +8,6 @@
 #include <seq/client-info.h>
 #include <seq/port-info.h>
 #include <seq/client-pool.h>
-#include <seq/event.h>
 #include <seq/subscribe-data.h>
 #include <seq/queue-info.h>
 #include <seq/queue-tempo.h>

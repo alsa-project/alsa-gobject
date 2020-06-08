@@ -11,7 +11,6 @@
 #include "client-info.h"
 #include "port-info.h"
 #include "client-pool.h"
-#include "event.h"
 #include "subscribe-data.h"
 #include "queue-info.h"
 #include "queue-status.h"
@@ -40,8 +39,6 @@ void seq_port_info_refer_private(ALSASeqPortInfo *self,
 
 void seq_client_pool_refer_private(ALSASeqClientPool *self,
                                    struct snd_seq_client_pool **pool);
-
-void seq_event_refer_private(ALSASeqEvent *self, struct snd_seq_event **ev);
 
 void seq_subscribe_data_refer_private(ALSASeqSubscribeData *self,
                                       struct snd_seq_port_subscribe **data);
