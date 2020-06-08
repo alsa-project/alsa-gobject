@@ -420,3 +420,66 @@ void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
 
     *mode = (ALSASeqEventLengthMode)(ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK);
 }
+
+/**
+ * alsaseq_event_cntr_get_priority_mode:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @mode: (out): The mode of priority, one of #ALSASeqEventPriorityMode.
+ * @error: A #GError.
+ *
+ * Get the mode of priority for the event pointed by the index.
+ */
+void alsaseq_event_cntr_get_priority_mode(
+                                ALSASeqEventCntr *self, gsize index,
+                                ALSASeqEventPriorityMode *mode, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *mode = (ALSASeqEventPriorityMode)(ev->flags & SNDRV_SEQ_PRIORITY_MASK);
+}
+
+/**
+ * alsaseq_event_cntr_set_priority_mode:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @mode: The mode of priority, one of #ALSASeqEventPriorityMode.
+ * @error: A #GError.
+ *
+ * Set the mode of priority for the event pointed by the index.
+ */
+void alsaseq_event_cntr_set_priority_mode(
+                                ALSASeqEventCntr *self, gsize index,
+                                ALSASeqEventPriorityMode mode, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->flags &= ~SNDRV_SEQ_PRIORITY_MASK;
+    ev->flags |= (unsigned char)mode;
+}

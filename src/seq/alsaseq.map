@@ -182,6 +182,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_time_mode";
     "alsaseq_event_cntr_get_length_mode";
     "alsaseq_event_cntr_set_length_mode";
+    "alsaseq_event_cntr_get_priority_mode";
+    "alsaseq_event_cntr_set_priority_mode";
   local:
     *;
 };
