@@ -22,6 +22,8 @@ methods = (
     'get_time_mode',
     'set_time_mode',
     'get_length_mode',
+    'get_priority_mode',
+    'set_priority_mode',
 )
 signals = ()
 

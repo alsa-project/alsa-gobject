@@ -78,6 +78,13 @@ void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
                                           ALSASeqEventLengthMode *mode,
                                           GError **error);
 
+void alsaseq_event_cntr_get_priority_mode(
+                                ALSASeqEventCntr *self, gsize index,
+                                ALSASeqEventPriorityMode *mode, GError **error);
+void alsaseq_event_cntr_set_priority_mode(
+                                ALSASeqEventCntr *self, gsize index,
+                                ALSASeqEventPriorityMode mode, GError **error);
+
 G_END_DECLS
 
 #endif
