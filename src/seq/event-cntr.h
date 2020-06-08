@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <seq/alsaseq-enums.h>
+
 G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_EVENT_CNTR     (alsaseq_event_cntr_get_type())
@@ -51,6 +53,12 @@ void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count);
 
 void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
 				gsize count, gsize *cells, GError **error);
+
+void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
+                                    ALSASeqEventType *ev_type, GError **error);
+void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
+                                         gsize index, ALSASeqEventType ev_type,
+                                         GError **error);
 
 G_END_DECLS
 
