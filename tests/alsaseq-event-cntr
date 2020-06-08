@@ -50,6 +50,8 @@ methods = (
     'set_tstamp_data',
     'get_connect_data',
     'set_connect_data',
+    'get_result_data',
+    'set_result_data',
 )
 signals = ()
 
