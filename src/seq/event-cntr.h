@@ -90,6 +90,11 @@ void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
 void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
                                   gint8 tag, GError **error);
 
+void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
+                                       guint8 *queue_id, GError **error);
+void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
+                                       guint8 queue_id, GError **error);
+
 G_END_DECLS
 
 #endif

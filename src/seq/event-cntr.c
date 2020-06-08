@@ -543,3 +543,65 @@ void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
 
     ev->tag = tag;
 }
+
+/**
+ * alsaseq_event_cntr_get_queue_id:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @queue_id: (out): The numerical ID of queue to deliver the event. One of
+ *                   #ALSASeqSpecificQueueId is available as well.
+ * @error: A #GError.
+ *
+ * Get the numerical ID of queue to deliver the event.
+ */
+void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
+                                       guint8 *queue_id, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    *queue_id = ev->queue;
+}
+
+/**
+ * alsaseq_event_cntr_set_queue_id:
+ * @self: A #ALSASeqEventCntr.
+ * @index: The index of event to set.
+ * @queue_id: The numerical ID of queue to deliver the event. One of
+ *            #ALSASeqSpecificQueueId is available as well.
+ * @error: A #GError.
+ *
+ * Set the numerical ID of queue to deliver the event.
+ */
+void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
+                                       guint8 queue_id, GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+
+    ev = event_iterator_find(&iter, index);
+    if (ev == NULL) {
+        generate_error(error, ENOENT);
+        return;
+    }
+
+    ev->queue = queue_id;
+}
