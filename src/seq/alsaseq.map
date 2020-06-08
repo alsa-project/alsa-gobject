@@ -202,6 +202,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_cntr_set_byte_data";
     "alsaseq_event_cntr_get_quadlet_data";
     "alsaseq_event_cntr_set_quadlet_data";
+    "alsaseq_event_cntr_get_blob_data";
+    "alsaseq_event_cntr_set_blob_data";
   local:
     *;
 };
