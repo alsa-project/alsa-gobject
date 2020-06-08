@@ -40,6 +40,7 @@ typedef struct {
     size_t buf_len;
     ALSASeqEventFixed *ev_fixed;
     ALSASeqEventVariable *ev_var;
+    ALSASeqEventCntr *ev_cntr;
 } UserClientSource;
 
 enum seq_user_client_prop_type {
@@ -453,6 +454,8 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
     }
 
+    seq_event_cntr_set_buf(src->ev_cntr, src->buf, len);
+
     buf = src->buf;
     while (len >= sizeof(*event)) {
         struct snd_seq_event *data_ptr;
@@ -511,6 +514,7 @@ static void seq_user_client_finalize_src(GSource *gsrc)
 
     g_object_unref(src->ev_fixed);
     g_object_unref(src->ev_var);
+    g_object_unref(src->ev_cntr);
 
     g_free(src->buf);
     g_object_unref(src->self);
@@ -556,6 +560,7 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
 
     src->ev_fixed = g_object_new(ALSASEQ_TYPE_EVENT_FIXED, NULL);
     src->ev_var = g_object_new(ALSASEQ_TYPE_EVENT_VARIABLE, NULL);
+    src->ev_cntr = g_object_new(ALSASEQ_TYPE_EVENT_CNTR, NULL);
 
     g_source_set_name(*gsrc, "ALSASeqUserClient");
     g_source_set_priority(*gsrc, G_PRIORITY_HIGH_IDLE);
