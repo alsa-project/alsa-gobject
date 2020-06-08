@@ -3,6 +3,46 @@
 
 #include <errno.h>
 
+/**
+ * SECTION: event-cntr
+ * @Title: ALSASeqEventCntr
+ * @Short_description: A GObject-derived object to represent container for a
+ *                     batch of events
+ *
+ * A #ALSASeqEventCntr is a GObject-derived object to represent container for
+ * a batch of events. The instance of object has accessor methods to properties
+ * and data for each events expanded to the flat memory space. The object is
+ * designed for applications to maintain collections of event by the convenient
+ * way which each programming language produces.
+ *
+ * This is the list of properties for event:
+ * - the type of event
+ * - the mode of time stamp
+ * - the mode of time
+ * - the mode of length
+ * - the mode of priority
+ * - associated tag
+ * - the numerical ID of associated queue
+ * - time stamp
+ * - destination address
+ * - source address
+ *
+ * This is the list of data for event. These data shared the same storage and
+ * an event can have the sole type of data:
+ * - note
+ * - control
+ * - 12 bytes
+ * - 3 quadlets
+ * - blob as variable length of bytes
+ * - queue control
+ * - arbitrary time stamp
+ * - arbitrary address
+ * - connection with source and destination addresses
+ * - result
+ *
+ * The data shares the same storage in event. An event can have the sole type
+ * of data. The type of data is not associated to the type of event directly.
+ */
 typedef struct _ALSASeqEventCntrPrivate {
     guint8 *buf;
     gsize length;
