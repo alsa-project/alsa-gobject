@@ -56,13 +56,16 @@ tests = {
   ],
 }
 
+dir_paths = []
 foreach path, scripts: tests
-  objdir = join_paths(meson.build_root(), 'src', path)
+  dir_paths += join_paths(meson.build_root(), 'src', path)
+endforeach
 
-  env = environment()
-  env.append('LD_LIBRARY_PATH', objdir, separator : ':')
-  env.append('GI_TYPELIB_PATH', objdir, separator : ':')
+env = environment()
+env.append('LD_LIBRARY_PATH', ':'.join(dir_paths), separator : ':')
+env.append('GI_TYPELIB_PATH', ':'.join(dir_paths), separator : ':')
 
+foreach path, scripts: tests
   foreach script: scripts
     prog = find_program(script)
     test(script, prog,
