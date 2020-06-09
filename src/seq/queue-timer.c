@@ -6,19 +6,17 @@
 /**
  * SECTION: queue-timer
  * @Title: ALSASeqQueueTimer
- * @Short_description: A GObject-derived abstract object to represent timer for
- *                     queue
+ * @Short_description: A GObject-derived object to represent timer for queue
  *
- * A #ALSASeqQueueTimer is a GObject-derived abstract object to represent common
- * properties and methods of timer for queue. Applications can use derived
- * object; ALSASeqQueueTimerAlsa.
+ * A #ALSASeqQueueTimer is a GObject-derived object to represent the information
+ * of timer which drives the queue.
  *
  * The object wraps 'struct snd_seq_queue_timer' in UAPI of Linux sound subsystem.
  */
 struct _ALSASeqQueueTimerPrivate {
     struct snd_seq_queue_timer timer;
 };
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ALSASeqQueueTimer, alsaseq_queue_timer, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqQueueTimer, alsaseq_queue_timer, G_TYPE_OBJECT)
 
 enum seq_queue_timer_prop_type {
     SEQ_QUEUE_TIMER_PROP_QUEUE_ID = 1,
@@ -77,6 +75,18 @@ static void alsaseq_queue_timer_class_init(ALSASeqQueueTimerClass *klass)
 static void alsaseq_queue_timer_init(ALSASeqQueueTimer *self)
 {
     return;
+}
+
+/**
+ * alsaseq_queue_timer_new:
+ *
+ * Allocate and return the instance of #ALSASeqQueueTimer.
+ *
+ * Returns: the instance of #ALSASeqQueueTimer.
+ */
+ALSASeqQueueTimer *alsaseq_queue_timer_new()
+{
+    return g_object_new(ALSASEQ_TYPE_QUEUE_TIMER, NULL);
 }
 
 /**
