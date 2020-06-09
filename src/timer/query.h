@@ -32,6 +32,8 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                  const ALSATimerDeviceParams *device_params,
                                  GError **error);
 
+void alsatimer_get_tstamp_source(int *clock_id, GError **error);
+
 G_END_DECLS
 
 #endif

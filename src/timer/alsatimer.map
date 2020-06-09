@@ -13,6 +13,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_get_device_id_list";
     "alsatimer_get_device_info";
     "alsatimer_get_device_status";
+    "alsatimer_get_tstamp_source";
 
     "alsatimer_device_id_get_type";
     "alsatimer_device_id_new";

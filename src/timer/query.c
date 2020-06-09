@@ -2,6 +2,7 @@
 #include "query.h"
 #include "privates.h"
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -12,10 +13,12 @@
 #include <stdbool.h>
 
 #include <sound/asound.h>
+#include <time.h>
 
 #include <libudev.h>
 
 #define TIMER_SYSNAME_TEMPLATE  "timer"
+#define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
 
 /**
  * SECTION: query
@@ -277,4 +280,95 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
         generate_error(error, errno);
 
     close(fd);
+}
+
+static void timer_get_node_param_value(const char *param_name, char *buf,
+                                       gsize size, int *val, GError **error)
+{
+    char literal[64];
+    int fd;
+    ssize_t len;
+    long v;
+    char *term;
+
+    snprintf(literal, sizeof(literal), SYSFS_SND_TIMER_NODE "parameters/%s",
+             param_name);
+
+    fd = open(literal, O_RDONLY);
+    if (fd < 0) {
+        generate_error(error, errno);
+        return;
+    }
+
+    len = read(fd, buf, size);
+    if (len < 0) {
+        generate_error(error, errno);
+        goto end;
+    }
+
+    v = strtol(buf, &term, 10);
+    if (errno > 0)
+        generate_error(error, errno);
+    else if (*term != '\n')
+        generate_error(error, EIO);
+    else
+        *val = (int)v;
+end:
+    close(fd);
+}
+
+/**
+ * alsatimer_get_tstamp_source:
+ * @clock_id: (out): The clock source for timestamp. The value of CLOCK_XXX in
+ *                   UAPI of Linux kernel.
+ * @error: A #GError.
+ *
+ * Get the clock source for timestamp when #ALSATimerUserInstance is configured
+ * to receive event with timestamp. The source is selected according to
+ * parameter of 'snd-timer' kernel module, and the call of function is just to
+ * refer to it.
+ *
+ * 0 means CLOCK_REALTIME is used. 1 means CLOCK_MONOTONIC is used.
+ */
+void alsatimer_get_tstamp_source(int *clock_id, GError **error)
+{
+    int val;
+    gsize size;
+    char *buf;
+
+    // Count required digits.
+    val = INT_MAX;
+    size = 0;
+    while (val > 0) {
+        val /= 10;
+        ++size;
+    }
+
+    // For codes of sign and new line.
+    size += 2;
+
+    buf = g_try_malloc0(size);
+    if (buf == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    timer_get_node_param_value("timer_tstamp_monotonic", buf, size, &val,
+                               error);
+    if (*error != NULL)
+        goto end;
+
+    switch (val) {
+    case 0:
+        *clock_id = CLOCK_REALTIME;
+        break;
+    case 1:
+        *clock_id = CLOCK_MONOTONIC;
+        break;
+    default:
+        generate_error(error, EPROTO);
+        break;
+    }
+end:
+    g_free(buf);
 }
