@@ -34,4 +34,5 @@ alsaseq_queue_status_get_type
 alsaseq_queue_tempo_get_type
 alsaseq_queue_timer_get_type
 alsaseq_queue_timer_alsa_get_type
+alsaseq_queue_timer_data_alsa_get_type
 alsaseq_event_cntr_get_type

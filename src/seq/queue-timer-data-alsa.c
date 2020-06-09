@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "queue-timer-data-alsa.h"
 
+/**
+ * SECTION: queue-timer-data-alsa
+ * @Title: ALSASeqQueueTimerDataAlsa
+ * @Short_description: A boxed object to represent data of queue timer in the
+ *                     case of ALSATimer
+ *
+ * A #ALSASeqQueueTimerDataAlsa is a boxed object to represent data of queue
+ * timer in the case of ALSATimer. The instance of object is one of data
+ * properties in queue timer.
+ */
 ALSASeqQueueTimerDataAlsa *seq_queue_timer_data_alsa_copy(const ALSASeqQueueTimerDataAlsa *self)
 {
     return g_memdup(self, sizeof(*self));

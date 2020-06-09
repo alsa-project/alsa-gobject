@@ -52,6 +52,7 @@
         <xi:include href="xml/queue-tempo.xml"/>
         <xi:include href="xml/queue-timer.xml"/>
         <xi:include href="xml/queue-timer-alsa.xml"/>
+        <xi:include href="xml/queue-timer-data-alsa.xml"/>
         <xi:include href="xml/remove-filter.xml"/>
     </chapter>
 
