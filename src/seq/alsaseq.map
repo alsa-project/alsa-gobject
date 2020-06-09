@@ -150,6 +150,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_queue_timer_alsa_new";
 
     "alsaseq_queue_timer_data_alsa_get_type";
+    "alsaseq_queue_timer_data_alsa_get_device_id";
+    "alsaseq_queue_timer_data_alsa_set_device_id";
 
     "alsaseq_remove_filter_get_type";
     "alsaseq_remove_filter_new_with_dest_addr";
