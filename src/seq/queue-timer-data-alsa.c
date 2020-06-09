@@ -33,3 +33,29 @@ void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self
 {
     self->device_id = *(struct snd_timer_id *)device_id;
 }
+
+/**
+ * alsaseq_queue_timer_data_alsa_get_resolution:
+ * @self: A #ALSASeqQueueTimerDataAlsa.
+ * @resolution: (out): The resolution of timer.
+ *
+ * Get the resolution of timer which drives the queue.
+ */
+void alsaseq_queue_timer_data_alsa_get_resolution(ALSASeqQueueTimerDataAlsa *self,
+                                                  guint *resolution)
+{
+    *resolution = self->resolution;
+}
+
+/**
+ * alsaseq_queue_timer_data_alsa_set_resolution:
+ * @self: A #ALSASeqQueueTimerDataAlsa.
+ * @resolution: The resolution of timer.
+ *
+ * Set the resolution of timer which drives the queue.
+ */
+void alsaseq_queue_timer_data_alsa_set_resolution(ALSASeqQueueTimerDataAlsa *self,
+                                                  guint resolution)
+{
+    self->resolution = resolution;
+}

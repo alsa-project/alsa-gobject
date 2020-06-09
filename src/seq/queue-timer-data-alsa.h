@@ -25,6 +25,10 @@ void alsaseq_queue_timer_data_alsa_get_device_id(ALSASeqQueueTimerDataAlsa *self
 void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId *device_id);
 
+void alsaseq_queue_timer_data_alsa_get_resolution(ALSASeqQueueTimerDataAlsa *self,
+                                                  guint *resolution);
+void alsaseq_queue_timer_data_alsa_set_resolution(ALSASeqQueueTimerDataAlsa *self,
+                                                  guint resolution);
 G_END_DECLS
 
 #endif
