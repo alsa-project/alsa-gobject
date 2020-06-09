@@ -14,7 +14,12 @@ props = (
     'queue-id',
     'type',
 )
-methods = ()
+
+methods = (
+    'get_alsa_data',
+    'set_alsa_data',
+)
+
 signals = ()
 
 if not test(target, props, methods, signals):

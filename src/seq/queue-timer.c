@@ -79,6 +79,46 @@ static void alsaseq_queue_timer_init(ALSASeqQueueTimer *self)
     return;
 }
 
+/**
+ * alsaseq_queue_timer_get_alsa_data:
+ * @self: A #ALSASeqQueueTimer.
+ * @data: (out)(transfer none): A #ALSASeqQueueTimerDataAlsa.
+ *
+ * Refer to the data of timer for queue in the case that the device in ALSATimer
+ * drives the timer.
+ */
+void alsaseq_queue_timer_get_alsa_data(ALSASeqQueueTimer *self,
+                                       const ALSASeqQueueTimerDataAlsa **data)
+{
+    ALSASeqQueueTimerPrivate *priv;
+
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(self));
+    priv = alsaseq_queue_timer_get_instance_private(self);
+
+    *data = (const ALSASeqQueueTimerDataAlsa *)&priv->timer.u.alsa;
+}
+
+/**
+ * alsaseq_queue_timer_set_alsa_data:
+ * @self: A #ALSASeqQueueTimer.
+ * @data: A #ALSASeqQueueTimerDataAlsa.
+ *
+ * Set the data of timer for queue in the case that the device in ALSATimer
+ * drives the timer.
+ */
+void alsaseq_queue_timer_set_alsa_data(ALSASeqQueueTimer *self,
+                                       const ALSASeqQueueTimerDataAlsa *data)
+{
+    ALSASeqQueueTimerPrivate *priv;
+
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(self));
+    priv = alsaseq_queue_timer_get_instance_private(self);
+
+    priv->timer.type = SNDRV_SEQ_TIMER_ALSA;
+    priv->timer.u.alsa.id = data->device_id;
+    priv->timer.u.alsa.resolution = data->resolution;
+}
+
 void seq_queue_timer_refer_private(ALSASeqQueueTimer *self,
                                    struct snd_seq_queue_timer **timer)
 {

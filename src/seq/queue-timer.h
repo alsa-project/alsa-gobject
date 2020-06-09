@@ -6,7 +6,7 @@
 #include <glib-object.h>
 
 #include <seq/alsaseq-enums.h>
-#include <timer/device-id.h>
+#include <seq/queue-timer-data-alsa.h>
 
 G_BEGIN_DECLS
 
@@ -47,6 +47,11 @@ struct _ALSASeqQueueTimerClass {
 };
 
 GType alsaseq_queue_timer_get_type() G_GNUC_CONST;
+
+void alsaseq_queue_timer_get_alsa_data(ALSASeqQueueTimer *self,
+                                       const ALSASeqQueueTimerDataAlsa **data);
+void alsaseq_queue_timer_set_alsa_data(ALSASeqQueueTimer *self,
+                                       const ALSASeqQueueTimerDataAlsa *data);
 
 G_END_DECLS
 
