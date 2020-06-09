@@ -28,6 +28,7 @@ sources = files(
   'queue-tempo.c',
   'queue-timer.c',
   'queue-timer-alsa.c',
+  'queue-timer-data-alsa.c',
   'remove-filter.c',
   'event-cntr.c',
 )
@@ -52,6 +53,7 @@ headers = files(
   'queue-tempo.h',
   'queue-timer.h',
   'queue-timer-alsa.h',
+  'queue-timer-data-alsa.h',
   'remove-filter.h',
   'event-cntr.h',
 )
