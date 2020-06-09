@@ -12,7 +12,6 @@
 #include <seq/queue-info.h>
 #include <seq/queue-tempo.h>
 #include <seq/queue-timer.h>
-#include <seq/queue-timer-alsa.h>
 #include <seq/remove-filter.h>
 #include <seq/event-cntr.h>
 
