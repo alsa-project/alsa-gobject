@@ -144,6 +144,7 @@ gnome.generate_gir(library,
   includes: [
     'GLib-2.0',
     'GObject-2.0',
+    'ALSATimer-0.0',
   ],
   install: true,
 )
