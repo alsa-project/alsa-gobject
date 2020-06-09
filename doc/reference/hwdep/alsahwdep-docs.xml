@@ -13,7 +13,7 @@
     </bookinfo>
 
     <chapter id="introduction">
-        <title></title>
+        <title>Introduction</title>
         <param>This library is designed for applications to manipulate ALSA
         hwdep character device and retrieve common information of hardware
         dependent functionality abstracted as hwdep device. As the design
