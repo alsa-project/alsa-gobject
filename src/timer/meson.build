@@ -114,7 +114,7 @@ pkg.generate(library,
 )
 
 # Generate metadata for gobject introspection.
-gnome.generate_gir(library,
+alsatimer_gir = gnome.generate_gir(library,
   sources: sources + headers,
   nsversion: '0.0',
   namespace: namespace,
