@@ -27,26 +27,6 @@ enum seq_queue_timer_prop_type {
 };
 static GParamSpec *seq_queue_timer_props[SEQ_QUEUE_TIMER_PROP_COUNT] = { NULL, };
 
-static void seq_queue_timer_set_property(GObject *obj, guint id,
-                                         const GValue *val, GParamSpec *spec)
-{
-    ALSASeqQueueTimer *self = ALSASEQ_QUEUE_TIMER(obj);
-    ALSASeqQueueTimerPrivate *priv =
-                                alsaseq_queue_timer_get_instance_private(self);
-
-    switch (id) {
-    case SEQ_QUEUE_TIMER_PROP_QUEUE_ID:
-        priv->timer.queue = g_value_get_int(val);
-        break;
-    case SEQ_QUEUE_TIMER_PROP_TIMER_TYPE:
-        priv->timer.type = (int)g_value_get_enum(val);
-        break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
-        break;
-    }
-}
-
 static void seq_queue_timer_get_property(GObject *obj, guint id, GValue *val,
                                          GParamSpec *spec)
 {
@@ -71,7 +51,6 @@ static void alsaseq_queue_timer_class_init(ALSASeqQueueTimerClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
-    gobject_class->set_property = seq_queue_timer_set_property;
     gobject_class->get_property = seq_queue_timer_get_property;
 
     seq_queue_timer_props[SEQ_QUEUE_TIMER_PROP_QUEUE_ID] =
@@ -80,7 +59,7 @@ static void alsaseq_queue_timer_class_init(ALSASeqQueueTimerClass *klass)
                          "ALSASeqSpecificClientId.",
                          G_MININT, G_MAXINT,
                          -1,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READABLE);
 
     seq_queue_timer_props[SEQ_QUEUE_TIMER_PROP_TIMER_TYPE] =
         g_param_spec_enum("type", "type",
@@ -88,7 +67,7 @@ static void alsaseq_queue_timer_class_init(ALSASeqQueueTimerClass *klass)
                           "ALSASeqQueueTimerType.",
                           ALSASEQ_TYPE_QUEUE_TIMER_TYPE,
                           ALSASEQ_QUEUE_TIMER_TYPE_ALSA,
-                          G_PARAM_READWRITE);
+                          G_PARAM_READABLE);
 
     g_object_class_install_properties(gobject_class,
                                       SEQ_QUEUE_TIMER_PROP_COUNT,
