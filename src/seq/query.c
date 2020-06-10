@@ -575,6 +575,7 @@ void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
         return;
     }
 
+    index = 0;
     for (i = 0; i < maximum_count; ++i) {
         struct snd_seq_queue_info info;
 
