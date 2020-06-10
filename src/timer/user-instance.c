@@ -340,7 +340,7 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
     case ALSATIMER_EVENT_DATA_TYPE_TICK:
         event_size = sizeof(struct snd_timer_read);
         break;
-    case ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP:
+    case ALSATIMER_EVENT_DATA_TYPE_TSTAMP:
         event_size = sizeof(struct snd_timer_tread);
         break;
     default:
