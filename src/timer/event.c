@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "event.h"
 
+/**
+ * SECTION: event
+ * @Title: ALSATimerEvent
+ * @Short_description: A boxed object to represent event of timer
+ *
+ * A #ALSATimerEvent is a boxed object to represent event of timer. The
+ * instance of object uses single storage for two types of event data;
+ * #ALSATimerEventDataTick for and #ALSATimerEventDataTstamp. Applications can
+ * decide to use one of the two by passing one of #ALSATimerEventType to the
+ * call of alsatimer_user_instance_attach().
+ */
 ALSATimerEvent *timer_event_copy(const ALSATimerEvent *self)
 {
     return g_memdup(self, sizeof(*self));
