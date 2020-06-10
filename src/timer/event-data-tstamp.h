@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <timer/alsatimer-enums.h>
+
 #include <sound/asound.h>
 
 G_BEGIN_DECLS
@@ -14,6 +16,15 @@ G_BEGIN_DECLS
 typedef struct snd_timer_tread ALSATimerEventDataTstamp;
 
 GType alsatimer_event_data_tstamp_get_type() G_GNUC_CONST;
+
+void alsatimer_event_data_tstamp_get_event(ALSATimerEventDataTstamp *self,
+                                           ALSATimerEventType *event);
+
+void alsatimer_event_data_tstamp_get_tstamp(ALSATimerEventDataTstamp *self,
+                                            guint *tv_sec, guint *tv_nsec);
+
+void alsatimer_event_data_tstamp_get_val(ALSATimerEventDataTstamp *self,
+                                         guint *val);
 
 G_END_DECLS
 
