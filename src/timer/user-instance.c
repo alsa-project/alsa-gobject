@@ -35,7 +35,6 @@ typedef struct {
     gpointer tag;
     void *buf;
     unsigned int buf_len;
-    ALSATimerEventData *event_data;
 } TimerUserInstanceSource;
 
 enum timer_user_instance_sig_type {
@@ -66,7 +65,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
     /**
      * ALSATimerUserInstance::handle-event:
      * @self: A #ALSATimerUserInstance.
-     * @event_data: (transfer none): An object derived from #ALSATimerEventData.
+     * @event: (transfer none): The instance of #ALSATimerEvent.
      *
      * When event occurs for any element, this signal is emit.
      */
@@ -77,7 +76,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
                      G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__OBJECT,
-                     G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA);
+                     G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT);
 
     /**
      * ALSATimerUserInstance::handle-disconnection:
@@ -295,40 +294,6 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     }
 }
 
-static void handle_tick_events(TimerUserInstanceSource *src, int len)
-{
-    struct snd_timer_read *ev = src->buf;
-
-    while (len >= sizeof(*ev)) {
-        ALSATimerEventDataTick *data = ALSATIMER_EVENT_DATA_TICK(src->event_data);
-
-        timer_event_data_tick_set_data(data, ev);
-        g_signal_emit(src->self,
-                timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT],
-                0, src->event_data);
-
-        len -= sizeof(*ev);
-        ++ev;
-    }
-}
-
-static void handle_timestamp_events(TimerUserInstanceSource *src, int len)
-{
-    struct snd_timer_tread *ev = src->buf;
-
-    while (len >= sizeof(*ev)) {
-        ALSATimerEventDataTimestamp *data = ALSATIMER_EVENT_DATA_TIMESTAMP(src->event_data);
-
-        timer_event_data_timestamp_set_data(data, ev);
-        g_signal_emit(src->self,
-                timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT],
-                0, src->event_data);
-
-        len -= sizeof(*ev);
-        ++ev;
-    }
-}
-
 static gboolean timer_user_instance_check_src(GSource *gsrc)
 {
     TimerUserInstanceSource *src = (TimerUserInstanceSource *)gsrc;
@@ -347,7 +312,9 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
     ALSATimerUserInstance *self = src->self;
     ALSATimerUserInstancePrivate *priv;
     GIOCondition condition;
+    size_t event_size;
     int len;
+    guint8 *buf;
 
     priv = alsatimer_user_instance_get_instance_private(self);
     if (priv->fd < 0)
@@ -369,10 +336,28 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
     }
 
-    if (priv->event_data_type == ALSATIMER_EVENT_DATA_TYPE_TICK)
-        handle_tick_events(src, len);
-    else
-        handle_timestamp_events(src, len);
+    switch (priv->event_data_type) {
+    case ALSATIMER_EVENT_DATA_TYPE_TICK:
+        event_size = sizeof(struct snd_timer_read);
+        break;
+    case ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP:
+        event_size = sizeof(struct snd_timer_tread);
+        break;
+    default:
+        return G_SOURCE_CONTINUE;
+    }
+
+    buf = src->buf;
+    while (len > 0) {
+        ALSATimerEvent *ev = (ALSATimerEvent *)buf;
+
+        g_signal_emit(src->self,
+                      timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT],
+                      0, ev);
+
+        buf += event_size;
+        len -= event_size;
+    }
 
     // Just be sure to continue to process this source.
     return G_SOURCE_CONTINUE;
@@ -383,7 +368,6 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
     TimerUserInstanceSource *src = (TimerUserInstanceSource *)gsrc;
 
     g_free(src->buf);
-    g_object_unref(src->event_data);
     g_object_unref(src->self);
 }
 
@@ -405,7 +389,6 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
             .finalize       = timer_user_instance_finalize_src,
     };
     ALSATimerUserInstancePrivate *priv;
-    GType event_data_class;
     TimerUserInstanceSource *src;
     long page_size = sysconf(_SC_PAGESIZE);
     void *buf;
@@ -415,18 +398,6 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
 
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
-        return;
-    }
-
-    switch (priv->event_data_type) {
-    case ALSATIMER_EVENT_DATA_TYPE_TICK:
-        event_data_class = ALSATIMER_TYPE_EVENT_DATA_TICK;
-        break;
-    case ALSATIMER_EVENT_DATA_TYPE_TIMESTAMP:
-        event_data_class = ALSATIMER_TYPE_EVENT_DATA_TIMESTAMP;
-        break;
-    default:
-        generate_error(error, EINVAL);
         return;
     }
 
@@ -447,9 +418,6 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
-
-    src->event_data = g_object_new(event_data_class,
-		                   "type", priv->event_data_type, NULL);
 }
 
 /**

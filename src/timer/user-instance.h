@@ -9,7 +9,7 @@
 #include <timer/instance-info.h>
 #include <timer/instance-params.h>
 #include <timer/instance-status.h>
-#include <timer/event-data.h>
+#include <timer/event.h>
 
 G_BEGIN_DECLS
 
@@ -51,12 +51,12 @@ struct _ALSATimerUserInstanceClass {
     /**
      * ALSATimerUserInstanceClass::handle_event:
      * @self: A #ALSATimerUserInstance.
-     * @event_data: (transfer none): An object derived from #ALSATimerEventData.
+     * @event: (transfer none): An object derived from #ALSATimerEvent.
      *
      * When event occurs, this signal is emit.
      */
     void (*handle_event)(ALSATimerUserInstance *self,
-                         const ALSATimerEventData *event_data);
+                         const ALSATimerEvent *event);
 
     /**
      * ALSATimerUserInstanceClass::handle_disconnection:
