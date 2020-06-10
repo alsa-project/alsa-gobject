@@ -6,6 +6,7 @@
 #include <glib-object.h>
 
 #include <timer/event-data-tick.h>
+#include <timer/event-data-timestamp.h>
 
 G_BEGIN_DECLS
 
@@ -13,7 +14,7 @@ G_BEGIN_DECLS
 
 typedef union {
     ALSATimerEventDataTick tick;
-    struct snd_timer_tread timestamp;
+    ALSATimerEventDataTimestamp timestamp;
 } ALSATimerEvent;
 
 GType alsatimer_event_get_type() G_GNUC_CONST;
