@@ -19,3 +19,29 @@ ALSATimerEventDataTick *timer_event_data_tick_copy(const ALSATimerEventDataTick 
 }
 
 G_DEFINE_BOXED_TYPE(ALSATimerEventDataTick, alsatimer_event_data_tick, timer_event_data_tick_copy, g_free)
+
+/**
+ * alsatimer_event_data_tick_get_resolution:
+ * @self: A #ALSATimerEventDataTick.
+ * @resolution: (out): The resolution of tick event.
+ *
+ * Get the resolution of tick event.
+ */
+void alsatimer_event_data_tick_get_resolution(ALSATimerEventDataTick *self,
+                                              guint *resolution)
+{
+    *resolution = self->resolution;
+}
+
+/**
+ * alsatimer_event_data_tick_get_ticks:
+ * @self: A #ALSATimerEventDataTick.
+ * @ticks: (out): The tick count since the last event.
+ *
+ * Get the tick count since the last event.
+ */
+void alsatimer_event_data_tick_get_ticks(ALSATimerEventDataTick *self,
+                                         guint *ticks)
+{
+    *ticks = self->ticks;
+}
