@@ -21,6 +21,7 @@ sources = files(
   'event-data.c',
   'event-data-tick.c',
   'event-data-timestamp.c',
+  'event.c',
 )
 
 headers = files(
@@ -36,6 +37,7 @@ headers = files(
   'event-data.h',
   'event-data-tick.h',
   'event-data-timestamp.h',
+  'event.h',
 )
 
 privates = files(
