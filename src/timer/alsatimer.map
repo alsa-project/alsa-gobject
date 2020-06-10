@@ -63,6 +63,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_event_data_tstamp_get_val";
 
     "alsatimer_event_get_type";
+    "alsatimer_event_get_tick_data";
+    "alsatimer_event_get_tstamp_data";
   local:
     *;
 };
