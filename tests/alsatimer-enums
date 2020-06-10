@@ -53,7 +53,7 @@ event_types = (
 
 event_data_types = (
     'TICK',
-    'TIMESTAMP',
+    'TSTAMP',
 )
 
 types = {
