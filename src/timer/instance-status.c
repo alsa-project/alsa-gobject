@@ -101,15 +101,15 @@ static void alsatimer_instance_status_init(ALSATimerInstanceStatus *self)
 }
 
 /**
- * alsatimer_instance_status_get_timestamp:
+ * alsatimer_instance_status_get_tstamp:
  * @self: A #ALSATimerInstanceStatus.
  * @tv_sec: (out): The second part of timestamp.
  * @tv_nsec: (out): The nano second part of timerstamp.
  *
  * Get timestamp for the latest update.
  */
-void alsatimer_instance_status_get_timestamp(ALSATimerInstanceStatus *self,
-                                             guint *tv_sec, guint *tv_nsec)
+void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
+                                          guint *tv_sec, guint *tv_nsec)
 {
     ALSATimerInstanceStatusPrivate *priv;
 
