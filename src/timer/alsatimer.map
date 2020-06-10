@@ -53,8 +53,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_instance_status_get_type";
     "alsatimer_instance_status_get_timestamp";
 
-    "alsatimer_event_data_get_type";
-
     "alsatimer_event_data_tick_get_type";
     "alsatimer_event_data_tick_get_resolution";
     "alsatimer_event_data_tick_get_ticks";
