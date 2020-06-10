@@ -59,6 +59,8 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_event_data_timestamp_get_type";
     "alsatimer_event_data_timestamp_get_timestamp";
+
+    "alsatimer_event_get_type";
   local:
     *;
 };
