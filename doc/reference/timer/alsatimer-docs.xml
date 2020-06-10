@@ -43,7 +43,7 @@
         <xi:include href="xml/instance-params.xml"/>
         <xi:include href="xml/event-data.xml"/>
         <xi:include href="xml/event-data-tick.xml"/>
-        <xi:include href="xml/event-data-timestamp.xml"/>
+        <xi:include href="xml/event-data-tstamp.xml"/>
     </chapter>
 
     <index id="index-all">
