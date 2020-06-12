@@ -7,7 +7,6 @@ alsactl_card_get_type
 alsactl_card_info_get_type
 alsactl_elem_id_get_type
 alsactl_elem_info_get_type
-alsactl_elem_info_bytes_get_type
 alsactl_elem_info_iec60958_get_type
 alsactl_elem_info_int64_get_type
 alsactl_elem_value_get_type
