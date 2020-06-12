@@ -3,7 +3,7 @@
 
 /**
  * SECTION: elem-info
- * @Title: ALSACtlElemInfoInt
+ * @Title: ALSACtlElemInfo
  * @Short_description: An abstract object to represent the common information
  *                     of any type of element
  *
