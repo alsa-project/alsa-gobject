@@ -422,8 +422,14 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
         *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_ENUM, "labels", labels,
                                   NULL);
-
+        alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels,
+                                        error);
         g_strfreev(labels);
+        if (*error != NULL) {
+            g_object_unref(*elem_info);
+            return;
+        }
+
         break;
     }
     default:
