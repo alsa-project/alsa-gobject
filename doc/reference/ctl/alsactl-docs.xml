@@ -37,7 +37,6 @@
         <xi:include href="xml/card-info.xml"/>
         <xi:include href="xml/elem-id.xml"/>
         <xi:include href="xml/elem-info.xml"/>
-        <xi:include href="xml/elem-info-enum.xml"/>
         <xi:include href="xml/elem-info-bytes.xml"/>
         <xi:include href="xml/elem-info-iec60958.xml"/>
         <xi:include href="xml/elem-info-int64.xml"/>
