@@ -14,7 +14,6 @@ sources = files(
   'card-info.c',
   'elem-id.c',
   'elem-info.c',
-  'elem-info-iec60958.c',
   'elem-info-int64.c',
   'elem-value.c',
 )
@@ -25,7 +24,6 @@ headers = files(
   'card-info.h',
   'elem-id.h',
   'elem-info.h',
-  'elem-info-iec60958.h',
   'elem-info-int64.h',
   'elem-value.h',
 )
