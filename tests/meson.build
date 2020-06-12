@@ -7,7 +7,6 @@ tests = {
     'alsactl-card',
     'alsactl-card-info',
     'alsactl-elem-info',
-    'alsactl-elem-info-int',
     'alsactl-elem-info-enum',
     'alsactl-elem-info-bytes',
     'alsactl-elem-info-iec60958',
