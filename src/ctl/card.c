@@ -574,6 +574,7 @@ static int prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labe
     unsigned int length;
     char *pos;
 
+    length = 0;
     for (count = 0; labels[count] != NULL; ++count) {
         const gchar *label = labels[count];
 
