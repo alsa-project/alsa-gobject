@@ -22,6 +22,7 @@ struct _ALSACtlElemInfoPrivate {
         gint32 max;
         gint32 step;
     } int_data;
+    gchar **enum_data;
 };
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ALSACtlElemInfo, alsactl_elem_info, G_TYPE_OBJECT)
 
@@ -81,12 +82,23 @@ static void ctl_elem_info_get_property(GObject *obj, guint id, GValue *val,
     }
 }
 
+static void ctl_elem_info_finalize(GObject *obj)
+{
+    ALSACtlElemInfo *self = ALSACTL_ELEM_INFO(obj);
+    ALSACtlElemInfoPrivate *priv = alsactl_elem_info_get_instance_private(self);
+
+    g_strfreev(priv->enum_data);
+
+    G_OBJECT_CLASS(alsactl_elem_info_parent_class)->finalize(obj);
+}
+
 static void alsactl_elem_info_class_init(ALSACtlElemInfoClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->set_property = ctl_elem_info_set_property;
     gobject_class->get_property = ctl_elem_info_get_property;
+    gobject_class->finalize = ctl_elem_info_finalize;
 
     ctl_elem_info_props[CTL_ELEM_INFO_PROP_ELEM_ID] =
         g_param_spec_boxed("elem-id", "elem-id",
@@ -122,7 +134,9 @@ static void alsactl_elem_info_class_init(ALSACtlElemInfoClass *klass)
 
 static void alsactl_elem_info_init(ALSACtlElemInfo *self)
 {
-    return;
+    ALSACtlElemInfoPrivate *priv = alsactl_elem_info_get_instance_private(self);
+
+    priv->enum_data = NULL;
 }
 
 /**
@@ -247,6 +261,62 @@ void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
     priv->info.value.integer.min = (long long)data[0];
     priv->info.value.integer.max = (long long)data[1];
     priv->info.value.integer.step = (long long)data[2];
+}
+
+/**
+ * alsactl_elem_info_get_enum_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array zero-terminated=1)(out)(transfer none): The array with elements
+ *        for the label entries of enumerated element.
+ * @error: A #GError.
+ *
+ * Refer to the array with elements for the label entries of enumerated element
+ * in internal storage. The call of function is successful as long as the
+ * information is for enumerated type.
+ */
+void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self,
+                                     const gchar ***data, GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    *data = (const gchar **)priv->enum_data;
+}
+
+/**
+ * alsactl_elem_info_set_enum_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array zero-terminated=1): The array with elements for the label
+ *        entries of enumerated element.
+ * @error: A #GError.
+ *
+ * Copy the array with elements for the label entries of enumerated element
+ * into internal storage. The call of function is successful as long as the
+ * information is for enumerated type.
+ */
+void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self,
+                                     const gchar **data, GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    g_strfreev(priv->enum_data);
+
+    priv->enum_data = g_strdupv((gchar **)data);
 }
 
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self,

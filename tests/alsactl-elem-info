@@ -21,6 +21,8 @@ methods = (
     'set_int_data',
     'get_int64_data',
     'set_int64_data',
+    'get_enum_data',
+    'set_enum_data',
 )
 signals = ()
 
