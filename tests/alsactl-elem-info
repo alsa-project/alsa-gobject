@@ -15,6 +15,7 @@ props = (
     'type',
     'access',
     'owner',
+    'value-count',
 )
 methods = (
     'get_int_data',
