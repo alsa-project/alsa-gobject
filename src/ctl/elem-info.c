@@ -177,7 +177,7 @@ ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error
         return NULL;
     }
 
-    return g_object_new(ALSACTL_TYPE_ELEM_INFO, "type", elem_type);
+    return g_object_new(ALSACTL_TYPE_ELEM_INFO, "type", elem_type, NULL);
 }
 
 /**
