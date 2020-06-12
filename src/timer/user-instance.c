@@ -140,33 +140,53 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
 }
 
 /**
- * alsatimer_user_instance_attach:
+ * alsatimer_user_instance_choose_event_data_type:
  * @self: A #ALSATimerUserInstance.
- * @device_id: A #ALSATimerDeviceId to which the instance is attached.
  * @event_data_type: The type of event data, one of ALSATimerEventDataType.
  * @error: A #GError.
  *
- * Attach the instance to the timer device.
+ * Choose the type of event data to receive.
+ *
+ * The call of function is successful just before the instance is not attached
+ * yet. ALSATIMER_EVENT_DATA_TYPE_TICK is used as a default if the function is
+ * not called for ALSATIMER_EVENT_DATA_TYPE_TSTAMP explicitly.
  */
-void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
-                                    ALSATimerDeviceId *device_id,
-                                    ALSATimerEventDataType event_data_type,
-                                    GError **error)
+void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
+                                        ALSATimerEventDataType event_data_type,
+                                        GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     int tread;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    tread = (int)event_data_type;
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0)
+        generate_error(error, errno);
+    else
+        priv->event_data_type = event_data_type;
+}
+
+/**
+ * alsatimer_user_instance_attach:
+ * @self: A #ALSATimerUserInstance.
+ * @device_id: A #ALSATimerDeviceId to which the instance is attached.
+ * @error: A #GError.
+ *
+ * Attach the instance to the timer device. If the given device_id is for
+ * absent timer device, the instance can be detached with error.
+ */
+void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
+                                    ALSATimerDeviceId *device_id,
+                                    GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
     struct snd_timer_select sel = {0};
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     g_return_if_fail(device_id != NULL);
     priv = alsatimer_user_instance_get_instance_private(self);
-
-    tread = (int)event_data_type;
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
-        generate_error(error, errno);
-        return;
-    }
-    priv->event_data_type = event_data_type;
 
     sel.id = *device_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
@@ -179,7 +199,6 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  * @slave_class: The class identifier of master instance, one of
  *               #ALSATimerSlaveClass.
  * @slave_id: The numerical identifier of master instance.
- * @event_data_type: The type of event data, one of ALSATimerEventDataType.
  * @error: A #GError.
  *
  * Attach the instance to timer device as an slave to another instance indicated
@@ -188,26 +207,20 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  * application process which owns the instance of timer. If the slave_class is
  * for ALSA sequencer (=ALSATIMER_SLAVE_CLASS_SEQUENCER), the slave_id is the
  * numerical ID of queue bound for timer device.
+ *
+ * Attach the instance to the timer device. If the given device_id is for
+ * absent timer device, the instance can be detached with error.
  */
 void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
                                         ALSATimerSlaveClass slave_class,
                                         int slave_id,
-                                        ALSATimerEventDataType event_data_type,
                                         GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
-    int tread;
     struct snd_timer_select sel = {0};
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
-
-    tread = (int)event_data_type;
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
-        generate_error(error, errno);
-        return;
-    }
-    priv->event_data_type = event_data_type;
 
     sel.id.dev_class = SNDRV_TIMER_CLASS_SLAVE;
     sel.id.dev_sclass = slave_class;
