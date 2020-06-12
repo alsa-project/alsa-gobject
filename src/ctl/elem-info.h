@@ -54,6 +54,11 @@ void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
 void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
                                     const gint32 data[3], GError **error);
 
+void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
+                                      const gint64 *data[3], GError **error);
+void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
+                                      const gint64 data[3], GError **error);
+
 G_END_DECLS
 
 #endif
