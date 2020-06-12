@@ -338,6 +338,39 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
         generate_error(error, errno);
 }
 
+static void parse_enum_names(ALSACtlCardPrivate *priv,
+                             struct snd_ctl_elem_info *info,
+                             gchar ***labels, GError **error)
+{
+    gsize count = info->value.enumerated.items;
+    int i;
+
+    *labels = g_malloc0_n(count + 1, sizeof(**labels));
+    if (*labels == NULL) {
+        generate_error(error, ENOMEM);
+        return;
+    }
+
+    for (i = 0; i < count; ++i) {
+        info->value.enumerated.item = i;
+        if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
+            generate_error(error, errno);
+            goto error;
+        }
+
+        (*labels)[i] = strdup(info->value.enumerated.name);
+        if ((*labels)[i] == NULL) {
+            generate_error(error, ENOMEM);
+            goto error;
+        }
+    }
+
+    (*labels)[count] = NULL;
+    return;
+error:
+    g_strfreev(*labels);
+}
+
 /**
  * alsactl_card_get_elem_info:
  * @self: A #ALSACtlCard.
@@ -363,57 +396,39 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
         return;
     }
 
-    if (info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
-        switch (info.type) {
-        case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
-            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BOOL, NULL);
-            break;
-        case SNDRV_CTL_ELEM_TYPE_INTEGER:
-            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT, NULL);
-            break;
-        case SNDRV_CTL_ELEM_TYPE_BYTES:
-            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BYTES, NULL);
-            break;
-        case SNDRV_CTL_ELEM_TYPE_IEC958:
-            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_IEC60958, NULL);
-            break;
-        case SNDRV_CTL_ELEM_TYPE_INTEGER64:
-            *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT64, NULL);
-            break;
-        default:
-            generate_error(error, ENXIO);
-            return;
-        }
-    } else {
+    switch (info.type) {
+    case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BOOL, NULL);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_INTEGER:
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT, NULL);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_BYTES:
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_BYTES, NULL);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_IEC958:
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_IEC60958, NULL);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+        *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_INT64, NULL);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
+    {
         gchar **labels;
-        int i;
 
-        labels = g_malloc0_n(info.value.enumerated.items + 1, sizeof(*labels));
-        if (labels == NULL) {
-            generate_error(error, ENOMEM);
+        parse_enum_names(priv, &info, &labels, error);
+        if (*error != NULL)
             return;
-        }
-
-        for (i = 0; i < info.value.enumerated.items; ++i) {
-            info.value.enumerated.item = i;
-            if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, &info)) {
-                generate_error(error, errno);
-                g_strfreev(labels);
-                return;
-            }
-
-            labels[i] = strdup(info.value.enumerated.name);
-            if (labels[i] == NULL) {
-                generate_error(error, ENOMEM);
-                g_strfreev(labels);
-                return;
-            }
-        }
-        labels[info.value.enumerated.items] = NULL;
 
         *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO_ENUM, "labels", labels,
                                   NULL);
+
         g_strfreev(labels);
+        break;
+    }
+    default:
+        generate_error(error, ENXIO);
+        return;
     }
 
     ctl_elem_info_refer_private(ALSACTL_ELEM_INFO(*elem_info), &info_ptr);
