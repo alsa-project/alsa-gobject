@@ -18,6 +18,7 @@ props = (
     'value-count',
 )
 methods = (
+    'new',
     'get_int_data',
     'set_int_data',
     'get_int64_data',

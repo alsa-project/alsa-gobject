@@ -6,10 +6,10 @@
 /**
  * SECTION: elem-info
  * @Title: ALSACtlElemInfo
- * @Short_description: An abstract object to represent the common information
+ * @Short_description: An GObject-derived object to represent the information
  *                     of any type of element
  *
- * A #ALSACtlElemInfo is an abstract object to represent the common information
+ * A #ALSACtlElemInfo is an GObject-derived object to represent the information
  * of any type of element.
  *
  * The object wraps 'struct snd_ctl_elem_info' in UAPI of Linux sound subsystem.
@@ -24,7 +24,7 @@ struct _ALSACtlElemInfoPrivate {
     } int_data;
     gchar **enum_data;
 };
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ALSACtlElemInfo, alsactl_elem_info, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemInfo, alsactl_elem_info, G_TYPE_OBJECT)
 
 enum ctl_elem_info_prop_type {
     CTL_ELEM_INFO_PROP_ELEM_ID = 1,
@@ -151,6 +151,33 @@ static void alsactl_elem_info_init(ALSACtlElemInfo *self)
     ALSACtlElemInfoPrivate *priv = alsactl_elem_info_get_instance_private(self);
 
     priv->enum_data = NULL;
+}
+
+/**
+ * alsactl_elem_info_new:
+ * @elem_type: The type of element, one of #ALSACtlElemType.
+ * @error: A #GError.
+ *
+ * Allocate and return the instance of #ALSACtlElemInfo.
+ *
+ * Returns: A #ALSACtlElemInfo.
+ */
+ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error)
+{
+    switch (elem_type) {
+    case ALSACTL_ELEM_TYPE_BOOLEAN:
+    case ALSACTL_ELEM_TYPE_INTEGER:
+    case ALSACTL_ELEM_TYPE_ENUMERATED:
+    case ALSACTL_ELEM_TYPE_BYTES:
+    case ALSACTL_ELEM_TYPE_IEC60958:
+    case ALSACTL_ELEM_TYPE_INTEGER64:
+        break;
+    default:
+        generate_error(error, EINVAL);
+        return NULL;
+    }
+
+    return g_object_new(ALSACTL_TYPE_ELEM_INFO, "type", elem_type);
 }
 
 /**
