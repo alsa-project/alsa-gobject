@@ -49,6 +49,8 @@ struct _ALSACtlElemInfoClass {
 
 GType alsactl_elem_info_get_type() G_GNUC_CONST;
 
+ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error);
+
 void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
                                     const gint32 *data[3], GError **error);
 void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
