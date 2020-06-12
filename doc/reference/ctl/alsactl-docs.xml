@@ -37,7 +37,6 @@
         <xi:include href="xml/card-info.xml"/>
         <xi:include href="xml/elem-id.xml"/>
         <xi:include href="xml/elem-info.xml"/>
-        <xi:include href="xml/elem-info-int64.xml"/>
         <xi:include href="xml/elem-value.xml"/>
         <xi:include href="xml/alsactl-sigs-marshal.xml"/>
     </chapter>
