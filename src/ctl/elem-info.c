@@ -187,6 +187,68 @@ void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
     priv->info.value.integer.step = (long)data[2];
 }
 
+/**
+ * alsactl_elem_info_get_int64_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array fixed-size=3)(out)(transfer none): The array with elements for
+ *        the data of integer64 element; minimum value, maximum value, and value
+ *        step in the order.
+ * @error: A #GError.
+ *
+ * Refer to the array with elements for the data of integer64 element; minimum
+ * value, maximum value, and value step in the order. The call of function is
+ * successful as long as the information is for integer64 type.
+ */
+void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
+                                      const gint64 *data[3], GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    priv->int_data.min = (gint64)priv->info.value.integer.min;
+    priv->int_data.max = (gint64)priv->info.value.integer.max;
+    priv->int_data.step = (gint64)priv->info.value.integer.step;
+
+    *data = (const gint64 *)&priv->info.value.integer64;
+}
+
+/**
+ * alsactl_elem_info_set_int64_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array fixed-size=3)(transfer none): The array with elements for
+ *        the data of integer64 element; minimum value, maximum value, and value
+ *        step in the order.
+ * @error: A #GError.
+ *
+ * Get the array with elements for the data of integer64 element; minimum value,
+ * maximum value, and value step in the order. The call of function is
+ * successful as long as the information is for integer64 type.
+ */
+void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
+                                      const gint64 data[3], GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    priv->info.value.integer.min = (long long)data[0];
+    priv->info.value.integer.max = (long long)data[1];
+    priv->info.value.integer.step = (long long)data[2];
+}
+
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
                                  struct snd_ctl_elem_info **info)
 {
