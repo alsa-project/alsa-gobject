@@ -31,6 +31,7 @@ enum ctl_elem_info_prop_type {
     CTL_ELEM_INFO_PROP_TYPE,
     CTL_ELEM_INFO_PROP_ACCESS,
     CTL_ELEM_INFO_PROP_OWNER,
+    CTL_ELEM_INFO_PROP_VALUE_COUNT,
     CTL_ELEM_INFO_PROP_COUNT,
 };
 static GParamSpec *ctl_elem_info_props[CTL_ELEM_INFO_PROP_COUNT] = { NULL, };
@@ -49,8 +50,11 @@ static void ctl_elem_info_set_property(GObject *obj, guint id,
         priv->info.access = (ALSACtlElemAccessFlag)g_value_get_flags(val);
         break;
     case CTL_ELEM_INFO_PROP_OWNER:
-         priv->info.owner = g_value_get_int(val);
-         break;
+        priv->info.owner = g_value_get_int(val);
+        break;
+    case CTL_ELEM_INFO_PROP_VALUE_COUNT:
+        priv->info.count = g_value_get_uint(val);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
         break;
@@ -74,7 +78,10 @@ static void ctl_elem_info_get_property(GObject *obj, guint id, GValue *val,
         g_value_set_flags(val, priv->info.access);
         break;
     case CTL_ELEM_INFO_PROP_OWNER:
-         g_value_set_int(val, priv->info.owner);
+        g_value_set_int(val, priv->info.owner);
+        break;
+    case CTL_ELEM_INFO_PROP_VALUE_COUNT:
+        g_value_set_uint(val, priv->info.count);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -127,6 +134,13 @@ static void alsactl_elem_info_class_init(ALSACtlElemInfoClass *klass)
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
+
+    ctl_elem_info_props[CTL_ELEM_INFO_PROP_VALUE_COUNT] =
+        g_param_spec_uint("value-count", "value-count",
+                          "The number of members as value of this element",
+                          0, G_MAXUINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     g_object_class_install_properties(gobject_class, CTL_ELEM_INFO_PROP_COUNT,
                                       ctl_elem_info_props);
