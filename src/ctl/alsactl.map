@@ -43,6 +43,8 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_id_equal";
 
     "alsactl_elem_info_get_type";
+    "alsactl_elem_info_get_int_data";
+    "alsactl_elem_info_set_int_data";
 
     "alsactl_elem_info_bool_get_type";
     "alsactl_elem_info_bool_new";

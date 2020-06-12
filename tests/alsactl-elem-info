@@ -16,7 +16,10 @@ props = (
     'access',
     'owner',
 )
-methods = ()
+methods = (
+    'get_int_data',
+    'set_int_data',
+)
 signals = ()
 
 if not test(target, props, methods, signals):

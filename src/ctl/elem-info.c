@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+#include <errno.h>
+
 /**
  * SECTION: elem-info
  * @Title: ALSACtlElemInfo
@@ -14,6 +16,12 @@
  */
 struct _ALSACtlElemInfoPrivate {
     struct snd_ctl_elem_info info;
+
+    struct {
+        gint32 min;
+        gint32 max;
+        gint32 step;
+    } int_data;
 };
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ALSACtlElemInfo, alsactl_elem_info, G_TYPE_OBJECT)
 
@@ -115,6 +123,68 @@ static void alsactl_elem_info_class_init(ALSACtlElemInfoClass *klass)
 static void alsactl_elem_info_init(ALSACtlElemInfo *self)
 {
     return;
+}
+
+/**
+ * alsactl_elem_info_get_int_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array fixed-size=3)(out)(transfer none): The array with elements for
+ *        the data of integer element; minimum value, maximum value, and value
+ *        step in the order.
+ * @error: A #GError.
+ *
+ * Refer to the array with elements for the data of integer element; minimum
+ * value, maximum value, and value step in the order. The call of function is
+ * successful as long as the information is for integer type.
+ */
+void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
+                                    const gint32 *data[3], GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    priv->int_data.min = (gint32)priv->info.value.integer.min;
+    priv->int_data.max = (gint32)priv->info.value.integer.max;
+    priv->int_data.step = (gint32)priv->info.value.integer.step;
+
+    *data = (const gint32 *)&priv->int_data;
+}
+
+/**
+ * alsactl_elem_info_set_int_data:
+ * @self: A #ALSACtlElemInfo.
+ * @data: (array fixed-size=3)(transfer none): The array with elements for
+ *        the data of integer element; minimum value, maximum value, and value
+ *        step in the order.
+ * @error: A #GError.
+ *
+ * Get the array with elements for the data of integer element; minimum value,
+ * maximum value, and value step in the order. The call of function is
+ * successful as long as the information is for integer type.
+ */
+void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
+                                    const gint32 data[3], GError **error)
+{
+    ALSACtlElemInfoPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    priv = alsactl_elem_info_get_instance_private(self);
+
+    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    priv->info.value.integer.min = (long)data[0];
+    priv->info.value.integer.max = (long)data[1];
+    priv->info.value.integer.step = (long)data[2];
 }
 
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
