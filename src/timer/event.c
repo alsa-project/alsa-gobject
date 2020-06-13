@@ -20,6 +20,18 @@ ALSATimerEvent *timer_event_copy(const ALSATimerEvent *self)
 G_DEFINE_BOXED_TYPE(ALSATimerEvent, alsatimer_event, timer_event_copy, g_free)
 
 /**
+ * alsatimer_event_new:
+ *
+ * Allocate and return the instance of #ALSATimerEvent.
+ *
+ * Returns: A #ALSATimerEvent.
+ */
+ALSATimerEvent *alsatimer_event_new()
+{
+    return g_malloc0(sizeof(ALSATimerEvent));
+}
+
+/**
  * alsatimer_event_get_tick_data:
  * @self: A #ALSATimerEvent.
  * @tick: (out)(transfer none): The instance of #ALSATimerEventDataTick.

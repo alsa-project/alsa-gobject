@@ -19,6 +19,8 @@ typedef union {
 
 GType alsatimer_event_get_type() G_GNUC_CONST;
 
+ALSATimerEvent *alsatimer_event_new();
+
 void alsatimer_event_get_tick_data(ALSATimerEvent *self,
                                    const ALSATimerEventDataTick **tick);
 
