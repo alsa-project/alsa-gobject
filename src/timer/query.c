@@ -62,6 +62,8 @@ static bool check_existence(char *sysname, GError **error)
  * @error: A #GError.
  *
  * Allocate sysname for ALSA Timer and return it when it exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsatimer_get_sysname(char **sysname, GError **error)
 {
@@ -89,6 +91,8 @@ void alsatimer_get_sysname(char **sysname, GError **error)
  * @error: A #GError.
  *
  * Allocate string of devnode for ALSA Timer and return it if exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsatimer_get_devnode(char **devnode, GError **error)
 {
@@ -128,6 +132,10 @@ void alsatimer_get_devnode(char **devnode, GError **error)
  *           entries of ALSATimerId.
  * @error: A #GError.
  *
+ * Get the list of existent timer device.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_TIMER_IOCTL_NEXT_DEVICE command for ALSA timer character device.
  */
 void alsatimer_get_device_id_list(GList **entries, GError **error)
 {
@@ -170,6 +178,11 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
  * @device_info: (out): The information of timer device.
  * @error: A #GError.
+ *
+ * Get the information of timer device.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_TIMER_IOCTL_GINFO command for ALSA timer character device.
  */
 void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
                                ALSATimerDeviceInfo **device_info,
@@ -209,6 +222,11 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
  * @device_status: (out): The status of timer device.
  * @error: A #GError.
+ *
+ * Get the status of timer device.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_TIMER_IOCTL_GSTATUS command for ALSA timer character device.
  */
 void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
                                  ALSATimerDeviceStatus **device_status,
@@ -250,6 +268,9 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
  * @error: A #GError.
  *
  * Set the given parameters to the timer indicated by the identifier.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_TIMER_IOCTL_GPARAMS command for ALSA timer character device.
  */
 void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                  const ALSATimerDeviceParams *device_params,
@@ -329,6 +350,9 @@ end:
  * refer to it.
  *
  * 0 means CLOCK_REALTIME is used. 1 means CLOCK_MONOTONIC is used.
+ *
+ * The call of function executes open(2), read(2), close(2) system calls for
+ * the sysfs node corresponding to 'snd-timer' kernel module.
  */
 void alsatimer_get_tstamp_source(int *clock_id, GError **error)
 {
