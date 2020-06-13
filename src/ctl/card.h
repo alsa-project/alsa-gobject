@@ -66,8 +66,8 @@ struct _ALSACtlCardClass {
      *
      * When the sound card is not available anymore due to unbinding driver or
      * hot unplugging, this signal is emit. The owner of this object should
-     * call g_object_free() as quickly as possible to release ALSA control
-     * character device.
+     * call g_object_free() as quickly as possible to be going to release ALSA
+     * control character device.
      */
     void (*handle_disconnection)(ALSACtlCard *self);
 };
