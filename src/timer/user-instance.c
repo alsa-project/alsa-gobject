@@ -112,6 +112,9 @@ static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
  * @error: A #GError.
  *
  * Open ALSA Timer character device to allocate queue.
+ *
+ * The call of function executes open(2) system call for ALSA timer character
+ * device.
  */
 void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
                                   GError **error)
@@ -150,6 +153,9 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
  * The call of function is successful just before the instance is not attached
  * yet. ALSATIMER_EVENT_DATA_TYPE_TICK is used as a default if the function is
  * not called for ALSATIMER_EVENT_DATA_TYPE_TSTAMP explicitly.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_TREAD command for ALSA timer character device.
  */
 void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
                                         ALSATimerEventDataType event_data_type,
@@ -176,6 +182,9 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
  *
  * Attach the instance to the timer device. If the given device_id is for
  * absent timer device, the instance can be detached with error.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_SELECT command for ALSA timer character device.
  */
 void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
@@ -210,6 +219,9 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  *
  * Attach the instance to the timer device. If the given device_id is for
  * absent timer device, the instance can be detached with error.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_SELECT command for ALSA timer character device.
  */
 void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
                                         ALSATimerSlaveClass slave_class,
@@ -236,6 +248,9 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
  * @error: A #GError.
  *
  * Return the information of device if attached to the instance.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_INFO command for ALSA timer character device.
  */
 void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
                                       ALSATimerInstanceInfo **instance_info,
@@ -263,6 +278,9 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
  * @error: A #GError.
  *
  * Configure the instance with the parameters and return the latest parameters.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_PARAMS command for ALSA timer character device.
  */
 void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
                                 ALSATimerInstanceParams *const *instance_params,
@@ -287,6 +305,9 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
  * @error: A #GError.
  *
  * Get the latest status of instance.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_STATUS command for ALSA timer character device.
  */
 void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
                                     ALSATimerInstanceStatus **instance_status,
@@ -391,7 +412,9 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
  * @error: A #GError.
  *
  * Allocate GSource structure to handle events from ALSA timer character
- * device.
+ * device. In each iteration of GMainContext, the read(2) system call is
+ * executed to dispatch timer event for 'handle-event' signal, according to
+ * the result of poll(2) system call.
  */
 void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
                                          GSource **gsrc, GError **error)
@@ -438,7 +461,10 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
  * @self: A #ALSATimerUserInstance.
  * @error: A #GError.
  *
- * Start event emission.
+ * Start timer event emission.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_START command for ALSA timer character device.
  */
 void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 {
@@ -456,7 +482,10 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
  * @self: A #ALSATimerUserInstance.
  * @error: A #GError.
  *
- * Stop event emission.
+ * Stop timer event emission.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_STOP command for ALSA timer character device.
  */
 void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 {
@@ -474,7 +503,10 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
  * @self: A #ALSATimerUserInstance.
  * @error: A #GError.
  *
- * Stop event emission.
+ * Pause timer event emission.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_PAUSE command for ALSA timer character device.
  */
 void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 {
@@ -492,7 +524,10 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
  * @self: A #ALSATimerUserInstance.
  * @error: A #GError.
  *
- * Stop event emission.
+ * Continue timer event emission paused by alsatimer_user_instance_pause().
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_TIMER_IOCTL_CONTINUE command for ALSA timer character device.
  */
 void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
                                       GError **error)
