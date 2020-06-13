@@ -132,6 +132,8 @@ static unsigned int calculate_digits(unsigned int number)
  * @error: A #GError.
  *
  * Get the list of numerical ID for available rawmidi devices of sound card.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
                                     gsize *entry_count, GError **error)
@@ -218,6 +220,8 @@ end:
  * @error: A #GError.
  *
  * Allocate sysname for rawmidi device and return it when it exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
                                      char **sysname, GError **error)
@@ -263,6 +267,8 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
  * @error: A #GError.
  *
  * Allocate devnode string for rawmidi device and return it when exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
                                      char **devnode, GError **error)
@@ -373,6 +379,12 @@ err_sysname:
  * @entries: (array length=entry_count)(out): The list of card.
  * @entry_count: The number of entries.
  * @error: A #GError.
+ *
+ * Get the list of numerical IDs for subdevices belongs to the numerical ID of
+ * card, device, and the direction.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_CTL_IOCTL_RAWMIDI_INFO command for ALSA control character device.
  */
 void alsarawmidi_get_subdevice_id_list(guint card, guint device,
                                        ALSARawmidiStreamDirection direction,
@@ -413,6 +425,12 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
  * @subdevice_id: The numerical value of subdevice in rawmidi device.
  * @substream_info: (out): The information of substream for the subdevice.
  * @error: A #GError.
+ *
+ * Get the information of substream pointed by the numerical ID of card, device,
+ * subdevice, and the direction.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_CTL_IOCTL_RAWMIDI_INFO command for ALSA control character device.
  */
 void alsarawmidi_get_substream_info(guint card_id, guint device_id,
                                     ALSARawmidiStreamDirection direction,
