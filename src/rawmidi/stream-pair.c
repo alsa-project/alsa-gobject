@@ -113,7 +113,7 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
      * When any input message is available, this event is emit.
      */
     rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_HANDLE_MESSAGES] =
-        g_signal_new("handle_messages",
+        g_signal_new("handle-messages",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
                      G_STRUCT_OFFSET(ALSARawmidiStreamPairClass, handle_messages),
