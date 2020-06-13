@@ -145,6 +145,10 @@ ALSASeqUserClient *alsaseq_user_client_new()
  * @error: A #GError.
  *
  * Open ALSA sequencer character device.
+ *
+ * The call of function executes open(2) system call, then executes ioctl(2)
+ * system call with SNDRV_SEQ_IOCTL_CLIENT_ID command for ALSA sequencer
+ * character device.
  */
 void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
                               GError **error)
@@ -181,6 +185,9 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
  * @error: A #GError.
  *
  * Get client information.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_CLIENT_INFO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *client_info,
@@ -207,6 +214,9 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Set client information.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_GET_CLIENT_INFO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *const *client_info,
@@ -234,6 +244,9 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Create a port into the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_CREATE_PORT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_port(ALSASeqUserClient *self,
                                      ALSASeqPortInfo *port_info,
@@ -264,6 +277,10 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
  * @port_id: The numerical ID of port.
  * @error: A #GError.
  *
+ * Update port information.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_PORT_INFO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_update_port(ALSASeqUserClient *self,
                                      ALSASeqPortInfo *port_info,
@@ -292,6 +309,9 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Delete a port from the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_DELETE_PORT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
                                      guint8 port_id, GError **error)
@@ -315,6 +335,9 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Configure memory pool in the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_CLIENT_POOL command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
                                   ALSASeqClientPool *client_pool,
@@ -340,6 +363,9 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Get information of memory pool in the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_GET_CLIENT_POOL command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
                                   ALSASeqClientPool *const *client_pool,
@@ -367,6 +393,9 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Deliver the event immediately, or schedule it into memory pool of the client.
+ *
+ * The call of function executes write(2) system call for ALSA sequencer
+ * character device.
  */
 void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
                                         ALSASeqEventCntr *ev_cntr,
@@ -462,6 +491,9 @@ static void seq_user_client_finalize_src(GSource *gsrc)
  * @error: A #GError.
  *
  * Allocate GSource structure to handle events from ALSA seq character device.
+ * In each iteration of GMainContext, the read(2) system call is exected to
+ * dispatch sequencer event for 'handle-event' signal, according to the result
+ * of poll(2) system call.
  */
 void alsaseq_user_client_create_source(ALSASeqUserClient *self,
                                        GSource **gsrc, GError **error)
@@ -513,6 +545,10 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Operate subscription between two ports pointed by the data.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT and SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT commands
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
                                          ALSASeqSubscribeData *subs_data,
@@ -546,6 +582,9 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
  *
  * Create a new queue owned by the client. The content of information is updated
  * if success.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_CREATE_QUEUE command for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
                                 ALSASeqQueueInfo *queue_info, GError **error)
@@ -570,6 +609,9 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Delete the queue owned by the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_DELETE_QUEUE command for ALSA sequencer character device.
  */
 void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
                                       guint queue_id, GError **error)
@@ -593,6 +635,9 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Update owned queue according to the information.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_QUEUE_INFO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
                                       ALSASeqQueueInfo *queue_info,
@@ -620,6 +665,9 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Get usage of the queue by the client.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
                                          guint queue_id, gboolean *use,
@@ -649,6 +697,9 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Start the queue to use or not.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
                                          guint queue_id, gboolean use,
@@ -676,8 +727,10 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
  * @queue_tempo: The data of tempo for queue.
  * @error: A #GError.
  *
- *
  * Set the data of tempo to the queue.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
                                 guint queue_id, ALSASeqQueueTempo *queue_tempo,
@@ -705,6 +758,9 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Get the data of tempo for the queue.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
                                 guint queue_id, ALSASeqQueueTempo **queue_tempo,
@@ -736,6 +792,9 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Set the data of timer for the queue.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
                                          guint queue_id,
@@ -775,6 +834,9 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Get the data of timer for the queue.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
                                          guint queue_id,
@@ -818,6 +880,9 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
  * @error: A #GError.
  *
  * Remove queued events according to the filter.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_REMOVE_EVENTS command for ALSA sequencer character device.
  */
 void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
                                        ALSASeqRemoveFilter *filter,
