@@ -171,6 +171,9 @@ ALSARawmidiStreamPair *alsarawmidi_stream_pair_new()
  *
  * Open file descriptor for a pair of streams to attach input/output substreams
  * corresponding to the given subdevice.
+ *
+ * The call of function executes open(2) system call for ALSA rawmidi character
+ * device.
  */
 void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                                   guint device_id, guint subdevice_id,
@@ -230,6 +233,9 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
  * @error: A #GError.
  *
  * Get information of substream attached to the stream pair.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_RAWMIDI_IOCTL_INFO command for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
@@ -262,6 +268,9 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
  *
  * Set parameters of substream for given direction, which is attached to the
  * pair of streams.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_RAWMIDI_IOCTL_PARAMS command for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
@@ -290,6 +299,9 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
  *
  * Retrieve status of substream for given direction, which is attached to the
  * pair of streams.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_RAWMIDI_IOCTL_STATUS command for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
                             ALSARawmidiStreamDirection direction,
@@ -321,6 +333,9 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
  * the pair of streams. In a case that the instance is opened without
  * O_NONBLOCK flag and the intermediate buffer has no data, call of the API
  * is blocked till any data is available.
+ *
+ * The call of function executes read(2) system for ALSA rawmidi character
+ * device.
  */
 void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
                                         guint8 *const *buf, gsize *buf_size,
@@ -352,6 +367,9 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
  * the pair of streams. In a case that the instance is opened without
  * O_NONBLOCK flag and the intermediate buffer is full, call of the API is
  * blocked till the buffer has space for the data.
+ *
+ * The call of function executes write(2) system for ALSA rawmidi character
+ * device.
  */
 void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                                         const guint8 *buf, gsize buf_size,
@@ -380,6 +398,9 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
  * of streams. In a case that the instance is opened without O_NONBLOCK and the
  * call is for output substream and any data is in the intermediate buffer, the
  * call is blocked till no data is in the intermediate buffer.
+ *
+ * The call of function executes ioctl(2) system with
+ * SNDRV_RAWMIDI_IOCTL_DRAIN command for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
@@ -403,6 +424,9 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
  * Drop queued data in intermediate buffer immediately for substream attached
  * to the pair of streams. In implementation of ALSA rawmidi core, the
  * direction should be for output substream.
+ *
+ * The call of function executes ioctl(2) system with
+ * SNDRV_RAWMIDI_IOCTL_DROP command for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
@@ -472,7 +496,9 @@ static void rawmidi_stream_pair_finalize_src(GSource *gsrc)
  * @error: A #GError.
  *
  * Allocate GSource structure to handle events from ALSA rawmidi character
- * device for input substream.
+ * device for input substream. In each iteration of GManContext, the read(2)
+ * system call is executed to dispatch control event for 'handle-message'
+ * signal, according to the result of poll(2) system call.
  */
 void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
                                            GSource **gsrc, GError **error)
