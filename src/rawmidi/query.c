@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 #include <libudev.h>
 
@@ -353,6 +354,8 @@ static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
 
     if (ioctl(fd, request, data) < 0)
         generate_error(error, errno);
+
+    close(fd);
 err_device:
     udev_device_unref(dev);
 err_ctx:
