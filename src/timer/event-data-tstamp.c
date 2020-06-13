@@ -36,16 +36,17 @@ void alsatimer_event_data_tstamp_get_event(ALSATimerEventDataTstamp *self,
 /**
  * alsatimer_event_data_tstamp_get_tstamp:
  * @self: A #ALSATimerEventDataTstamp.
- * @tv_sec: (out): The seconds part of timestamp.
- * @tv_nsec: (out): The nanoseconds part of timestamp.
+ * @tstamp: (array fixed-size=2)(inout): The array with two elements for the
+ *          seconds and nanoseconds part of timestamp when the instance queues
+ *          the timestamp event.
  *
  * Get the seconds and nanoseconds part for the timestamp event.
  */
 void alsatimer_event_data_tstamp_get_tstamp(ALSATimerEventDataTstamp *self,
-                                            guint *tv_sec, guint *tv_nsec)
+                                            gint64 *const tstamp[2])
 {
-    *tv_sec = (guint)self->tstamp.tv_sec;
-    *tv_nsec = (guint)self->tstamp.tv_nsec;
+    (*tstamp)[0] = (gint64)self->tstamp.tv_sec;
+    (*tstamp)[1] = (gint64)self->tstamp.tv_nsec;
 }
 
 /**
