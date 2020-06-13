@@ -21,7 +21,7 @@ void alsatimer_event_data_tstamp_get_event(ALSATimerEventDataTstamp *self,
                                            ALSATimerEventType *event);
 
 void alsatimer_event_data_tstamp_get_tstamp(ALSATimerEventDataTstamp *self,
-                                            guint *tv_sec, guint *tv_nsec);
+                                            gint64 *const tstamp[2]);
 
 void alsatimer_event_data_tstamp_get_val(ALSATimerEventDataTstamp *self,
                                          guint *val);
