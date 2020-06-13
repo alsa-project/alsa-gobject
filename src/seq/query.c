@@ -30,6 +30,8 @@ G_DEFINE_QUARK("alsaseq-error", alsaseq_error)
  * @error: A #GError.
  *
  * Allocate sysname string for ALSA sequencer and return it when exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
 {
@@ -72,6 +74,8 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
  * @error: A #GError.
  *
  * Allocate devnode string for ALSA Sequencer and return it when exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
 {
@@ -114,6 +118,9 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
  * @error: A #GError.
  *
  * Get information of ALSA Sequencer.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_SYSTEM_INFO command for ALSA sequencer character device.
  */
 void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 {
@@ -159,6 +166,11 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
  * @error: A #GError.
  *
  * Get the list of clients as the numerical ID.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_CLIENT_ID, SNDRV_SEQ_IOCTL_SYSTEM_INFO, and
+ * SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
                                 GError **error)
@@ -242,6 +254,10 @@ void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
  * @error: A #GError.
  *
  * Get the information of client according to the numerical ID.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_CLIENT_INFO command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
                              GError **error)
@@ -288,6 +304,10 @@ void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
  * @error: A #GError.
  *
  * Get the list of numerical IDs for port added by the client.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_CLIENT_INFO and SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT
+ * commands for ALSA sequencer character device.
  */
 void alsaseq_get_port_id_list(guint client_id, guint **entries,
                               gsize *entry_count, GError **error)
@@ -360,6 +380,10 @@ void alsaseq_get_port_id_list(guint client_id, guint **entries,
  * @error: A #GError.
  *
  * Get the information of port in client.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_PORT_INFO command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_port_info(guint client_id, guint port_id,
                            ALSASeqPortInfo **port_info, GError **error)
@@ -404,6 +428,10 @@ void alsaseq_get_port_info(guint client_id, guint port_id,
  * @error: A #GError.
  *
  * Get statistical information of memory pool for the given client.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_CLIENT_POOL command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_client_pool(gint client_id, ALSASeqClientPool **client_pool,
                              GError **error)
@@ -460,6 +488,9 @@ static void fill_data_with_result(struct snd_seq_port_subscribe *data,
  * @error: A #GError.
  *
  * Get the list of subscription for given address and query type.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_QUERY_SUBS command for ALSA sequencer character device.
  */
 void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
                                    ALSASeqQuerySubscribeType query_type,
@@ -531,6 +562,10 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
  * @error: A #GError.
  *
  * Get the list of queue in ALSA Sequencer.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_SYSTEM_INFO and SNDRV_SEQ_IOCTL_GET_QUEUE_INFO commands
+ * for ALSA sequencer character device.
  */
 void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
                                GError **error)
@@ -606,6 +641,10 @@ void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
  * @error: A #GError.
  *
  * Get the information of queue, according to the numerical ID.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_QUEUE_INFO command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
                                   GError **error)
@@ -646,6 +685,10 @@ void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
  * @error: A #GError.
  *
  * Get the information of queue, according to the name string.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_queue_info_by_name(const gchar *name,
                                     ALSASeqQueueInfo **queue_info,
@@ -688,6 +731,10 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  * @error: A #GError.
  *
  * Get current status of queue.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system calls
+ * with SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS command for ALSA sequencer character
+ * device.
  */
 void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
                               GError **error)
