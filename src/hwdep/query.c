@@ -132,6 +132,8 @@ static unsigned int calculate_digits(unsigned int number)
  * @error: A #GError.
  *
  * Get the list of numerical ID for available hwdep devices of sound card.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsahwdep_get_device_id_list(guint card_id, guint **entries,
                                   gsize *entry_count, GError **error)
@@ -218,6 +220,8 @@ end:
  * @error: A #GError.
  *
  * Allocate sysname for hwdep device and return it when it exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
                                  char **sysname, GError **error)
@@ -263,6 +267,8 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
  * @error: A #GError.
  *
  * Allocate devnode string for hwdep device and return it when exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
                                  char **devnode, GError **error)
@@ -370,6 +376,11 @@ err_sysname:
  * @device_id: The numerical value of hwdep device to query.
  * @device_info: (out): The information of the device.
  * @error: A #GError.
+ *
+ * Get the information according to given numerical IDs for card and device.
+ *
+ * The call of function executes open(2), close(2), and ioctl(2) system call
+ * with SNDRV_CTL_IOCTL_HWDEP_INFO command for ALSA control character device.
  */
 void alsahwdep_get_device_info(guint card_id, guint device_id,
                                ALSAHwdepDeviceInfo **device_info,
