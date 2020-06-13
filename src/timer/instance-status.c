@@ -18,6 +18,7 @@
  */
 struct _ALSATimerInstanceStatusPrivate {
     struct snd_timer_status status;
+    gint64 tstamp[2];
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerInstanceStatus, alsatimer_instance_status, G_TYPE_OBJECT)
 
@@ -103,24 +104,25 @@ static void alsatimer_instance_status_init(ALSATimerInstanceStatus *self)
 /**
  * alsatimer_instance_status_get_tstamp:
  * @self: A #ALSATimerInstanceStatus.
- * @tv_sec: (out): The second part of timestamp.
- * @tv_nsec: (out): The nano second part of timerstamp.
+ * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two
+ *          elements for the seconds and nanoseconds parts of timestamp
+ *          when the instance queues the latest event.
  *
- * Get timestamp for the latest update.
+ * Get timestamp for the latest event.
  */
 void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
-                                          guint *tv_sec, guint *tv_nsec)
+                                          const gint64 *tstamp[2])
 {
     ALSATimerInstanceStatusPrivate *priv;
 
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(self));
-    g_return_if_fail(tv_sec != NULL);
-    g_return_if_fail(tv_nsec != NULL);
+    g_return_if_fail(tstamp != NULL);
     priv = alsatimer_instance_status_get_instance_private(self);
 
-    *tv_sec = (guint)priv->status.tstamp.tv_sec;
-    *tv_nsec = (guint)priv->status.tstamp.tv_nsec;
+    priv->tstamp[0] = (gint64)priv->status.tstamp.tv_sec;
+    priv->tstamp[1] = (gint64)priv->status.tstamp.tv_nsec;
 
+    *tstamp = (const gint64 *)&priv->tstamp;
 }
 
 void timer_instance_status_refer_private(ALSATimerInstanceStatus *self,
