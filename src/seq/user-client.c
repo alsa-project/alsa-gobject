@@ -632,7 +632,7 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
     priv = alsaseq_user_client_get_instance_private(self);
 
     data.queue = (int)queue_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0) {
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT, &data) < 0) {
         generate_error(error, errno);
         return;
     }
