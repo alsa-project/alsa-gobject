@@ -112,6 +112,8 @@ static int compare_guint(const void *l, const void *r)
  * @error: A #GError.
  *
  * Get the list of numerical ID for available sound cards.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
                               GError **error)
@@ -238,6 +240,8 @@ static bool check_existence(char *sysname, GError **error)
  * @error: A #GError.
  *
  * Allocate sysname for the sound card and return it when it exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
 {
@@ -265,6 +269,8 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
  *
  * Allocate sysname of control device for the sound card and return it when
  * it exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
 {
@@ -292,6 +298,8 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
  *
  * Allocate string of devnode for control device of the sound card and return it
  * if exists.
+ *
+ * Nodes under sound subsystem in sysfs are used to gather the information.
  */
 void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
 {
