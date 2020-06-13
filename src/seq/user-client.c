@@ -607,7 +607,7 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
 
     seq_queue_info_refer_private(queue_info, &info);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_INFO, info) < 0)
         generate_error(error, errno);
 }
 
