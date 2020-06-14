@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/04/08
+2020/06/14
 Takashi Sakamoto
 
 Introduction
@@ -39,6 +39,16 @@ ALSAHwdep-0.0
     For bindings to use libalsahwdep0
 ALSARawmidi-0.0
     For bindings to use libalsarawmidi0
+
+Documentation
+=============
+
+<https://alsa-project.github.io/alsa-gobject-docs/>
+
+Python 3 Samples
+================
+
+See samples directory.
 
 License
 =======
@@ -96,6 +106,12 @@ Design note
 * These libraries are independent of alsa-lib, to focus on interaction to
   kernel land directly by system calls without alsa-lib's configuration space.
 * The way to enumerate any device is based on sysfs, programmed with libudev1.
+* GObject object is used for structures in UAPI of Linux sound subsystem with
+  reserved space.
+* Boxed object is used for structures in UAPI of Linux sound subsystem without
+  reserved space.
+* The type which has variable size of storage in 32/64 bit ABI (e.g. long) is
+  not used for properties of GObject-derived objects.
 
 Supplemental information for language bindings
 ==============================================
