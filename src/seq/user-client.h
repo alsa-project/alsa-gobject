@@ -82,8 +82,8 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
                                   GError **error);
 
 void alsaseq_user_client_create_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
-                                     const guint8 *port_id, GError **error);
+                                     ALSASeqPortInfo *const *port_info,
+                                     GError **error);
 void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
                                         ALSASeqPortInfo *const *port_info,
                                         guint8 port_id, GError **error);
