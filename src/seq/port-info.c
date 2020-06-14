@@ -234,10 +234,8 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
     seq_port_info_props[SEQ_PORT_INFO_PROP_TIME_QUEUE] =
         g_param_spec_uchar("queue-id", "queue-id",
                            "The numerical ID of queue to update timestamp "
-                           "when timestamp-overwrite property is set to "
-                           "ALSASeq.PortTstampOverwrite.TICK or "
-                           "ALSASeq.PortTstampOverwrite.REAL. One of "
-                           "ALSASeqSpecificQueueId is available as well.",
+                           "when timestamp-overwrite property is set to True. "
+                           "One of ALSASeqSpecificQueueId is available as well.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
