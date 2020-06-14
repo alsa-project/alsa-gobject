@@ -239,8 +239,7 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
 /**
  * alsaseq_user_client_create_port:
  * @self: A #ALSASeqUserClient.
- * @port_info: A #ALSASeqPortInfo.
- * @port_id: (nullable): The numerical ID of port if specified.
+ * @port_info: (inout): A #ALSASeqPortInfo.
  * @error: A #GError.
  *
  * Create a port into the client.
@@ -249,23 +248,19 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_CREATE_PORT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
-                                     const guint8 *port_id, GError **error)
+                                     ALSASeqPortInfo *const *port_info,
+                                     GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
+    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
-    seq_port_info_refer_private(port_info, &info);
+    seq_port_info_refer_private(*port_info, &info);
 
     info->addr.client = priv->client_id;
-    if (port_id != NULL) {
-        info->addr.port = *port_id;
-        info->flags |= SNDRV_SEQ_PORT_FLG_GIVEN_PORT;
-    }
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_PORT, info) < 0)
         generate_error(error, errno);
 }
@@ -296,7 +291,7 @@ void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
     info->addr.port = port_id;
     info->flags |= SNDRV_SEQ_PORT_FLG_GIVEN_PORT;
 
-    alsaseq_user_client_create_port(self, *port_info, NULL, error);
+    alsaseq_user_client_create_port(self, port_info, error);
 }
 
 /**
