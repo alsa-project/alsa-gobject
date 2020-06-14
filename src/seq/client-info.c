@@ -177,11 +177,11 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
                          G_PARAM_READWRITE);
 
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_PROCESS_ID] =
-        g_param_spec_long("process-id", "process-id",
-                          "The process ID for user client, otherwise -1.",
-                          G_MINLONG, G_MAXLONG,
-                          -1,
-                          G_PARAM_READABLE);
+        g_param_spec_int64("process-id", "process-id",
+                           "The process ID for user client, otherwise -1.",
+                           G_MININT64, G_MAXINT64,
+                           -1,
+                           G_PARAM_READABLE);
 
     g_object_class_install_properties(gobject_class,
                                       SEQ_CLIENT_INFO_PROP_COUNT,
