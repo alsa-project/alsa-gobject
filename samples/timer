@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+import gi
+gi.require_version('GLib', '2.0')
+gi.require_version('ALSATimer', '0.0')
+from gi.repository import GLib, ALSATimer
+
+from sys import exit
+from signal import SIGINT
+
+# Register user instance.
+instance = ALSATimer.UserInstance.new()
+instance.open(0)
+
+# Choose tstamp type of data for event and register event handler.
+instance.choose_event_data_type(ALSATimer.EventDataType.TSTAMP)
+def handle_event(instance, event):
+    data = event.get_tstamp_data()
+    tstamp = data.get_tstamp([0, 0])
+    print('\nEvent at', tstamp)
+    print('  ', data.get_event().value_nick)
+    print('  ', data.get_val())
+instance.connect('handle-event', handle_event)
+
+# Decide ALSA timer device to which the instance is attached.
+targets = (
+    (ALSATimer.Class.GLOBAL, ALSATimer.SpecificGlobalDevice.HRTIMER),
+    (ALSATimer.Class.GLOBAL, ALSATimer.SpecificGlobalDevice.SYSTEM),
+)
+
+# ALSA timer device produced by 'snd-hrtimer' is preferrable (based on hrtimer).
+# Secondary produced by 'snd-timer' (based on Linux timer wheel).
+for target in targets:
+    for device_id in ALSATimer.get_device_id_list():
+        key = (device_id.get_class(), device_id.get_device_id())
+        if key == target:
+            break;
+    else:
+        continue
+    break
+else:
+    print('ALSA Timer device not found.')
+    exit(1)
+
+# Attach the instance to the timer device.
+instance.attach(device_id)
+
+# Get the information of timer device.
+info = ALSATimer.get_device_info(device_id)
+print('Timer device to which the instance is attached:')
+print('  flags:', info.get_property('flags').value_nicks)
+for prop in ('id', 'name', 'resolution', 'resolution-min', 'resolution-max',
+             'instance-count'):
+    print('  {}: {}'.format(prop, info.get_property(prop)))
+resolution = info.get_property('resolution')
+
+# Configure the instance to receive any event in 500 msec interval.
+params = ALSATimer.InstanceParams.new()
+flags = (ALSATimer.InstanceParamFlag.AUTO |
+         ALSATimer.InstanceParamFlag.EARLY_EVENT)
+params.set_property('flags', flags)
+ticks = 500 * 1000 * 1000 // resolution  # 500msec
+params.set_property('interval', ticks)
+params.set_property('queue-size', 64)
+events = (ALSATimer.EventType.RESOLUTION,
+          ALSATimer.EventType.TICK,
+          ALSATimer.EventType.START,
+          ALSATimer.EventType.STOP,
+          ALSATimer.EventType.CONTINUE,
+          ALSATimer.EventType.PAUSE,
+          ALSATimer.EventType.SUSPEND,
+          ALSATimer.EventType.RESUME)
+params.set_event_filter(events)
+params = instance.set_params(params)
+
+# Dump the parameters.
+print('\nThe parameter of instance:')
+print('  flags', params.get_property('flags').value_nicks)
+for prop in ('interval', 'queue-size'):
+    print('  {}: {}'.format(prop, params.get_property(prop)))
+
+# Begin event emission.
+instance.start()
+
+# Create event dispatcher.
+dispatcher = GLib.MainLoop.new(None, False)
+src = instance.create_source()
+src.attach(dispatcher.get_context())
+
+# Register UNIX signal handler.
+def handle_unix_signal(dispatcher):
+    dispatcher.quit()
+GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT,
+                     handle_unix_signal, dispatcher)
+
+# Start to dispatch events.
+dispatcher.run()
+
+# Stop event emission.
+instance.stop()
