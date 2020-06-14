@@ -116,7 +116,8 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
                                               GError **error);
 
 void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
-                                ALSASeqQueueInfo *queue_info, GError **error);
+                                      ALSASeqQueueInfo *const *queue_info,
+                                      GError **error);
 void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
                                       guint queue_id, GError **error);
 void alsaseq_user_client_update_queue(ALSASeqUserClient *self,

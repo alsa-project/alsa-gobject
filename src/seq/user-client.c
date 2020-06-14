@@ -601,7 +601,7 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
 /**
  * alsaseq_user_client_create_queue:
  * @self: A #ALSASeqUserClient.
- * @queue_info: The information of queue to add.
+ * @queue_info: (inout): The information of queue to add.
  * @error: A #GError.
  *
  * Create a new queue owned by the client. The content of information is updated
@@ -611,16 +611,17 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_CREATE_QUEUE command for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
-                                ALSASeqQueueInfo *queue_info, GError **error)
+                                      ALSASeqQueueInfo *const *queue_info,
+				      GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info));
+    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
-    seq_queue_info_refer_private(queue_info, &info);
+    seq_queue_info_refer_private(*queue_info, &info);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
         generate_error(error, errno);
