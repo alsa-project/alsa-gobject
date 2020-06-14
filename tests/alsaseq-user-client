@@ -19,6 +19,7 @@ methods = (
     'set_info',
     'get_info',
     'create_port',
+    'create_port_at',
     'update_port',
     'delete_port',
     'set_pool',

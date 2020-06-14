@@ -45,6 +45,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_set_info";
     "alsaseq_user_client_get_info";
     "alsaseq_user_client_create_port";
+    "alsaseq_user_client_create_port_at";
     "alsaseq_user_client_update_port";
     "alsaseq_user_client_delete_port";
     "alsaseq_user_client_set_pool";

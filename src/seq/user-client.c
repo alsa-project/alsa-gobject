@@ -271,6 +271,35 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
 }
 
 /**
+ * alsaseq_user_client_create_port_at:
+ * @self: A #ALSASeqUserClient.
+ * @port_info: (inout): A #ALSASeqPortInfo.
+ * @port_id: The numerical ID of port to create.
+ * @error: A #GError.
+ *
+ * Create a port into the client with the given numerical port ID.
+ *
+ * The call of function executes ioctl(2) system call with
+ * SNDRV_SEQ_IOCTL_CREATE_PORT command for ALSA sequencer character device.
+ */
+void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
+                                        ALSASeqPortInfo *const *port_info,
+                                        guint8 port_id, GError **error)
+{
+    struct snd_seq_port_info *info;
+
+    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
+
+    seq_port_info_refer_private(*port_info, &info);
+
+    info->addr.port = port_id;
+    info->flags |= SNDRV_SEQ_PORT_FLG_GIVEN_PORT;
+
+    alsaseq_user_client_create_port(self, *port_info, NULL, error);
+}
+
+/**
  * alsaseq_user_client_update_port:
  * @self: A #ALSASeqUserClient.
  * @port_info: A #ALSASeqPortInfo.
