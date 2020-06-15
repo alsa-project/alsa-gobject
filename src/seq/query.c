@@ -727,7 +727,7 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  * alsaseq_get_queue_status:
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
- * @queue_status: (out): The current status of queue.
+ * @queue_status: (inout): The current status of queue.
  * @error: A #GError.
  *
  * Get current status of queue.
@@ -736,7 +736,8 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  * with SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS command for ALSA sequencer character
  * device.
  */
-void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
+void alsaseq_get_queue_status(guint queue_id,
+                              ALSASeqQueueStatus *const *queue_status,
                               GError **error)
 {
     struct snd_seq_queue_status *status;
@@ -754,16 +755,12 @@ void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
         return;
     }
 
-    *queue_status = g_object_new(ALSASEQ_TYPE_QUEUE_STATUS, NULL);
+    g_return_if_fail(ALSASEQ_IS_QUEUE_STATUS(*queue_status));
     seq_queue_status_refer_private(*queue_status, &status);
 
     status->queue = (int)queue_id;
-    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS, status) < 0) {
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS, status) < 0)
         generate_error(error, errno);
-        close(fd);
-        g_object_unref(*queue_status);
-        return;
-    }
 
     close(fd);
 }
