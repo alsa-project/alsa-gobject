@@ -25,7 +25,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
                                GError **error);
 
 void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
-                                 ALSATimerDeviceStatus **device_status,
+                                 ALSATimerDeviceStatus *const *device_status,
                                  GError **error);
 
 void alsatimer_set_device_params(ALSATimerDeviceId *device_id,

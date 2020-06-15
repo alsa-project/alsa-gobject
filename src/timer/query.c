@@ -220,7 +220,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
 /**
  * alsatimer_get_device_status:
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
- * @device_status: (out): The status of timer device.
+ * @device_status: (inout): The status of timer device.
  * @error: A #GError.
  *
  * Get the status of timer device.
@@ -229,7 +229,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
  * with SNDRV_TIMER_IOCTL_GSTATUS command for ALSA timer character device.
  */
 void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
-                                 ALSATimerDeviceStatus **device_status,
+                                 ALSATimerDeviceStatus *const *device_status,
                                  GError **error)
 {
     char *devnode;
@@ -237,6 +237,7 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
     int fd;
 
     g_return_if_fail(device_id != NULL);
+    g_return_if_fail(ALSATIMER_IS_DEVICE_STATUS(*device_status));
 
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
@@ -249,7 +250,6 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
         return;
     }
 
-    *device_status = g_object_new(ALSATIMER_TYPE_DEVICE_STATUS, NULL);
     timer_device_status_refer_private(*device_status, &status);
 
     status->tid = *device_id;
