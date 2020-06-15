@@ -45,6 +45,8 @@ struct _ALSATimerInstanceStatusClass {
 
 GType alsatimer_instance_status_get_type() G_GNUC_CONST;
 
+ALSATimerInstanceStatus *alsatimer_instance_status_new();
+
 void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
                                           const gint64 *tstamp[2]);
 

@@ -125,6 +125,18 @@ void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
     *tstamp = (const gint64 *)&priv->tstamp;
 }
 
+/**
+ * alsatimer_instance_status_new:
+ *
+ * Allocate and return an instance of #ALSATimerInstanceStatus.
+ *
+ * Returns: A #ALSATimerInstanceStatus.
+ */
+ALSATimerInstanceStatus *alsatimer_instance_status_new()
+{
+    return g_object_new(ALSATIMER_TYPE_INSTANCE_STATUS, NULL);
+}
+
 void timer_instance_status_refer_private(ALSATimerInstanceStatus *self,
                                          struct snd_timer_status **status)
 {
