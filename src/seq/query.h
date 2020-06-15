@@ -49,7 +49,8 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
                                     ALSASeqQueueInfo **queue_info,
                                     GError **error);
 
-void alsaseq_get_queue_status(guint queue_id, ALSASeqQueueStatus **queue_status,
+void alsaseq_get_queue_status(guint queue_id,
+                              ALSASeqQueueStatus *const *queue_status,
                               GError **error);
 
 G_END_DECLS
