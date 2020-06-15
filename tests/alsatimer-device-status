@@ -15,7 +15,9 @@ props = (
     'resolution-numerator',
     'resolution-denominator',
 )
-methods = ()
+methods = (
+    'new',
+)
 signals = ()
 
 if not test(target, props, methods, signals):

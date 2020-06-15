@@ -87,6 +87,18 @@ static void alsatimer_device_status_init(ALSATimerDeviceStatus *self)
     return;
 }
 
+/**
+ * alsatimer_device_status_new:
+ *
+ * Allocate and return an instance of #ALSATimerDeviceStatus.
+ *
+ * Returns: A #ALSATimerDeviceStatus.
+ */
+ALSATimerDeviceStatus *alsatimer_device_status_new()
+{
+    return g_object_new(ALSATIMER_TYPE_DEVICE_STATUS, NULL);
+}
+
 void timer_device_status_refer_private(ALSATimerDeviceStatus *self,
                                        struct snd_timer_gstatus **status)
 {

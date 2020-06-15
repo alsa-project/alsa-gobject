@@ -45,6 +45,8 @@ struct _ALSATimerDeviceStatusClass {
 
 GType alsatimer_device_status_get_type() G_GNUC_CONST;
 
+ALSATimerDeviceStatus *alsatimer_device_status_new();
+
 G_END_DECLS
 
 #endif
