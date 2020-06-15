@@ -10,7 +10,11 @@ gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
 target = ALSATimer.DeviceStatus()
-props = ()
+props = (
+    'resolution',
+    'resolution-numerator',
+    'resolution-denominator',
+)
 methods = ()
 signals = ()
 
