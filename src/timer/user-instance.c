@@ -301,7 +301,7 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
 /**
  * alsatimer_user_instance_get_status:
  * @self: A #ALSATimerUserInstance.
- * @instance_status: (out): A #ALSATimerInstanceStatus.
+ * @instance_status: (inout): A #ALSATimerInstanceStatus.
  * @error: A #GError.
  *
  * Get the latest status of instance.
@@ -310,8 +310,8 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
  * SNDRV_TIMER_IOCTL_STATUS command for ALSA timer character device.
  */
 void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
-                                    ALSATimerInstanceStatus **instance_status,
-                                    GError **error)
+                                ALSATimerInstanceStatus *const *instance_status,
+                                GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_status *status;
@@ -319,13 +319,11 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    *instance_status = g_object_new(ALSATIMER_TYPE_INSTANCE_STATUS, NULL);
+    g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status));
     timer_instance_status_refer_private(*instance_status, &status);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0) {
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0)
         generate_error(error, errno);
-        g_object_unref(*instance_status);
-    }
 }
 
 static gboolean timer_user_instance_check_src(GSource *gsrc)
