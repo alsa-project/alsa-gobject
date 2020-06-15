@@ -137,6 +137,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_queue_info_new";
 
     "alsaseq_queue_status_get_type";
+    "alsaseq_queue_status_new";
     "alsaseq_queue_status_get_tick_time";
     "alsaseq_queue_status_get_real_time";
 

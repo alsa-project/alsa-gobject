@@ -45,6 +45,8 @@ struct _ALSASeqQueueStatusClass {
 
 GType alsaseq_queue_status_get_type() G_GNUC_CONST;
 
+ALSASeqQueueStatus *alsaseq_queue_status_new();
+
 void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
                                         guint *tick_time);
 

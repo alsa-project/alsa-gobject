@@ -16,6 +16,7 @@ props = (
     'running',
 )
 methods = (
+    'new',
     'get_tick_time',
     'get_real_time',
 )

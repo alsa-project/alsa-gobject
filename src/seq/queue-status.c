@@ -86,6 +86,18 @@ static void alsaseq_queue_status_init(ALSASeqQueueStatus *self)
 }
 
 /**
+ * alsaseq_queue_status_new:
+ *
+ * Allocate and returns an instance of #ALSASeqQueueStatus.
+ *
+ * Returns: A #ALSASeqQueueStatus.
+ */
+ALSASeqQueueStatus *alsaseq_queue_status_new()
+{
+    return g_object_new(ALSASEQ_TYPE_QUEUE_STATUS, NULL);
+}
+
+/**
  * alsaseq_queue_status_get_tick_time:
  * @self: A #ALSASeqQueueStatus.
  * @tick_time: (out): The number of MIDI ticks.
