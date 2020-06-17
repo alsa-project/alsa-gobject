@@ -25,7 +25,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataCtl, alsaseq_event_data_ctl, seq_event_data_
  *
  * Get the value of channel for the control event.
  */
-void alsaseq_event_data_ctl_get_channel(ALSASeqEventDataCtl *self,
+void alsaseq_event_data_ctl_get_channel(const ALSASeqEventDataCtl *self,
                                         guint8 *channel)
 {
     *channel = self->channel;
@@ -51,7 +51,8 @@ void alsaseq_event_data_ctl_set_channel(ALSASeqEventDataCtl *self,
  *
  * Get the parameter for the control event.
  */
-void alsaseq_event_data_ctl_get_param(ALSASeqEventDataCtl *self, guint *param)
+void alsaseq_event_data_ctl_get_param(const ALSASeqEventDataCtl *self,
+                                      guint *param)
 {
     *param = self->param;
 }
@@ -75,7 +76,8 @@ void alsaseq_event_data_ctl_set_param(ALSASeqEventDataCtl *self, guint param)
  *
  * Get the value for the control event.
  */
-void alsaseq_event_data_ctl_get_value(ALSASeqEventDataCtl *self, gint *value)
+void alsaseq_event_data_ctl_get_value(const ALSASeqEventDataCtl *self,
+                                      gint *value)
 {
     *value = self->param;
 }
