@@ -25,7 +25,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataResult, alsaseq_event_data_result, seq_event
  *
  * Get the type of event in which the data results.
  */
-void alsaseq_event_data_result_get_event(ALSASeqEventDataResult *self,
+void alsaseq_event_data_result_get_event(const ALSASeqEventDataResult *self,
                                          ALSASeqEventType *event_type)
 {
     *event_type = (ALSASeqEventType)self->event;
@@ -51,7 +51,7 @@ void alsaseq_event_data_result_set_event(ALSASeqEventDataResult *self,
  *
  * Get the status of event.
  */
-void alsaseq_event_data_result_get_result(ALSASeqEventDataResult *self,
+void alsaseq_event_data_result_get_result(const ALSASeqEventDataResult *self,
                                           gint *result)
 {
     *result = self->result;
