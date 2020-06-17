@@ -25,7 +25,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqQueueTimerDataAlsa, alsaseq_queue_timer_data_alsa, se
  *
  * Refer to the device ID of timer which drives the queue.
  */
-void alsaseq_queue_timer_data_alsa_get_device_id(ALSASeqQueueTimerDataAlsa *self,
+void alsaseq_queue_timer_data_alsa_get_device_id(const ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId **device_id)
 {
     *device_id = (ALSATimerDeviceId *)&self->device_id;
@@ -51,7 +51,7 @@ void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self
  *
  * Get the resolution of timer which drives the queue.
  */
-void alsaseq_queue_timer_data_alsa_get_resolution(ALSASeqQueueTimerDataAlsa *self,
+void alsaseq_queue_timer_data_alsa_get_resolution(const ALSASeqQueueTimerDataAlsa *self,
                                                   guint *resolution)
 {
     *resolution = self->resolution;

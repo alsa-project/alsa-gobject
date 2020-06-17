@@ -20,12 +20,12 @@ typedef struct {
 
 GType alsaseq_queue_timer_data_alsa_get_type() G_GNUC_CONST;
 
-void alsaseq_queue_timer_data_alsa_get_device_id(ALSASeqQueueTimerDataAlsa *self,
+void alsaseq_queue_timer_data_alsa_get_device_id(const ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId **device_id);
 void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId *device_id);
 
-void alsaseq_queue_timer_data_alsa_get_resolution(ALSASeqQueueTimerDataAlsa *self,
+void alsaseq_queue_timer_data_alsa_get_resolution(const ALSASeqQueueTimerDataAlsa *self,
                                                   guint *resolution);
 void alsaseq_queue_timer_data_alsa_set_resolution(ALSASeqQueueTimerDataAlsa *self,
                                                   guint resolution);
