@@ -27,7 +27,7 @@ G_DEFINE_BOXED_TYPE(ALSATimerEventDataTstamp, alsatimer_event_data_tstamp, timer
  *
  * Get the kind of event for the timestamp event.
  */
-void alsatimer_event_data_tstamp_get_event(ALSATimerEventDataTstamp *self,
+void alsatimer_event_data_tstamp_get_event(const ALSATimerEventDataTstamp *self,
                                            ALSATimerEventType *event)
 {
     *event = (ALSATimerEventType)self->event;
@@ -42,7 +42,7 @@ void alsatimer_event_data_tstamp_get_event(ALSATimerEventDataTstamp *self,
  *
  * Get the seconds and nanoseconds part for the timestamp event.
  */
-void alsatimer_event_data_tstamp_get_tstamp(ALSATimerEventDataTstamp *self,
+void alsatimer_event_data_tstamp_get_tstamp(const ALSATimerEventDataTstamp *self,
                                             gint64 *const tstamp[2])
 {
     (*tstamp)[0] = (gint64)self->tstamp.tv_sec;
@@ -56,7 +56,7 @@ void alsatimer_event_data_tstamp_get_tstamp(ALSATimerEventDataTstamp *self,
  *
  * Get the value depending on the type of timestamp event.
  */
-void alsatimer_event_data_tstamp_get_val(ALSATimerEventDataTstamp *self,
+void alsatimer_event_data_tstamp_get_val(const ALSATimerEventDataTstamp *self,
                                          guint *val)
 {
     *val = self->val;
