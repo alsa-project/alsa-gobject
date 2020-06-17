@@ -27,7 +27,7 @@ G_DEFINE_BOXED_TYPE(ALSATimerEventDataTick, alsatimer_event_data_tick, timer_eve
  *
  * Get the resolution of tick event.
  */
-void alsatimer_event_data_tick_get_resolution(ALSATimerEventDataTick *self,
+void alsatimer_event_data_tick_get_resolution(const ALSATimerEventDataTick *self,
                                               guint *resolution)
 {
     *resolution = self->resolution;
@@ -40,7 +40,7 @@ void alsatimer_event_data_tick_get_resolution(ALSATimerEventDataTick *self,
  *
  * Get the tick count since the last event.
  */
-void alsatimer_event_data_tick_get_ticks(ALSATimerEventDataTick *self,
+void alsatimer_event_data_tick_get_ticks(const ALSATimerEventDataTick *self,
                                          guint *ticks)
 {
     *ticks = self->ticks;
