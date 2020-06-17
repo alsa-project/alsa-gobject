@@ -26,7 +26,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataQueue, alsaseq_event_data_queue, seq_event_d
  *
  * Get the numerical ID of queue for the event.
  */
-void alsaseq_event_data_queue_get_queue_id(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_queue_id(const ALSASeqEventDataQueue *self,
                                            guint8 *queue_id)
 {
     *queue_id = self->queue;
@@ -52,7 +52,7 @@ void alsaseq_event_data_queue_set_queue_id(ALSASeqEventDataQueue *self,
  *
  * Get the value as param of the queue event.
  */
-void alsaseq_event_data_queue_get_value_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_value_param(const ALSASeqEventDataQueue *self,
                                               gint *value)
 {
     *value = self->param.value;
@@ -78,7 +78,7 @@ void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
  *
  * Get the timestamp as param of the queue event.
  */
-void alsaseq_event_data_queue_get_tstamp_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_tstamp_param(const ALSASeqEventDataQueue *self,
                                                const ALSASeqTstamp **tstamp)
 {
     *tstamp = &self->param.time;
@@ -104,7 +104,7 @@ void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
  *
  * Get the position as param of the queue event.
  */
-void alsaseq_event_data_queue_get_position_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_position_param(const ALSASeqEventDataQueue *self,
                                                  guint *position)
 {
     *position = self->param.position;
@@ -132,7 +132,7 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
  * Refer to numerator and denominator of fraction for skew as the parameter of
  * queue event.
  */
-void alsaseq_event_data_queue_get_skew_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_skew_param(const ALSASeqEventDataQueue *self,
                                              const guint *skew[2])
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
@@ -164,7 +164,7 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
  *
  * Refer to two quadlets as the parameter of queue event.
  */
-void alsaseq_event_data_queue_get_quadlet_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_quadlet_param(const ALSASeqEventDataQueue *self,
                                                 const guint32 *quadlets[2])
 {
     *quadlets = self->param.d32;
@@ -192,7 +192,7 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
  *
  * Refer to eight bytes as the parameter of queue event.
  */
-void alsaseq_event_data_queue_get_byte_param(ALSASeqEventDataQueue *self,
+void alsaseq_event_data_queue_get_byte_param(const ALSASeqEventDataQueue *self,
                                              const guint8 *bytes[8])
 {
     *bytes = self->param.d8;
