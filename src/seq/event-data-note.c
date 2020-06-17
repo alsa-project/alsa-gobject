@@ -25,7 +25,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataNote, alsaseq_event_data_note, seq_event_dat
  *
  * Get the value of channel in the note event.
  */
-void alsaseq_event_data_note_get_channel(ALSASeqEventDataNote *self,
+void alsaseq_event_data_note_get_channel(const ALSASeqEventDataNote *self,
                                          guint8 *channel)
 {
     *channel = self->channel;
@@ -51,7 +51,8 @@ void alsaseq_event_data_note_set_channel(ALSASeqEventDataNote *self,
  *
  * Get the value of note in the note event.
  */
-void alsaseq_event_data_note_get_note(ALSASeqEventDataNote *self, guint8 *note)
+void alsaseq_event_data_note_get_note(const ALSASeqEventDataNote *self,
+                                      guint8 *note)
 {
     *note = self->note;
 }
@@ -75,7 +76,7 @@ void alsaseq_event_data_note_set_note(ALSASeqEventDataNote *self, guint8 note)
  *
  * Get the value of velocity in the note event.
  */
-void alsaseq_event_data_note_get_velocity(ALSASeqEventDataNote *self,
+void alsaseq_event_data_note_get_velocity(const ALSASeqEventDataNote *self,
                                           guint8 *velocity)
 {
     *velocity = self->velocity;
@@ -101,7 +102,7 @@ void alsaseq_event_data_note_set_velocity(ALSASeqEventDataNote *self,
  *
  * Get the value of off-velocity in the note event.
  */
-void alsaseq_event_data_note_get_off_velocity(ALSASeqEventDataNote *self,
+void alsaseq_event_data_note_get_off_velocity(const ALSASeqEventDataNote *self,
                                               guint8 *off_velocity)
 {
     *off_velocity = self->off_velocity;
@@ -127,7 +128,7 @@ void alsaseq_event_data_note_set_off_velocity(ALSASeqEventDataNote *self,
  *
  * Get the value of duration in the note event.
  */
-void alsaseq_event_data_note_get_duration(ALSASeqEventDataNote *self,
+void alsaseq_event_data_note_get_duration(const ALSASeqEventDataNote *self,
                                           guint8 *duration)
 {
     *duration = self->duration;
