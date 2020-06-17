@@ -15,10 +15,10 @@ typedef struct snd_timer_read ALSATimerEventDataTick;
 
 GType alsatimer_event_data_tick_get_type() G_GNUC_CONST;
 
-void alsatimer_event_data_tick_get_resolution(ALSATimerEventDataTick *self,
+void alsatimer_event_data_tick_get_resolution(const ALSATimerEventDataTick *self,
                                               guint *resolution);
 
-void alsatimer_event_data_tick_get_ticks(ALSATimerEventDataTick *self,
+void alsatimer_event_data_tick_get_ticks(const ALSATimerEventDataTick *self,
                                          guint *ticks);
 
 G_END_DECLS
