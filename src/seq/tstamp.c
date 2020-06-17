@@ -25,7 +25,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqTstamp, alsaseq_tstamp, seq_tstamp_copy, g_free)
  *
  * Get time as MIDI ticks.
  */
-void alsaseq_tstamp_get_tick_time(ALSASeqTstamp *self, guint32 *tick_time)
+void alsaseq_tstamp_get_tick_time(const ALSASeqTstamp *self, guint32 *tick_time)
 {
     *tick_time = self->tick;
 }
@@ -50,7 +50,8 @@ void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time)
  *
  * Refer to the time as wall-clock time.
  */
-void alsaseq_tstamp_get_real_time(ALSASeqTstamp *self, const guint32 *real_time[2])
+void alsaseq_tstamp_get_real_time(const ALSASeqTstamp *self,
+                                  const guint32 *real_time[2])
 {
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
