@@ -639,7 +639,7 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_DELETE_QUEUE command for ALSA sequencer character device.
  */
 void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
-                                      guint queue_id, GError **error)
+                                      guint8 queue_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info info = {0};
@@ -695,7 +695,7 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
-                                         guint queue_id, gboolean *use,
+                                         guint8 queue_id, gboolean *use,
                                          GError **error)
 {
     ALSASeqUserClientPrivate *priv;
@@ -727,7 +727,7 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
-                                         guint queue_id, gboolean use,
+                                         guint8 queue_id, gboolean use,
                                          GError **error)
 {
     ALSASeqUserClientPrivate *priv;
@@ -758,7 +758,7 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
-                                guint queue_id, ALSASeqQueueTempo *queue_tempo,
+                                guint8 queue_id, ALSASeqQueueTempo *queue_tempo,
                                 GError **error)
 {
     ALSASeqUserClientPrivate *priv;
@@ -788,7 +788,7 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
-                                guint queue_id, ALSASeqQueueTempo **queue_tempo,
+                                guint8 queue_id, ALSASeqQueueTempo **queue_tempo,
                                 GError **error)
 {
     ALSASeqUserClientPrivate *priv;
@@ -822,7 +822,7 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
-                                         guint queue_id,
+                                         guint8 queue_id,
                                          ALSASeqQueueTimer *queue_timer,
                                          GError **error)
 {
@@ -864,7 +864,7 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
  * SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
-                                         guint queue_id,
+                                         guint8 queue_id,
                                          ALSASeqQueueTimer **queue_timer,
                                          GError **error)
 {

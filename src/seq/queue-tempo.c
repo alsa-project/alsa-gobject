@@ -33,7 +33,7 @@ static void seq_queue_tempo_set_property(GObject *obj, guint id,
 
     switch (id) {
     case SEQ_QUEUE_TEMPO_PROP_QUEUE_ID:
-        priv->tempo.queue = g_value_get_int(val);
+        priv->tempo.queue = (int)g_value_get_uchar(val);
         break;
     case SEQ_QUEUE_TEMPO_PROP_TEMPO:
         priv->tempo.tempo = g_value_get_int(val);
@@ -56,7 +56,7 @@ static void seq_queue_tempo_get_property(GObject *obj, guint id, GValue *val,
 
     switch (id) {
     case SEQ_QUEUE_TEMPO_PROP_QUEUE_ID:
-        g_value_set_int(val, priv->tempo.queue);
+        g_value_set_uchar(val, (guint8)priv->tempo.queue);
         break;
     case SEQ_QUEUE_TEMPO_PROP_TEMPO:
         g_value_set_uint(val, priv->tempo.tempo);
@@ -78,12 +78,12 @@ static void alsaseq_queue_tempo_class_init(ALSASeqQueueTempoClass *klass)
     gobject_class->get_property = seq_queue_tempo_get_property;
 
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_QUEUE_ID] =
-        g_param_spec_int("queue-id", "queue-id",
-                         "The numerical ID of queue, except for one of "
-                         "ALSASeqSpecificClientId.",
-                         G_MININT, G_MAXINT,
-                         -1,
-                         G_PARAM_READWRITE);
+        g_param_spec_uchar("queue-id", "queue-id",
+                           "The numerical ID of queue, except for one of "
+                           "ALSASeqSpecificClientId.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READWRITE);
 
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_TEMPO] =
         g_param_spec_uint("tempo", "tempo",

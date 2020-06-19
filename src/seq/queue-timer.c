@@ -52,12 +52,12 @@ static void alsaseq_queue_timer_class_init(ALSASeqQueueTimerClass *klass)
     gobject_class->get_property = seq_queue_timer_get_property;
 
     seq_queue_timer_props[SEQ_QUEUE_TIMER_PROP_QUEUE_ID] =
-        g_param_spec_int("queue-id", "queue-id",
-                         "The numerical ID of queue, except for one of "
-                         "ALSASeqSpecificClientId.",
-                         G_MININT, G_MAXINT,
-                         -1,
-                         G_PARAM_READABLE);
+        g_param_spec_uchar("queue-id", "queue-id",
+                           "The numerical ID of queue, except for one of "
+                           "ALSASeqSpecificClientId.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READABLE);
 
     seq_queue_timer_props[SEQ_QUEUE_TIMER_PROP_TIMER_TYPE] =
         g_param_spec_enum("type", "type",
