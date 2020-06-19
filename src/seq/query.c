@@ -567,7 +567,7 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
  * with SNDRV_SEQ_IOCTL_SYSTEM_INFO and SNDRV_SEQ_IOCTL_GET_QUEUE_INFO commands
  * for ALSA sequencer character device.
  */
-void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
+void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
                                GError **error)
 {
     char *devnode;
@@ -575,7 +575,7 @@ void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
     struct snd_seq_system_info info = {0};
     unsigned int maximum_count;
     unsigned int count;
-    guint *list;
+    guint8 *list;
     unsigned int index;
     int i;
 

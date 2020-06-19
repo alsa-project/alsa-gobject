@@ -40,7 +40,7 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
                                    ALSASeqQuerySubscribeType query_type,
                                    GList **entries, GError **error);
 
-void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
+void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
                                GError **error);
 
 void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info,
