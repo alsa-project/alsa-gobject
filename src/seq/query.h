@@ -21,7 +21,7 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error);
 
 void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error);
 
-void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
+void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
                                 GError **error);
 
 void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,

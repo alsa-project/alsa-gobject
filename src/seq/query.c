@@ -172,14 +172,14 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
  * SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT command for ALSA sequencer character
  * device.
  */
-void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
+void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
                                 GError **error)
 {
     char *devnode;
     int my_id;
     struct snd_seq_system_info system_info = {0};
     unsigned int count;
-    guint *list;
+    guint8 *list;
     unsigned int index;
     struct snd_seq_client_info client_info = {0};
     int fd;
