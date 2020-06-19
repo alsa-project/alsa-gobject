@@ -646,7 +646,7 @@ void alsaseq_get_queue_id_list(guint **entries, gsize *entry_count,
  * with SNDRV_SEQ_IOCTL_GET_QUEUE_INFO command for ALSA sequencer character
  * device.
  */
-void alsaseq_get_queue_info_by_id(guint queue_id, ALSASeqQueueInfo **queue_info,
+void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info,
                                   GError **error)
 {
     struct snd_seq_queue_info *info;
@@ -736,7 +736,7 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  * with SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS command for ALSA sequencer character
  * device.
  */
-void alsaseq_get_queue_status(guint queue_id,
+void alsaseq_get_queue_status(guint8 queue_id,
                               ALSASeqQueueStatus *const *queue_status,
                               GError **error)
 {

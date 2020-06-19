@@ -55,12 +55,12 @@ static void alsaseq_queue_status_class_init(ALSASeqQueueStatusClass *klass)
     gobject_class->get_property = seq_queue_status_get_property;
 
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_QUEUE_ID] =
-        g_param_spec_int("queue-id", "queue-id",
-                         "The numerical ID of queue, except for entries in "
-                         "ALSASeqSpecificQueueId.",
-                         G_MININT, G_MAXINT,
-                         -1,
-                         G_PARAM_READABLE);
+        g_param_spec_uchar("queue-id", "queue-id",
+                           "The numerical ID of queue, except for entries in "
+                           "ALSASeqSpecificQueueId.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READABLE);
 
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_EVENT_COUNT] =
         g_param_spec_int("event-count", "event-count",

@@ -119,30 +119,30 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
                                       ALSASeqQueueInfo *const *queue_info,
                                       GError **error);
 void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
-                                      guint queue_id, GError **error);
+                                      guint8 queue_id, GError **error);
 void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
                                 ALSASeqQueueInfo *queue_info, GError **error);
 
 void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
-                                         guint queue_id, gboolean *use,
+                                         guint8 queue_id, gboolean *use,
                                          GError **error);
 void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
-                                         guint queue_id, gboolean use,
+                                         guint8 queue_id, gboolean use,
                                          GError **error);
 
 void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
-                                guint queue_id, ALSASeqQueueTempo *queue_tempo,
+                                guint8 queue_id, ALSASeqQueueTempo *queue_tempo,
                                 GError **error);
 void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
-                                guint queue_id, ALSASeqQueueTempo **queue_tempo,
+                                guint8 queue_id, ALSASeqQueueTempo **queue_tempo,
                                 GError **error);
 
 void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
-                                         guint queue_id,
+                                         guint8 queue_id,
                                          ALSASeqQueueTimer *queue_timer,
                                          GError **error);
 void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
-                                         guint queue_id,
+                                         guint8 queue_id,
                                          ALSASeqQueueTimer **queue_timer,
                                          GError **error);
 
