@@ -41,7 +41,7 @@ static void seq_queue_info_set_property(GObject *obj, guint id,
         priv->info.queue = (int)g_value_get_uchar(val);
         break;
     case SEQ_QUEUE_INFO_PROP_CLIENT_ID:
-        priv->info.owner = g_value_get_int(val);
+        priv->info.owner = (int)g_value_get_uchar(val);
         break;
     case SEQ_QUEUE_INFO_PROP_LOCKED:
         priv->info.locked = g_value_get_boolean(val);
@@ -67,7 +67,7 @@ static void seq_queue_info_get_property(GObject *obj, guint id, GValue *val,
         g_value_set_uchar(val, (guint8)priv->info.queue);
         break;
     case SEQ_QUEUE_INFO_PROP_CLIENT_ID:
-        g_value_set_int(val, priv->info.owner);
+        g_value_set_uchar(val, (guint8)priv->info.owner);
         break;
     case SEQ_QUEUE_INFO_PROP_LOCKED:
         g_value_set_boolean(val, priv->info.locked);
@@ -97,12 +97,12 @@ static void alsaseq_queue_info_class_init(ALSASeqQueueInfoClass *klass)
                            G_PARAM_READWRITE);
 
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_CLIENT_ID] =
-        g_param_spec_int("client-id", "client-id",
-                         "The numerical ID of client which owns the queue, "
-                         "except for one of ALSASeqSpecificClientId.",
-                         G_MININT, G_MAXINT,
-                         -1,
-                         G_PARAM_READWRITE);
+        g_param_spec_uchar("client-id", "client-id",
+                           "The numerical ID of client which owns the queue, "
+                           "except for one of ALSASeqSpecificClientId.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READWRITE);
 
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_LOCKED] =
         g_param_spec_boolean("locked", "locked",

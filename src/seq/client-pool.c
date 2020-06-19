@@ -69,7 +69,7 @@ static void seq_client_pool_get_property(GObject *obj, guint id, GValue *val,
 
     switch (id) {
     case SEQ_CLIENT_POOL_PROP_CLIENT_ID:
-        g_value_set_int(val, priv->pool.client);
+        g_value_set_uchar(val, (guint8)priv->pool.client);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_POOL:
         g_value_set_int(val, priv->pool.output_pool);
@@ -100,13 +100,13 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     gobject_class->get_property = seq_client_pool_get_property;
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_CLIENT_ID] =
-        g_param_spec_int("client-id", "client-id",
-                         "The numerical ID of client. One of "
-                         "ALSASeqSpecificClientId is available as well as "
-                         "any numerical value.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READABLE);
+        g_param_spec_uchar("client-id", "client-id",
+                           "The numerical ID of client. One of "
+                           "ALSASeqSpecificClientId is available as well as "
+                           "any numerical value.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READABLE);
 
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
         g_param_spec_int("output-pool", "output-pool",
