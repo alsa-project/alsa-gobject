@@ -24,16 +24,16 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error);
 void alsaseq_get_client_id_list(guint **entries, gsize *entry_count,
                                 GError **error);
 
-void alsaseq_get_client_info(guint client_id, ALSASeqClientInfo **client_info,
+void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
 			     GError **error);
 
-void alsaseq_get_port_id_list(guint client_id, guint **entries,
+void alsaseq_get_port_id_list(guint8 client_id, guint **entries,
                               gsize *entry_count, GError **error);
 
-void alsaseq_get_port_info(guint client_id, guint port_id,
+void alsaseq_get_port_info(guint8 client_id, guint port_id,
                            ALSASeqPortInfo **port_info, GError **error);
 
-void alsaseq_get_client_pool(gint client_id, ALSASeqClientPool **client_pool,
+void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
                              GError **error);
 
 void alsaseq_get_subscription_list(const ALSASeqAddr *addr,

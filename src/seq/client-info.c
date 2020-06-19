@@ -44,7 +44,7 @@ static void seq_client_info_set_property(GObject *obj, guint id,
 
     switch (id) {
     case SEQ_CLIENT_INFO_PROP_CLIENT_ID:
-        priv->info.client = g_value_get_int(val);
+        priv->info.client = (int)g_value_get_uchar(val);
         break;
     case SEQ_CLIENT_INFO_PROP_CLIENT_TYPE:
         priv->info.type = (snd_seq_client_type_t)g_value_get_enum(val);
@@ -79,7 +79,7 @@ static void seq_client_info_get_property(GObject *obj, guint id, GValue *val,
 
     switch (id) {
     case SEQ_CLIENT_INFO_PROP_CLIENT_ID:
-        g_value_set_int(val, priv->info.client);
+        g_value_set_uchar(val, (guint8)priv->info.client);
         break;
     case SEQ_CLIENT_INFO_PROP_CLIENT_TYPE:
         g_value_set_enum(val, (ALSASeqClientType)priv->info.type);
@@ -121,13 +121,13 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
     gobject_class->get_property = seq_client_info_get_property;
 
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_ID] =
-        g_param_spec_int("client-id", "client-id",
-                         "The numerical ID of client. One of "
-                         "ALSASeqSpecificClientId is available as well as "
-                         "any numerical value.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uchar("client-id", "client-id",
+                           "The numerical ID of client. One of "
+                           "ALSASeqSpecificClientId is available as well as "
+                           "any numerical value.",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READWRITE);
 
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_TYPE] =
         g_param_spec_enum("type", "type",
