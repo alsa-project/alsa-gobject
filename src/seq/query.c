@@ -309,13 +309,13 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
  * with SNDRV_SEQ_IOCTL_GET_CLIENT_INFO and SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT
  * commands for ALSA sequencer character device.
  */
-void alsaseq_get_port_id_list(guint8 client_id, guint **entries,
+void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
                               gsize *entry_count, GError **error)
 {
     char *devnode;
     struct snd_seq_client_info client_info = {0};
     unsigned int count;
-    guint *list;
+    guint8 *list;
     unsigned int index;
     struct snd_seq_port_info port_info = {0};
     int fd;
@@ -385,7 +385,7 @@ void alsaseq_get_port_id_list(guint8 client_id, guint **entries,
  * with SNDRV_SEQ_IOCTL_GET_PORT_INFO command for ALSA sequencer character
  * device.
  */
-void alsaseq_get_port_info(guint8 client_id, guint port_id,
+void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
                            ALSASeqPortInfo **port_info, GError **error)
 {
     char *devnode;
