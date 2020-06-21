@@ -37,6 +37,7 @@
 struct _ALSARawmidiStreamPairPrivate {
     int fd;
     char *devnode;
+    guint16 proto_ver_triplet[3];
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYPE_OBJECT)
 
@@ -182,6 +183,7 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 {
     ALSARawmidiStreamPairPrivate *priv;
     char *devnode;
+    int proto_ver;
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
@@ -222,7 +224,47 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
         return;
     }
 
+    // Remember the version of protocol currently used.
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PVERSION, &proto_ver) < 0) {
+        generate_error(error, errno);
+        close(priv->fd);
+        priv->fd = -1;
+        g_free(devnode);
+        return;
+    }
+
     priv->devnode = devnode;
+    priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
+    priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
+    priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+}
+
+/**
+ * alsarawmidi_stream_pair_get_protocol_version:
+ * @self: A #ALSARawmidiStreamPair.
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
+ *                     protocol currently used.
+ *
+ * Get the version of rawmidi protocol currently used. The version is
+ * represented as the array with three elements; major, minor, and micro version
+ * in the order. The length of major version is 16 bit, the length of minor
+ * and micro version is 8 bit each.
+ */
+void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
+                                       const guint16 *proto_ver_triplet[3],
+                                       GError **error)
+{
+    ALSARawmidiStreamPairPrivate *priv;
+
+    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
 
 /**
