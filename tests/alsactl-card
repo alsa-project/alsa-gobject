@@ -17,6 +17,7 @@ props = (
 methods = (
     'new',
     'open',
+    'get_protocol_version',
     'get_info',
     'get_elem_id_list',
     'lock_elem',

@@ -14,6 +14,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_card_get_type";
     "alsactl_card_new";
     "alsactl_card_open";
+    "alsactl_card_get_protocol_version";
     "alsactl_card_get_info";
     "alsactl_card_get_elem_id_list";
     "alsactl_card_lock_elem";
