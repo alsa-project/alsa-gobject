@@ -74,7 +74,7 @@ ALSARawmidiStreamPair *alsarawmidi_stream_pair_new();
 void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                                   guint device_id, guint subdevice_id,
                                   ALSARawmidiStreamPairInfoFlag access_modes,
-				  gint open_flag, GError **error);
+                                  gint open_flag, GError **error);
 
 void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
