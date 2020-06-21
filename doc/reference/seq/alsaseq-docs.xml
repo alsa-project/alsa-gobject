@@ -33,9 +33,9 @@
 
     <chapter id="alsaseq-objects">
         <title>ALSASeq objects</title>
+        <xi:include href="xml/user-client.xml"/>
         <xi:include href="xml/system-info.xml"/>
         <xi:include href="xml/client-info.xml"/>
-        <xi:include href="xml/user-client.xml"/>
         <xi:include href="xml/client-pool.xml"/>
         <xi:include href="xml/addr.xml"/>
         <xi:include href="xml/port-info.xml"/>
