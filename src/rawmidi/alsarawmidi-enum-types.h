@@ -6,8 +6,8 @@
 
 /**
  * ALSARawmidiStreamDirection:
- * @ALSARAWMIDI_STREAM_DIRECTION_OUTPUT:	Output direction of stream.
- * @ALSARAWMIDI_STREAM_DIRECTION_INPUT:		Input direction of stream.
+ * @ALSARAWMIDI_STREAM_DIRECTION_OUTPUT:        Output direction of stream.
+ * @ALSARAWMIDI_STREAM_DIRECTION_INPUT:         Input direction of stream.
  *
  * A set of enumerators for the direction of stream.
  */
@@ -18,9 +18,9 @@ typedef enum {
 
 /**
  * ALSARawmidiStreamPairInfoFlag:
- * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT:	The pair of stream supports output substream.
- * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT:	The pair of stream supports input substream.
- * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_DUPLEX:	Both directions of stream are available at the same time.
+ * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT:   The pair of stream supports output substream.
+ * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT:    The pair of stream supports input substream.
+ * @ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_DUPLEX:   Both directions of stream are available at the same time.
  *
  * A set of flags for information of the pair of streams.
  */
