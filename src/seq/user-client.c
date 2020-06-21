@@ -612,7 +612,7 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
  */
 void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
                                       ALSASeqQueueInfo *const *queue_info,
-				      GError **error)
+                                      GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info *info;
