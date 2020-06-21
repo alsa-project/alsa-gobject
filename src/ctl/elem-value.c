@@ -304,7 +304,7 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
 
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.status));
     for (i = 0; i < length; ++i)
-	    value->value.iec958.status[i] = status[i];
+        value->value.iec958.status[i] = status[i];
 }
 
 /**
@@ -329,7 +329,7 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self,
 
     *length = MIN(*length, G_N_ELEMENTS(value->value.iec958.status));
     for (i = 0; i < *length; ++i)
-	    (*status)[i] = value->value.iec958.status[i];
+        (*status)[i] = value->value.iec958.status[i];
 }
 
 /**
@@ -354,7 +354,7 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self,
 
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.subcode));
     for (i = 0; i < length; ++i)
-	    value->value.iec958.subcode[i] = data[i];
+        value->value.iec958.subcode[i] = data[i];
 }
 
 /**
