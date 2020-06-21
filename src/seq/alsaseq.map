@@ -42,6 +42,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_user_client_get_type";
     "alsaseq_user_client_new";
     "alsaseq_user_client_open";
+    "alsaseq_user_client_get_protocol_version";
     "alsaseq_user_client_set_info";
     "alsaseq_user_client_get_info";
     "alsaseq_user_client_create_port";

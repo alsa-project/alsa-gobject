@@ -16,6 +16,7 @@ props = (
 methods = (
     'new',
     'open',
+    'get_protocol_version',
     'set_info',
     'get_info',
     'create_port',
