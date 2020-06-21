@@ -77,6 +77,10 @@ ALSATimerUserInstance *alsatimer_user_instance_new();
 void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
                                   GError **error);
 
+void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
+                                        const guint16 *proto_ver_triplet[3],
+                                        GError **error);
+
 void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
                                         ALSATimerEventDataType event_data_type,
                                         GError **error);

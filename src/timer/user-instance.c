@@ -26,6 +26,7 @@
 struct _ALSATimerUserInstancePrivate {
     int fd;
     ALSATimerEventDataType event_data_type;
+    guint16 proto_ver_triplet[3];
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYPE_OBJECT)
 
@@ -121,6 +122,7 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
 {
     ALSATimerUserInstancePrivate *priv;
     char *devnode;
+    int proto_ver;
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
@@ -134,12 +136,54 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
     g_free(devnode);
     if (priv->fd < 0) {
         generate_error(error, errno);
+        return;
     }
+
+    // Remember the version of protocol currently used.
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PVERSION, &proto_ver) < 0) {
+        generate_error(error, errno);
+        close(priv->fd);
+        priv->fd = -1;
+        return;
+    }
+
+    priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
+    priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
+    priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
 }
 
 ALSATimerUserInstance *alsatimer_user_instance_new()
 {
     return g_object_new(ALSATIMER_TYPE_USER_INSTANCE, NULL);
+}
+
+/**
+ * alsatimer_user_instance_get_protocol_version:
+ * @self: A #ALSATimerUserInstance.
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
+ *                     protocol currently used.
+ * @error: A #GError.
+ *
+ * Get the version of timer protocol currently used. The version is
+ * represented as the array with three elements; major, minor, and micro version
+ * in the order. The length of major version is 16 bit, the length of minor
+ * and micro version is 8 bit each.
+ */
+void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
+                                        const guint16 *proto_ver_triplet[3],
+                                        GError **error)
+{
+    ALSATimerUserInstancePrivate *priv;
+
+    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    priv = alsatimer_user_instance_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
 
 /**
