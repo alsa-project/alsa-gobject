@@ -14,6 +14,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_stream_pair_get_type";
     "alsarawmidi_stream_pair_new";
     "alsarawmidi_stream_pair_open";
+    "alsarawmidi_stream_pair_get_protocol_version";
     "alsarawmidi_stream_pair_get_substream_info";
     "alsarawmidi_stream_pair_set_substream_params";
     "alsarawmidi_stream_pair_get_substream_status";

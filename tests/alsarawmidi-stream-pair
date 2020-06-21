@@ -16,6 +16,7 @@ props = (
 methods = (
     'new',
     'open',
+    'get_protocol_version',
     'get_substream_info',
     'set_substream_params',
     'get_substream_status',

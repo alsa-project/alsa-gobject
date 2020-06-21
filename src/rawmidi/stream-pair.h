@@ -76,6 +76,10 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                                   ALSARawmidiStreamPairInfoFlag access_modes,
                                   gint open_flag, GError **error);
 
+void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
+                                       const guint16 *proto_ver_triplet[3],
+                                       GError **error);
+
 void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamInfo **substream_info,
