@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/06/14
+2020/06/21
 Takashi Sakamoto
 
 Introduction
@@ -118,8 +118,8 @@ Supplemental information for language bindings
 
 * PyGObject <https://pygobject.readthedocs.io/> is a dynamic loader for
   libraries compatible with g-i.
-* alsa-gobject-rs <not published yet> includes creates to use these
-  libraries.
+* alsa-gobject-rs <https://github.com/alsa-project/alsa-gobject-rs/> includes
+  creates to use these libraries.
 
 Valgrind suppression file for leak detected in glib
 ===================================================
