@@ -26,6 +26,7 @@ struct _ALSACtlCardPrivate {
     int fd;
     char *devnode;
     gint subscribers;
+    guint16 proto_ver_triplet[3];
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 
@@ -179,6 +180,7 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
 {
     ALSACtlCardPrivate *priv;
     char *devnode;
+    int proto_ver;
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
@@ -195,7 +197,48 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
         return;
     }
 
+    // Remember the version of protocol currently used.
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_PVERSION, &proto_ver) < 0) {
+        generate_error(error, errno);
+        close(priv->fd);
+        priv->fd = -1;
+        g_free(devnode);
+        return;
+    }
+
     priv->devnode = devnode;
+    priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
+    priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
+    priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+}
+
+/**
+ * alsactl_card_get_protocol_version:
+ * @self: A #ALSACtlCard.
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
+ *                     protocol currently used.
+ * @error: A #GError.
+ *
+ * Get the version of control protocol currently used. The version is
+ * represented as the array with three elements; major, minor, and micro version
+ * in the order. The length of major version is 16 bit, the length of minor
+ * and micro version is 8 bit each.
+ */
+void alsactl_card_get_protocol_version(ALSACtlCard *self,
+                                       const guint16 *proto_ver_triplet[3],
+                                       GError **error)
+{
+    ALSACtlCardPrivate *priv;
+
+    g_return_if_fail(ALSACTL_IS_CARD(self));
+    priv = alsactl_card_get_instance_private(self);
+
+    if (priv->fd < 0) {
+        generate_error(error, ENXIO);
+        return;
+    }
+
+    *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
 
 /**

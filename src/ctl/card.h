@@ -79,6 +79,10 @@ ALSACtlCard *alsactl_card_new();
 void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
                        GError **error);
 
+void alsactl_card_get_protocol_version(ALSACtlCard *self,
+                                       const guint16 *proto_ver_triplet[3],
+                                       GError **error);
+
 void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
                            GError **error);
 
