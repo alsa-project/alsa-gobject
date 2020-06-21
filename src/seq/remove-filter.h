@@ -41,7 +41,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
                                 gint32 tick_time, gboolean after,
-				GError **error);
+                                GError **error);
 
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
