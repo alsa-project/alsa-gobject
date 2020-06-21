@@ -25,7 +25,7 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
                                 GError **error);
 
 void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
-			     GError **error);
+                             GError **error);
 
 void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
                               gsize *entry_count, GError **error);
