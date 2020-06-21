@@ -88,7 +88,7 @@ static void alsatimer_instance_params_class_init(ALSATimerInstanceParamsClass *k
     timer_instance_params_props[TIMER_INSTANCE_PARAMS_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
                            "The flags for user instance, as a set of "
-			   "ALSATimerInstanceParamFlag",
+                           "ALSATimerInstanceParamFlag",
                            ALSATIMER_TYPE_INSTANCE_PARAM_FLAG,
                            0,
                            G_PARAM_READWRITE);
