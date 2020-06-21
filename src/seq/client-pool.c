@@ -111,7 +111,7 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
         g_param_spec_int("output-pool", "output-pool",
                          "The total number of cells in memory pool for output "
-			 "direction.",
+                         "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
@@ -119,7 +119,7 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_POOL] =
         g_param_spec_int("input-pool", "input-pool",
                          "The total number of cells in memory pool for input "
-			 "direction.",
+                         "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
@@ -127,7 +127,7 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM] =
         g_param_spec_int("output-room", "output-room",
                          "The number of cells in memory pool for output "
-			 "direction to block user process.",
+                         "direction to block user process.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
@@ -135,7 +135,7 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_FREE] =
         g_param_spec_int("output-free", "output-free",
                          "The free number of cells in memory pool for output "
-			 "direction.",
+                         "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
@@ -143,7 +143,7 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_FREE] =
         g_param_spec_int("input-free", "input-free",
                          "The free number of cells in memory pool for input "
-			 "direction.",
+                         "direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
