@@ -74,6 +74,10 @@ ALSASeqUserClient *alsaseq_user_client_new();
 void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
                               GError **error);
 
+void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
+                                        const guint16 *proto_ver_triplet[3],
+                                        GError **error);
+
 void alsaseq_user_client_set_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *client_info,
                                   GError **error);
