@@ -33,11 +33,11 @@
 
     <chapter id="alsatimer-objects">
         <title>ALSATimer objects</title>
+        <xi:include href="xml/user-instance.xml"/>
         <xi:include href="xml/device-id.xml"/>
         <xi:include href="xml/device-info.xml"/>
         <xi:include href="xml/device-status.xml"/>
         <xi:include href="xml/device-params.xml"/>
-        <xi:include href="xml/user-instance.xml"/>
         <xi:include href="xml/instance-info.xml"/>
         <xi:include href="xml/instance-status.xml"/>
         <xi:include href="xml/instance-params.xml"/>
