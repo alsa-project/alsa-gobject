@@ -9,9 +9,6 @@
 
 #include <libudev.h>
 
-#define CARD_SYSNAME_TEMPLATE       "card%u"
-#define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
-
 /**
  * SECTION: query
  * @Title: Global functions in ALSACtl
@@ -22,6 +19,12 @@
 // For error handling.
 G_DEFINE_QUARK("alsactl-error", alsactl_error)
 
+#define CARD_SYSNAME_TEMPLATE       "card%u"
+#define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
+
+#define generate_file_error(exception, errno, msg) \
+        g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
+
 static void prepare_udev_enum(struct udev_enumerate **enumerator,
                               GError **error)
 {
@@ -30,20 +33,20 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return;
     }
 
     *enumerator = udev_enumerate_new(ctx);
     if (*enumerator == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_enumerate_new()");
         udev_unref(ctx);
         return;
     }
 
     err = udev_enumerate_add_match_subsystem(*enumerator, "sound");
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_add_match_subsystem()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
         return;
@@ -51,7 +54,7 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator,
 
     err = udev_enumerate_scan_devices(*enumerator);
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_scan_devices()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
     }
@@ -206,13 +209,13 @@ static bool check_existence(char *sysname, GError **error)
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return false;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
     if (dev == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
         result = false;
     } else {
         result = true;
@@ -310,14 +313,14 @@ void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         g_free(sysname);
         return;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         g_free(sysname);
         udev_unref(ctx);
         return;
@@ -328,7 +331,7 @@ void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
     if (node != NULL)
         *devnode = g_strdup(node);
     else
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
 
     udev_device_unref(dev);
     udev_unref(ctx);
