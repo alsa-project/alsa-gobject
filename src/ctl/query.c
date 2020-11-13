@@ -16,9 +16,6 @@
  *                     descriptor
  */
 
-// For error handling.
-G_DEFINE_QUARK("alsactl-error", alsactl_error)
-
 #define CARD_SYSNAME_TEMPLATE       "card%u"
 #define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
 
