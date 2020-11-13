@@ -127,6 +127,7 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
         generate_error(error, EINVAL);
         return;
     }
+    g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
     if (enumerator == NULL)
@@ -240,6 +241,7 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
     char *name;
 
     g_return_if_fail(sysname != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     allocate_sysname(&name, CARD_SYSNAME_TEMPLATE, card_id, error);
     if (*error != NULL)
@@ -269,6 +271,7 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
     char *name;
 
     g_return_if_fail(sysname != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     allocate_sysname(&name, CONTROL_SYSNAME_TEMPLATE, card_id, error);
     if (*error != NULL)
@@ -301,6 +304,7 @@ void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
     const char *node;
 
     g_return_if_fail(devnode != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     allocate_sysname(&sysname, CONTROL_SYSNAME_TEMPLATE, card_id, error);
     if (*error != NULL)

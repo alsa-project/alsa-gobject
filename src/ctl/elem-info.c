@@ -164,6 +164,8 @@ static void alsactl_elem_info_init(ALSACtlElemInfo *self)
  */
 ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error)
 {
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
     switch (elem_type) {
     case ALSACTL_ELEM_TYPE_BOOLEAN:
     case ALSACTL_ELEM_TYPE_INTEGER:
@@ -200,6 +202,8 @@ void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
         generate_error(error, ENXIO);
         return;
@@ -232,6 +236,8 @@ void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
         generate_error(error, ENXIO);
         return;
@@ -261,6 +267,8 @@ void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
         generate_error(error, ENXIO);
@@ -294,6 +302,8 @@ void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
         generate_error(error, ENXIO);
         return;
@@ -323,6 +333,8 @@ void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
         generate_error(error, ENXIO);
         return;
@@ -349,6 +361,8 @@ void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
         generate_error(error, ENXIO);
