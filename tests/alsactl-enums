@@ -53,6 +53,7 @@ elem_event_mask_flags = (
 
 card_error_types = (
     'FAILED',
+    'DISCONNECTED',
 )
 
 types = {

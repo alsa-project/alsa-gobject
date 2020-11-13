@@ -39,6 +39,13 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
  */
 G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
 
+static const char *const err_msgs[] = {
+    [ALSACTL_CARD_ERROR_DISCONNECTED] = "The card associated to the instance is in disconnect state",
+};
+
+#define generate_local_error(exception, code) \
+    g_set_error_literal(exception, ALSACTL_CARD_ERROR, code, err_msgs[code])
+
 #define generate_syscall_error(exception, errno, fmt, arg)                  \
     g_set_error(exception, ALSACTL_CARD_ERROR, ALSACTL_CARD_ERROR_FAILED,   \
                 fmt" %d(%s)", arg, errno, strerror(errno))
@@ -210,12 +217,16 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
     open_flag |= O_RDONLY;
     priv->fd = open(devnode, open_flag);
     if (priv->fd < 0) {
-        GFileError code = g_file_error_from_errno(errno);
+        if (errno == ENODEV) {
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        } else {
+            GFileError code = g_file_error_from_errno(errno);
 
-        if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, code, "open(%s)", devnode);
-        else
-            generate_syscall_error(error, errno, "open(%s)", devnode);
+            if (code != G_FILE_ERROR_FAILED)
+                generate_file_error(error, code, "open(%s)", devnode);
+            else
+                generate_syscall_error(error, errno, "open(%s)", devnode);
+        }
 
         g_free(devnode);
         return;
@@ -223,7 +234,10 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_PVERSION, &proto_ver) < 0) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
         g_free(devnode);
@@ -291,7 +305,10 @@ void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
 
     ctl_card_info_refer_private(*card_info, &info);
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_CARD_INFO, info) < 0) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "CARD_INFO");
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "CARD_INFO");
         g_object_unref(*card_info);
     }
 }
@@ -306,7 +323,10 @@ static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
 
     // Get the number of elements in this control device.
     if (ioctl(fd, SNDRV_CTL_IOCTL_ELEM_LIST, list) < 0) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
         return;
     }
 
@@ -326,7 +346,10 @@ static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
 
         // Get the IDs of elements in this control device.
         if (ioctl(fd, SNDRV_CTL_IOCTL_ELEM_LIST, list) < 0) {
-            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
+            if (errno == ENODEV)
+                generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+            else
+                generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
             free(ids);
             list->pids = NULL;
             return;
@@ -419,8 +442,12 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     }
 
     ret = ioctl(priv->fd, req, elem_id);
-    if (ret < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+    if (ret < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+    }
 }
 
 static void parse_enum_names(ALSACtlCardPrivate *priv,
@@ -435,7 +462,10 @@ static void parse_enum_names(ALSACtlCardPrivate *priv,
     for (i = 0; i < count; ++i) {
         info->value.enumerated.item = i;
         if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
-            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
+            if (errno == ENODEV)
+                generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+            else
+                generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
             goto error;
         }
 
@@ -480,7 +510,10 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
     info->id = *elem_id;
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
         return;
     }
 
@@ -556,8 +589,12 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
     packet->length = container_size;
     memcpy(packet->tlv, container, container_size);
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_WRITE, packet) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "TLV_WRITE");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_WRITE, packet) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "TLV_WRITE");
+    }
 
     g_free(packet);
 }
@@ -601,8 +638,12 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     packet->numid = elem_id->numid;
     packet->length = container_size;
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_READ, packet) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "TLV_READ");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_READ, packet) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "TLV_READ");
+    }
 
     memcpy(*container, packet->tlv, packet->length);
     *container_count = packet->length / sizeof(**container);
@@ -651,8 +692,12 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
     packet->length = container_size;
     memcpy(packet->tlv, *container, container_size);
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_COMMAND, packet) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "TLV_COMMAND");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_COMMAND, packet) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "TLV_COMMAND");
+    }
 
     memcpy(*container, packet->tlv, packet->length);
     *container_count = packet->length / sizeof(**container);
@@ -737,8 +782,12 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
     }
 
     info->owner = (__kernel_pid_t)elem_count;
-    if (ioctl(fd, request, info) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+    if (ioctl(fd, request, info) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+    }
     g_free((void *)info->value.enumerated.names_ptr);
     if (*error != NULL)
         return;
@@ -838,8 +887,12 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(elem_id != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_REMOVE");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_REMOVE");
+    }
 }
 
 /**
@@ -872,8 +925,12 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
     ctl_elem_value_refer_private((ALSACtlElemValue *)elem_value, &value);
     value->id = *elem_id;
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_WRITE, value) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_WRITE");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_WRITE, value) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_WRITE");
+    }
 }
 
 /**
@@ -906,8 +963,12 @@ void alsactl_card_read_elem_value(ALSACtlCard *self,
     ctl_elem_value_refer_private(*elem_value, &value);
     value->id = *elem_id;
 
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_READ, value) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_READ");
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_READ, value) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_READ");
+    }
 }
 
 static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
@@ -1048,7 +1109,10 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
         g_atomic_int_inc(&priv->subscribers);
 
         if (ioctl(priv->fd, SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS, &subscribe)) {
-            generate_syscall_error(error, errno, "ioctl(%s)", "SUBSCRIBE_EVENTS");
+            if (errno == ENODEV)
+                generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+            else
+                generate_syscall_error(error, errno, "ioctl(%s)", "SUBSCRIBE_EVENTS");
             g_source_unref(*gsrc);
         }
     }
