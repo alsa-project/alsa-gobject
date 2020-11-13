@@ -57,6 +57,7 @@ card_error_types = (
     'ELEM_NOT_FOUND',
     'ELEM_NOT_SUPPORTED',
     'ELEM_OWNED',
+    'ELEM_EXIST',
 )
 
 types = {
