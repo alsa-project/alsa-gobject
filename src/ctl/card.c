@@ -41,6 +41,7 @@ G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
 
 static const char *const err_msgs[] = {
     [ALSACTL_CARD_ERROR_DISCONNECTED] = "The card associated to the instance is in disconnect state",
+    [ALSACTL_CARD_ERROR_ELEM_NOT_FOUND] = "The control element not found in the card",
 };
 
 #define generate_local_error(exception, code) \
@@ -445,6 +446,8 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     if (ret < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
     }
@@ -512,6 +515,8 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
         return;
@@ -592,6 +597,8 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_WRITE, packet) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_WRITE");
     }
@@ -641,6 +648,8 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_READ, packet) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_READ");
     }
@@ -695,6 +704,8 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_TLV_COMMAND, packet) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_COMMAND");
     }
@@ -785,6 +796,8 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
     if (ioctl(fd, request, info) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
     }
@@ -890,6 +903,8 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_REMOVE");
     }
@@ -928,6 +943,8 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_WRITE, value) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_WRITE");
     }
@@ -966,6 +983,8 @@ void alsactl_card_read_elem_value(ALSACtlCard *self,
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_READ, value) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
+        else if (errno == ENOENT)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_READ");
     }
