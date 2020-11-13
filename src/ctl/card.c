@@ -42,6 +42,7 @@ G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
 static const char *const err_msgs[] = {
     [ALSACTL_CARD_ERROR_DISCONNECTED] = "The card associated to the instance is in disconnect state",
     [ALSACTL_CARD_ERROR_ELEM_NOT_FOUND] = "The control element not found in the card",
+    [ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED] = "The operation is not supported by the control element.",
 };
 
 #define generate_local_error(exception, code) \
@@ -945,6 +946,8 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if (errno == EPERM)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_WRITE");
     }
@@ -985,6 +988,8 @@ void alsactl_card_read_elem_value(ALSACtlCard *self,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if (errno == EPERM)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_READ");
     }
