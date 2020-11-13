@@ -30,6 +30,15 @@ struct _ALSACtlCardPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 
+/**
+ * alsactl_card_error_quark:
+ *
+ * Return the GQuark for error domain of GError which has code in #ALSACtlCardError enumerations.
+ *
+ * Returns: A #GQuark.
+ */
+G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
+
 typedef struct {
     GSource src;
     ALSACtlCard *self;
