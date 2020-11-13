@@ -44,6 +44,7 @@ static const char *const err_msgs[] = {
     [ALSACTL_CARD_ERROR_ELEM_NOT_FOUND] = "The control element not found in the card",
     [ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED] = "The operation is not supported by the control element.",
     [ALSACTL_CARD_ERROR_ELEM_OWNED] = "The control element is owned by the other process.",
+    [ALSACTL_CARD_ERROR_ELEM_EXIST] = "The control element already exists.",
 };
 
 #define generate_local_error(exception, code) \
@@ -809,6 +810,8 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
         } else if (errno == EBUSY) {
             if (replace)
                 generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
+            else
+                generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_EXIST);
         } else {
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
         }
