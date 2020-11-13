@@ -234,14 +234,10 @@ void alsactl_card_get_protocol_version(ALSACtlCard *self,
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
@@ -993,14 +989,10 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     buf = g_malloc0(page_size);
 
