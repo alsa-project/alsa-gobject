@@ -289,11 +289,7 @@ static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
         return;
 
     // Allocate spaces for these elements.
-    ids = calloc(list->count, sizeof(*ids));
-    if (!ids) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    ids = g_malloc_n(list->count, sizeof(*ids));
 
     list->offset = 0;
     while (list->offset < list->count) {
@@ -396,10 +392,6 @@ static void parse_enum_names(ALSACtlCardPrivate *priv,
     int i;
 
     *labels = g_malloc0_n(count + 1, sizeof(**labels));
-    if (*labels == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
 
     for (i = 0; i < count; ++i) {
         info->value.enumerated.item = i;
@@ -408,11 +400,7 @@ static void parse_enum_names(ALSACtlCardPrivate *priv,
             goto error;
         }
 
-        (*labels)[i] = strdup(info->value.enumerated.name);
-        if ((*labels)[i] == NULL) {
-            generate_error(error, ENOMEM);
-            goto error;
-        }
+        (*labels)[i] = g_strdup(info->value.enumerated.name);
     }
 
     (*labels)[count] = NULL;
@@ -521,10 +509,6 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
     container_size = container_count * sizeof(*container);
 
     packet = g_malloc0(sizeof(*packet) + container_size);
-    if (packet == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
 
     packet->numid = elem_id->numid;
     packet->length = container_size;
@@ -571,10 +555,6 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     container_size = *container_count * sizeof(**container);
 
     packet = g_malloc0(sizeof(*packet) + container_size);
-    if (packet == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
 
     packet->numid = elem_id->numid;
     packet->length = container_size;
@@ -624,10 +604,6 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
     container_size = *container_count * sizeof(**container);
 
     packet = g_malloc0(sizeof(*packet) + container_size);
-    if (packet == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
 
     packet->numid = elem_id->numid;
     packet->length = container_size;
@@ -662,8 +638,7 @@ static int prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labe
         return -EINVAL;
 
     pos = g_malloc0(length);
-    if (pos == NULL)
-        return -ENOMEM;
+
     info->value.enumerated.names_ptr = (__u64)pos;
     info->value.enumerated.names_length = length;
 
@@ -1005,11 +980,7 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
         return;
     }
 
-    buf = g_try_malloc0(page_size);
-    if (buf == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    buf = g_malloc0(page_size);
 
     *gsrc = g_source_new(&funcs, sizeof(CtlCardSource));
     src = (CtlCardSource *)(*gsrc);

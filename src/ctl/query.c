@@ -147,11 +147,7 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
     if (count == 0)
         goto end;
 
-    *entries = g_try_malloc0_n(count, sizeof(**entries));
-    if (*entries == NULL) {
-        generate_error(error, ENOMEM);
-        goto end;
-    }
+    *entries = g_malloc0_n(count, sizeof(**entries));
 
     index = 0;
     udev_list_entry_foreach(entry, entry_list) {
@@ -198,11 +194,7 @@ static void allocate_sysname(char **sysname ,const char *template,
     }
 
     length = strlen(template) + digits;
-    *sysname = g_try_malloc0(length + 1);
-    if (*sysname == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    *sysname = g_malloc0(length + 1);
 
     snprintf(*sysname, length, template, card_id);
 }
@@ -332,7 +324,7 @@ void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
 
     node = udev_device_get_devnode(dev);
     if (node != NULL)
-        *devnode = strdup(node);
+        *devnode = g_strdup(node);
     else
         generate_error(error, ENODEV);
 
