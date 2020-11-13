@@ -43,6 +43,7 @@ static const char *const err_msgs[] = {
     [ALSACTL_CARD_ERROR_DISCONNECTED] = "The card associated to the instance is in disconnect state",
     [ALSACTL_CARD_ERROR_ELEM_NOT_FOUND] = "The control element not found in the card",
     [ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED] = "The operation is not supported by the control element.",
+    [ALSACTL_CARD_ERROR_ELEM_OWNED] = "The control element is owned by the other process.",
 };
 
 #define generate_local_error(exception, code) \
@@ -449,6 +450,8 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if ((errno == EBUSY && lock) || (errno == EPERM && !lock))
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
     }
@@ -600,6 +603,8 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if (errno == EPERM)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_WRITE");
     }
@@ -707,6 +712,8 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if (errno == EPERM)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_COMMAND");
     }
@@ -795,12 +802,16 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
 
     info->owner = (__kernel_pid_t)elem_count;
     if (ioctl(fd, request, info) < 0) {
-        if (errno == ENODEV)
+        if (errno == ENODEV) {
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
-        else if (errno == ENOENT)
+        } else if (errno == ENOENT) {
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
-        else
+        } else if (errno == EBUSY) {
+            if (replace)
+                generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
+        } else {
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+        }
     }
     g_free((void *)info->value.enumerated.names_ptr);
     if (*error != NULL)
@@ -906,6 +917,8 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
+        else if (errno == EBUSY)
+            generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_REMOVE");
     }
