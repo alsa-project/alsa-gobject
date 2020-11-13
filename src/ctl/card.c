@@ -43,6 +43,9 @@ G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
     g_set_error(exception, ALSACTL_CARD_ERROR, ALSACTL_CARD_ERROR_FAILED,   \
                 fmt" %d(%s)", arg, errno, strerror(errno))
 
+#define generate_file_error(exception, code, format, arg) \
+    g_set_error(exception, G_FILE_ERROR, code, format, arg)
+
 typedef struct {
     GSource src;
     ALSACtlCard *self;
@@ -207,7 +210,13 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
     open_flag |= O_RDONLY;
     priv->fd = open(devnode, open_flag);
     if (priv->fd < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, code, "open(%s)", devnode);
+        else
+            generate_syscall_error(error, errno, "open(%s)", devnode);
+
         g_free(devnode);
         return;
     }
