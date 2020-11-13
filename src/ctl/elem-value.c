@@ -103,8 +103,10 @@ void alsactl_elem_value_set_bool(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+
+    value = &priv->value;
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer.value[i] = (long)values[i];
@@ -128,8 +130,11 @@ void alsactl_elem_value_get_bool(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+    g_return_if_fail(value_count != NULL);
+
+    value = &priv->value;
     *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (gboolean)value->value.integer.value[i];
@@ -152,8 +157,10 @@ void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+
+    value = &priv->value;
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer.value[i] = (long)values[i];
@@ -177,8 +184,11 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+    g_return_if_fail(value_count != NULL);
+
+    value = &priv->value;
     *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (gint32)value->value.integer.value[i];
@@ -202,8 +212,10 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+
+    value = &priv->value;
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.enumerated.item));
     for (i = 0; i < value_count; ++i)
         value->value.enumerated.item[i] = (unsigned int)values[i];
@@ -227,8 +239,11 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+    g_return_if_fail(value_count != NULL);
+
+    value = &priv->value;
     *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.enumerated.item));
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (guint32)value->value.enumerated.item[i];
@@ -251,8 +266,10 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+
+    value = &priv->value;
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.bytes.data));
     for (i = 0; i < value_count; ++i)
         value->value.bytes.data[i] = (long)values[i];
@@ -275,8 +292,11 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+    g_return_if_fail(value_count != NULL);
+
+    value = &priv->value;
     *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.bytes.data));
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (guint8)value->value.bytes.data[i];
@@ -300,8 +320,10 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(status != NULL);
+
+    value = &priv->value;
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.status));
     for (i = 0; i < length; ++i)
         value->value.iec958.status[i] = status[i];
@@ -325,8 +347,11 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(status != NULL);
+    g_return_if_fail(length != NULL);
+
+    value = &priv->value;
     *length = MIN(*length, G_N_ELEMENTS(value->value.iec958.status));
     for (i = 0; i < *length; ++i)
         (*status)[i] = value->value.iec958.status[i];
@@ -350,8 +375,10 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(data != NULL);
+
+    value = &priv->value;
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.subcode));
     for (i = 0; i < length; ++i)
         value->value.iec958.subcode[i] = data[i];
@@ -375,8 +402,11 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(data != NULL);
+    g_return_if_fail(length != NULL);
+
+    value = &priv->value;
     *length = MIN(*length, G_N_ELEMENTS(value->value.iec958.subcode));
     for (i = 0; i < *length; ++i)
         (*data)[i] = value->value.iec958.subcode[i];
@@ -399,8 +429,10 @@ void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+
+    value = &priv->value;
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer64.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer64.value[i] = (long long)values[i];
@@ -424,8 +456,11 @@ void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
-    value = &priv->value;
 
+    g_return_if_fail(values != NULL);
+    g_return_if_fail(value_count != NULL);
+
+    value = &priv->value;
     *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer64.value));
     for (i = 0; i < *value_count; ++i)
         (*values)[i] = (gint64)value->value.integer64.value[i];

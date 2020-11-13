@@ -123,10 +123,8 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
     unsigned int count;
     unsigned int index;
 
-    if (entries == NULL || entry_count == NULL || error == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(entries != NULL);
+    g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
@@ -168,7 +166,7 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
         }
     }
     if (index != count) {
-        generate_error(error, ENOENT);
+        g_warn_if_reached();
         g_free(*entries);
         *entries = NULL;
         goto end;
