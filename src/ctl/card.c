@@ -195,7 +195,8 @@ ALSACtlCard *alsactl_card_new()
  * @self: A #ALSACtlCard.
  * @card_id: The numerical ID of sound card.
  * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsactl_card_error_quark().
  *
  * Open ALSA control character device for the sound card.
  *
@@ -286,7 +287,7 @@ void alsactl_card_get_protocol_version(ALSACtlCard *self,
  * alsactl_card_get_info:
  * @self: A #ALSACtlCard.
  * @card_info: (out): A #ALSACtlCardInfo for the sound card.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Get the information of sound card.
  *
@@ -376,7 +377,7 @@ static inline void deallocate_elem_ids(struct snd_ctl_elem_list *list)
  * @self: A #ALSACtlCard.
  * @entries: (element-type ALSACtl.ElemId)(out): The list of entries for
  *           ALSACtlElemId.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Generate a list of ALSACtlElemId for ALSA control character device
  * associated to the sound card.
@@ -415,7 +416,7 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
  * @self: A #ALSACtlCard.
  * @elem_id: A #ALSACtlElemId.
  * @lock: whether to lock or unlock the element.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Lock/Unlock indicated element not to be written by the other processes.
  *
@@ -491,7 +492,7 @@ error:
  * @self: A #ALSACtlCard.
  * @elem_id: A #ALSACtlElemId.
  * @elem_info: (out): A %ALSACtlElemInfo.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Get information of element corresponding to given id.
  *
@@ -565,7 +566,7 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @container: (array length=container_count): The array with qudalets for
  *             Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Write the given array of bytes as Type/Length/Value data for element pointed
  * by the identifier.
@@ -620,7 +621,7 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
  * @container: (array length=container_count)(inout): The array with qudalets
  *             for Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Read Type/Length/Value data from element pointed by the identifier and fulfil
  * the given array of bytes with the data.
@@ -674,7 +675,7 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @container: (array length=container_count)(inout): The array with qudalets
  *             for Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Command the given array of bytes as Type/Length/Value data for  element
  * pointed by the identifier.
@@ -836,7 +837,7 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
  * @elem_count: The number of elements going to be added.
  * @elem_info: A %ALSACtlElemInfo.
  * @entries: (element-type ALSACtl.ElemId)(out): The list of added element IDs.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Add the user-defined elements and return the list of their identifier.
  *
@@ -868,7 +869,7 @@ void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @elem_count: The number of elements going to be added.
  * @elem_info: A %ALSACtlElemInfo.
  * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element IDs.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Add user-defined elements to replace the existent ones.
  *
@@ -897,7 +898,7 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * alsactl_card_remove_elems:
  * @self: A #ALSACtlCard.
  * @elem_id: A #ALSACtlElemId.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Remove user-defined elements pointed by the identifier.
  *
@@ -932,7 +933,7 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @self: A #ALSACtlCard.
  * @elem_id: A #ALSACtlElemId.
  * @elem_value: A derivative of #ALSACtlElemValue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Write given value to element indicated by given ID.
  *
@@ -974,7 +975,7 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
  * @self: A #ALSACtlCard.
  * @elem_id: A #ALSACtlElemId.
  * @elem_value: (inout): A derivative of #ALSACtlElemValue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Read given value from element indicated by given ID.
  *
@@ -1101,7 +1102,7 @@ static void ctl_card_finalize_src(GSource *gsrc)
  * alsactl_card_create_source:
  * @self: A #ALSACtlCard.
  * @gsrc: (out): A #GSource to handle events from ALSA control character device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
  *
  * Allocate GSource structure to handle events from ALSA control character
  * device. In each iteration of GManContext, the read(2) system call is
