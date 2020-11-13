@@ -185,6 +185,8 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsactl_get_control_devnode(card_id, &devnode, error);
     if (*error != NULL)
         return;
@@ -233,6 +235,8 @@ void alsactl_card_get_protocol_version(ALSACtlCard *self,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -260,6 +264,8 @@ void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *card_info = g_object_new(ALSACTL_TYPE_CARD_INFO, NULL);
 
@@ -341,6 +347,8 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     allocate_elem_ids(priv->fd, &list, error);
     if (*error != NULL)
         return;
@@ -375,6 +383,8 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (lock)
         ret = ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_LOCK, elem_id);
@@ -432,6 +442,8 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO, NULL);
     ctl_elem_info_refer_private(*elem_info, &info);
@@ -501,6 +513,8 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
     g_return_if_fail(elem_id != NULL);
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     // At least two quadlets should be included for type and length.
     if (container == NULL || container_count < 2) {
         generate_error(error, EINVAL);
@@ -546,6 +560,8 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     // At least two quadlets should be included for type and length.
     if (*container == NULL || *container_count < 2) {
@@ -595,6 +611,8 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     // At least two quadlets should be included for type and length.
     if (*container == NULL || *container_count < 2) {
@@ -689,8 +707,7 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
         break;
     }
     default:
-        generate_error(error, ENXIO);
-        return;
+        g_return_if_reached();
     }
 
     info->id = *elem_id;
@@ -741,6 +758,8 @@ void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, FALSE,
                          entries, error);
 }
@@ -770,6 +789,8 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
     priv = alsactl_card_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE,
                          entries, error);
 }
@@ -793,6 +814,8 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0)
         generate_error(error, errno);
@@ -821,6 +844,8 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(elem_value));
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     ctl_elem_value_refer_private((ALSACtlElemValue *)elem_value, &value);
     value->id = *elem_id;
@@ -853,6 +878,8 @@ void alsactl_card_read_elem_value(ALSACtlCard *self,
     g_return_if_fail(ALSACTL_IS_CARD(self));
     g_return_if_fail(elem_id != NULL);
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(*elem_value));
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     ctl_elem_value_refer_private(*elem_value, &value);
     value->id = *elem_id;
@@ -974,6 +1001,8 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
 
     g_return_if_fail(ALSACTL_IS_CARD(self));
     priv = alsactl_card_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
