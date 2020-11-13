@@ -55,6 +55,7 @@ card_error_types = (
     'FAILED',
     'DISCONNECTED',
     'ELEM_NOT_FOUND',
+    'ELEM_NOT_SUPPORTED',
 )
 
 types = {
