@@ -109,4 +109,14 @@ typedef enum /*< flags >*/
     ALSACTL_ELEM_EVENT_MASK_REMOVE  = SNDRV_CTL_EVENT_MASK_TLV << 1,
 } ALSACtlElemEventMask;
 
+/**
+ * ALSACtlCardError:
+ * @ALSACTL_CARD_ERROR_FAILED:              The system call failed.
+ *
+ * A set of error code for GError with domain which equals to #alsactl_card_error_quark()
+ */
+typedef enum {
+    ALSACTL_CARD_ERROR_FAILED,
+} ALSACtlCardError;
+
 #endif

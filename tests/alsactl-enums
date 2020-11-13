@@ -51,6 +51,10 @@ elem_event_mask_flags = (
     'REMOVE',
 )
 
+card_error_types = (
+    'FAILED',
+)
+
 types = {
     ALSACtl.ElemType:       elem_types,
     ALSACtl.ElemIfaceType:  elem_iface_types,
@@ -58,6 +62,7 @@ types = {
     ALSACtl.ElemAccessFlag: elem_access_flags,
     ALSACtl.EventType:      event_types,
     ALSACtl.ElemEventMask:  elem_event_mask_flags,
+    ALSACtl.CardError:      card_error_types,
 }
 
 for obj, types in types.items():
