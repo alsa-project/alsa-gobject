@@ -175,8 +175,7 @@ ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error
     case ALSACTL_ELEM_TYPE_INTEGER64:
         break;
     default:
-        generate_error(error, EINVAL);
-        return NULL;
+        g_return_val_if_reached(NULL);
     }
 
     return g_object_new(ALSACTL_TYPE_ELEM_INFO, "type", elem_type, NULL);
@@ -202,12 +201,10 @@ void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER);
 
     priv->int_data.min = (gint32)priv->info.value.integer.min;
     priv->int_data.max = (gint32)priv->info.value.integer.max;
@@ -236,12 +233,10 @@ void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER);
 
     priv->info.value.integer.min = (long)data[0];
     priv->info.value.integer.max = (long)data[1];
@@ -268,12 +263,10 @@ void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64);
 
     priv->int_data.min = (gint64)priv->info.value.integer.min;
     priv->int_data.max = (gint64)priv->info.value.integer.max;
@@ -302,12 +295,10 @@ void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_INTEGER64) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64);
 
     priv->info.value.integer.min = (long long)data[0];
     priv->info.value.integer.max = (long long)data[1];
@@ -333,12 +324,10 @@ void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED);
 
     *data = (const gchar **)priv->enum_data;
 }
@@ -362,12 +351,10 @@ void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self,
     g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
     priv = alsactl_elem_info_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (priv->info.type != SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
-        generate_error(error, ENXIO);
-        return;
-    }
+    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED);
 
     g_strfreev(priv->enum_data);
 

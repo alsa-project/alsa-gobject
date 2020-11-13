@@ -57,6 +57,8 @@ ALSACtlElemId *alsactl_elem_id_new_by_name(ALSACtlElemIfaceType iface,
 {
     struct snd_ctl_elem_id *id;
 
+    g_return_val_if_fail(name != NULL && strlen(name) > 0, NULL);
+
     id = g_malloc0(sizeof(*id));
 
     id->iface = iface;
