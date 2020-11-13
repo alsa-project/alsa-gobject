@@ -113,12 +113,14 @@ typedef enum /*< flags >*/
  * ALSACtlCardError:
  * @ALSACTL_CARD_ERROR_FAILED:              The system call failed.
  * @ALSACTL_CARD_ERROR_DISCONNECTED:        The card associated to the instance is in disconnect state.
+ * @ALSACTL_CARD_ERROR_ELEM_NOT_FOUND:      The control element not found in the card.
  *
  * A set of error code for GError with domain which equals to #alsactl_card_error_quark()
  */
 typedef enum {
     ALSACTL_CARD_ERROR_FAILED,
     ALSACTL_CARD_ERROR_DISCONNECTED,
+    ALSACTL_CARD_ERROR_ELEM_NOT_FOUND,
 } ALSACtlCardError;
 
 #endif
