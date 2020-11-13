@@ -36,6 +36,10 @@ G_BEGIN_DECLS
                                ALSACTL_TYPE_CARD,   \
                                ALSACtlCardClass))
 
+#define ALSACTL_CARD_ERROR	alsactl_card_error_quark()
+
+GQuark alsactl_card_error_quark();
+
 typedef struct _ALSACtlCard         ALSACtlCard;
 typedef struct _ALSACtlCardClass    ALSACtlCardClass;
 typedef struct _ALSACtlCardPrivate  ALSACtlCardPrivate;
