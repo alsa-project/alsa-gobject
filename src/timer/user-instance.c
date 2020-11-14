@@ -254,15 +254,12 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  * @slave_id: The numerical identifier of master instance.
  * @error: A #GError.
  *
- * Attach the instance to timer device as an slave to another instance indicated
- * by a pair of slave_class and slave_id. If the slave_class is for application
+ * Attach the instance as an slave to another instance indicated by a pair of
+ * slave_class and slave_id. If the slave_class is for application
  * (=ALSATIMER_SLAVE_CLASS_APPLICATION), the slave_id is for the PID of
  * application process which owns the instance of timer. If the slave_class is
  * for ALSA sequencer (=ALSATIMER_SLAVE_CLASS_SEQUENCER), the slave_id is the
  * numerical ID of queue bound for timer device.
- *
- * Attach the instance to the timer device. If the given device_id is for
- * absent timer device, the instance can be detached with error.
  *
  * The call of function executes ioctl(2) system call with
  * SNDRV_TIMER_IOCTL_SELECT command for ALSA timer character device.
