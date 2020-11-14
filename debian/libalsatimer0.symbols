@@ -1,5 +1,6 @@
 libalsatimer.so.0 libalsatimer0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
+ ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
  alsatimer_class_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_id_get_card_id@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_id_get_class@ALSA_GOBJECT_0_0_0 0.1.0
@@ -58,3 +59,5 @@ libalsatimer.so.0 libalsatimer0 #MINVER#
  alsatimer_user_instance_set_params@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_user_instance_start@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_user_instance_stop@ALSA_GOBJECT_0_0_0 0.1.0
+ alsatimer_user_instance_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
+ alsatimer_user_instance_error_quark@ALSA_GOBJECT_0_2_0 0.2.0
