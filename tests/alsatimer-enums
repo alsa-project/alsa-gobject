@@ -58,6 +58,7 @@ event_data_types = (
 
 user_instance_error_types = (
     'FAILED',
+    'TIMER_NOT_FOUND',
 )
 
 types = {
