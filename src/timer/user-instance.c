@@ -43,6 +43,9 @@ G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_erro
     g_set_error(exception, ALSATIMER_USER_INSTANCE_ERROR, ALSATIMER_USER_INSTANCE_ERROR_FAILED, \
                 fmt" %d(%s)", arg, errno, strerror(errno))
 
+#define generate_file_error(exception, code, format, arg) \
+    g_set_error(exception, G_FILE_ERROR, code, format, arg)
+
 typedef struct {
     GSource src;
     ALSATimerUserInstance *self;
@@ -148,11 +151,18 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
 
     open_flag |= O_RDONLY;
     priv->fd = open(devnode, open_flag);
-    g_free(devnode);
     if (priv->fd < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, errno, "open(%s)", devnode);
+        else
+            generate_syscall_error(error, errno, "open(%s)", devnode);
+
+        g_free(devnode);
         return;
     }
+    g_free(devnode);
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PVERSION, &proto_ver) < 0) {
