@@ -122,4 +122,14 @@ typedef enum {
     ALSATIMER_EVENT_DATA_TYPE_TSTAMP,
 } ALSATimerEventDataType;
 
+/**
+ * ALSATimerUserInstanceError:
+ * @ALSATIMER_USER_INSTANCE_ERROR_FAILED:           The system call failed.
+ *
+ * A set of error code for GError with domain which equals to #alsatimer_user_instance_error_quark()
+ */
+typedef enum {
+    ALSATIMER_USER_INSTANCE_ERROR_FAILED,
+} ALSATimerUserInstanceError;
+
 #endif

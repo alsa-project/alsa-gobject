@@ -56,6 +56,10 @@ event_data_types = (
     'TSTAMP',
 )
 
+user_instance_error_types = (
+    'FAILED',
+)
+
 types = {
     ALSATimer.Class:                class_types,
     ALSATimer.SlaveClass:           slave_class_types,
@@ -64,6 +68,7 @@ types = {
     ALSATimer.InstanceParamFlag:    instance_param_flags,
     ALSATimer.EventType:            event_types,
     ALSATimer.EventDataType:        event_data_types,
+    ALSATimer.UserInstanceError:    user_instance_error_types,
 }
 
 for obj, types in types.items():
