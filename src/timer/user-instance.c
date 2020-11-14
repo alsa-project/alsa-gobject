@@ -180,6 +180,7 @@ void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
@@ -244,9 +245,9 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
     struct snd_timer_select sel = {0};
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
-    g_return_if_fail(device_id != NULL);
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(device_id != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     sel.id = *device_id;
@@ -313,6 +314,7 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(instance_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     *instance_info = g_object_new(ALSATIMER_TYPE_INSTANCE_INFO, NULL);
@@ -345,6 +347,7 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(instance_params != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     timer_instance_params_refer_private(*instance_params, &params);
@@ -374,6 +377,7 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(instance_status != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status));
@@ -487,6 +491,7 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
