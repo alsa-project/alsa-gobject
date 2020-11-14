@@ -165,8 +165,7 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
             (val > SNDRV_TIMER_EVENT_RESUME &&
              val < SNDRV_TIMER_EVENT_MSTART) ||
             val > SNDRV_TIMER_EVENT_MRESUME) {
-            generate_error(error, EINVAL);
-            return;
+            g_return_if_reached();
         }
         filter |= (1u << val);
     }
@@ -225,9 +224,8 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     }
 
     if (index != count) {
-        generate_error(error, ENXIO);
         g_free(list);
-        return;
+        g_return_if_reached();
     }
 
     *entries = list;
