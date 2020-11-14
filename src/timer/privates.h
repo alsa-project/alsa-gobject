@@ -13,12 +13,6 @@
 
 G_BEGIN_DECLS
 
-GQuark alsatimer_error_quark(void);
-
-#define generate_error(err, errno)                              \
-    g_set_error(err, alsatimer_error_quark(), errno,            \
-                __FILE__ ":%d: %s", __LINE__, strerror(errno))
-
 void timer_device_info_refer_private(ALSATimerDeviceInfo *self,
                                      struct snd_timer_ginfo **info);
 
