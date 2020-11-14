@@ -125,11 +125,13 @@ typedef enum {
 /**
  * ALSATimerUserInstanceError:
  * @ALSATIMER_USER_INSTANCE_ERROR_FAILED:           The system call failed.
+ * @ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND:  The timer instance is not found.
  *
  * A set of error code for GError with domain which equals to #alsatimer_user_instance_error_quark()
  */
 typedef enum {
     ALSATIMER_USER_INSTANCE_ERROR_FAILED,
+    ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND,
 } ALSATimerUserInstanceError;
 
 #endif

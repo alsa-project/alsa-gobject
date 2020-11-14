@@ -39,6 +39,13 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYP
  */
 G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_error)
 
+static const char *const err_msgs[] = {
+    [ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND] = "The timer instance is not found",
+};
+
+#define generate_local_error(exception, code) \
+    g_set_error_literal(exception, ALSATIMER_USER_INSTANCE_ERROR, code, err_msgs[code])
+
 #define generate_syscall_error(exception, errno, fmt, arg)                                      \
     g_set_error(exception, ALSATIMER_USER_INSTANCE_ERROR, ALSATIMER_USER_INSTANCE_ERROR_FAILED, \
                 fmt" %d(%s)", arg, errno, strerror(errno))
@@ -270,8 +277,12 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
     g_return_if_fail(error == NULL || *error == NULL);
 
     sel.id = *device_id;
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
+    }
 }
 
 /**
