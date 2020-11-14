@@ -70,6 +70,7 @@ void alsatimer_get_sysname(char **sysname, GError **error)
     char *name;
 
     g_return_if_fail(sysname != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     name = g_strdup(TIMER_SYSNAME_TEMPLATE);
 
@@ -97,6 +98,7 @@ void alsatimer_get_devnode(char **devnode, GError **error)
     const char *node;
 
     g_return_if_fail(devnode != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     ctx = udev_new();
     if (ctx == NULL) {
@@ -142,6 +144,7 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
     int fd;
 
     g_return_if_fail(entries != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
@@ -189,6 +192,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
     int fd;
 
     g_return_if_fail(device_id != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
@@ -234,6 +238,7 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
 
     g_return_if_fail(device_id != NULL);
     g_return_if_fail(ALSATIMER_IS_DEVICE_STATUS(*device_status));
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
@@ -278,6 +283,7 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
 
     g_return_if_fail(device_id != NULL);
     g_return_if_fail(device_params != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
@@ -355,6 +361,8 @@ void alsatimer_get_tstamp_source(int *clock_id, GError **error)
     int val;
     gsize size;
     char *buf;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     // Count required digits.
     val = INT_MAX;
