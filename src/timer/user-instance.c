@@ -42,6 +42,7 @@ G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_erro
 static const char *const err_msgs[] = {
     [ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND] = "The timer instance is not found",
     [ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED] = "The timer instance is not attached to any timer device or the other instance",
+    [ALSATIMER_USER_INSTANCE_ERROR_ATTACHED] = "The timer instance is already attached to timer device or the other instance",
 };
 
 #define generate_local_error(exception, code) \
@@ -246,10 +247,14 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
     g_return_if_fail(error == NULL || *error == NULL);
 
     tread = (int)event_data_type;
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "TREAD");
-    else
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
+        if (errno == EBUSY)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "TREAD");
+    } else {
         priv->event_data_type = event_data_type;
+    }
 }
 
 /**

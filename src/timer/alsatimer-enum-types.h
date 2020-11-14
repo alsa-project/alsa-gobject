@@ -128,6 +128,8 @@ typedef enum {
  * @ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND:  The timer instance is not found.
  * @ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED:     The timer instance is not attached to any timer
  *                                                  device or the other instance.
+ * @ALSATIMER_USER_INSTANCE_ERROR_ATTACHED:         The timer instance is already attached to timer
+ *                                                  device or the other instance.
  *
  * A set of error code for GError with domain which equals to #alsatimer_user_instance_error_quark()
  */
@@ -135,6 +137,7 @@ typedef enum {
     ALSATIMER_USER_INSTANCE_ERROR_FAILED,
     ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND,
     ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED,
+    ALSATIMER_USER_INSTANCE_ERROR_ATTACHED,
 } ALSATimerUserInstanceError;
 
 #endif
