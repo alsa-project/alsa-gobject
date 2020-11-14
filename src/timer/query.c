@@ -130,6 +130,27 @@ void alsatimer_get_devnode(char **devnode, GError **error)
     udev_unref(ctx);
 }
 
+static int open_fd(GError **error)
+{
+    char *devnode;
+    int fd;
+
+    alsatimer_get_devnode(&devnode, error);
+    if (*error != NULL)
+        return -1;
+
+    fd = open(devnode, O_RDONLY);
+    if (fd < 0) {
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
+    	g_free(devnode);
+        return -1;
+    }
+
+    g_free(devnode);
+
+    return fd;
+}
+
 /**
  * alsatimer_get_device_id_list:
  * @entries: (element-type ALSATimer.DeviceId)(out): The array with
@@ -146,23 +167,14 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
     struct snd_timer_id id = {
         .dev_class = -1,
     };
-    char *devnode;
     int fd;
 
     g_return_if_fail(entries != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsatimer_get_devnode(&devnode, error);
+    fd = open_fd(error);
     if (*error != NULL)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-    	g_free(devnode);
-        return;
-    }
-    g_free(devnode);
 
     while (true) {
         ALSATimerDeviceId *entry;
@@ -196,7 +208,6 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
                                ALSATimerDeviceInfo **device_info,
                                GError **error)
 {
-    char *devnode;
     struct snd_timer_ginfo *info;
     int fd;
 
@@ -204,17 +215,9 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
     g_return_if_fail(device_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsatimer_get_devnode(&devnode, error);
+    fd = open_fd(error);
     if (*error != NULL)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-        return;
-    	g_free(devnode);
-    }
-    g_free(devnode);
 
     *device_info = g_object_new(ALSATIMER_TYPE_DEVICE_INFO, NULL);
     timer_device_info_refer_private(*device_info, &info);
@@ -243,7 +246,6 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
                                  ALSATimerDeviceStatus *const *device_status,
                                  GError **error)
 {
-    char *devnode;
     struct snd_timer_gstatus *status;
     int fd;
 
@@ -251,17 +253,9 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
     g_return_if_fail(ALSATIMER_IS_DEVICE_STATUS(*device_status));
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsatimer_get_devnode(&devnode, error);
+    fd = open_fd(error);
     if (*error != NULL)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-    	g_free(devnode);
-        return;
-    }
-    g_free(devnode);
 
     timer_device_status_refer_private(*device_status, &status);
 
@@ -289,7 +283,6 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                  const ALSATimerDeviceParams *device_params,
                                  GError **error)
 {
-    char *devnode;
     struct snd_timer_gparams *params;
     int fd;
 
@@ -297,17 +290,9 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
     g_return_if_fail(device_params != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsatimer_get_devnode(&devnode, error);
+    fd = open_fd(error);
     if (*error != NULL)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-    	g_free(devnode);
-        return;
-    }
-    g_free(devnode);
 
     timer_device_params_refer_private((ALSATimerDeviceParams *)device_params,
                                       &params);
