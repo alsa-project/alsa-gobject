@@ -1,5 +1,6 @@
 libalsarawmidi.so.0 libalsarawmidi0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
+ ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
  alsarawmidi_get_device_id_list@ALSA_GOBJECT_0_0_0 0.1.0
  alsarawmidi_get_rawmidi_devnode@ALSA_GOBJECT_0_0_0 0.1.0
  alsarawmidi_get_rawmidi_sysname@ALSA_GOBJECT_0_0_0 0.1.0
@@ -24,3 +25,5 @@ libalsarawmidi.so.0 libalsarawmidi0 #MINVER#
  alsarawmidi_substream_params_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsarawmidi_substream_status_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsarawmidi_substream_status_new@ALSA_GOBJECT_0_0_0 0.1.0
+ alsarawmidi_stream_pair_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
+ alsarawmidi_stream_pair_error_quark@ALSA_GOBJECT_0_2_0 0.2.0

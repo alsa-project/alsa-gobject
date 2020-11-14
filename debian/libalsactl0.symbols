@@ -1,7 +1,7 @@
 libalsactl.so.0 libalsactl0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
+ ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
  alsactl_card_add_elems@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_command_elem_tlv@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_create_source@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_get_elem_id_list@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_get_elem_info@ALSA_GOBJECT_0_0_0 0.1.0
@@ -12,11 +12,9 @@ libalsactl.so.0 libalsactl0 #MINVER#
  alsactl_card_lock_elem@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_open@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_read_elem_tlv@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_read_elem_value@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_remove_elems@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_replace_elems@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_write_elem_tlv@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_write_elem_value@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_access_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_event_mask_get_type@ALSA_GOBJECT_0_0_0 0.1.0
@@ -63,3 +61,8 @@ libalsactl.so.0 libalsactl0 #MINVER#
  alsactl_get_control_devnode@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_get_control_sysname@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_sigs_marshal_VOID__BOXED_FLAGS@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_card_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
+ alsactl_card_error_quark@ALSA_GOBJECT_0_2_0 0.2.0
+ alsactl_card_command_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
+ alsactl_card_read_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
+ alsactl_card_write_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
