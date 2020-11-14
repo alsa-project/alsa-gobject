@@ -76,4 +76,5 @@ ALSA_GOBJECT_0_0_0 {
 
 ALSA_GOBJECT_0_2_0 {
     "alsatimer_user_instance_error_get_type";
+    "alsatimer_user_instance_error_quark";
 } ALSA_GOBJECT_0_0_0;

@@ -35,6 +35,10 @@ G_BEGIN_DECLS
                                ALSATIMER_TYPE_USER_INSTANCE,    \
                                ALSATimerUserInstanceClass))
 
+#define ALSATIMER_USER_INSTANCE_ERROR   alsatimer_user_instance_error_quark()
+
+GQuark alsatimer_user_instance_error_quark();
+
 typedef struct _ALSATimerUserInstance           ALSATimerUserInstance;
 typedef struct _ALSATimerUserInstanceClass      ALSATimerUserInstanceClass;
 typedef struct _ALSATimerUserInstancePrivate    ALSATimerUserInstancePrivate;
