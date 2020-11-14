@@ -150,6 +150,8 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
     g_return_if_fail(entries != NULL);
     priv = alsatimer_instance_params_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     priv->params.filter = 0;
 
     // Clear the event filter.
@@ -198,6 +200,8 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     g_return_if_fail(entries != NULL);
     g_return_if_fail(entry_count != NULL);
     priv = alsatimer_instance_params_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     count = 0;
     filter = priv->params.filter;

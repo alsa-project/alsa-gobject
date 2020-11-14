@@ -127,6 +127,8 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsatimer_get_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -178,6 +180,8 @@ void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -211,6 +215,8 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     tread = (int)event_data_type;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0)
         generate_error(error, errno);
@@ -240,6 +246,8 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     g_return_if_fail(device_id != NULL);
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     sel.id = *device_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
@@ -275,6 +283,8 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     sel.id.dev_class = SNDRV_TIMER_CLASS_SLAVE;
     sel.id.dev_sclass = slave_class;
     sel.id.device = slave_id;
@@ -302,6 +312,8 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *instance_info = g_object_new(ALSATIMER_TYPE_INSTANCE_INFO, NULL);
     timer_instance_info_refer_private(*instance_info, &info);
@@ -333,6 +345,8 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     timer_instance_params_refer_private(*instance_params, &params);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0)
@@ -359,6 +373,8 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status));
     timer_instance_status_refer_private(*instance_status, &status);
@@ -471,6 +487,8 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -508,6 +526,8 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0)
         generate_error(error, errno);
 }
@@ -528,6 +548,8 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0)
         generate_error(error, errno);
@@ -550,6 +572,8 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0)
         generate_error(error, errno);
 }
@@ -571,6 +595,8 @@ void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
 
     g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
     priv = alsatimer_user_instance_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0)
         generate_error(error, errno);
