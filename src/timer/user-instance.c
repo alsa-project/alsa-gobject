@@ -39,6 +39,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYP
  */
 G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_error)
 
+#define generate_syscall_error(exception, errno, fmt, arg)                                      \
+    g_set_error(exception, ALSATIMER_USER_INSTANCE_ERROR, ALSATIMER_USER_INSTANCE_ERROR_FAILED, \
+                fmt" %d(%s)", arg, errno, strerror(errno))
+
 typedef struct {
     GSource src;
     ALSATimerUserInstance *self;
@@ -152,7 +156,7 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PVERSION, &proto_ver) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
         return;
@@ -225,7 +229,7 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
 
     tread = (int)event_data_type;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "TREAD");
     else
         priv->event_data_type = event_data_type;
 }
@@ -257,7 +261,7 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
 
     sel.id = *device_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
 }
 
 /**
@@ -295,7 +299,7 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
     sel.id.dev_sclass = slave_class;
     sel.id.device = slave_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
 }
 
 /**
@@ -326,7 +330,7 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
     timer_instance_info_refer_private(*instance_info, &info);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_INFO, info) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
         g_object_unref(*instance_info);
     }
 }
@@ -358,7 +362,7 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
     timer_instance_params_refer_private(*instance_params, &params);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
 }
 
 /**
@@ -389,7 +393,7 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     timer_instance_status_refer_private(*instance_status, &status);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
 }
 
 static gboolean timer_user_instance_check_src(GSource *gsrc)
@@ -535,7 +539,7 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "START");
 }
 
 /**
@@ -558,7 +562,7 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "STOP");
 }
 
 /**
@@ -581,7 +585,7 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PAUSE");
 }
 
 /**
@@ -605,5 +609,5 @@ void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "CONTINUE");
 }
