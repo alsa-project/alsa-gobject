@@ -135,7 +135,8 @@ static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
  * alsatimer_user_instance_open:
  * @self: A #ALSATimerUserInstance.
  * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsaseq_user_client_error_quark().
  *
  * Open ALSA Timer character device to allocate queue.
  *
@@ -223,7 +224,7 @@ void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
  * alsatimer_user_instance_choose_event_data_type:
  * @self: A #ALSATimerUserInstance.
  * @event_data_type: The type of event data, one of ALSATimerEventDataType.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Choose the type of event data to receive.
  *
@@ -261,7 +262,7 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
  * alsatimer_user_instance_attach:
  * @self: A #ALSATimerUserInstance.
  * @device_id: A #ALSATimerDeviceId to which the instance is attached.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Attach the instance to the timer device. If the given device_id is for
  * absent timer device, the instance can be detached with error.
@@ -297,7 +298,7 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  * @slave_class: The class identifier of master instance, one of
  *               #ALSATimerSlaveClass.
  * @slave_id: The numerical identifier of master instance.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Attach the instance as an slave to another instance indicated by a pair of
  * slave_class and slave_id. If the slave_class is for application
@@ -333,7 +334,7 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
  * alsatimer_user_instance_get_info:
  * @self: A #ALSATimerUserInstance.
  * @instance_info: (out): A #ALSATimerInstanceInfo.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Return the information of device if attached to the instance.
  *
@@ -369,7 +370,7 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
  * alsatimer_user_instance_set_params:
  * @self: A #ALSATimerUserInstance.
  * @instance_params: (inout): A #ALSATimerInstanceParams.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Configure the instance with the parameters and return the latest parameters.
  *
@@ -403,7 +404,7 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
  * alsatimer_user_instance_get_status:
  * @self: A #ALSATimerUserInstance.
  * @instance_status: (inout): A #ALSATimerInstanceStatus.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Get the latest status of instance.
  *
@@ -560,7 +561,7 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
 /**
  * alsatimer_user_instance_start:
  * @self: A #ALSATimerUserInstance.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Start timer event emission.
  *
@@ -587,7 +588,7 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 /**
  * alsatimer_user_instance_stop:
  * @self: A #ALSATimerUserInstance.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Stop timer event emission.
  *
@@ -614,7 +615,7 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 /**
  * alsatimer_user_instance_pause:
  * @self: A #ALSATimerUserInstance.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Pause timer event emission.
  *
@@ -641,7 +642,7 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 /**
  * alsatimer_user_instance_continue:
  * @self: A #ALSATimerUserInstance.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark.
  *
  * Continue timer event emission paused by alsatimer_user_instance_pause().
  *
