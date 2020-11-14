@@ -71,11 +71,7 @@ void alsatimer_get_sysname(char **sysname, GError **error)
 
     g_return_if_fail(sysname != NULL);
 
-    name = strdup(TIMER_SYSNAME_TEMPLATE);
-    if (name == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    name = g_strdup(TIMER_SYSNAME_TEMPLATE);
 
     if (!check_existence(name, error)) {
         g_free(name);
@@ -118,7 +114,7 @@ void alsatimer_get_devnode(char **devnode, GError **error)
 
     node = udev_device_get_devnode(dev);
     if (node != NULL)
-        *devnode = strdup(node);
+        *devnode = g_strdup(node);
     else
         generate_error(error, ENODEV);
 
@@ -371,11 +367,7 @@ void alsatimer_get_tstamp_source(int *clock_id, GError **error)
     // For codes of sign and new line.
     size += 2;
 
-    buf = g_try_malloc0(size);
-    if (buf == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    buf = g_malloc0(size);
 
     timer_get_node_param_value("timer_tstamp_monotonic", buf, size, &val,
                                error);
