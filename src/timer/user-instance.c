@@ -30,6 +30,15 @@ struct _ALSATimerUserInstancePrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYPE_OBJECT)
 
+/**
+ * alsatimer_user_instance_error_quark:
+ *
+ * Return the GQuark for error domain of GError which has code in #ALSATimerUserInstanceError enumerations.
+ *
+ * Returns: A #GQuark.
+ */
+G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_error)
+
 typedef struct {
     GSource src;
     ALSATimerUserInstance *self;
