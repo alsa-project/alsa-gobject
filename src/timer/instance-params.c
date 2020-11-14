@@ -209,11 +209,7 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     if (count == 0)
         return;
 
-    list = g_try_malloc0_n(count, sizeof(*list));
-    if (list == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    list = g_malloc0_n(count, sizeof(*list));
 
     index = 0;
     for (i = 0; i < sizeof(filter) * 8; ++i) {

@@ -476,11 +476,7 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
         return;
     }
 
-    buf = g_try_malloc0(page_size);
-    if (buf == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    buf = g_malloc0(page_size);
 
     *gsrc = g_source_new(&funcs, sizeof(TimerUserInstanceSource));
     src = (TimerUserInstanceSource *)(*gsrc);
