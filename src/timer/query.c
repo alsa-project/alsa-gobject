@@ -24,9 +24,6 @@
  *                     file descriptor
  */
 
-// For error handling.
-G_DEFINE_QUARK("alsatimer-error", alsatimer_error)
-
 #define TIMER_SYSNAME_TEMPLATE  "timer"
 #define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
 
