@@ -116,8 +116,9 @@ void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
     ALSATimerInstanceStatusPrivate *priv;
 
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(self));
-    g_return_if_fail(tstamp != NULL);
     priv = alsatimer_instance_status_get_instance_private(self);
+
+    g_return_if_fail(tstamp != NULL);
 
     priv->tstamp[0] = (gint64)priv->status.tstamp.tv_sec;
     priv->tstamp[1] = (gint64)priv->status.tstamp.tv_nsec;

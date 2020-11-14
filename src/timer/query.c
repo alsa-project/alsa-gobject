@@ -192,6 +192,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
     int fd;
 
     g_return_if_fail(device_id != NULL);
+    g_return_if_fail(device_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     alsatimer_get_devnode(&devnode, error);
