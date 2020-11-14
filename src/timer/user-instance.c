@@ -41,6 +41,7 @@ G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_erro
 
 static const char *const err_msgs[] = {
     [ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND] = "The timer instance is not found",
+    [ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED] = "The timer instance is not attached to any timer device or the other instance",
 };
 
 #define generate_local_error(exception, code) \
@@ -351,7 +352,10 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
     timer_instance_info_refer_private(*instance_info, &info);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_INFO, info) < 0) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
         g_object_unref(*instance_info);
     }
 }
@@ -382,8 +386,12 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
 
     timer_instance_params_refer_private(*instance_params, &params);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PARAMS, params) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+    }
 }
 
 /**
@@ -413,8 +421,12 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status));
     timer_instance_status_refer_private(*instance_status, &status);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+    }
 }
 
 static gboolean timer_user_instance_check_src(GSource *gsrc)
@@ -559,8 +571,12 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "START");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "START");
+    }
 }
 
 /**
@@ -582,8 +598,12 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "STOP");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "STOP");
+    }
 }
 
 /**
@@ -605,8 +625,12 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "PAUSE");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "PAUSE");
+    }
 }
 
 /**
@@ -629,6 +653,10 @@ void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "CONTINUE");
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0) {
+        if (errno == EBADFD)
+            generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "CONTINUE");
+    }
 }
