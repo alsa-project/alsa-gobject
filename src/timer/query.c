@@ -17,9 +17,6 @@
 
 #include <libudev.h>
 
-#define TIMER_SYSNAME_TEMPLATE  "timer"
-#define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
-
 /**
  * SECTION: query
  * @Title: Global functions in ALSATimer
@@ -30,6 +27,15 @@
 // For error handling.
 G_DEFINE_QUARK("alsatimer-error", alsatimer_error)
 
+#define TIMER_SYSNAME_TEMPLATE  "timer"
+#define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
+
+#define generate_file_error(exception, errno, msg) \
+        g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
+
+#define generate_file_error_fmt(exception, errno, fmt, msg) \
+        g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
+
 static bool check_existence(char *sysname, GError **error)
 {
     struct udev *ctx;
@@ -38,13 +44,13 @@ static bool check_existence(char *sysname, GError **error)
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return false;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
     if (dev == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
         result = false;
     } else {
         result = true;
@@ -102,14 +108,14 @@ void alsatimer_get_devnode(char **devnode, GError **error)
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound",
                                                  TIMER_SYSNAME_TEMPLATE);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         udev_unref(ctx);
         return;
     }
@@ -118,7 +124,7 @@ void alsatimer_get_devnode(char **devnode, GError **error)
     if (node != NULL)
         *devnode = g_strdup(node);
     else
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
 
     udev_device_unref(dev);
     udev_unref(ctx);
@@ -151,17 +157,20 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
         return;
 
     fd = open(devnode, O_RDONLY);
-    g_free(devnode);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
+    	g_free(devnode);
         return;
     }
+    g_free(devnode);
 
     while (true) {
         ALSATimerDeviceId *entry;
 
-        if (ioctl(fd, SNDRV_TIMER_IOCTL_NEXT_DEVICE, &id) < 0)
+        if (ioctl(fd, SNDRV_TIMER_IOCTL_NEXT_DEVICE, &id) < 0) {
+            generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_NEXT_DEVICE)");
             break;
+        }
         if (id.dev_class == SNDRV_TIMER_CLASS_NONE)
             break;
 
@@ -200,18 +209,19 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
         return;
 
     fd = open(devnode, O_RDONLY);
-    g_free(devnode);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
         return;
+    	g_free(devnode);
     }
+    g_free(devnode);
 
     *device_info = g_object_new(ALSATIMER_TYPE_DEVICE_INFO, NULL);
     timer_device_info_refer_private(*device_info, &info);
 
     info->tid = *device_id;
     if (ioctl(fd, SNDRV_TIMER_IOCTL_GINFO, info) < 0) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GINFO)");
         g_object_unref(*device_info);
     }
 
@@ -246,17 +256,18 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
         return;
 
     fd = open(devnode, O_RDONLY);
-    g_free(devnode);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
+    	g_free(devnode);
         return;
     }
+    g_free(devnode);
 
     timer_device_status_refer_private(*device_status, &status);
 
     status->tid = *device_id;
     if (ioctl(fd, SNDRV_TIMER_IOCTL_GSTATUS, status) < 0) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GSTATUS)");
         g_object_unref(*device_status);
     }
 
@@ -291,17 +302,18 @@ void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
         return;
 
     fd = open(devnode, O_RDONLY);
-    g_free(devnode);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
+    	g_free(devnode);
         return;
     }
+    g_free(devnode);
 
     timer_device_params_refer_private((ALSATimerDeviceParams *)device_params,
                                       &params);
     params->tid = *device_id;
     if (ioctl(fd, SNDRV_TIMER_IOCTL_GPARAMS, params) < 0)
-        generate_error(error, errno);
+        generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GPARAMS)");
 
     close(fd);
 }
@@ -320,21 +332,21 @@ static void timer_get_node_param_value(const char *param_name, char *buf,
 
     fd = open(literal, O_RDONLY);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", literal);
         return;
     }
 
     len = read(fd, buf, size);
     if (len < 0) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "read()");
         goto end;
     }
 
     v = strtol(buf, &term, 10);
     if (errno > 0)
-        generate_error(error, errno);
+        generate_file_error(error, errno, "strtol()");
     else if (*term != '\n')
-        generate_error(error, EIO);
+        generate_file_error(error, EIO, "strtol()");
     else
         *val = (int)v;
 end:
@@ -391,7 +403,7 @@ void alsatimer_get_tstamp_source(int *clock_id, GError **error)
         *clock_id = CLOCK_MONOTONIC;
         break;
     default:
-        generate_error(error, EPROTO);
+        generate_file_error(error, EPROTO, "timer_tstamp_monotonic");
         break;
     }
 end:
