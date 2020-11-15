@@ -42,6 +42,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT
  */
 G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
 
+#define generate_syscall_error(exception, errno, fmt, arg) \
+        g_set_error(exception, ALSASEQ_USER_CLIENT_ERROR, ALSASEQ_USER_CLIENT_ERROR_FAILED, \
+                    fmt" %d(%s)", arg, errno, strerror(errno))
+
 typedef struct {
     GSource src;
     ALSASeqUserClient *self;
@@ -185,14 +189,14 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
     }
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &priv->client_id) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "CLIENT_ID");
         close(priv->fd);
         priv->fd = -1;
     }
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_PVERSION, &proto_ver) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
         return;
@@ -259,7 +263,7 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
     info->client = priv->client_id;
     info->type = USER_CLIENT;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_INFO, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_CLIENT_INFO");
 }
 
 /**
@@ -290,7 +294,7 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
     seq_client_info_refer_private(*client_info, &info);
     info->client = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "GET_CLIENT_INFO");
 }
 
 /**
@@ -321,7 +325,7 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
 
     info->addr.client = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_PORT, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "CREATE_PORT");
 }
 
 /**
@@ -385,7 +389,7 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
     info->addr.port = port_id;
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_PORT_INFO, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_PORT_INFO");
 }
 
 /**
@@ -413,7 +417,7 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
     info.addr.client = priv->client_id;
     info.addr.port = port_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, &info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "DELETE_PORT");
 }
 
 /**
@@ -443,7 +447,7 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
     seq_client_pool_refer_private(client_pool, &pool);
     pool->client = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_POOL, pool) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_CLIENT_POOL");
 }
 
 /**
@@ -473,7 +477,7 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
     seq_client_pool_refer_private(*client_pool, &pool);
     pool->client = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "GET_CLIENT_POOL");
 }
 
 /**
@@ -640,6 +644,7 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_subscribe *data;
     long request;
+    const char *label;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
@@ -649,13 +654,16 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
 
     seq_subscribe_data_refer_private(subs_data, &data);
 
-    if (establish)
+    if (establish) {
         request = SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT;
-    else
+        label = "SUBSCRIBE_PORT";
+    } else {
         request = SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT;
+        label = "UNSUBSCRIBE_PORT";
+    }
 
     if (ioctl(priv->fd, request, data) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", label);
 }
 
 /**
@@ -686,7 +694,7 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
     seq_queue_info_refer_private(*queue_info, &info);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "CREATE_QUEUE");
 }
 
 /**
@@ -714,7 +722,7 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
     info.queue = (int)queue_id;
     info.owner = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_QUEUE, &info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "DELETE_QUEUE");
 }
 
 /**
@@ -744,7 +752,7 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
     seq_queue_info_refer_private(queue_info, &info);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_INFO, info) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_INFO");
 }
 
 /**
@@ -775,7 +783,7 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
 
     data.queue = (int)queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT, &data) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_CLIENT");
         return;
     }
 
@@ -812,7 +820,7 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
     data.used = use;
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_CLIENT");
 }
 
 /**
@@ -844,7 +852,7 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
     seq_queue_tempo_refer_private(queue_tempo, &tempo);
     tempo->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO, tempo) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TEMPO");
 }
 
 /**
@@ -878,7 +886,7 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
 
     tempo->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO, tempo) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_TEMPO");
         g_object_unref(*queue_tempo);
     }
 }
@@ -923,7 +931,7 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
 
     timer->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, timer) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TIMER");
 }
 
 /**
@@ -958,7 +966,7 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
 
     timer->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER, timer) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_TIMER");
         return;
     }
 
@@ -998,8 +1006,6 @@ void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
     g_return_if_fail(filter != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {
-        generate_error(error, errno);
-        return;
-    }
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0)
+        generate_syscall_error(error, errno, "ioctl(%s)", "REMOVE_EVENTS");
 }
