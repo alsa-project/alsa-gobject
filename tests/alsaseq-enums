@@ -166,6 +166,7 @@ remove_filter_flags = (
 
 user_client_error_types = (
     'FAILED',
+    'PORT_PERMISSION',
 )
 
 types = {
