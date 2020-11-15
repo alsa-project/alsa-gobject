@@ -39,6 +39,8 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
     struct udev_device *dev;
     const char *name;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     ctx = udev_new();
     if (ctx == NULL) {
         generate_error(error, errno);
@@ -80,6 +82,8 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
     struct udev *ctx;
     struct udev_device *dev;
     const char *node;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     ctx = udev_new();
     if (ctx == NULL) {
@@ -123,6 +127,8 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
     char *devnode;
     struct snd_seq_system_info *info;
     int fd;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -179,6 +185,8 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
     unsigned int index;
     struct snd_seq_client_info client_info = {0};
     int fd;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -258,6 +266,8 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
     struct snd_seq_client_info *info;
     int fd;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -311,6 +321,8 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     unsigned int index;
     struct snd_seq_port_info port_info = {0};
     int fd;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -380,6 +392,8 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
     struct snd_seq_port_info *info;
     int fd;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -427,6 +441,8 @@ void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
     char *devnode;
     int fd;
     struct snd_seq_client_pool *pool;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -489,6 +505,8 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
     struct snd_seq_query_subs query = {0};
     unsigned int count;
     unsigned int index;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -567,6 +585,8 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
     unsigned int index;
     int i;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -636,6 +656,8 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
     char *devnode;
     int fd;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -680,6 +702,8 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
     struct snd_seq_queue_info *info;
     char *devnode;
     int fd;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
@@ -726,6 +750,8 @@ void alsaseq_get_queue_status(guint8 queue_id,
     struct snd_seq_queue_status *status;
     char *devnode;
     int fd;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)

@@ -161,6 +161,8 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     alsaseq_get_seq_devnode(&devnode, error);
     if (*error != NULL)
         return;
@@ -213,6 +215,8 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -242,6 +246,8 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_info_refer_private(client_info, &info);
     info->client = priv->client_id;
@@ -273,6 +279,8 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_client_info_refer_private(*client_info, &info);
     info->client = priv->client_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
@@ -301,6 +309,8 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_port_info_refer_private(*port_info, &info);
 
     info->addr.client = priv->client_id;
@@ -328,6 +338,7 @@ void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
+    g_return_if_fail(error == NULL || *error == NULL);
 
     seq_port_info_refer_private(*port_info, &info);
 
@@ -360,6 +371,8 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_port_info_refer_private(port_info, &info);
 
     info->addr.client = priv->client_id;
@@ -389,6 +402,8 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     info.addr.client = priv->client_id;
     info.addr.port = port_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, &info) < 0)
@@ -416,6 +431,8 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_pool_refer_private(client_pool, &pool);
     pool->client = priv->client_id;
@@ -445,6 +462,8 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
     g_return_if_fail(*client_pool != NULL);
     g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_pool_refer_private(*client_pool, &pool);
     pool->client = priv->client_id;
@@ -477,6 +496,8 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_event_cntr_count_events(ev_cntr, &total);
     if (count > total) {
@@ -578,6 +599,8 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -626,6 +649,8 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_subscribe_data_refer_private(subs_data, &data);
 
     if (establish)
@@ -660,6 +685,8 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_queue_info_refer_private(*queue_info, &info);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
@@ -685,6 +712,8 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     info.queue = (int)queue_id;
     info.owner = priv->client_id;
@@ -714,6 +743,8 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_queue_info_refer_private(queue_info, &info);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_INFO, info) < 0)
@@ -742,6 +773,8 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     data.queue = (int)queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT, &data) < 0) {
@@ -775,6 +808,8 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     data.queue = (int)queue_id;
     data.client = priv->client_id;
     data.used = use;
@@ -807,6 +842,8 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     seq_queue_tempo_refer_private(queue_tempo, &tempo);
     tempo->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO, tempo) < 0)
@@ -836,6 +873,8 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(queue_tempo != NULL);
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *queue_tempo = g_object_new(ALSASEQ_TYPE_QUEUE_TEMPO, NULL);
     seq_queue_tempo_refer_private(*queue_tempo, &tempo);
@@ -871,6 +910,8 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     seq_queue_timer_refer_private(queue_timer, &timer);
 
@@ -914,6 +955,8 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
     g_return_if_fail(queue_timer != NULL);
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     *queue_timer = g_object_new(ALSASEQ_TYPE_QUEUE_TIMER, NULL);
     seq_queue_timer_refer_private(*queue_timer, &timer);
 
@@ -956,6 +999,8 @@ void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {
         generate_error(error, errno);

@@ -42,6 +42,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
 {
     struct snd_seq_remove_events filter;
 
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
         return NULL;
@@ -70,6 +72,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
                                 guint8 channel, GError **error)
 {
     struct snd_seq_remove_events filter;
+
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
 
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
@@ -100,6 +104,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
 {
     struct snd_seq_remove_events filter;
 
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
         return NULL;
@@ -128,6 +134,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
 {
     struct snd_seq_remove_events filter;
 
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
         return NULL;
@@ -155,6 +163,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
                                 gint8 tag, GError **error)
 {
     struct snd_seq_remove_events filter;
+
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
 
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
@@ -187,6 +197,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
                                 GError **error)
 {
     struct snd_seq_remove_events filter;
+
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
 
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);
@@ -224,6 +236,8 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
                                 GError **error)
 {
     struct snd_seq_remove_events filter;
+
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
 
     if (inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)) {
         generate_error(error, EINVAL);

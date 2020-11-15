@@ -224,6 +224,8 @@ void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
     g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
     priv = alsaseq_client_info_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     memset(priv->info.event_filter, 0, sizeof(priv->info.event_filter));
 
     if (event_types == NULL)
@@ -261,6 +263,8 @@ void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
 
     g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
     priv = alsaseq_client_info_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (event_types == NULL || event_type_count == NULL) {
         generate_error(error, EINVAL);
