@@ -153,11 +153,8 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
         goto end;
 
     length = strlen(PREFIX_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
-    prefix = g_try_malloc0(length);
-    if (prefix == NULL) {
-        generate_error(error, ENOMEM);
-        goto end;
-    }
+    prefix = g_malloc0(length);
+
     snprintf(prefix, length, PREFIX_SYSNAME_TEMPLATE, card_id);
 
     entry_list = udev_enumerate_get_list_entry(enumerator);
@@ -175,11 +172,7 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
     if (count == 0)
         goto end;
 
-    *entries = g_try_malloc0_n(count, sizeof(**entries));
-    if (*entries == NULL) {
-        generate_error(error, ENOMEM);
-        goto end;
-    }
+    *entries = g_malloc0_n(count, sizeof(**entries));
 
     index = 0;
     udev_list_entry_foreach(entry, entry_list) {
@@ -233,11 +226,8 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
 
     length = strlen(HWDEP_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
-    name = g_try_malloc0(length);
-    if (name == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    name = g_malloc0(length);
+
     snprintf(name, length, HWDEP_SYSNAME_TEMPLATE, card_id, device_id);
 
     ctx = udev_new();
@@ -281,11 +271,8 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
 
     length = strlen(HWDEP_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
-    name = g_try_malloc0(length);
-    if (name == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    name = g_malloc0(length);
+
     snprintf(name, length, HWDEP_SYSNAME_TEMPLATE, card_id, device_id);
 
     ctx = udev_new();
@@ -304,13 +291,10 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
     }
 
     node = udev_device_get_devnode(dev);
-    if (node == NULL) {
+    if (node == NULL)
         generate_error(error, ENOENT);
-    } else {
-        *devnode = strdup(node);
-        if (*devnode == NULL)
-            generate_error(error, ENOMEM);
-    }
+    else
+        *devnode = g_strdup(node);
 
     udev_device_unref(dev);
     udev_unref(ctx);
@@ -327,11 +311,8 @@ static void hwdep_perform_ctl_ioctl(guint card_id, long request, void *data,
     int fd;
 
     length = strlen(CTL_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
-    sysname = g_try_malloc0(length);
-    if (sysname == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    sysname = g_malloc0(length);
+
     snprintf(sysname, length, CTL_SYSNAME_TEMPLATE, card_id);
 
     ctx = udev_new();
