@@ -192,12 +192,9 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
             udev_device_unref(dev);
         }
     }
-    if (index != count) {
-        g_warn_if_reached();
-        g_free(*entries);
-        *entries = NULL;
-        goto end;
-    }
+
+    g_warn_if_fail(index == count);
+
     *entry_count = count;
 
     qsort(*entries, count, sizeof(guint), compare_guint);
