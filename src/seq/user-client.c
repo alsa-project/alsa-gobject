@@ -583,11 +583,7 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
         return;
     }
 
-    buf = g_try_malloc0(page_size);
-    if (buf == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    buf = g_malloc0(page_size);
 
     *gsrc = g_source_new(&funcs, sizeof(*src));
     src = (UserClientSource *)(*gsrc);

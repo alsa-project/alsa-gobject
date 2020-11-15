@@ -99,11 +99,8 @@ ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error)
     int i;
 
     priv->length = sizeof(struct snd_seq_event) * count;
-    priv->buf = g_try_malloc0(priv->length);
-    if (priv->buf == NULL) {
-        generate_error(error, ENOMEM);
-        return NULL;
-    }
+    priv->buf = g_malloc0(priv->length);
+
     priv->allocated = TRUE;
 
     ev = (struct snd_seq_event *)priv->buf;
@@ -888,11 +885,7 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
 
     to_tail = priv->length - (next_ev - priv->buf);
 
-    new = g_try_malloc(from_head + size + to_tail);
-    if (new == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    new = g_malloc(from_head + size + to_tail);
 
     memcpy(new, priv->buf, from_head);
     memcpy(new + from_head, data, size);

@@ -60,9 +60,7 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
         return;
     }
 
-    *sysname = strdup(name);
-    if (*sysname == NULL)
-        generate_error(error, ENOMEM);
+    *sysname = g_strdup(name);
 
     udev_device_unref(dev);
     udev_unref(ctx);
@@ -104,9 +102,7 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
         return;
     }
 
-    *devnode = strdup(node);
-    if (*devnode == NULL)
-        generate_error(error, ENOMEM);
+    *devnode = g_strdup(node);
 
     udev_device_unref(dev);
     udev_unref(ctx);
@@ -215,12 +211,8 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
         return;
     }
 
-    list = g_try_malloc0_n(count, sizeof(guint));
-    if (list == NULL) {
-        *entry_count = 0;
-        close(fd);
-        return;
-    }
+    list = g_malloc0_n(count, sizeof(guint));
+
     index = 0;
 
     client_info.client = -1;
@@ -339,12 +331,8 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     }
 
     count = client_info.num_ports;
-    list = g_try_malloc0_n(count, sizeof(*list));
-    if (list == NULL) {
-        generate_error(error, ENOMEM);
-        close(fd);
-        return;
-    }
+    list = g_malloc0_n(count, sizeof(*list));
+
     index = 0;
 
     port_info.addr.client = client_id;
@@ -603,12 +591,7 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
         return;
     }
 
-    list = g_try_malloc0_n(count, sizeof(*entries));
-    if (list == NULL) {
-        generate_error(error, ENOMEM);
-        close(fd);
-        return;
-    }
+    list = g_malloc0_n(count, sizeof(*entries));
 
     index = 0;
     for (i = 0; i < maximum_count; ++i) {
