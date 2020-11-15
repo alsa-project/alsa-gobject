@@ -362,4 +362,14 @@ typedef enum /*< flags >*/
     ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT   = SNDRV_SEQ_REMOVE_OUTPUT,
 } ALSASeqRemoveFilterFlag;
 
+/**
+ * ALSASeqUserClientError:
+ * @ALSASEQ_USER_CLIENT_ERROR_FAILED:	The system call failed.
+ *
+ * A set of error code for GError with domain which equals to #alsaseq_user_client_error_quark()
+ */
+typedef enum {
+    ALSASEQ_USER_CLIENT_ERROR_FAILED,
+} ALSASeqUserClientError;
+
 #endif

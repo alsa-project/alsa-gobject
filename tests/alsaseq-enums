@@ -164,6 +164,10 @@ remove_filter_flags = (
     'OUTPUT',
 )
 
+user_client_error_types = (
+    'FAILED',
+)
+
 types = {
     ALSASeq.SpecificAddress:    specific_address_types,
     ALSASeq.SpecificClientId:   specific_client_id_types,
@@ -182,6 +186,7 @@ types = {
     ALSASeq.QuerySubscribeType: query_subscribe_types,
     ALSASeq.QueueTimerType:     queue_timer_types,
     ALSASeq.RemoveFilterFlag:   remove_filter_flags,
+    ALSASeq.UserClientError:    user_client_error_types,
 }
 
 for obj, types in types.items():
