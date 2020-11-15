@@ -366,12 +366,14 @@ typedef enum /*< flags >*/
  * ALSASeqUserClientError:
  * @ALSASEQ_USER_CLIENT_ERROR_FAILED:	            The system call failed.
  * @ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION:      The operation fails due to access permission of port.
+ * @ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION:     The operation fails due to access permission of queue.
  *
  * A set of error code for GError with domain which equals to #alsaseq_user_client_error_quark()
  */
 typedef enum {
     ALSASEQ_USER_CLIENT_ERROR_FAILED,
     ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION,
+    ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION,
 } ALSASeqUserClientError;
 
 #endif
