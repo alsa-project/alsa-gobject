@@ -214,3 +214,7 @@ ALSA_GOBJECT_0_0_0 {
   local:
     *;
 };
+
+ALSA_GOBJECT_0_2_0 {
+    "alsaseq_user_client_error_get_type";
+} ALSA_GOBJECT_0_0_0;
