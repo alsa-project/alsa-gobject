@@ -39,6 +39,10 @@ G_BEGIN_DECLS
                                ALSASEQ_TYPE_USER_CLIENT,    \
                                ALSASeqUserClientClass))
 
+#define ALSASEQ_USER_CLIENT_ERROR   alsaseq_user_client_error_quark()
+
+GQuark alsaseq_user_client_error_quark();
+
 typedef struct _ALSASeqUserClient           ALSASeqUserClient;
 typedef struct _ALSASeqUserClientClass      ALSASeqUserClientClass;
 typedef struct _ALSASeqUserClientPrivate    ALSASeqUserClientPrivate;
