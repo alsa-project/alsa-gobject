@@ -223,10 +223,7 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
         }
     }
 
-    if (index != count) {
-        g_free(list);
-        g_return_if_reached();
-    }
+    g_warn_if_fail(index == count);
 
     *entries = list;
     *entry_count = count;
