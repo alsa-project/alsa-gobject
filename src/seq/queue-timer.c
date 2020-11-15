@@ -105,6 +105,8 @@ void alsaseq_queue_timer_get_alsa_data(ALSASeqQueueTimer *self,
     g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(self));
     priv = alsaseq_queue_timer_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
+
     *data = (const ALSASeqQueueTimerDataAlsa *)&priv->timer.u.alsa;
 }
 
@@ -123,6 +125,8 @@ void alsaseq_queue_timer_set_alsa_data(ALSASeqQueueTimer *self,
 
     g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(self));
     priv = alsaseq_queue_timer_get_instance_private(self);
+
+    g_return_if_fail(data != NULL);
 
     priv->timer.type = SNDRV_SEQ_TIMER_ALSA;
     priv->timer.u.alsa.id = data->device_id;

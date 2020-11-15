@@ -136,6 +136,8 @@ void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2
     g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(self));
     priv = alsaseq_queue_tempo_get_instance_private(self);
 
+    g_return_if_fail(skew != NULL);
+
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
     *skew = (guint32 *)&priv->tempo.skew_value;
@@ -156,6 +158,8 @@ void alsaseq_queue_tempo_set_skew(ALSASeqQueueTempo *self, const guint32 skew[2]
 
     g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(self));
     priv = alsaseq_queue_tempo_get_instance_private(self);
+
+    g_return_if_fail(skew != NULL);
 
     priv->tempo.skew_value = skew[0];
     priv->tempo.skew_base = skew[1];

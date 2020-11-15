@@ -112,6 +112,8 @@ void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
     g_return_if_fail(ALSASEQ_IS_QUEUE_STATUS(self));
     priv = alsaseq_queue_status_get_instance_private(self);
 
+    g_return_if_fail(tick_time != NULL);
+
     *tick_time = priv->status.tick;
 }
 
@@ -130,6 +132,8 @@ void alsaseq_queue_status_get_real_time(ALSASeqQueueStatus *self,
 
     g_return_if_fail(ALSASEQ_IS_QUEUE_STATUS(self));
     priv = alsaseq_queue_status_get_instance_private(self);
+
+    g_return_if_fail(real_time != NULL);
 
     // MEMO: I wish 32-bit storage size is aligned to 32 bit offset in all of
     // supported ABIs.
