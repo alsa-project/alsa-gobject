@@ -43,6 +43,13 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT
  */
 G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
 
+static const char *const err_msgs[] = {
+        [ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION] = "The operation fails due to access permission of port",
+};
+
+#define generate_local_error(exception, code) \
+        g_set_error_literal(exception, ALSASEQ_USER_CLIENT_ERROR, code, err_msgs[code])
+
 #define generate_syscall_error(exception, errno, fmt, arg) \
         g_set_error(exception, ALSASEQ_USER_CLIENT_ERROR, ALSASEQ_USER_CLIENT_ERROR_FAILED, \
                     fmt" %d(%s)", arg, errno, strerror(errno))
@@ -680,8 +687,12 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
         label = "UNSUBSCRIBE_PORT";
     }
 
-    if (ioctl(priv->fd, request, data) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", label);
+    if (ioctl(priv->fd, request, data) < 0) {
+        if (errno == EPERM)
+            generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", label);
+    }
 }
 
 /**
