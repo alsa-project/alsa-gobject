@@ -20,9 +20,6 @@
  *                     descriptor
  */
 
-// For error handling.
-G_DEFINE_QUARK("alsahwdep-error", alsahwdep_error)
-
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "hwC%u"
 #define HWDEP_SYSNAME_TEMPLATE      "hwC%uD%u"
