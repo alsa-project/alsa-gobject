@@ -169,7 +169,8 @@ ALSASeqUserClient *alsaseq_user_client_new()
  * alsaseq_user_client_open:
  * @self: A #ALSASeqUserClient.
  * @open_flag: The flag of open(2) system call. O_RDWR is forced to fulfil internally.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsaseq_user_client_error_quark().
  *
  * Open ALSA sequencer character device.
  *
@@ -259,7 +260,7 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
  * alsaseq_user_client_set_info:
  * @self: A #ALSASeqUserClient.
  * @client_info: A #ALSASeqClientInfo.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Get client information.
  *
@@ -290,7 +291,7 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
  * alsaseq_user_client_get_info:
  * @self: A #ALSASeqUserClient.
  * @client_info: (inout): A #ALSASeqClientInfo.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Set client information.
  *
@@ -321,7 +322,7 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
  * alsaseq_user_client_create_port:
  * @self: A #ALSASeqUserClient.
  * @port_info: (inout): A #ALSASeqPortInfo.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Create a port into the client.
  *
@@ -353,7 +354,7 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
  * @self: A #ALSASeqUserClient.
  * @port_info: (inout): A #ALSASeqPortInfo.
  * @port_id: The numerical ID of port to create.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Create a port into the client with the given numerical port ID.
  *
@@ -383,7 +384,7 @@ void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
  * @self: A #ALSASeqUserClient.
  * @port_info: A #ALSASeqPortInfo.
  * @port_id: The numerical ID of port.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Update port information.
  *
@@ -416,7 +417,7 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
  * alsaseq_user_client_delete_port:
  * @self: A #ALSASeqUserClient.
  * @port_id: The numerical ID of port.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Delete a port from the client.
  *
@@ -444,7 +445,7 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
  * alsaseq_user_client_set_pool:
  * @self: A #ALSASeqUserClient.
  * @client_pool: A #ALSASeqClientPool to be configured for the client.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Configure memory pool in the client.
  *
@@ -474,7 +475,7 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
  * alsaseq_user_client_get_pool:
  * @self: A #ALSASeqUserClient.
  * @client_pool: (inout): A #ALSASeqClientPool to be configured for the client.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Get information of memory pool in the client.
  *
@@ -505,7 +506,8 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
  * @self: A #ALSASeqUserClient.
  * @ev_cntr: An instance of #ALSASeqEventCntr pointing to events.
  * @count: The number of events in the ev_cntr to write.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark()
+ *         and #alsaseq_user_client_error_quark().
  *
  * Deliver the event immediately, or schedule it into memory pool of the client.
  *
@@ -654,7 +656,7 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
  * @self: A #ALSASeqUserClient.
  * @subs_data: A #ALSASeqSubscribeData.
  * @establish: Whether to establish subscription between two ports, or break it.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Operate subscription between two ports pointed by the data.
  *
@@ -700,7 +702,7 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
  * alsaseq_user_client_create_queue:
  * @self: A #ALSASeqUserClient.
  * @queue_info: (inout): The information of queue to add.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Create a new queue owned by the client. The content of information is updated
  * if success.
@@ -731,7 +733,7 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
  * alsaseq_user_client_delete_queue:
  * @self: A #ALSASeqUserClient.
  * @queue_id: The numerical ID of queue, except for one of ALSASeqSpecificQueueId.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Delete the queue owned by the client.
  *
@@ -759,7 +761,7 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
  * alsaseq_user_client_update_queue:
  * @self: A #ALSASeqUserClient.
  * @queue_info: The information of queue to add.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Update owned queue according to the information.
  *
@@ -795,7 +797,7 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @use: (out): Whether the client uses the queue or not.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Get usage of the queue by the client.
  *
@@ -830,7 +832,7 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @use: Whether to use the queue or not.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Start the queue to use or not.
  *
@@ -863,7 +865,7 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @queue_tempo: The data of tempo for queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Set the data of tempo to the queue.
  *
@@ -899,7 +901,7 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @queue_tempo: (out): The data of tempo for queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Get the data of tempo for the queue.
  *
@@ -935,7 +937,7 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @queue_timer: The data of timer for queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Set the data of timer for the queue.
  *
@@ -982,7 +984,7 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @queue_timer: (out): The data of timer for queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Get the data of timer for the queue.
  *
@@ -1029,7 +1031,7 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
  * alsaseq_user_client_remove_events:
  * @self: A #ALSASeqUserClient.
  * @filter: A #ALSASeqRemoveFilter.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
  *
  * Remove queued events according to the filter.
  *
