@@ -283,11 +283,8 @@ void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
         return;
     }
 
-    *event_types = g_try_malloc0_n(count, sizeof(*event_types));
-    if (*event_types == NULL) {
-        generate_error(error, ENOMEM);
-        return;
-    }
+    *event_types = g_malloc0_n(count, sizeof(*event_types));
+
     *event_type_count = count;
 
     index = 0;
