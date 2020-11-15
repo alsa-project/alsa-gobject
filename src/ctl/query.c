@@ -165,12 +165,9 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
             udev_device_unref(dev);
         }
     }
-    if (index != count) {
-        g_warn_if_reached();
-        g_free(*entries);
-        *entries = NULL;
-        goto end;
-    }
+
+    g_warn_if_fail(index == count);
+
     *entry_count = count;
 
     qsort(*entries, count, sizeof(guint), compare_guint);
