@@ -120,6 +120,26 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
     udev_unref(ctx);
 }
 
+static int open_fd(GError **error)
+{
+    char *devnode;
+    int fd;
+
+    alsaseq_get_seq_devnode(&devnode, error);
+    if (*error != NULL)
+        return -1;
+
+    fd = open(devnode, O_RDONLY);
+    if (fd < 0) {
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
+        g_free(devnode);
+        return -1;
+    }
+    g_free(devnode);
+
+    return fd;
+}
+
 /**
  * alsaseq_get_system_info:
  * @system_info: (out): The information of ALSA Sequencer.
@@ -132,28 +152,18 @@ void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
  */
 void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 {
-    char *devnode;
     struct snd_seq_system_info *info;
     int fd;
 
     g_return_if_fail(system_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
 
     *system_info = g_object_new(ALSASEQ_TYPE_SYSTEM_INFO, NULL);
     seq_system_info_refer_private(*system_info, &info);
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-        g_object_unref(*system_info);
-        *system_info = NULL;
-        return;
-    }
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, info) < 0)
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
@@ -186,7 +196,6 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
                                 GError **error)
 {
-    char *devnode;
     int my_id;
     struct snd_seq_system_info system_info = {0};
     unsigned int count;
@@ -199,16 +208,9 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &my_id) < 0) {
         generate_file_error(error, errno, "ioctl(CLIENT_ID)");
@@ -278,28 +280,18 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
 void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
                              GError **error)
 {
-    char *devnode;
     struct snd_seq_client_info *info;
     int fd;
 
     g_return_if_fail(client_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
 
     *client_info = g_object_new(ALSASEQ_TYPE_CLIENT_INFO, NULL);
     seq_client_info_refer_private(*client_info, &info);
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        g_object_unref(*client_info);
-        *client_info = NULL;
-        return;
-    }
 
     info->client = client_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
@@ -331,7 +323,6 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
 void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
                               gsize *entry_count, GError **error)
 {
-    char *devnode;
     struct snd_seq_client_info client_info = {0};
     unsigned int count;
     guint8 *list;
@@ -343,16 +334,9 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     client_info.client = client_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, &client_info) < 0) {
@@ -410,28 +394,18 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
 void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
                            ALSASeqPortInfo **port_info, GError **error)
 {
-    char *devnode;
     struct snd_seq_port_info *info;
     int fd;
 
     g_return_if_fail(port_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
 
     *port_info = g_object_new(ALSASEQ_TYPE_PORT_INFO, NULL);
     seq_port_info_refer_private(*port_info, &info);
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        g_object_unref(*port_info);
-        *port_info = NULL;
-        return;
-    }
 
     info->addr.client = client_id;
     info->addr.port = port_id;
@@ -461,23 +435,15 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
 void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
                              GError **error)
 {
-    char *devnode;
     int fd;
     struct snd_seq_client_pool *pool;
 
     g_return_if_fail(client_pool != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     *client_pool = g_object_new(ALSASEQ_TYPE_CLIENT_POOL, NULL);
     seq_client_pool_refer_private(*client_pool, &pool);
@@ -524,7 +490,6 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
                                    ALSASeqQuerySubscribeType query_type,
                                    GList **entries, GError **error)
 {
-    char *devnode;
     int fd;
     struct snd_seq_query_subs query = {0};
     unsigned int count;
@@ -533,16 +498,9 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
     g_return_if_fail(entries != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     g_object_get((gpointer)addr, "client-id", &query.root.client,
                  "port-id", &query.root.port, NULL);
@@ -601,7 +559,6 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
 void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
                                GError **error)
 {
-    char *devnode;
     int fd;
     struct snd_seq_system_info info = {0};
     unsigned int maximum_count;
@@ -614,16 +571,9 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
@@ -677,22 +627,14 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
                                   GError **error)
 {
     struct snd_seq_queue_info *info;
-    char *devnode;
     int fd;
 
     g_return_if_fail(queue_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
     seq_queue_info_refer_private(*queue_info, &info);
@@ -725,22 +667,14 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
                                     GError **error)
 {
     struct snd_seq_queue_info *info;
-    char *devnode;
     int fd;
 
     g_return_if_fail(queue_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
     seq_queue_info_refer_private(*queue_info, &info);
@@ -774,22 +708,14 @@ void alsaseq_get_queue_status(guint8 queue_id,
                               GError **error)
 {
     struct snd_seq_queue_status *status;
-    char *devnode;
     int fd;
 
     g_return_if_fail(queue_status != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    fd = open_fd(error);
+    if (fd < 0)
         return;
-
-    fd = open(devnode, O_RDONLY);
-    g_free(devnode);
-    if (fd < 0) {
-        generate_file_error(error, errno, "open()");
-        return;
-    }
 
     g_return_if_fail(ALSASEQ_IS_QUEUE_STATUS(*queue_status));
     seq_queue_status_refer_private(*queue_status, &status);
