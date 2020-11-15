@@ -147,6 +147,7 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
 
     g_return_if_fail(entries != NULL);
     g_return_if_fail(entry_count != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
     if (*error != NULL)
@@ -224,6 +225,8 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
     struct udev *ctx;
     struct udev_device *dev;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     length = strlen(HWDEP_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
     name = g_malloc0(length);
@@ -268,6 +271,8 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
     struct udev *ctx;
     struct udev_device *dev;
     const char *node;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     length = strlen(HWDEP_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
@@ -370,6 +375,7 @@ void alsahwdep_get_device_info(guint card_id, guint device_id,
     struct snd_hwdep_info *info;
 
     g_return_if_fail(device_info != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *device_info = g_object_new(ALSAHWDEP_TYPE_DEVICE_INFO, NULL);
     hwdep_device_info_refer_private(*device_info, &info);
