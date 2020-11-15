@@ -22,12 +22,6 @@
 
 G_BEGIN_DECLS
 
-GQuark alsaseq_error_quark(void);
-
-#define generate_error(err, errno)                      \
-    g_set_error(err, alsaseq_error_quark(), errno,      \
-                __FILE__ ":%d: %s", __LINE__, strerror(errno))
-
 void seq_system_info_refer_private(ALSASeqSystemInfo *self,
                                    struct snd_seq_system_info **info);
 

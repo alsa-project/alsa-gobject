@@ -19,9 +19,6 @@
  *                     descriptor
  */
 
-// For error handling.
-G_DEFINE_QUARK("alsaseq-error", alsaseq_error)
-
 #define SEQ_SYSNAME   "seq"
 
 #define generate_file_error(exception, errno, msg) \
