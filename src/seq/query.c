@@ -165,17 +165,17 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
     *system_info = g_object_new(ALSASEQ_TYPE_SYSTEM_INFO, NULL);
     seq_system_info_refer_private(*system_info, &info);
 
-    if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, info) < 0)
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
-    close(fd);
-    if (*error != NULL) {
         g_object_unref(*system_info);
         *system_info = NULL;
-        return;
+        goto end;
     }
 
     // Decrement count for the above connection.
     --info->cur_clients;
+end:
+    close(fd);
 }
 
 /**
@@ -214,22 +214,19 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &my_id) < 0) {
         generate_file_error(error, errno, "ioctl(CLIENT_ID)");
-        close(fd);
-        return;
+        goto end;
     }
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &system_info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
-        close(fd);
-        return;
+        goto end;
     }
 
     // Exclude myself.
     count = system_info.cur_clients - 1;
     if (count == 0)  {
         *entry_count = 0;
-        close(fd);
-        return;
+        goto end;
     }
 
     list = g_malloc0_n(count, sizeof(guint));
@@ -250,17 +247,17 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
         }
     }
 
-    close(fd);
-
     if (*error != NULL) {
         g_free(list);
-        return;
+        goto end;;
     }
 
     g_warn_if_fail(index == count);
 
     *entries = list;
     *entry_count = count;
+end:
+    close(fd);
 }
 
 /**
@@ -294,13 +291,13 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
     seq_client_info_refer_private(*client_info, &info);
 
     info->client = client_id;
-    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_CLIENT_INFO)");
-    close(fd);
-    if (*error != NULL) {
         g_object_unref(*client_info);
         *client_info = NULL;
     }
+
+    close(fd);
 }
 
 /**
@@ -341,8 +338,7 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     client_info.client = client_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, &client_info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_CLIENT_INFO)");
-        close(fd);
-        return;
+        goto end;
     }
 
     count = client_info.num_ports;
@@ -366,13 +362,15 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
 
     if (*error != NULL) {
         g_free(list);
-        return;
+        goto end;
     }
 
     g_warn_if_fail(index == count);
 
     *entries = list;
     *entry_count = count;
+end:
+    close(fd);
 }
 
 /**
@@ -409,13 +407,13 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
 
     info->addr.client = client_id;
     info->addr.port = port_id;
-    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_PORT_INFO, info) < 0)
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_PORT_INFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_PORT_INFO)");
-    close(fd);
-    if (*error != NULL) {
         g_object_unref(*port_info);
         *port_info = NULL;
     }
+
+    close(fd);
 }
 
 /**
@@ -451,9 +449,7 @@ void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
     pool->client = client_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0) {
         generate_file_error(error, errno, "ioctl(GET_CLIENT_POOL)");
-        close(fd);
         g_object_unref(*client_pool);
-        return;
     }
 
     close(fd);
@@ -508,8 +504,7 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
     if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_SUBS, &query) < 0) {
         if (errno != ENOENT)
             generate_file_error(error, errno, "ioctl(QUERY_SUBS)");
-        close(fd);
-        return;
+        goto end;
     }
     count = query.num_subs;
 
@@ -533,14 +528,14 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
         }
     }
 
-    close(fd);
-
     if (*error != NULL) {
         g_list_free_full(*entries, g_object_unref);
-        return;
+        goto end;
     }
 
     g_warn_if_fail(index == count);
+end:
+    close(fd);
 }
 
 /**
@@ -577,16 +572,13 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
-        close(fd);
-        return;
+        goto end;
     }
     maximum_count = info.queues;
     count = info.cur_queues;
 
-    if (count == 0) {
-        close(fd);
-        return;
-    }
+    if (count == 0)
+        goto end;
 
     list = g_malloc0_n(count, sizeof(*entries));
 
@@ -602,12 +594,13 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
         if (++index >= count)
             break;
     }
-    close(fd);
 
     g_warn_if_fail(index == count);
 
     *entries = list;
     *entry_count = count;
+end:
+    close(fd);
 }
 
 /**
@@ -642,9 +635,7 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
     info->queue = queue_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_INFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_QUEUE_INFO)");
-        close(fd);
         g_object_unref(*queue_info);
-        return;
     }
 
     close(fd);
@@ -682,9 +673,7 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
     strncpy(info->name, name, sizeof(info->name));
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_NAMED_QUEUE)");
-        close(fd);
         g_object_unref(*queue_info);
-        return;
     }
 
     close(fd);
