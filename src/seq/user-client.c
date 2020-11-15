@@ -215,6 +215,7 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
@@ -244,9 +245,9 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
     struct snd_seq_client_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_info_refer_private(client_info, &info);
@@ -275,10 +276,10 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
     struct snd_seq_client_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(client_info != NULL);
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(client_info != NULL);
+    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_info_refer_private(*client_info, &info);
@@ -306,9 +307,9 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
     struct snd_seq_port_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_port_info_refer_private(*port_info, &info);
@@ -368,9 +369,9 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
     struct snd_seq_port_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_port_info_refer_private(port_info, &info);
@@ -429,9 +430,9 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
     struct snd_seq_client_pool *pool;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_pool_refer_private(client_pool, &pool);
@@ -459,10 +460,9 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
     struct snd_seq_client_pool *pool;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(*client_pool != NULL);
-    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_client_pool_refer_private(*client_pool, &pool);
@@ -494,22 +494,16 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
     ssize_t len;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr));
     g_return_if_fail(error == NULL || *error == NULL);
 
     alsaseq_event_cntr_count_events(ev_cntr, &total);
-    if (count > total) {
-        generate_error(error, ENOBUFS);
-        return;
-    }
+    g_return_if_fail(count <= total);
 
     seq_event_cntr_get_buf(ev_cntr, count, &buf, &length);
-    if (buf == NULL || length == 0) {
-        generate_error(error, ENODATA);
-        return;
-    }
+    g_return_if_fail(buf != NULL && length > 0);
 
     len = write(priv->fd, buf, length);
     if (len < 0)
@@ -599,6 +593,7 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
@@ -646,9 +641,9 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
     long request;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_subscribe_data_refer_private(subs_data, &data);
@@ -682,9 +677,9 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
     struct snd_seq_queue_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_queue_info_refer_private(*queue_info, &info);
@@ -740,9 +735,9 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
     struct snd_seq_queue_info *info;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_queue_info_refer_private(queue_info, &info);
@@ -774,6 +769,7 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(use != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     data.queue = (int)queue_id;
@@ -839,9 +835,9 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
     struct snd_seq_queue_tempo *tempo;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_queue_tempo_refer_private(queue_tempo, &tempo);
@@ -871,9 +867,9 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
     struct snd_seq_queue_tempo *tempo;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(queue_tempo != NULL);
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(queue_tempo != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     *queue_tempo = g_object_new(ALSASEQ_TYPE_QUEUE_TEMPO, NULL);
@@ -908,9 +904,9 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
     struct snd_seq_queue_timer *timer;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer));
     g_return_if_fail(error == NULL || *error == NULL);
 
     seq_queue_timer_refer_private(queue_timer, &timer);
@@ -921,8 +917,7 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
     case SNDRV_SEQ_TIMER_MIDI_CLOCK:
     case SNDRV_SEQ_TIMER_MIDI_TICK:
     default:
-        generate_error(error, EINVAL);
-        return;
+        g_return_if_reached();
     }
 
     timer->queue = queue_id;
@@ -952,9 +947,9 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
     struct snd_seq_queue_timer *timer;
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(queue_timer != NULL);
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(queue_timer != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     *queue_timer = g_object_new(ALSASEQ_TYPE_QUEUE_TIMER, NULL);
@@ -975,8 +970,7 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
         // Not available.
         g_object_unref(*queue_timer);
         *queue_timer = NULL;
-        generate_error(error, ENXIO);
-        return;
+        g_return_if_reached();
     }
 }
 
@@ -1000,6 +994,7 @@ void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
 
+    g_return_if_fail(filter != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {

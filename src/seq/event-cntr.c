@@ -203,6 +203,8 @@ void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count)
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(count != NULL);
+
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     *count = 0;
@@ -231,6 +233,7 @@ void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(cells != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     *cells = 0;
@@ -265,15 +268,13 @@ void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(ev_type != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *ev_type = (ALSASeqEventType)ev->type;
 }
@@ -303,10 +304,7 @@ void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->type = (snd_seq_event_type_t)ev_type;
 }
@@ -331,15 +329,13 @@ void alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(mode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *mode = (ALSASeqEventTimestampMode)(ev->flags & SNDRV_SEQ_TIME_STAMP_MASK);
 }
@@ -369,10 +365,7 @@ void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->flags &= ~SNDRV_SEQ_TIME_STAMP_MASK;
     ev->flags |= (unsigned char)mode;
@@ -398,15 +391,13 @@ void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(mode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *mode = (ALSASeqEventTimeMode)(ev->flags & SNDRV_SEQ_TIME_MODE_MASK);
 }
@@ -436,10 +427,7 @@ void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->flags &= ~SNDRV_SEQ_TIME_MODE_MASK;
     ev->flags |= (unsigned char)mode;
@@ -465,15 +453,13 @@ void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(mode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *mode = (ALSASeqEventLengthMode)(ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK);
 }
@@ -498,15 +484,13 @@ void alsaseq_event_cntr_get_priority_mode(
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(mode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *mode = (ALSASeqEventPriorityMode)(ev->flags & SNDRV_SEQ_PRIORITY_MASK);
 }
@@ -536,10 +520,7 @@ void alsaseq_event_cntr_set_priority_mode(
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->flags &= ~SNDRV_SEQ_PRIORITY_MASK;
     ev->flags |= (unsigned char)mode;
@@ -564,15 +545,13 @@ void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(tag != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *tag = ev->tag;
 }
@@ -601,10 +580,7 @@ void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->tag = tag;
 }
@@ -629,15 +605,13 @@ void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(queue_id != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *queue_id = ev->queue;
 }
@@ -667,10 +641,7 @@ void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->queue = queue_id;
 }
@@ -695,15 +666,13 @@ void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(tstamp != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *tstamp = (const ALSASeqTstamp *)&ev->time;
 }
@@ -728,15 +697,13 @@ void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(tstamp != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->time = *tstamp;
 }
@@ -760,15 +727,13 @@ void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(dst != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *dst = (const ALSASeqAddr *)&ev->dest;
 }
@@ -792,15 +757,13 @@ void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(dst != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->dest = *dst;
 }
@@ -824,15 +787,13 @@ void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(src != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *src = (const ALSASeqAddr *)&ev->source;
 }
@@ -856,15 +817,13 @@ void alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(src != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ev->source = *src;
 }
@@ -873,7 +832,7 @@ static void ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv,
                                       struct snd_seq_event *ev, GError **error)
 {
     if (!priv->allocated) {
-        generate_error(error, ENOBUFS);
+        g_return_if_fail(priv->allocated);
         return;
     }
 
@@ -912,7 +871,7 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
     guint8 *new;
 
     if (!priv->allocated) {
-        generate_error(error, ENOBUFS);
+        g_return_if_fail(priv->allocated);
         return;
     }
 
@@ -967,14 +926,12 @@ void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqEventDataNote *)&ev->data.note;
 }
@@ -998,14 +955,12 @@ void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1033,14 +988,12 @@ void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqEventDataCtl *)&ev->data.control;
 }
@@ -1064,14 +1017,12 @@ void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1099,14 +1050,12 @@ void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = ev->data.raw8.d;
 }
@@ -1130,14 +1079,12 @@ void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1165,15 +1112,13 @@ void alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = ev->data.raw32.d;
 }
@@ -1197,15 +1142,13 @@ void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1235,14 +1178,13 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
+    g_return_if_fail(size != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
     case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
@@ -1256,7 +1198,7 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
         break;
     }
     default:
-        generate_error(error, ENODATA);
+        g_return_if_reached();
         break;
     }
 }
@@ -1282,14 +1224,12 @@ void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_variable_length_event(priv, ev, data, size, error);
 }
@@ -1313,14 +1253,12 @@ void alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqEventDataQueue *)&ev->data.queue;
 }
@@ -1344,14 +1282,12 @@ void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1379,14 +1315,12 @@ void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqTstamp *)&ev->data.time;
 }
@@ -1410,14 +1344,12 @@ void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1445,14 +1377,12 @@ void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqAddr *)&ev->data.time;
 }
@@ -1476,14 +1406,12 @@ void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1511,14 +1439,12 @@ void alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqEventDataConnect *)&ev->data.connect;
 }
@@ -1542,14 +1468,12 @@ void alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
@@ -1577,14 +1501,12 @@ void alsaseq_event_cntr_get_result_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     *data = (const ALSASeqEventDataResult *)&ev->data.result;
 }
@@ -1608,14 +1530,12 @@ void alsaseq_event_cntr_set_result_data(ALSASeqEventCntr *self, gsize index,
     g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
     priv = alsaseq_event_cntr_get_instance_private(self);
 
+    g_return_if_fail(data != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    if (ev == NULL) {
-        generate_error(error, ENOENT);
-        return;
-    }
+    g_return_if_fail(ev != NULL);
 
     ensure_fixed_length_event(priv, ev, error);
     if (*error != NULL)
