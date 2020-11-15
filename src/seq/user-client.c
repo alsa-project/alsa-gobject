@@ -28,6 +28,7 @@
  */
 struct _ALSASeqUserClientPrivate {
     int fd;
+    const char *devnode;
     int client_id;
     guint16 proto_ver_triplet[3];
 };
@@ -45,6 +46,9 @@ G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
 #define generate_syscall_error(exception, errno, fmt, arg) \
         g_set_error(exception, ALSASEQ_USER_CLIENT_ERROR, ALSASEQ_USER_CLIENT_ERROR_FAILED, \
                     fmt" %d(%s)", arg, errno, strerror(errno))
+
+#define generate_file_error(exception, code, fmt, arg) \
+        g_set_error(exception, G_FILE_ERROR, code, fmt, arg)
 
 typedef struct {
     GSource src;
@@ -92,6 +96,7 @@ static void seq_user_client_finalize(GObject *obj)
 
     if (priv->fd >= 0)
         close(priv->fd);
+    g_free((gpointer)priv->devnode);
 
     G_OBJECT_CLASS(alsaseq_user_client_parent_class)->finalize(obj);
 }
@@ -182,11 +187,18 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
 
     open_flag |= O_RDWR;
     priv->fd = open(devnode, open_flag);
-    g_free(devnode);
     if (priv->fd < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, errno, "open(%s)", devnode);
+        else
+            generate_syscall_error(error, errno, "open(%s)", devnode);
+
+        g_free(devnode);
         return;
     }
+    priv->devnode = devnode;
 
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &priv->client_id) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "CLIENT_ID");
@@ -515,8 +527,14 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
     g_return_if_fail(buf != NULL && length > 0);
 
     len = write(priv->fd, buf, length);
-    if (len < 0)
-        generate_error(error, errno);
+    if (len < 0) {
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, errno, "open(%s)", priv->devnode);
+        else
+            generate_syscall_error(error, errno, "open(%s)", priv->devnode);
+    }
 }
 
 static gboolean seq_user_client_check_src(GSource *gsrc)
