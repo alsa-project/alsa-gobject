@@ -33,6 +33,15 @@ struct _ALSASeqUserClientPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT)
 
+/**
+ * alsaseq_user_client_error_quark:
+ *
+ * Return the GQuark for error domain of GError which has code in #ALSASeqUserClientError enumerations.
+ *
+ * Returns: A #GQuark.
+ */
+G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
+
 typedef struct {
     GSource src;
     ALSASeqUserClient *self;

@@ -217,4 +217,5 @@ ALSA_GOBJECT_0_0_0 {
 
 ALSA_GOBJECT_0_2_0 {
     "alsaseq_user_client_error_get_type";
+    "alsaseq_user_client_error_quark";
 } ALSA_GOBJECT_0_0_0;
