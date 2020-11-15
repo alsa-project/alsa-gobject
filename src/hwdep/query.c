@@ -28,6 +28,12 @@ G_DEFINE_QUARK("alsahwdep-error", alsahwdep_error)
 #define HWDEP_SYSNAME_TEMPLATE      "hwC%uD%u"
 #define CTL_SYSNAME_TEMPLATE        "controlC%u"
 
+#define generate_file_error(error, errno, msg) \
+        g_set_error_literal(error, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
+
+#define generate_file_error_fmt(error, errno, fmt, msg) \
+        g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
+
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
     struct udev *ctx;
@@ -35,20 +41,20 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return;
     }
 
     *enumerator = udev_enumerate_new(ctx);
     if (*enumerator == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_enumerate_new()");
         udev_unref(ctx);
         return;
     }
 
     err = udev_enumerate_add_match_subsystem(*enumerator, "sound");
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_add_match_subsystem()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
         return;
@@ -56,7 +62,7 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error
 
     err = udev_enumerate_scan_devices(*enumerator);
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_scan_devices()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
     }
@@ -233,14 +239,14 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         g_free(name);
         return;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         g_free(name);
     } else {
         *sysname = name;
@@ -281,7 +287,7 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         g_free(name);
         return;
     }
@@ -289,14 +295,14 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
     g_free(name);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         udev_unref(ctx);
         return;
     }
 
     node = udev_device_get_devnode(dev);
     if (node == NULL)
-        generate_error(error, ENOENT);
+        generate_file_error(error, ENOENT, "udev_device_get_devnode()");
     else
         *devnode = g_strdup(node);
 
@@ -305,7 +311,7 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
 }
 
 static void hwdep_perform_ctl_ioctl(guint card_id, long request, void *data,
-                                      GError **error)
+                                    const char *req_label, GError **error)
 {
     unsigned int length;
     char *sysname;
@@ -321,30 +327,30 @@ static void hwdep_perform_ctl_ioctl(guint card_id, long request, void *data,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         goto err_sysname;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
     if (dev == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
         goto err_ctx;
     }
 
     devnode = udev_device_get_devnode(dev);
     if (devnode == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
         goto err_device;
     }
 
     fd = open(devnode, O_RDONLY | O_NONBLOCK);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
         goto err_device;
     }
 
     if (ioctl(fd, request, data) < 0)
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "ioctl(%s)", req_label);
 
     close(fd);
 err_device:
@@ -381,7 +387,7 @@ void alsahwdep_get_device_info(guint card_id, guint device_id,
 
     info->device = device_id;
     info->card = card_id;
-    hwdep_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_HWDEP_INFO, info, error);
+    hwdep_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_HWDEP_INFO, info, "HWDEP_INFO", error);
     if (*error != NULL)
         g_object_unref(*device_info);
 }
