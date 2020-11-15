@@ -45,6 +45,7 @@ G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
 
 static const char *const err_msgs[] = {
         [ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION] = "The operation fails due to access permission of port",
+        [ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION] = "The operation fails due to access permission of queue",
 };
 
 #define generate_local_error(exception, code) \
@@ -780,8 +781,12 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
 
     seq_queue_info_refer_private(queue_info, &info);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_INFO, info) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_INFO");
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_INFO, info) < 0) {
+        if (errno == EPERM)
+            generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_INFO");
+    }
 }
 
 /**
@@ -880,8 +885,12 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
 
     seq_queue_tempo_refer_private(queue_tempo, &tempo);
     tempo->queue = queue_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO, tempo) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TEMPO");
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO, tempo) < 0) {
+        if (errno == EPERM)
+            generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TEMPO");
+    }
 }
 
 /**
@@ -959,8 +968,12 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
     }
 
     timer->queue = queue_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, timer) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TIMER");
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, timer) < 0) {
+        if (errno == EPERM)
+            generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TIMER");
+    }
 }
 
 /**
