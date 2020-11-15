@@ -214,14 +214,10 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
@@ -592,14 +588,10 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
 
     g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
     priv = alsaseq_user_client_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     buf = g_malloc0(page_size);
 
