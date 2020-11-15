@@ -246,7 +246,7 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
 
     if (*error != NULL) {
         g_free(list);
-        goto end;;
+        goto end;
     }
 
     g_warn_if_fail(index == count);
