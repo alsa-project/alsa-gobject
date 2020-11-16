@@ -193,7 +193,7 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
         }
     }
     if (index != count) {
-        generate_error(error, ENOENT);
+        g_warn_if_reached();
         g_free(*entries);
         *entries = NULL;
         goto end;
@@ -225,6 +225,7 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
     struct udev *ctx;
     struct udev_device *dev;
 
+    g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
@@ -272,6 +273,7 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
     struct udev_device *dev;
     const char *node;
 
+    g_return_if_fail(devnode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
@@ -423,12 +425,8 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
 {
     struct snd_rawmidi_info *info;
 
+    g_return_if_fail(substream_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (substream_info == NULL) {
-        generate_error(error, EINVAL);
-        return;
-    }
 
     *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
 

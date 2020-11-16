@@ -188,26 +188,20 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    // The flag is used to attach substreams for each direction.
+    g_return_if_fail((access_modes & ~(ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT |
+                     ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) == 0);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    // The flag is used to attach substreams for each direction.
-    if (access_modes & ~(ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT |
-                         ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) {
-        generate_error(error, EINVAL);
-        return;
-    }
-
     if ((access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT) &&
-        (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) {
+        (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT))
         open_flag = O_RDWR;
-    } else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT) {
+    else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT)
         open_flag = O_WRONLY;
-    } else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT) {
+    else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)
         open_flag = O_RDONLY;
-    } else {
-        generate_error(error, EINVAL);
-        return;
-    }
+    else
+        g_return_if_reached();
 
     alsarawmidi_get_rawmidi_devnode(card_id, device_id, &devnode, error);
     if (*error != NULL)
@@ -261,6 +255,7 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
@@ -294,6 +289,7 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(substream_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
@@ -331,6 +327,7 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(substream_params != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     rawmidi_substream_params_refer_private(substream_params, &params);
@@ -362,9 +359,9 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
     struct snd_rawmidi_status *status;
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
-    g_return_if_fail(substream_status != NULL);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(substream_status != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     rawmidi_substream_status_refer_private(*substream_status, &status);
@@ -399,6 +396,8 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(buf != NULL);
+    g_return_if_fail(buf_size != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     len = read(priv->fd, *buf, *buf_size);
@@ -435,6 +434,7 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(buf != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     len = write(priv->fd, buf, buf_size);
@@ -575,6 +575,7 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
