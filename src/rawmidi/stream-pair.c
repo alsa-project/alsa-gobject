@@ -50,6 +50,9 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYP
  */
 G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_error)
 
+#define generate_file_error(exception, code, format, arg) \
+        g_set_error(exception, G_FILE_ERROR, code, format, arg)
+
 #define generate_syscall_error(error, errno, format, arg)           \
         g_set_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR,           \
                     ALSARAWMIDI_STREAM_PAIR_ERROR_FAILED,           \
@@ -229,21 +232,26 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 
     priv->fd = open(devnode, open_flag);
     if (priv->fd < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, code, "open(%s)", devnode);
+        else
+            generate_syscall_error(error, errno, "open(%s)", devnode);
+
         g_free(devnode);
         return;
     }
+    priv->devnode = devnode;
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PVERSION, &proto_ver) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
-        g_free(devnode);
         return;
     }
 
-    priv->devnode = devnode;
     priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
     priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
@@ -411,7 +419,13 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
 
     len = read(priv->fd, *buf, *buf_size);
     if (len < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, code, "read(%s)", priv->devnode);
+        else
+            generate_syscall_error(error, errno, "read(%s)", priv->devnode);
+
         return;
     }
 
@@ -448,7 +462,13 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
 
     len = write(priv->fd, buf, buf_size);
     if (len < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, code, "write(%s)", priv->devnode);
+        else
+            generate_syscall_error(error, errno, "write(%s)", priv->devnode);
+
         return;
     }
 }
@@ -590,7 +610,13 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
 
     access_modes = fcntl(priv->fd, F_GETFL);
     if (access_modes < 0) {
-        generate_error(error, errno);
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, code, "fcntl(%s)", "F_GETFL");
+        else
+            generate_syscall_error(error, errno, "fcntl(%s)", "F_GETFL");
+
         return;
     }
 
