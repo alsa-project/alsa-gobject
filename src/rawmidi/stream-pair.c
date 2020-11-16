@@ -41,6 +41,15 @@ struct _ALSARawmidiStreamPairPrivate {
 };
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYPE_OBJECT)
 
+/**
+ * alsarawmidi_stream_pair_error_quark:
+ *
+ * Return the GQuark for error domain of GError which has code in #ALSARawmidiStreamPairError.
+ *
+ * Returns: A #GQuark.
+ */
+G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_error)
+
 typedef struct {
     GSource src;
     ALSARawmidiStreamPair *self;

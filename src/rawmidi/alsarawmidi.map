@@ -35,4 +35,5 @@ ALSA_GOBJECT_0_0_0 {
 
 ALSA_GOBJECT_0_2_0 {
     "alsarawmidi_stream_pair_error_get_type";
+    "alsarawmidi_stream_pair_error_quark";
 } ALSA_GOBJECT_0_0_0;
