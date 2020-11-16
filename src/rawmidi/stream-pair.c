@@ -50,6 +50,13 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYP
  */
 G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_error)
 
+static const char *const err_msgs[] = {
+        [ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED] = "The card is in disconnect state",
+};
+
+#define generate_local_error(error, code) \
+        g_set_error_literal(error, ALSARAWMIDI_STREAM_PAIR_ERROR, code, err_msgs[code])
+
 #define generate_file_error(exception, code, format, arg) \
         g_set_error(exception, G_FILE_ERROR, code, format, arg)
 
@@ -232,13 +239,16 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 
     priv->fd = open(devnode, open_flag);
     if (priv->fd < 0) {
-        GFileError code = g_file_error_from_errno(errno);
+        if (errno == ENODEV) {
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        } else {
+            GFileError code = g_file_error_from_errno(errno);
 
-        if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, code, "open(%s)", devnode);
-        else
-            generate_syscall_error(error, errno, "open(%s)", devnode);
-
+            if (code != G_FILE_ERROR_FAILED)
+                generate_file_error(error, code, "open(%s)", devnode);
+            else
+                generate_syscall_error(error, errno, "open(%s)", devnode);
+        }
         g_free(devnode);
         return;
     }
@@ -246,7 +256,10 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PVERSION, &proto_ver) < 0) {
-        generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
         return;
@@ -316,7 +329,11 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
     info->stream = direction;
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_INFO, info) < 0) {
         g_object_unref(*substream_info);
-        generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
+
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
     }
 }
 
@@ -350,8 +367,12 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
     rawmidi_substream_params_refer_private(substream_params, &params);
 
     params->stream = direction;
-    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PARAMS, params) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PARAMS, params) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+    }
 }
 
 /**
@@ -384,8 +405,12 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
     rawmidi_substream_status_refer_private(*substream_status, &status);
 
     status->stream = direction;
-    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_STATUS, status) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_STATUS, status) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+    }
 }
 
 /**
@@ -419,12 +444,16 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
 
     len = read(priv->fd, *buf, *buf_size);
     if (len < 0) {
-        GFileError code = g_file_error_from_errno(errno);
+        if (errno == ENODEV) {
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        } else {
+            GFileError code = g_file_error_from_errno(errno);
 
-        if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, code, "read(%s)", priv->devnode);
-        else
-            generate_syscall_error(error, errno, "read(%s)", priv->devnode);
+            if (code != G_FILE_ERROR_FAILED)
+                generate_file_error(error, code, "read(%s)", priv->devnode);
+            else
+                generate_syscall_error(error, errno, "read(%s)", priv->devnode);
+        }
 
         return;
     }
@@ -462,12 +491,16 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
 
     len = write(priv->fd, buf, buf_size);
     if (len < 0) {
-        GFileError code = g_file_error_from_errno(errno);
+        if (errno == ENODEV) {
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        } else {
+            GFileError code = g_file_error_from_errno(errno);
 
-        if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, code, "write(%s)", priv->devnode);
-        else
-            generate_syscall_error(error, errno, "write(%s)", priv->devnode);
+            if (code != G_FILE_ERROR_FAILED)
+                generate_file_error(error, code, "write(%s)", priv->devnode);
+            else
+                generate_syscall_error(error, errno, "write(%s)", priv->devnode);
+        }
 
         return;
     }
@@ -498,8 +531,12 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "DRAIN");
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "DRAIN");
+    }
 }
 
 /**
@@ -526,8 +563,12 @@ void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0)
-        generate_syscall_error(error, errno, "ioctl(%s)", "DROP");
+    if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0) {
+        if (errno == ENODEV)
+            generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
+        else
+            generate_syscall_error(error, errno, "ioctl(%s)", "DROP");
+    }
 }
 
 static gboolean rawmidi_stream_pair_check_src(GSource *gsrc)
