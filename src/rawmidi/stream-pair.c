@@ -52,6 +52,7 @@ G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_erro
 
 static const char *const err_msgs[] = {
         [ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED] = "The card is in disconnect state",
+        [ALSARAWMIDI_STREAM_PAIR_ERROR_UNREADABLE] = "The instance is not for read operation",
 };
 
 #define generate_local_error(error, code) \
@@ -662,7 +663,7 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
     }
 
     if (!(access_modes & O_RDWR) && !(access_modes & O_WRONLY)) {
-        generate_error(error, ENOTSUP);
+        generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_UNREADABLE);
         return;
     }
 
