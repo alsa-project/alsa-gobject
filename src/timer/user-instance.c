@@ -165,7 +165,7 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
         GFileError code = g_file_error_from_errno(errno);
 
         if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, errno, "open(%s)", devnode);
+            generate_file_error(error, code, "open(%s)", devnode);
         else
             generate_syscall_error(error, errno, "open(%s)", devnode);
 
