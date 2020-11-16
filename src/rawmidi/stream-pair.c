@@ -254,14 +254,10 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(proto_ver_triplet != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
 }
@@ -574,14 +570,10 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+    g_return_if_fail(priv->fd >= 0);
 
     g_return_if_fail(gsrc != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
-
-    if (priv->fd < 0) {
-        generate_error(error, ENXIO);
-        return;
-    }
 
     access_modes = fcntl(priv->fd, F_GETFL);
     if (access_modes < 0) {
