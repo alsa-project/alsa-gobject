@@ -16,9 +16,14 @@ stream_pair_info_flags = (
     'DUPLEX',
 )
 
+stream_pair_error_types = (
+    'FAILED',
+)
+
 types = {
     ALSARawmidi.StreamDirection:    stream_direction_types,
     ALSARawmidi.StreamPairInfoFlag: stream_pair_info_flags,
+    ALSARawmidi.StreamPairError:    stream_pair_error_types,
 }
 
 for obj, types in types.items():
