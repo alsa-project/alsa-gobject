@@ -101,14 +101,14 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 void alsactl_card_write_elem_tlv(ALSACtlCard *self,
                             const ALSACtlElemId *elem_id,
-                            const gint32 *container, gsize container_count,
+                            const guint32 *container, gsize container_count,
                             GError **error);
 void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            gint32 *const *container, gsize *container_count,
+                            guint32 *const *container, gsize *container_count,
                             GError **error);
 void alsactl_card_command_elem_tlv(ALSACtlCard *self,
                             const ALSACtlElemId *elem_id,
-                            gint32 *const *container, gsize *container_count,
+                            guint32 *const *container, gsize *container_count,
                             GError **error);
 
 void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
