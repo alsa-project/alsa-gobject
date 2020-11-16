@@ -208,6 +208,7 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 {
     ALSARawmidiStreamPairPrivate *priv;
     char *devnode;
+    int ctl_fd;
     int proto_ver;
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
@@ -232,13 +233,14 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     if (*error != NULL)
         return;
 
-    rawmidi_select_subdevice(card_id, subdevice_id, error);
+    rawmidi_select_subdevice(card_id, subdevice_id, &ctl_fd, error);
     if (*error != NULL) {
         g_free(devnode);
         return;
     }
 
     priv->fd = open(devnode, open_flag);
+    close(ctl_fd);
     if (priv->fd < 0) {
         if (errno == ENODEV) {
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
