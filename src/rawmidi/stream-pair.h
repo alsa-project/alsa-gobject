@@ -34,6 +34,10 @@ G_BEGIN_DECLS
                                ALSARAWMIDI_TYPE_STREAM_PAIR,    \
                                ALSARawmidiStreamPairClass))
 
+#define ALSARAWMIDI_STREAM_PAIR_ERROR           alsarawmidi_stream_pair_error_quark()
+
+GQuark alsarawmidi_stream_pair_error_quark();
+
 typedef struct _ALSARawmidiStreamPair           ALSARawmidiStreamPair;
 typedef struct _ALSARawmidiStreamPairClass      ALSARawmidiStreamPairClass;
 typedef struct _ALSARawmidiStreamPairPrivate    ALSARawmidiStreamPairPrivate;
