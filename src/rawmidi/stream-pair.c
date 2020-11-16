@@ -50,6 +50,11 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYP
  */
 G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_error)
 
+#define generate_syscall_error(error, errno, format, arg)           \
+        g_set_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR,           \
+                    ALSARAWMIDI_STREAM_PAIR_ERROR_FAILED,           \
+                    format " %d(%s)", arg, errno, strerror(errno))
+
 typedef struct {
     GSource src;
     ALSARawmidiStreamPair *self;
@@ -231,7 +236,7 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 
     // Remember the version of protocol currently used.
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PVERSION, &proto_ver) < 0) {
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
         g_free(devnode);
@@ -302,9 +307,8 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
     rawmidi_substream_info_refer_private(*substream_info, &info);
     info->stream = direction;
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_INFO, info) < 0) {
-        generate_error(error, errno);
         g_object_unref(*substream_info);
-        return;
+        generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
     }
 }
 
@@ -339,7 +343,7 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
 
     params->stream = direction;
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_PARAMS, params) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
 }
 
 /**
@@ -373,7 +377,7 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
 
     status->stream = direction;
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_STATUS, status) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
 }
 
 /**
@@ -475,7 +479,7 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "DRAIN");
 }
 
 /**
@@ -503,7 +507,7 @@ void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0)
-        generate_error(error, errno);
+        generate_syscall_error(error, errno, "ioctl(%s)", "DROP");
 }
 
 static gboolean rawmidi_stream_pair_check_src(GSource *gsrc)
