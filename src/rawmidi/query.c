@@ -147,6 +147,7 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
 
     g_return_if_fail(entries != NULL);
     g_return_if_fail(entry_count != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
     if (*error != NULL)
@@ -224,6 +225,8 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
     struct udev *ctx;
     struct udev_device *dev;
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
     name = g_malloc0(length);
@@ -268,6 +271,8 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
     struct udev *ctx;
     struct udev_device *dev;
     const char *node;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
              calculate_digits(device_id) + 1;
@@ -382,6 +387,7 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
 
     g_return_if_fail(entries != NULL);
     g_return_if_fail(entry_count != NULL);
+    g_return_if_fail(error == NULL || *error == NULL);
 
     rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, error);
     if (*error != NULL)
@@ -416,6 +422,8 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
                                     GError **error)
 {
     struct snd_rawmidi_info *info;
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (substream_info == NULL) {
         generate_error(error, EINVAL);
