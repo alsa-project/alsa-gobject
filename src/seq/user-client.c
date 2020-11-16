@@ -200,7 +200,7 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
         GFileError code = g_file_error_from_errno(errno);
 
         if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, errno, "open(%s)", devnode);
+            generate_file_error(error, code, "open(%s)", devnode);
         else
             generate_syscall_error(error, errno, "open(%s)", devnode);
 
@@ -541,9 +541,9 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
         GFileError code = g_file_error_from_errno(errno);
 
         if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, errno, "open(%s)", priv->devnode);
+            generate_file_error(error, code, "write(%s)", priv->devnode);
         else
-            generate_syscall_error(error, errno, "open(%s)", priv->devnode);
+            generate_syscall_error(error, errno, "write(%s)", priv->devnode);
     }
 }
 
