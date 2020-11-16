@@ -28,6 +28,12 @@ G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
 #define RAWMIDI_SYSNAME_TEMPLATE    "midiC%uD%u"
 #define CTL_SYSNAME_TEMPLATE        "controlC%u"
 
+#define generate_file_error(error, errno, msg)    \
+    g_set_error_literal(error, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
+
+#define generate_file_error_fmt(error, errno, fmt, msg) \
+    g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
+
 static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error)
 {
     struct udev *ctx;
@@ -35,20 +41,20 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         return;
     }
 
     *enumerator = udev_enumerate_new(ctx);
     if (*enumerator == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_enumerate_new()");
         udev_unref(ctx);
         return;
     }
 
     err = udev_enumerate_add_match_subsystem(*enumerator, "sound");
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_add_match_subsystem()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
         return;
@@ -56,7 +62,7 @@ static void prepare_udev_enum(struct udev_enumerate **enumerator, GError **error
 
     err = udev_enumerate_scan_devices(*enumerator);
     if (err < 0) {
-        generate_error(error, -err);
+        generate_file_error(error, -err, "udev_enumerate_scan_devices()");
         udev_enumerate_unref(*enumerator);
         udev_unref(ctx);
     }
@@ -233,14 +239,14 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         g_free(name);
         return;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         g_free(name);
     } else {
         *sysname = name;
@@ -281,7 +287,7 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         g_free(name);
         return;
     }
@@ -289,14 +295,14 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
     g_free(name);
     if (dev == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
         udev_unref(ctx);
         return;
     }
 
     node = udev_device_get_devnode(dev);
     if (node == NULL)
-        generate_error(error, ENOENT);
+        generate_file_error(error, ENOENT, "udev_device_get_devnode()");
     else
         *devnode = g_strdup(node);
 
@@ -305,7 +311,7 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
 }
 
 static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
-                                      GError **error)
+                                      const char *req_label, GError **error)
 {
     unsigned int length;
     char *sysname;
@@ -321,30 +327,30 @@ static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
 
     ctx = udev_new();
     if (ctx == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_new()");
         goto err_sysname;
     }
 
     dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
     if (dev == NULL) {
-        generate_error(error, errno);
+        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
         goto err_ctx;
     }
 
     devnode = udev_device_get_devnode(dev);
     if (devnode == NULL) {
-        generate_error(error, ENODEV);
+        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
         goto err_device;
     }
 
     fd = open(devnode, O_RDONLY);
     if (fd < 0) {
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "open(%s)", devnode);
         goto err_device;
     }
 
     if (ioctl(fd, request, data) < 0)
-        generate_error(error, errno);
+        generate_file_error_fmt(error, errno, "ioctl(%s)", req_label);
 
     close(fd);
 err_device:
@@ -388,7 +394,7 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, error);
+    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", error);
     if (*error != NULL)
         return;
 
@@ -433,7 +439,7 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
     info->stream = direction;
     info->card = card_id;
 
-    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, error);
+    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, "RAWMIDI_INFO", error);
     if (*error != NULL)
         g_object_unref(*substream_info);
 }
@@ -442,5 +448,5 @@ void rawmidi_select_subdevice(guint card_id, guint subdevice_id, GError **error)
 {
     guint data = subdevice_id;
     rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE,
-                              &data, error);
+                              &data, "RAWMIDI_PREFER_SUBDEVICE", error);
 }
