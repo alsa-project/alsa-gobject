@@ -308,7 +308,7 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
 }
 
 static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
-                                      const char *req_label, GError **error)
+                                      const char *req_label, int *ctl_fd, GError **error)
 {
     unsigned int length;
     char *sysname;
@@ -349,7 +349,11 @@ static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
     if (ioctl(fd, request, data) < 0)
         generate_file_error_fmt(error, errno, "ioctl(%s)", req_label);
 
-    close(fd);
+    // The caller is responsible for closing the file descriptor.
+    if (ctl_fd != NULL)
+        *ctl_fd = fd;
+    else
+        close(fd);
 err_device:
     udev_device_unref(dev);
 err_ctx:
@@ -391,7 +395,7 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", error);
+    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", NULL, error);
     if (*error != NULL)
         return;
 
@@ -436,7 +440,7 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
     info->stream = direction;
     info->card = card_id;
 
-    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, "RAWMIDI_INFO", error);
+    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, "RAWMIDI_INFO", NULL, error);
     if (*error != NULL)
         g_object_unref(*substream_info);
 }
@@ -445,5 +449,5 @@ void rawmidi_select_subdevice(guint card_id, guint subdevice_id, GError **error)
 {
     guint data = subdevice_id;
     rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE,
-                              &data, "RAWMIDI_PREFER_SUBDEVICE", error);
+                              &data, "RAWMIDI_PREFER_SUBDEVICE", NULL, error);
 }
