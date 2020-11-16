@@ -188,6 +188,8 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     // The flag is used to attach substreams for each direction.
     if (access_modes & ~(ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT |
                          ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) {
@@ -259,6 +261,8 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
         return;
@@ -289,6 +293,8 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
 
@@ -325,6 +331,8 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     rawmidi_substream_params_refer_private(substream_params, &params);
 
     params->stream = direction;
@@ -357,6 +365,8 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
     g_return_if_fail(substream_status != NULL);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     rawmidi_substream_status_refer_private(*substream_status, &status);
 
     status->stream = direction;
@@ -388,6 +398,8 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     len = read(priv->fd, *buf, *buf_size);
     if (len < 0) {
@@ -423,6 +435,8 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     len = write(priv->fd, buf, buf_size);
     if (len < 0) {
         generate_error(error, errno);
@@ -453,6 +467,8 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
+    g_return_if_fail(error == NULL || *error == NULL);
+
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0)
         generate_error(error, errno);
 }
@@ -478,6 +494,8 @@ void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0)
         generate_error(error, errno);
@@ -556,6 +574,8 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
 
     g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
     priv = alsarawmidi_stream_pair_get_instance_private(self);
+
+    g_return_if_fail(error == NULL || *error == NULL);
 
     if (priv->fd < 0) {
         generate_error(error, ENXIO);
