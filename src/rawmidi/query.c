@@ -20,9 +20,6 @@
  *                     descriptor
  */
 
-// For error reporting.
-G_DEFINE_QUARK("alsarawmidi-error", alsarawmidi_error)
-
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "midiC%u"
 #define RAWMIDI_SYSNAME_TEMPLATE    "midiC%uD%u"
