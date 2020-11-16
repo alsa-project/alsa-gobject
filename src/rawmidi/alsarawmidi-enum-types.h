@@ -31,4 +31,14 @@ typedef enum /*< flags >*/
     ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_DUPLEX = SNDRV_RAWMIDI_INFO_DUPLEX,
 } ALSARawmidiStreamPairInfoFlag;
 
+/**
+ * ALSARawmidiStreamPairError:
+ * @ALSARAWMIDI_STREAM_PAIR_ERROR_FAILED:       The system call failed.
+ *
+ * A set of error code for GError with domain which equals to #alsarawmidi_stream_pair_error_quark()
+ */
+typedef enum {
+    ALSARAWMIDI_STREAM_PAIR_ERROR_FAILED,
+} ALSARawmidiStreamPairError;
+
 #endif
