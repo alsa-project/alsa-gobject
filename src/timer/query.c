@@ -62,7 +62,7 @@ static bool check_existence(char *sysname, GError **error)
 /**
  * alsatimer_get_sysname:
  * @sysname: (out): The string for sysname of ALSA Timer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname for ALSA Timer and return it when it exists.
  *
@@ -88,7 +88,7 @@ void alsatimer_get_sysname(char **sysname, GError **error)
 /**
  * alsatimer_get_devnode:
  * @devnode: (out): The string for devnode of ALSA Timer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate string of devnode for ALSA Timer and return it if exists.
  *
@@ -152,7 +152,7 @@ static int open_fd(GError **error)
  * alsatimer_get_device_id_list:
  * @entries: (element-type ALSATimer.DeviceId)(out): The array with
  *           entries of ALSATimerId.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of existent timer device.
  *
@@ -194,7 +194,7 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
  * alsatimer_get_device_info:
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
  * @device_info: (out): The information of timer device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of timer device.
  *
@@ -232,7 +232,7 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
  * alsatimer_get_device_status:
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
  * @device_status: (inout): The status of timer device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the status of timer device.
  *
@@ -269,7 +269,7 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
  * alsatimer_set_device_params:
  * @device_id: A #ALSATimerDeviceId to identify the timer device.
  * @device_params: The parameters of timer device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Set the given parameters to the timer indicated by the identifier.
  *
@@ -339,7 +339,7 @@ end:
  * alsatimer_get_tstamp_source:
  * @clock_id: (out): The clock source for timestamp. The value of CLOCK_XXX in
  *                   UAPI of Linux kernel.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the clock source for timestamp when #ALSATimerUserInstance is configured
  * to receive event with timestamp. The source is selected according to
