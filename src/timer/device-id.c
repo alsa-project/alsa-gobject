@@ -23,7 +23,7 @@ G_DEFINE_BOXED_TYPE(ALSATimerDeviceId, alsatimer_device_id, timer_device_id_copy
 
 /**
  * alsatimer_device_id_new:
- * @class: The class of device, one of #ALSATImerClass.
+ * @class: The class of device, one of #ALSATimerClass.
  * @card_id: The numerical ID of relevant sound card.
  * @device_id: The numerical ID of relevant device.
  * @subdevice_id: The numerical ID of relevant subdevice.
