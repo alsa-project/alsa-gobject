@@ -109,7 +109,7 @@ static int compare_guint(const void *l, const void *r)
  * @entries: (array length=entry_count)(out): The list of numerical ID for sound
  *           cards.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of numerical ID for available sound cards.
  *
@@ -225,7 +225,7 @@ static bool check_existence(char *sysname, GError **error)
  * alsactl_get_card_sysname:
  * @card_id: The numeridcal ID of sound card.
  * @sysname: (out): The string for sysname of the sound card.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname for the sound card and return it when it exists.
  *
@@ -254,7 +254,7 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
  * alsactl_get_control_sysname:
  * @card_id: The numeridcal ID of sound card.
  * @sysname: (out): The string for sysname of control device for the sound card.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname of control device for the sound card and return it when
  * it exists.
@@ -284,7 +284,7 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
  * alsactl_get_control_devnode:
  * @card_id: The numerical ID of sound card.
  * @devnode: (out): The string for devnode of control device for the sound card.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate string of devnode for control device of the sound card and return it
  * if exists.
