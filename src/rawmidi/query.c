@@ -132,7 +132,7 @@ static unsigned int calculate_digits(unsigned int number)
  * @entries: (array length=entry_count)(out): The list of numerical ID for
  *           rawmidi device.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of numerical ID for available rawmidi devices of sound card.
  *
@@ -211,7 +211,7 @@ end:
  * @card_id: The numeridcal ID of sound card.
  * @device_id: The numerical ID of rawmidi device for the sound card.
  * @sysname: (out): The string for sysname of rawmidi device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname for rawmidi device and return it when it exists.
  *
@@ -258,7 +258,7 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
  * @card_id: The numeridcal ID of sound card.
  * @device_id: The numerical ID of rawmidi device for the sound card.
  * @devnode: (out): The string for devnode of rawmidi device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate devnode string for rawmidi device and return it when exists.
  *
@@ -370,7 +370,7 @@ err_sysname:
  *             ALSARawmidiStreamDirection.
  * @entries: (array length=entry_count)(out): The list of card.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of numerical IDs for subdevices belongs to the numerical ID of
  * card, device, and the direction.
@@ -413,7 +413,7 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
  * @direction: The direction of stream, one of ALSARawmidiStreamDirection.
  * @subdevice_id: The numerical value of subdevice in rawmidi device.
  * @substream_info: (out): The information of substream for the subdevice.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of substream pointed by the numerical ID of card, device,
  * subdevice, and the direction.
