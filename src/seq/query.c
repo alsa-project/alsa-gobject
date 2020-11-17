@@ -30,7 +30,7 @@
 /**
  * alsaseq_get_seq_sysname:
  * @sysname: (out): The sysname of ALSA Sequencer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname string for ALSA sequencer and return it when exists.
  *
@@ -75,7 +75,7 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
 /**
  * alsaseq_get_seq_devnode:
  * @devnode: (out): The devnode of ALSA Sequencer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate devnode string for ALSA Sequencer and return it when exists.
  *
@@ -140,7 +140,7 @@ static int open_fd(GError **error)
 /**
  * alsaseq_get_system_info:
  * @system_info: (out): The information of ALSA Sequencer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get information of ALSA Sequencer.
  *
@@ -181,7 +181,7 @@ end:
  *           numerical ID of client. One of ALSASeqSpecificClientId can be
  *           included in result as well as any numerical value.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of clients as the numerical ID.
  *
@@ -263,7 +263,7 @@ end:
  *             ALSASeqSpecificClientId is available as well as any numerical
  *             value.
  * @client_info: (out): A #ALSASeqClientInfo for the client.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of client according to the numerical ID.
  *
@@ -306,7 +306,7 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
  *           numerical ID of port. One of ALSASeqSpecificPortId is available as
  *           well as any numerical value.
  * @entry_count: The number of entries in the array.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of numerical IDs for port added by the client.
  *
@@ -378,7 +378,7 @@ end:
  * @port_id: The numerical ID of port in the client. One of
  *           ALSASeqSpecificPortId is available as well as any numerical value.
  * @port_info: (out): A #ALSASeqPortInfo for the port.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of port in client.
  *
@@ -419,7 +419,7 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
  *             ALSASeqSpecificClientId is available as well as any numerical
  *             value.
  * @client_pool: (out): The information of memory pool for the client.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get statistical information of memory pool for the given client.
  *
@@ -472,7 +472,7 @@ static void fill_data_with_result(struct snd_seq_port_subscribe *data,
  * @query_type: The type of query, one of #ALSASeqQuerySubscribeType.
  * @entries: (element-type ALSASeq.SubscribeData)(out): The array with element
  *           for subscription data.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of subscription for given address and query type.
  *
@@ -540,7 +540,7 @@ end:
  * @entries: (array length=entry_count)(out): The array of elements for
  *           numerical ID of queue.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of queue in ALSA Sequencer.
  *
@@ -605,7 +605,7 @@ end:
  * @queue_id: The numerical ID of queue, except for one of
  *            ALSASeqSpecificQueueId.
  * @queue_info: (out): The information of queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of queue, according to the numerical ID.
  *
@@ -642,7 +642,7 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
  * alsaseq_get_queue_info_by_name:
  * @name: The name string of queue to query.
  * @queue_info: (out): The information of queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information of queue, according to the name string.
  *
@@ -681,7 +681,7 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  * @queue_id: The numerical ID of queue, except for entries in
  *            ALSASeqSpecificQueueId.
  * @queue_status: (inout): The current status of queue.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get current status of queue.
  *
