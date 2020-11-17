@@ -193,7 +193,8 @@ ALSARawmidiStreamPair *alsarawmidi_stream_pair_new()
  * @access_modes: Access flags for stream direction.
  * @open_flag: The flag of open(2) system call. O_RDWR, O_WRONLY and O_RDONLY
  *             are forced to fulfil internally according to the access_modes.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark()
+ *         and #alsarawmidi_stream_pair_error_quark().
  *
  * Open file descriptor for a pair of streams to attach input/output substreams
  * corresponding to the given subdevice.
@@ -278,6 +279,7 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
  * @self: A #ALSARawmidiStreamPair.
  * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
  *                     protocol currently used.
+ * @error: A #GError.
  *
  * Get the version of rawmidi protocol currently used. The version is
  * represented as the array with three elements; major, minor, and micro version
@@ -305,7 +307,7 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
  * @self: A #ALSARawmidiStreamPair.
  * @direction: The direction of substream attached to the stream pair.
  * @substream_info: (out): The information for requested substream.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
  *
  * Get information of substream attached to the stream pair.
  *
@@ -345,7 +347,7 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
  * @self: A #ALSARawmidiStreamPair.
  * @direction: The direction of substream attached to the stream pair.
  * @substream_params: The parameters of substream.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
  *
  * Set parameters of substream for given direction, which is attached to the
  * pair of streams.
@@ -383,7 +385,7 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
  * @self: A #ALSARawmidiStreamPair.
  * @direction: The direction of substream attached to the stream pair.
  * @substream_status: (inout): The status of substream.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
  *
  * Retrieve status of substream for given direction, which is attached to the
  * pair of streams.
@@ -421,7 +423,8 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
  * @self: A #ALSARawmidiStreamPair.
  * @buf: (array length=buf_size)(inout): The buffer to copy data.
  * @buf_size: The size of buffer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsarawmidi_stream_pair_error_quark().
  *
  * Copy data from intermediate buffer to given buffer for substream attached to
  * the pair of streams. In a case that the instance is opened without
@@ -469,7 +472,8 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
  * @self: A #ALSARawmidiStreamPair.
  * @buf: (array length=buf_size): The buffer to copy data.
  * @buf_size: The size of buffer.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsarawmidi_stream_pair_error_quark().
  *
  * Copy data from given buffer to intermediate buffer for substream attached to
  * the pair of streams. In a case that the instance is opened without
@@ -513,7 +517,7 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
  * alsarawmidi_stream_pair_drain:
  * @self: A #ALSARawmidiStreamPair.
  * @direction: The direction of substream attached to the stream pair.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
  *
  * Drain queued data in intermediate buffer for substream attached to the pair
  * of streams. In a case that the instance is opened without O_NONBLOCK and the
@@ -546,7 +550,7 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
  * alsarawmidi_stream_pair_drop:
  * @self: A #ALSARawmidiStreamPair.
  * @direction: The direction of substream attached to the stream pair.
- * @err: A #GError.
+ * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
  *
  * Drop queued data in intermediate buffer immediately for substream attached
  * to the pair of streams. In implementation of ALSA rawmidi core, the
@@ -626,7 +630,8 @@ static void rawmidi_stream_pair_finalize_src(GSource *gsrc)
  * alsarawmidi_stream_pair_create_source:
  * @self: A #ALSARawmidiStreamPair.
  * @gsrc: (out): A #GSource to handle events from ALSA rawmidi character device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
+ *         #alsarawmidi_stream_pair_error_quark().
  *
  * Allocate GSource structure to handle events from ALSA rawmidi character
  * device for input substream. In each iteration of GManContext, the read(2)
