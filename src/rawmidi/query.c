@@ -114,7 +114,7 @@ static int compare_guint(const void *l, const void *r)
 
 static unsigned int calculate_digits(unsigned int number)
 {
-    unsigned int digits;
+    unsigned int digits = 0;
 
     while (true) {
         number /= 10;
