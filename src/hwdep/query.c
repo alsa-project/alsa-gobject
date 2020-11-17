@@ -132,7 +132,7 @@ static unsigned int calculate_digits(unsigned int number)
  * @entries: (array length=entry_count)(out): The list of numerical ID for
  *           hwdep device.
  * @entry_count: The number of entries.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the list of numerical ID for available hwdep devices of sound card.
  *
@@ -211,7 +211,7 @@ end:
  * @card_id: The numeridcal ID of sound card.
  * @device_id: The numerical ID of hwdep device for the sound card.
  * @sysname: (out): The string for sysname of hwdep device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate sysname for hwdep device and return it when it exists.
  *
@@ -258,7 +258,7 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
  * @card_id: The numeridcal ID of sound card.
  * @device_id: The numerical ID of hwdep device for the sound card.
  * @devnode: (out): The string for devnode of hwdep device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Allocate devnode string for hwdep device and return it when exists.
  *
@@ -363,7 +363,7 @@ err_sysname:
  * @card_id: The numberical value for sound card to query.
  * @device_id: The numerical value of hwdep device to query.
  * @device_info: (out): The information of the device.
- * @error: A #GError.
+ * @error: A #GError. Error is generated with domain of #g_file_error_quark().
  *
  * Get the information according to given numerical IDs for card and device.
  *
