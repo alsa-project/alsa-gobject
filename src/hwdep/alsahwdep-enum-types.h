@@ -32,8 +32,8 @@
  * @ALSAHWDEP_IFACE_TYPE_FW_DIGI00X:        For Digidesign Digi 002/003 family.
  * @ALSAHWDEP_IFACE_TYPE_FW_TASCAM:         For TASCAM FireWire series.
  * @ALSAHWDEP_IFACE_TYPE_LINE6:             For Line6 USB processors. Available in Linux kernel 4.9.0 or later.
- * @ALSAHWDEP_IFACE_TYPE_FW_MOTU:           For MOTU FireWire series.
- * @ALSAHWDEP_IFACE_TYPE_FW_FIREFACE:       For RME Fireface series.
+ * @ALSAHWDEP_IFACE_TYPE_FW_MOTU:           For MOTU FireWire series. Available in Linux kernel 4.12.0 or later.
+ * @ALSAHWDEP_IFACE_TYPE_FW_FIREFACE:       For RME Fireface series. Available in Linux kernel 4.12.0 or later.
  *
  * A set of enumerators for the interface of hwdep device.
  */
@@ -67,8 +67,13 @@ typedef enum {
 #else
     ALSAHWDEP_IFACE_TYPE_LINE6,
 #endif
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0)
     ALSAHWDEP_IFACE_TYPE_FW_MOTU        = SNDRV_HWDEP_IFACE_FW_MOTU,
     ALSAHWDEP_IFACE_TYPE_FW_FIREFACE    = SNDRV_HWDEP_IFACE_FW_FIREFACE,
+#else
+    ALSAHWDEP_IFACE_TYPE_FW_MOTU,
+    ALSAHWDEP_IFACE_TYPE_FW_FIREFACE,
+#endif
 } ALSAHwdepIfaceType;
 
 #endif
