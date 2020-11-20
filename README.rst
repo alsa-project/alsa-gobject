@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/06/21
+2020/11/20
 Takashi Sakamoto
 
 Introduction
@@ -60,7 +60,7 @@ Dependencies
 
 * GLib <https://gitlab.gnome.org/GNOME/glib>
 * GObject introspection <https://gi.readthedocs.io/>
-* UAPI of Linux kernel for sound subsystem
+* UAPI of Linux kernel version 4.5 or later for sound subsystem
 * libudev1 <https://www.freedesktop.org/wiki/Software/systemd/>
 * Meson <https://mesonbuild.com/>
 * (optional) PyGObject <https://pygobject.readthedocs.io/> to execute tests
@@ -104,7 +104,8 @@ Design note
 ===========
 
 * These libraries are independent of alsa-lib, to focus on interaction to
-  kernel land directly by system calls without alsa-lib's configuration space.
+  kernel land directly by system calls without alsa-lib's configuration space
+  and plugin framework.
 * The way to enumerate any device is based on sysfs, programmed with libudev1.
 * GObject object is used for structures in UAPI of Linux sound subsystem with
   reserved space.
