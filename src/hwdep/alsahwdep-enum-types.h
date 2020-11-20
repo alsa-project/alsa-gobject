@@ -3,6 +3,7 @@
 #define __ALSA_GOBJECT_ALSAHWDEP_ENUM_TYPES__H__
 
 #include <sound/asound.h>
+#include <linux/version.h>
 
 /**
  *ALSAHwdepIfaceType:
@@ -30,7 +31,7 @@
  * @ALSAHWDEP_IFACE_TYPE_FW_OXFW:           For Oxford OXFW970/971 based devices.
  * @ALSAHWDEP_IFACE_TYPE_FW_DIGI00X:        For Digidesign Digi 002/003 family.
  * @ALSAHWDEP_IFACE_TYPE_FW_TASCAM:         For TASCAM FireWire series.
- * @ALSAHWDEP_IFACE_TYPE_LINE6:             For Line6 USB processors.
+ * @ALSAHWDEP_IFACE_TYPE_LINE6:             For Line6 USB processors. Available in Linux kernel 4.9.0 or later.
  * @ALSAHWDEP_IFACE_TYPE_FW_MOTU:           For MOTU FireWire series.
  * @ALSAHWDEP_IFACE_TYPE_FW_FIREFACE:       For RME Fireface series.
  *
@@ -61,7 +62,11 @@ typedef enum {
     ALSAHWDEP_IFACE_TYPE_FW_OXFW        = SNDRV_HWDEP_IFACE_FW_OXFW,
     ALSAHWDEP_IFACE_TYPE_FW_DIGI00X     = SNDRV_HWDEP_IFACE_FW_DIGI00X,
     ALSAHWDEP_IFACE_TYPE_FW_TASCAM      = SNDRV_HWDEP_IFACE_FW_TASCAM,
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,9,0)
     ALSAHWDEP_IFACE_TYPE_LINE6          = SNDRV_HWDEP_IFACE_LINE6,
+#else
+    ALSAHWDEP_IFACE_TYPE_LINE6,
+#endif
     ALSAHWDEP_IFACE_TYPE_FW_MOTU        = SNDRV_HWDEP_IFACE_FW_MOTU,
     ALSAHWDEP_IFACE_TYPE_FW_FIREFACE    = SNDRV_HWDEP_IFACE_FW_FIREFACE,
 } ALSAHwdepIfaceType;
