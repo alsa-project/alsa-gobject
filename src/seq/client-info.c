@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
+#include <linux/version.h>
 
 #include <errno.h>
 
@@ -101,12 +102,14 @@ static void seq_client_info_get_property(GObject *obj, guint id, GValue *val,
     case SEQ_CLIENT_INFO_PROP_LOST_COUNT:
         g_value_set_int(val, priv->info.event_lost);
         break;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
     case SEQ_CLIENT_INFO_PROP_CARD_ID:
         g_value_set_int(val, priv->info.card);
         break;
     case SEQ_CLIENT_INFO_PROP_PROCESS_ID:
         g_value_set_int64(val, (gint64)priv->info.pid);
         break;
+#endif
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
         break;
@@ -171,14 +174,16 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
 
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card.",
+                         "The numerical ID of sound card. "
+                         "Available in Linux kernel 4.6.0 or later.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READWRITE);
 
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_PROCESS_ID] =
         g_param_spec_int64("process-id", "process-id",
-                           "The process ID for user client, otherwise -1.",
+                           "The process ID for user client, otherwise -1. "
+                           "Available in Linux kernel 4.6.0 or later",
                            G_MININT64, G_MAXINT64,
                            -1,
                            G_PARAM_READABLE);
