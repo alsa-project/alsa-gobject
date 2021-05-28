@@ -6,7 +6,7 @@ jobs:
   build_in_fedora_for_amd64_on_docker:
     runs-on: ubuntu-latest
     container:
-      image: fedora:33
+      image: fedora:34
     steps:
     - name: Checkout repository.
       uses: actions/checkout@v2
