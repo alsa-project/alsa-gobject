@@ -76,7 +76,7 @@ Preparation ::
 
 Build ::
 
-    $ meson build
+    $ ninja
 
 Test ::
 
