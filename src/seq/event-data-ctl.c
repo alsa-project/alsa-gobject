@@ -79,7 +79,7 @@ void alsaseq_event_data_ctl_set_param(ALSASeqEventDataCtl *self, guint param)
 void alsaseq_event_data_ctl_get_value(const ALSASeqEventDataCtl *self,
                                       gint *value)
 {
-    *value = self->param;
+    *value = self->value;
 }
 
 /**
