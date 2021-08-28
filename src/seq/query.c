@@ -667,7 +667,7 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
     *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
     seq_queue_info_refer_private(*queue_info, &info);
 
-    strncpy(info->name, name, sizeof(info->name));
+    g_strlcpy(info->name, name, sizeof(info->name));
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_NAMED_QUEUE)");
         g_object_unref(*queue_info);

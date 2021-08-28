@@ -50,7 +50,7 @@ static void seq_port_info_set_property(GObject *obj, guint id,
         break;
     }
     case SEQ_PORT_INFO_PROP_NAME:
-        strncpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        g_strlcpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
         break;
     case SEQ_PORT_INFO_PROP_CAPS:
         priv->info.capability = (unsigned int)g_value_get_flags(val);
