@@ -17,10 +17,10 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
     libglib2.0-0 (>= 2.32.0),
 Multi-Arch: same
-Description: An I/O library for ALSA control character device with GObject framework
- This package contains an I/O library for ALSA control character device with
- GObject framwork. This library produces a set of API for operations via the
- character device, and GSource to dispatch any events in GMainContext.
+Description: I/O library for ALSA control cdev with GObject framework
+ This package contains an I/O library for ALSA control character device (cdev)
+ with GObject framwork. This library produces a set of API for operations via
+ the character device, and GSource to dispatch any events in GMainContext.
 
 Package: gir1.2-alsactl-0.0
 Section: introspection
@@ -39,10 +39,10 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
     libglib2.0-0 (>= 2.32.0),
 Multi-Arch: same
-Description: An I/O library for ALSA rawmidi character device with GObject framework
- This package contains an I/O library for ALSA rawmidi character device with
- GObject framwork. This library produces a set of API for operations via the
- character device, and GSource to dispatch any events in GMainContext.
+Description: I/O library for ALSA rawmidi cdev with GObject framework
+ This package contains an I/O library for ALSA rawmidi character device (cdev)
+ with GObject framwork. This library produces a set of API for operations via
+ the character device, and GSource to dispatch any events in GMainContext.
 
 Package: gir1.2-alsarawmidi-0.0
 Section: introspection
@@ -61,10 +61,10 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
     libglib2.0-0 (>= 2.32.0),
 Multi-Arch: same
-Description: An I/O library for ALSA timer character device with GObject framework
- This package contains an I/O library for ALSA timer character device with
- GObject framwork. This library produces a set of API for operations via the
- character device, and GSource to dispatch any events in GMainContext.
+Description: I/O library for ALSA timer cdev with GObject framework
+ This package contains an I/O library for ALSA timer character device (cdev)
+ with GObject framwork. This library produces a set of API for operations via
+ the character device, and GSource to dispatch any events in GMainContext.
 
 Package: gir1.2-alsatimer-0.0
 Section: introspection
@@ -84,10 +84,10 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     libglib2.0-0 (>= 2.32.0),
     libalsatimer0,
 Multi-Arch: same
-Description: An I/O library for ALSA sequencer character device with GObject framework
- This package contains an I/O library for ALSA sequencer character device with
- GObject framwork. This library produces a set of API for operations via the
- character device, and GSource to dispatch any events in GMainContext.
+Description: I/O library for ALSA sequencer cdev with GObject framework
+ This package contains an I/O library for ALSA sequencer character device (cdev)
+ with GObject framwork. This library produces a set of API for operations via
+ the character device, and GSource to dispatch any events in GMainContext.
 
 Package: gir1.2-alsaseq-0.0
 Section: introspection
@@ -108,10 +108,10 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
     libglib2.0-0 (>= 2.32.0),
 Multi-Arch: same
-Description: An I/O library for ALSA hwdep character device with GObject framework
- This package contains an I/O library for ALSA hwdep character device with
- GObject framwork. This library produces a set of API for operations via the
- character device, and GSource to dispatch any events in GMainContext.
+Description: I/O library for ALSA hwdep cdev with GObject framework
+ This package contains an I/O library for ALSA hwdep character device (cdev)
+ with GObject framwork. This library produces a set of API for operations via
+ the character device, and GSource to dispatch any events in GMainContext.
 
 Package: gir1.2-alsahwdep-0.0
 Section: introspection
@@ -132,16 +132,18 @@ Depends: ${misc:Depends},
     libalsarawmidi0 (= ${binary:Version}),
     libalsatimer0 (= ${binary:Version}),
     libalsaseq0 (= ${binary:Version}),
+    libalsahwdep0 (= ${binary:Version}),
     libglib2.0-dev (>= 2.32.0),
     libgirepository1.0-dev (>= 1.32.1),
     gir1.2-alsactl-0.0 (= ${binary:Version}),
     gir1.2-alsarawmidi-0.0 (= ${binary:Version}),
     gir1.2-alsatimer-0.0 (= ${binary:Version}),
     gir1.2-alsaseq-0.0 (= ${binary:Version}),
-Description: A set of I/O library for ALSA chraracter devices with GObject framework (development file)
+    gir1.2-alsahwdep-0.0 (= ${binary:Version}),
+Description: I/O libraries for ALSA cdev with GObject framework (development file)
  An alsa-gobject project aims to produce a set of I/O libraries with GObject
- framework. These library supports any operations via the character devices,
- and GSource to dispatch any event in GMainContext.
+ framework. These library supports any operations via the character device
+ (cdev), and GSource to dispatch any event in GMainContext.
  .
  This package contains development files including C headers, documentation and
  XML data for GIRepository.
