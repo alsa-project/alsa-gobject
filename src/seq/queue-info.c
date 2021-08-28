@@ -47,7 +47,7 @@ static void seq_queue_info_set_property(GObject *obj, guint id,
         priv->info.locked = g_value_get_boolean(val);
         break;
     case SEQ_QUEUE_INFO_PROP_NAME:
-        strncpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        g_strlcpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);

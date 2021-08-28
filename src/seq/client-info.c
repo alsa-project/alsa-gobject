@@ -51,7 +51,7 @@ static void seq_client_info_set_property(GObject *obj, guint id,
         priv->info.type = (snd_seq_client_type_t)g_value_get_enum(val);
         break;
     case SEQ_CLIENT_INFO_PROP_NAME:
-        strncpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        g_strlcpy(priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
         break;
     case SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS:
         priv->info.filter &= SNDRV_SEQ_FILTER_USE_EVENT;
