@@ -118,7 +118,7 @@ static int compare_guint(const void *l, const void *r)
 void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
                               GError **error)
 {
-    struct udev_enumerate *enumerator;
+    struct udev_enumerate *enumerator = NULL;
     struct udev_list_entry *entry, *entry_list;
     unsigned int count;
     unsigned int index;
@@ -128,7 +128,7 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
     g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
-    if (enumerator == NULL)
+    if (*error == NULL)
         return;
 
     entry_list = udev_enumerate_get_list_entry(enumerator);

@@ -141,7 +141,7 @@ static unsigned int calculate_digits(unsigned int number)
 void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
                                     gsize *entry_count, GError **error)
 {
-    struct udev_enumerate *enumerator;
+    struct udev_enumerate *enumerator = NULL;
     unsigned int length;
     char *prefix;
     struct udev_list_entry *entry, *entry_list;
@@ -154,7 +154,7 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
 
     prepare_udev_enum(&enumerator, error);
     if (*error != NULL)
-        goto end;
+        return;
 
     length = strlen(PREFIX_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
     prefix = g_malloc0(length);
