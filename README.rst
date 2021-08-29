@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2020/11/20
+2021/08/27
 Takashi Sakamoto
 
 Introduction
