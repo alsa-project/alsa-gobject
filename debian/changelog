@@ -1,3 +1,9 @@
+alsa-gobject (0.2.1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Takashi Sakamoto <o-takashi@sakamocchi.jp>  Sun, 29 Aug 2021 19:13:18 +0900
+
 alsa-gobject (0.2.0-1) unstable; urgency=medium
 
   * New upstream release.
