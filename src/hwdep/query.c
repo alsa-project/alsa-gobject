@@ -143,7 +143,7 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
 {
     struct udev_enumerate *enumerator = NULL;
     unsigned int length;
-    char *prefix;
+    char *prefix = NULL;
     struct udev_list_entry *entry, *entry_list;
     unsigned int count;
     unsigned int index;
