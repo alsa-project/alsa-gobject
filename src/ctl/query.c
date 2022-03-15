@@ -128,7 +128,7 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
     g_return_if_fail(error == NULL || *error == NULL);
 
     prepare_udev_enum(&enumerator, error);
-    if (*error == NULL)
+    if (*error != NULL)
         return;
 
     entry_list = udev_enumerate_get_list_entry(enumerator);
