@@ -13,7 +13,15 @@
  */
 ALSASeqAddr *seq_addr_copy(const ALSASeqAddr *self)
 {
-    return g_memdup(self, sizeof(*self));
+#ifdef g_memdup2
+    return g_memdup2(self, sizeof(*self));
+#else
+    // GLib v2.68 deprecated g_memdup() with concern about overflow by narrow conversion from size_t to
+    // unsigned int however it's safe in the local case.
+    gpointer ptr = g_malloc(sizeof(*self));
+    memcpy(ptr, self, sizeof(*self));
+    return ptr;
+#endif
 }
 
 G_DEFINE_BOXED_TYPE(ALSASeqAddr, alsaseq_addr, seq_addr_copy, g_free)
