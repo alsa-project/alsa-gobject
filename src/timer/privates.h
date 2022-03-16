@@ -2,14 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSATIMER_PRIVATES__H__
 
-#include "device-info.h"
-#include "device-status.h"
-#include "device-params.h"
-#include "instance-info.h"
-#include "instance-params.h"
-#include "instance-status.h"
-
-#include <sound/asound.h>
+#include "alsatimer.h"
 
 G_BEGIN_DECLS
 

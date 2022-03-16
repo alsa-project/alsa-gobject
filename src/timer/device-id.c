@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "device-id.h"
+#include "privates.h"
 
 /**
  * SECTION: device-id
