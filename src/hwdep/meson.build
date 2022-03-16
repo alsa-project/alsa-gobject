@@ -101,7 +101,7 @@ pkg.generate(library,
 )
 
 # Generate metadata for gobject introspection.
-gnome.generate_gir(library,
+alsahwdep_gir = gnome.generate_gir(library,
   sources: enums + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
@@ -115,11 +115,4 @@ gnome.generate_gir(library,
   ],
   header: 'alsahwdep.h',
   install: true,
-)
-
-# For documentation of gtk-doc.
-alsahwdep_dir = include_directories('.')
-alsahwdep_dependency = declare_dependency(
-  link_with: library,
-  dependencies: dependencies,
 )
