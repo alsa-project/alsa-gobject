@@ -49,6 +49,8 @@ dependencies = [
   libudev,
 ]
 
+inc_dir = join_paths(meson.project_name(), path)
+
 # Generate enumerations for GObject fashion.
 if has_enumerations
   enum_header = '@0@-enum-types.h'.format(name)
@@ -57,7 +59,7 @@ if has_enumerations
     symbol_prefix: name,
     identifier_prefix: namespace,
     install_header: true,
-    install_dir: join_paths(get_option('includedir'), meson.project_name(), path),
+    install_dir: join_paths(get_option('includedir'), inc_dir),
     header_prefix: '#include <@0@-enum-types.h>'.format(join_paths(path, name)),
   )
   sources += enums
@@ -71,7 +73,7 @@ if has_marshaller
     sources: '@0@-sigs-marshal.list'.format(name),
     stdinc: true,
     install_header: true,
-    install_dir: join_paths(get_option('includedir'), meson.project_name(), path),
+    install_dir: join_paths(get_option('includedir'), inc_dir),
   )
   sources += signal_marshallers
 endif
@@ -93,7 +95,7 @@ library = library(name,
 )
 
 install_headers(headers,
-  subdir: join_paths(meson.project_name(), path),
+  subdir: inc_dir,
 )
 
 # Generate pkg-config file for development.
