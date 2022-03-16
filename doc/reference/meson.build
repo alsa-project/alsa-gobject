@@ -4,5 +4,4 @@ configure_file(
   configuration : conf,
 )
 
-subdir('timer')
 subdir('seq')

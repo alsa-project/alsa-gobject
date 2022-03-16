@@ -137,8 +137,6 @@ alsatimer_gir = gnome.generate_gir(library,
   install: true,
 )
 
-# For documentation of gtk-doc.
-alsatimer_dir = include_directories('.')
 alsatimer_dependency = declare_dependency(
   link_with: library,
   dependencies: dependencies,

@@ -106,7 +106,7 @@ pkg.generate(library,
 )
 
 # Generate metadata for gobject introspection.
-gnome.generate_gir(library,
+alsarawmidi_gir = gnome.generate_gir(library,
   sources: enums + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
@@ -120,11 +120,4 @@ gnome.generate_gir(library,
   ],
   header: 'alsarawmidi.h',
   install: true,
-)
-
-# For documentation of gtk-doc.
-alsarawmidi_dir = include_directories('.')
-alsarawmidi_dependency = declare_dependency(
-  link_with: library,
-  dependencies: dependencies,
 )
