@@ -36,48 +36,6 @@ jobs:
         cd build
         meson install
 
-# MEMO: my backup.
-#  build_in_ubuntu_for_i386_on_lxd:
-#    runs-on: ubuntu-latest
-#    steps:
-#    - name: Install and initialize LXD
-#      run: |
-#        sudo snap install lxd
-#        sudo lxd init --auto
-#    - name: Launch container
-#      run: |
-#        sudo lxc launch ubuntu:19.10/i386 builder
-#        sudo lxc exec builder -- bash -c 'while [ "$(systemctl is-system-running 2>/dev/null)" != "running" ] && [ "$(systemctl is-system-running 2>/dev/null)" != "degraded" ]; do :; done'
-#    - name: Prepare build environment.
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get update'
-#        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get -y full-upgrade'
-#        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y git build-essential'
-#        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y meson ninja-build libglib2.0-dev libudev-dev gobject-introspection libgirepository1.0-dev'
-#        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y gtk-doc-tools python3-gi'
-#    - name: Checkout repository.
-#      uses: actions/checkout@v2
-#    - name: Generate archive and expand it inner the container.
-#      run: |
-#        git archive --format=tar --prefix=dist/ HEAD | xz > archive.tar.xz
-#        sudo lxc file push archive.tar.xz builder/home/ubuntu/
-#        sudo lxc exec builder -- su ubuntu -c 'cd; tar xf archive.tar.xz'
-#    - name: Initialization for build
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist; meson --prefix=/home/ubuntu/install -Dgtk_doc=true -Dwarning_level=3 . build'
-#    - name: Display configuration.
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson configure'
-#    - name: Build library.
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; ninja'
-#    - name: Test interfaces exposed by g-i.
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson test'
-#    - name: Test install.
-#      run: |
-#        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson install'
-
   build_in_ubuntu_for_amd64_on_lxd:
     runs-on: ubuntu-latest
     steps:
@@ -118,39 +76,3 @@ jobs:
     - name: Test install.
       run: |
         sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson install'
-
-# MEMO: my backup.
-# build_in_ubuntu_on_docker:
-#   runs-on: ubuntu-latest
-#   container:
-#     image: ubuntu:19.10
-#   steps:
-#    - name: Checkout repository.
-#      uses: actions/checkout@v2
-#    - name: Prepare build environment.
-#      run: |
-#        apt-get update
-#        apt-get -y install apt-utils
-#        apt-get -y full-upgrade
-#        apt-get install -y git build-essential
-#        apt-get install -y meson ninja-build libglib2.0-dev libudev-dev gobject-introspection libgirepository1.0-dev
-#        apt-get install -y gtk-doc-tools python3-gi
-#    - name: Initialization for build.
-#      run: |
-#        meson --prefix=/tmp. -Dgtk_doc=true -Dwarning_level=3 . build
-#    - name: Display configuration.
-#      run: |
-#        cd build
-#        meson configure
-#    - name: Build library.
-#      run: |
-#        cd build
-#        ninja
-#    - name: Test interfaces exposed by g-i.
-#      run: |
-#        cd build
-#        meson test
-#    - name: Test install.
-#      run: |
-#        cd build
-#        meson install
