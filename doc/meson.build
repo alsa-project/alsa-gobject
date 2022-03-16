@@ -1,3 +1,3 @@
-if get_option('gtk_doc')
+if get_option('doc')
   subdir('reference')
 endif

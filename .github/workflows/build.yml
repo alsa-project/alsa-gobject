@@ -18,7 +18,7 @@ jobs:
         dnf -y install gtk-doc python3-gobject
     - name: Initialization for build.
       run: |
-        meson --prefix=/tmp. -Dgtk_doc=true -Dwarning_level=3 . build
+        meson --prefix=/tmp. -Ddoc=true -Dwarning_level=3 . build
     - name: Display configuration.
       run: |
         cd build
@@ -63,7 +63,7 @@ jobs:
         sudo lxc exec builder -- su ubuntu -c 'cd; tar xf archive.tar.xz'
     - name: Initialization for build
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist; meson --prefix=/home/ubuntu/install -Dgtk_doc=true -Dwarning_level=3 . build'
+        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist; meson --prefix=/home/ubuntu/install -Ddoc=true -Dwarning_level=3 . build'
     - name: Display configuration.
       run: |
         sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson configure'

@@ -95,7 +95,7 @@ arguments for them. For example ::
 
 Generate documentation ::
 
-    $ meson --prefix=xxx -D gtk_doc=true . build
+    $ meson --prefix=xxx -D doc=true . build
     $ cd build
     $ meson install
     $ xdg-open xxx/share/gtk-doc/html/alsactl/index.html
