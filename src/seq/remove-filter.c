@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "remove-filter.h"
 #include "privates.h"
 
 #include <errno.h>

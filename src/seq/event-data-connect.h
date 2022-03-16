@@ -2,12 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_EVENT_DATA_CONNECT__H__
 #define __ALSA_GOBJECT_ALSASEQ_EVENT_DATA_CONNECT__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <seq/addr.h>
-
-#include <sound/asequencer.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

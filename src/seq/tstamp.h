@@ -2,10 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_TSTAMP__H__
 #define __ALSA_GOBJECT_ALSASEQ_TSTAMP__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <sound/asequencer.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

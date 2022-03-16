@@ -2,11 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_QUEUE_TIMER__H__
 #define __ALSA_GOBJECT_ALSASEQ_QUEUE_TIMER__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <seq/alsaseq-enums.h>
-#include <seq/queue-timer-data-alsa.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

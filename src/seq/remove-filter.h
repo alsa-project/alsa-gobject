@@ -2,13 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_REMOVE_FILTER__H__
 #define __ALSA_GOBJECT_ALSASEQ_REMOVE_FILTER__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <seq/addr.h>
-#include <seq/alsaseq-enums.h>
-
-#include <sound/asequencer.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

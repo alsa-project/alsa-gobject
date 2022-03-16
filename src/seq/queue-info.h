@@ -2,8 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_QUEUE_INFO__H__
 #define __ALSA_GOBJECT_ALSASEQ_QUEUE_INFO__H__
 
-#include <glib.h>
-#include <glib-object.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

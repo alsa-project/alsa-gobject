@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "event-data-ctl.h"
+#include "privates.h"
 
 /**
  * SECTION: event-data-ctl

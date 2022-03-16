@@ -2,17 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_EVENT_CNTR__H__
 #define __ALSA_GOBJECT_ALSASEQ_EVENT_CNTR__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <seq/alsaseq-enums.h>
-#include <seq/tstamp.h>
-#include <seq/addr.h>
-#include <seq/event-data-note.h>
-#include <seq/event-data-ctl.h>
-#include <seq/event-data-queue.h>
-#include <seq/event-data-connect.h>
-#include <seq/event-data-result.h>
+#include <alsaseq.h>
 
 G_BEGIN_DECLS
 

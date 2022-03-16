@@ -33,6 +33,7 @@ sources = files(
 )
 
 headers = files(
+  'alsaseq.h',
   'query.h',
   'system-info.h',
   'client-info.h',
@@ -92,7 +93,7 @@ if has_enumerations
     identifier_prefix: namespace,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
-    header_prefix: '#include <@0@-enum-types.h>'.format(join_paths(path, name)),
+    header_prefix: '#include <alsaseq.h>',
   )
 else
   enum
@@ -125,7 +126,7 @@ library = library(name,
   dependencies: dependencies,
   link_args : linker_flag,
   link_depends : mapfile_name,
-  include_directories: include_directories('..', '../timer'),
+  include_directories: include_directories('.', '../timer'),
 )
 
 install_headers(headers,
@@ -136,7 +137,7 @@ install_headers(headers,
 pkg = import('pkgconfig')
 pkg.generate(library,
   description: 'GObject instrospection library for sequencer interface in asequencer.h',
-  subdirs: meson.project_name(),
+  subdirs: inc_dir,
 )
 
 # Generate metadata for gobject introspection.
@@ -153,6 +154,7 @@ gnome.generate_gir(library,
     'GObject-2.0',
     alsatimer_gir[0],
   ],
+  header: 'alsaseq.h',
   install: true,
 )
 
