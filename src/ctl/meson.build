@@ -54,6 +54,7 @@ inc_dir = join_paths(meson.project_name(), path)
 # Generate enumerations for GObject fashion.
 if has_enumerations
   enum_header = '@0@-enum-types.h'.format(name)
+  headers += enum_header
   enums = gnome.mkenums_simple('@0@-enums'.format(name),
     sources: enum_header,
     symbol_prefix: name,
@@ -62,20 +63,21 @@ if has_enumerations
     install_dir: join_paths(get_option('includedir'), inc_dir),
     header_prefix: '#include <@0@-enum-types.h>'.format(join_paths(path, name)),
   )
-  sources += enums
-  headers += enum_header
+else
+  enums = []
 endif
 
 # Generate marshallers for GObject signals.
 if has_marshaller
-  signal_marshallers = gnome.genmarshal('@0@-sigs-marshal'.format(name),
+  marshallers = gnome.genmarshal('@0@-sigs-marshal'.format(name),
     prefix: '@0@_sigs_marshal'.format(name),
     sources: '@0@-sigs-marshal.list'.format(name),
     stdinc: true,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
   )
-  sources += signal_marshallers
+else
+  marshallers = []
 endif
 
 # Constrain public APIs by linker option.
@@ -84,7 +86,7 @@ mapfile_path = join_paths(meson.current_source_dir(), mapfile_name)
 linker_flag = '-Wl,--version-script,@0@'.format(mapfile_path)
 
 library = library(name,
-  sources: sources + headers + privates,
+  sources: sources + headers + privates + enums + marshallers,
   version: meson.project_version(),
   soversion: meson.project_version().split('.')[0],
   install: true,
@@ -107,7 +109,7 @@ pkg.generate(library,
 
 # Generate metadata for gobject introspection.
 gnome.generate_gir(library,
-  sources: sources + headers,
+  sources: enums + marshallers + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
   symbol_prefix: '@0@_'.format(name),
