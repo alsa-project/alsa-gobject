@@ -2,15 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSACTL_CARD__H__
 #define __ALSA_GOBJECT_ALSACTL_CARD__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <ctl/card-info.h>
-#include <ctl/elem-id.h>
-#include <ctl/elem-info.h>
-#include <ctl/elem-value.h>
-
-#include <ctl/alsactl-sigs-marshal.h>
+#include <alsactl.h>
 
 G_BEGIN_DECLS
 
