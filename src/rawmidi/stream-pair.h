@@ -2,13 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSARAWMIDI_STREAM_PAIR__H__
 #define __ALSA_GOBJECT_ALSARAWMIDI_STREAM_PAIR__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <rawmidi/alsarawmidi-enums.h>
-#include <rawmidi/substream-info.h>
-#include <rawmidi/substream-params.h>
-#include <rawmidi/substream-status.h>
+#include <alsarawmidi.h>
 
 G_BEGIN_DECLS
 
