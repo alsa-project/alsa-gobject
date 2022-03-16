@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reference manuals for libraries in alsa-gobject version @VERSION@</title>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<h1>Reference manuals for libraries in alsa-gobject version @VERSION@</h1>
+<ul>
+<li><a href="alsactl/index.html">ALSACtl reference manual</a></li>
+<li><a href="alsatimer/index.html">ALSATimer reference manual</a></li>
+<li><a href="alsaseq/index.html">ALSASeq reference manual</a></li>
+<li><a href="alsahwdep/index.html">ALSAHwdep reference manual</a></li>
+<li><a href="alsarawmidi/index.html">ALSARawmidi reference manual</a></li>
+</ul>
+</body>
+
+</html>
