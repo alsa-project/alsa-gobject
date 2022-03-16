@@ -6,7 +6,7 @@ jobs:
   build_in_fedora_for_amd64_on_docker:
     runs-on: ubuntu-latest
     container:
-      image: fedora:34
+      image: fedora:rawhide
     steps:
     - name: Checkout repository.
       uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
         sudo lxd init --auto
     - name: Launch container
       run: |
-        sudo lxc launch ubuntu:20.04/amd64 builder
+        sudo lxc launch ubuntu-daily:22.04/amd64 builder
         sudo lxc exec builder -- bash -c 'while [ "$(systemctl is-system-running 2>/dev/null)" != "running" ] && [ "$(systemctl is-system-running 2>/dev/null)" != "degraded" ]; do :; done'
     - name: Prepare build environment.
       run: |
