@@ -141,7 +141,7 @@ pkg.generate(library,
 )
 
 # Generate metadata for gobject introspection.
-gnome.generate_gir(library,
+alsaseq_gir = gnome.generate_gir(library,
   sources: enums + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
@@ -156,11 +156,4 @@ gnome.generate_gir(library,
   ],
   header: 'alsaseq.h',
   install: true,
-)
-
-# For documentation of gtk-doc.
-alsaseq_dir = include_directories('.')
-alsaseq_dependency = declare_dependency(
-  link_with: library,
-  dependencies: dependencies,
 )
