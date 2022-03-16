@@ -10,4 +10,5 @@ dependency('gi-docgen',
 gidocgen = find_program('gi-docgen')
 
 subdir('ctl')
+subdir('hwdep')
 subdir('reference')
