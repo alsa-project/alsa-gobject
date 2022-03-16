@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "queue-timer.h"
-
-#include <sound/asequencer.h>
+#include "privates.h"
 
 /**
  * SECTION: queue-timer

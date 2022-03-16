@@ -2,23 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSASEQ_PRIVATES__H__
 
-#include <string.h>
-
-#include <glib.h>
-#include <glib-object.h>
-
-#include "system-info.h"
-#include "client-info.h"
-#include "port-info.h"
-#include "client-pool.h"
-#include "subscribe-data.h"
-#include "queue-info.h"
-#include "queue-status.h"
-#include "queue-tempo.h"
-#include "queue-timer.h"
-#include "event-cntr.h"
-
-#include <sound/asequencer.h>
+#include "alsaseq.h"
 
 G_BEGIN_DECLS
 

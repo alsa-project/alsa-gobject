@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "queue-timer-data-alsa.h"
+#include "privates.h"
 
 /**
  * SECTION: queue-timer-data-alsa

@@ -2,6 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_QUEUE_TIMER_DATA_ALSA__H__
 #define __ALSA_GOBJECT_ALSASEQ_QUEUE_TIMER_DATA_ALSA__H__
 
+#include <alsaseq.h>
 #include <alsatimer.h>
 
 G_BEGIN_DECLS
