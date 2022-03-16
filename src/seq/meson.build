@@ -127,8 +127,7 @@ install_headers(headers,
 # Generate pkg-config file for development.
 pkg = import('pkgconfig')
 pkg.generate(library,
-  name: name,
-  description: 'GObject instrospection library with API for asound.h and asequencer.h',
+  description: 'GObject instrospection library for sequencer interface in asequencer.h',
   subdirs: meson.project_name(),
 )
 
