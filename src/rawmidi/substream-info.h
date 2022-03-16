@@ -2,10 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSARAWMIDI_SUBSTREAM_INFO__H__
 #define __ALSA_GOBJECT_ALSARAWMIDI_SUBSTREAM_INFO__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <rawmidi/alsarawmidi-enums.h>
+#include <alsarawmidi.h>
 
 G_BEGIN_DECLS
 

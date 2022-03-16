@@ -2,16 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSARAWMIDI_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSARAWMIDI_PRIVATES__H__
 
-#include <string.h>
-
-#include <glib.h>
-#include <glib-object.h>
-
-#include "substream-info.h"
-#include "substream-params.h"
-#include "substream-status.h"
-
-#include <sound/asound.h>
+#include "alsarawmidi.h"
 
 G_BEGIN_DECLS
 

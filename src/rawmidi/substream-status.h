@@ -2,8 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSARAWMIDI_SUBSTREAM_STATUS__H__
 #define __ALSA_GOBJECT_ALSARAWMIDI_SUBSTREAM_STATUS__H__
 
-#include <glib.h>
-#include <glib-object.h>
+#include <alsarawmidi.h>
 
 G_BEGIN_DECLS
 
