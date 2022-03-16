@@ -2,10 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSAHWDEP_DEVICE_INFO__H__
 #define __ALSA_GOBJECT_ALSAHWDEP_DEVICE_INFO__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <hwdep/alsahwdep-enums.h>
+#include <alsahwdep.h>
 
 G_BEGIN_DECLS
 

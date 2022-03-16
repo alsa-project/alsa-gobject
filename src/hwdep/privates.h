@@ -2,9 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSAHWDEP_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSAHWDEP_PRIVATES__H__
 
-#include "device-info.h"
-
-#include <sound/asound.h>
+#include "alsahwdep.h"
 
 G_BEGIN_DECLS
 

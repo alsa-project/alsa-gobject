@@ -2,7 +2,6 @@
 #ifndef __ALSA_GOBJECT_ALSAHWDEP_ENUM_TYPES__H__
 #define __ALSA_GOBJECT_ALSAHWDEP_ENUM_TYPES__H__
 
-#include <sound/asound.h>
 #include <linux/version.h>
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,9,0)
