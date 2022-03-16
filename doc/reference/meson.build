@@ -6,4 +6,3 @@ configure_file(
 
 subdir('timer')
 subdir('seq')
-subdir('rawmidi')
