@@ -1,4 +1,4 @@
-option('gtk_doc',
+option('doc',
   type: 'boolean',
   value: false,
   description: 'generate API reference',
