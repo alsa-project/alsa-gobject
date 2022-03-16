@@ -11,4 +11,5 @@ gidocgen = find_program('gi-docgen')
 
 subdir('ctl')
 subdir('hwdep')
+subdir('rawmidi')
 subdir('reference')

@@ -1,0 +1,34 @@
+[library]
+version = "@VERSION@"
+description = "alsarawmidi"
+authors = "Takashi Sakamoto"
+license = "LGPL-3.0-or-later"
+website_url = "https://alsa-project.github.io/alsa-gobject-docs/alsarawmidi/"
+browse_url = "https://github.com/alsa-project/alsa-gobject"
+repository_url = "https://github.com/alsa-project/alsa-gobject.git"
+
+dependencies = [
+  "GLib-2.0",
+  "GObject-2.0",
+]
+
+[dependencies."GLib-2.0"]
+name = "GLib"
+description = "The base utility library"
+docs_url = "https://docs.gtk.org/glib/"
+
+[dependencies."GObject-2.0"]
+name = "GObject"
+description = "The base type system and object class"
+docs_url = "https://docs.gtk.org/gobject/"
+
+[source-location]
+base_url = "https://github.com/alsa-project/alsa-gobject/blob/master/"
+file_format = "{filename}#L{line}"
+
+[extra]
+content_files = [
+  "overview.md",
+]
+
+urlmap_file = "urlmap.js"
