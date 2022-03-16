@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "instance-status.h"
-
-#include <sound/asound.h>
+#include "privates.h"
 
 /**
  * SECTION: instance-status

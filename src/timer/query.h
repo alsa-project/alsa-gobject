@@ -2,15 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_QUERY__H__
 #define __ALSA_GOBJECT_ALSATIMER_QUERY__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <timer/device-id.h>
-#include <timer/device-info.h>
-#include <timer/device-status.h>
-#include <timer/device-params.h>
-
-#include <timer/alsatimer-enums.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 

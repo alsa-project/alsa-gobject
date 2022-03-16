@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "query.h"
 #include "privates.h"
 
 #include <stdio.h>
@@ -12,7 +11,6 @@
 #include <sys/ioctl.h>
 #include <stdbool.h>
 
-#include <sound/asound.h>
 #include <time.h>
 
 #include <libudev.h>

@@ -2,8 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_INSTANCE_STATUS__H__
 #define __ALSA_GOBJECT_ALSATIMER_INSTANCE_STATUS__H__
 
-#include <glib.h>
-#include <glib-object.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 

@@ -2,14 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_USER_INSTANCE__H__
 #define __ALSA_GOBJECT_ALSATIMER_USER_INSTANCE__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <timer/device-id.h>
-#include <timer/instance-info.h>
-#include <timer/instance-params.h>
-#include <timer/instance-status.h>
-#include <timer/event.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 

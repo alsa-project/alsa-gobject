@@ -2,10 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_DEVICE_PARAMS__H__
 #define __ALSA_GOBJECT_ALSATIMER_DEVICE_PARAMS__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <timer/device-id.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 

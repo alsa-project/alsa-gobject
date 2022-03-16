@@ -2,12 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TSTAMP__H__
 #define __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TSTAMP__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <timer/alsatimer-enums.h>
-
-#include <sound/asound.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 

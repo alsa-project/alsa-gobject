@@ -2,11 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSATIMER_EVENT__H__
 #define __ALSA_GOBJECT_ALSATIMER_EVENT__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <timer/event-data-tick.h>
-#include <timer/event-data-tstamp.h>
+#include <alsatimer.h>
 
 G_BEGIN_DECLS
 
