@@ -30,6 +30,9 @@ privates = files(
   'privates.h',
 )
 
+# For test.
+build_dirs += {'alsactl': meson.current_build_dir()}
+
 #
 # Common part except for identifier of dependency.
 #

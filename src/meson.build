@@ -1,3 +1,5 @@
+build_dirs = {}
+
 subdir('ctl')
 subdir('timer')
 subdir('seq')

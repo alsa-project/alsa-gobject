@@ -47,8 +47,8 @@ tests = {
 }
 
 dir_paths = []
-foreach path, scripts: tests
-  dir_paths += join_paths(meson.build_root(), 'src', path)
+foreach name, build_dir: build_dirs
+  dir_paths += join_paths(build_dir)
 endforeach
 
 env = environment()

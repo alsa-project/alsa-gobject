@@ -28,6 +28,9 @@ privates = files(
   'privates.h',
 )
 
+# For test.
+build_dirs += {'alsarawmidi': meson.current_build_dir()}
+
 #
 # Common part except for identifier of dependency.
 #
