@@ -2,10 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSAHWDEP_QUERY__H__
 #define __ALSA_GOBJECT_ALSAHWDEP_QUERY__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <hwdep/device-info.h>
+#include <alsahwdep.h>
 
 G_BEGIN_DECLS
 

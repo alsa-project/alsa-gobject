@@ -9,17 +9,18 @@ has_enumerations = true
 has_marshaller = false
 
 sources = files(
-    'query.c',
-    'device-info.c',
+  'query.c',
+  'device-info.c',
 )
 
 headers = files(
-    'query.h',
-    'device-info.h',
+  'alsahwdep.h',
+  'query.h',
+  'device-info.h',
 )
 
 privates = files(
-    'privates.h',
+  'privates.h',
 )
 
 # For test.
@@ -53,7 +54,7 @@ if has_enumerations
     identifier_prefix: namespace,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
-    header_prefix: '#include <@0@-enum-types.h>'.format(join_paths(path, name)),
+    header_prefix: '#include <alsahwdep.h>',
   )
 else
   enums = []
@@ -85,7 +86,7 @@ library = library(name,
   dependencies: dependencies,
   link_args : linker_flag,
   link_depends : mapfile_name,
-  include_directories: include_directories('..'),
+  include_directories: include_directories('.'),
 )
 
 install_headers(headers,
@@ -96,7 +97,7 @@ install_headers(headers,
 pkg = import('pkgconfig')
 pkg.generate(library,
   description: 'GObject instrospection library for HwDep interface in asound.h',
-  subdirs: meson.project_name(),
+  subdirs: inc_dir,
 )
 
 # Generate metadata for gobject introspection.
@@ -112,6 +113,7 @@ gnome.generate_gir(library,
     'GLib-2.0',
     'GObject-2.0',
   ],
+  header: 'alsahwdep.h',
   install: true,
 )
 
