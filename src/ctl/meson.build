@@ -109,7 +109,7 @@ pkg.generate(library,
 )
 
 # Generate metadata for gobject introspection.
-gnome.generate_gir(library,
+alsactl_gir = gnome.generate_gir(library,
   sources: enums + marshallers + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
@@ -123,11 +123,4 @@ gnome.generate_gir(library,
   ],
   header: 'alsactl.h',
   install: true,
-)
-
-# For documentation of gtk-doc.
-alsactl_dir = include_directories('.')
-alsactl_dependency = declare_dependency(
-  link_with: library,
-  dependencies: dependencies,
 )

@@ -64,7 +64,7 @@ Dependencies
 * libudev1 <https://www.freedesktop.org/wiki/Software/systemd/>
 * Meson <https://mesonbuild.com/>
 * (optional) PyGObject <https://pygobject.readthedocs.io/> to execute tests
-* (optional) gtk-doc <https://www.gtk.org/gtk-doc/> to generate documentation
+* (optional) gi-docgen <https://gnome.pages.gitlab.gnome.org/gi-docgen/> to generate documentation
 
 How to build
 ============
@@ -91,14 +91,14 @@ After installed, C headers for APIs are available and pkg-config returns
 arguments for them. For example ::
 
     $ pkg-config --cflags --libs alsactl
-    -I/usr/include/alsa-gobject -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -lalsactl
+    -I/usr/include/alsa-gobject/ctl -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -lalsactl
 
 Generate documentation ::
 
     $ meson --prefix=xxx -D doc=true . build
     $ cd build
     $ meson install
-    $ xdg-open xxx/share/gtk-doc/html/alsactl/index.html
+    $ xdg-open xxx/share/doc/html/index.html
 
 Design note
 ===========
