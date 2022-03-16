@@ -18,6 +18,7 @@ sources = files(
 )
 
 headers = files(
+  'alsactl.h',
   'query.h',
   'card.h',
   'card-info.h',
@@ -61,7 +62,7 @@ if has_enumerations
     identifier_prefix: namespace,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
-    header_prefix: '#include <@0@-enum-types.h>'.format(join_paths(path, name)),
+    header_prefix: '#include <alsactl.h>',
   )
 else
   enums = []
@@ -93,7 +94,7 @@ library = library(name,
   dependencies: dependencies,
   link_args : linker_flag,
   link_depends : mapfile_name,
-  include_directories: include_directories('..'),
+  include_directories: include_directories('.'),
 )
 
 install_headers(headers,
@@ -104,7 +105,7 @@ install_headers(headers,
 pkg = import('pkgconfig')
 pkg.generate(library,
   description: 'GObject instrospection library for control interface in asound.h',
-  subdirs: meson.project_name(),
+  subdirs: inc_dir,
 )
 
 # Generate metadata for gobject introspection.
@@ -120,6 +121,7 @@ gnome.generate_gir(library,
     'GLib-2.0',
     'GObject-2.0',
   ],
+  header: 'alsactl.h',
   install: true,
 )
 

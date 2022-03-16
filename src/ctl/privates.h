@@ -2,17 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSACTL_PRIVATES__H__
 #define __ALSA_GOBJECT_ALSACTL_PRIVATES__H__
 
-#include <string.h>
-
-#include <glib.h>
-#include <glib-object.h>
-
-#include "card-info.h"
-#include "elem-id.h"
-#include "elem-info.h"
-#include "elem-value.h"
-
-#include <sound/asound.h>
+#include "alsactl.h"
 
 G_BEGIN_DECLS
 

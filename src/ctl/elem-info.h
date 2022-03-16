@@ -2,12 +2,7 @@
 #ifndef __ALSA_GOBJECT_ALSACTL_ELEM_INFO__H__
 #define __ALSA_GOBJECT_ALSACTL_ELEM_INFO__H__
 
-#include <glib.h>
-#include <glib-object.h>
-
-#include <ctl/elem-id.h>
-
-#include <ctl/alsactl-enums.h>
+#include <alsactl.h>
 
 G_BEGIN_DECLS
 
