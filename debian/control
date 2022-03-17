@@ -4,7 +4,7 @@ Priority: optional
 Build-Depends: debhelper-compat (= 13),
     meson (>= 0.32.0),
     libglib2.0-dev (>= 2.32.0),
-    gtk-doc-tools (>= 1.18-2),
+    gi-docgen (>= 2021.8+ds1-1),
     gobject-introspection (>= 1.32.1),
     libgirepository1.0-dev (>= 1.32.1),
     python3-gi
