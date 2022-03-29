@@ -62,7 +62,7 @@ Dependencies
 
 * GLib `<https://gitlab.gnome.org/GNOME/glib>`_
 * GObject introspection `<https://gi.readthedocs.io/>`_
-* libudev1 `<https://www.freedesktop.org/wiki/Software/systemd/>`_
+* libsystemd <https://www.freedesktop.org/wiki/Software/systemd/>
 * Linux kernel version 4.5 or later
 
 Requirements to build
@@ -112,7 +112,7 @@ Design note
 * These libraries are independent of alsa-lib, to focus on interaction to
   kernel land directly by system calls without alsa-lib's configuration space
   and plugin framework.
-* The way to enumerate any device is based on sysfs, programmed with libudev1.
+* The way to enumerate any device is based on sysfs, programmed with libsystemd.
 * GObject-drived object is used for structures in UAPI of Linux sound subsystem with
   reserved space.
 * Boxed object is used for structures in UAPI of Linux sound subsystem without

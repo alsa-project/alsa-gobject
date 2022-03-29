@@ -9,69 +9,42 @@
 #define SOUND_SUBSYSTEM     "sound"
 
 int lookup_and_allocate_string_by_sysname(char **name, const char *sysname,
-                                          const char *(*func)(struct udev_device *))
+                                          int (*func)(sd_device *, const char **))
 {
-    struct udev *ctx;
-    struct udev_device *device;
+    sd_device *device;
     const char *n;
-    int err = 0;
+    int err;
 
     if (name == NULL || sysname == NULL || func == NULL)
         return -EINVAL;
 
-    ctx = udev_new();
-    if (ctx == NULL)
-        return -errno;
+    err = sd_device_new_from_subsystem_sysname(&device, SOUND_SUBSYSTEM, sysname);
+    if (err < 0)
+        return err;
 
-    device = udev_device_new_from_subsystem_sysname(ctx, SOUND_SUBSYSTEM, sysname);
-    if (device == NULL) {
-        err = -errno;
-        goto err_ctx;
-    }
-
-    n = func(device);
-    if (n == NULL) {
-        err = -errno;
-        goto err_dev;
-    }
+    err = func(device, &n);
+    if (err < 0)
+        goto end;
 
     *name = strdup(n);
     if (*name == NULL)
         err = -ENOMEM;
-err_dev:
-    udev_device_unref(device);
-err_ctx:
-    udev_unref(ctx);
+end:
+    sd_device_unref(device);
     return err;
 }
 
-static int detect_device(struct udev_device **device, struct udev *ctx,
-                         struct udev_list_entry *entry, const char *prefix)
+static int detect_device(sd_device *device, const char *prefix)
 {
-    const char *syspath;
-    struct udev_device *dev;
     const char *sysname;
+    int err;
 
-    syspath = udev_list_entry_get_name(entry);
-    if (syspath == NULL)
-        return -errno;
+    err = sd_device_get_sysname(device, &sysname);
+    if (err < 0)
+        return err;
 
-    dev = udev_device_new_from_syspath(ctx, syspath);
-    if (dev == NULL)
-        return -errno;
-
-    sysname = udev_device_get_sysname(dev);
-    if (sysname == NULL) {
-        udev_device_unref(dev);
-        return -errno;
-    }
-
-    if (strstr(sysname, prefix) != sysname) {
-        udev_device_unref(dev);
+    if (strstr(sysname, prefix) != sysname)
         return -ENODEV;
-    }
-
-    *device = dev;
 
     return 0;
 }
@@ -87,88 +60,70 @@ static int compare_u32(const void *l, const void *r)
 int generate_sysnum_list_by_sysname_prefix(unsigned int **entries, unsigned long *entry_count,
                                            const char *prefix)
 {
-    struct udev *ctx;
-    struct udev_enumerate *enumerator;
+    sd_device_enumerator *enumerator;
     unsigned int count;
-    struct udev_list_entry *entry, *entry_list;
+    sd_device *device;
     unsigned int index;
     int err;
 
-    ctx = udev_new();
-    if (ctx == NULL)
-        return -errno;
-
-    enumerator = udev_enumerate_new(ctx);
-    if (enumerator == NULL) {
-        err = -errno;
-        goto err_ctx;
-    }
-
-    err = udev_enumerate_add_match_subsystem(enumerator, SOUND_SUBSYSTEM);
-    if (err < 0) {
-        goto err_enum;
-    }
-
-    err = udev_enumerate_scan_devices(enumerator);
+    err = sd_device_enumerator_new(&enumerator);
     if (err < 0)
-        goto err_enum;
+        return err;
+
+    err = sd_device_enumerator_add_match_subsystem(enumerator, SOUND_SUBSYSTEM, 1);
+    if (err < 0)
+        return err;
 
     count = 0;
-    entry_list = udev_enumerate_get_list_entry(enumerator);
-    udev_list_entry_foreach(entry, entry_list) {
-        struct udev_device *dev;
+    device = sd_device_enumerator_get_device_first(enumerator);
+    do {
         int err;
 
-        err = detect_device(&dev, ctx, entry, prefix);
-        if (err < 0)
-            continue;
-
-         ++count;
-         udev_device_unref(dev);
-    }
+        err = detect_device(device, prefix);
+        if (err >= 0)
+            ++count;
+    } while ((device = sd_device_enumerator_get_device_next(enumerator)));
 
     // Nothing available.
     if (count == 0)
-        goto err_enum;
+        goto end;
 
     *entries = calloc(count, sizeof(**entries));
     if (*entries == NULL) {
         err = -ENOMEM;
-        goto err_enum;
+        goto end;
     }
 
     index = 0;
-    udev_list_entry_foreach(entry, entry_list) {
-        struct udev_device *dev;
+    device = sd_device_enumerator_get_device_first(enumerator);
+    do {
         const char *sysnum;
-        long val;
         int err;
 
-        err = detect_device(&dev, ctx, entry, prefix);
+        err = detect_device(device, prefix);
         if (err < 0)
             continue;
 
-        sysnum = udev_device_get_sysnum(dev);
-        if (sysnum != NULL && !long_from_string(sysnum, &val)) {
-            (*entries)[index] = (unsigned int)val;
-            ++index;
-        }
+        err = sd_device_get_sysnum(device, &sysnum);
+        if (err >= 0) {
+            long val;
 
-        udev_device_unref(dev);
-    }
+            if (!long_from_string(sysnum, &val)) {
+                (*entries)[index] = (unsigned int)val;
+                ++index;
+            }
+        }
+    } while ((device = sd_device_enumerator_get_device_next(enumerator)));
 
     if (index != count) {
         err = -ENODATA;
-        goto err_enum;
+        goto end;
     }
 
     *entry_count = count;
 
     qsort(*entries, count, sizeof(unsigned int), compare_u32);
-err_enum:
-    udev_enumerate_unref(enumerator);
-err_ctx:
-    udev_unref(ctx);
-
+end:
+    sd_device_enumerator_unref(enumerator);
     return err;
 }

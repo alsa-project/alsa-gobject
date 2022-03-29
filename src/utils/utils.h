@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
-#include <libudev.h>
+#include <systemd/sd-device.h>
 
 #define generate_file_error(exception, errno, ...) \
         g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), __VA_ARGS__)
@@ -26,7 +26,7 @@ long long_from_string(const char *literal, long *number);
 int allocate_string(char **dst, const char *template, va_list ap);
 
 int lookup_and_allocate_string_by_sysname(char **name, const char *sysname,
-                                          const char *(*func)(struct udev_device *));
+                                          int (*func)(sd_device *, const char **));
 
 int generate_sysnum_list_by_sysname_prefix(unsigned int **entries, unsigned long *entry_count,
                                            const char *prefix);
@@ -35,7 +35,7 @@ int request_ctl_ioctl_opened(int *fd, unsigned int card_id, long request, void *
 int request_ctl_ioctl(unsigned int card_id, long request, void *data);
 
 static inline int lookup_and_allocate_name_by_sysname(char **name,
-                                                      const char *(*func)(struct udev_device *),
+                                                      int (*func)(sd_device *, const char **),
                                                       const char *fmt, va_list ap)
 {
     char *sysname;
@@ -54,7 +54,7 @@ static inline int lookup_and_allocate_sysname_by_sysname(char **sysname, const c
     int err;
 
     va_start(ap, fmt);
-    err = lookup_and_allocate_name_by_sysname(sysname, udev_device_get_sysname, fmt, ap);
+    err = lookup_and_allocate_name_by_sysname(sysname, sd_device_get_sysname, fmt, ap);
     va_end(ap);
 
     return err;
@@ -66,7 +66,7 @@ static inline int lookup_and_allocate_devname_by_sysname(char **devname, const c
     int err;
 
     va_start(ap, fmt);
-    err = lookup_and_allocate_name_by_sysname(devname, udev_device_get_devnode, fmt, ap);
+    err = lookup_and_allocate_name_by_sysname(devname, sd_device_get_devname, fmt, ap);
     va_end(ap);
 
     return err;

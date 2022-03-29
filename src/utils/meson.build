@@ -9,7 +9,7 @@ sources = [
 ]
 
 dependencies = [
-  dependency('libudev'),
+  dependency('libsystemd'),
 ]
 
 static_library = static_library('utils',

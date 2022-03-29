@@ -46,7 +46,7 @@ jobs:
         DEBIAN_FRONTEND=noninteractive apt-get install -y git build-essential
         DEBIAN_FRONTEND=noninteractive apt-get install -y meson ninja-build libglib2.0-dev gobject-introspection libgirepository1.0-dev
         DEBIAN_FRONTEND=noninteractive apt-get install -y gi-docgen python3-gi
-        DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev
+        DEBIAN_FRONTEND=noninteractive apt-get install -y libsystemd-dev
     - name: Initialization for build.
       run: |
         meson --prefix=/tmp. -Ddoc=true -Dwarning_level=3 . build
