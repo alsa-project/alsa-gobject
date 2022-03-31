@@ -46,6 +46,9 @@ build_dirs += {'alsarawmidi': meson.current_build_dir()}
 
 inc_dir = join_paths(meson.project_name(), path)
 
+top_header = '@0@.h'.format(name)
+headers += top_header
+
 # Generate enumerations for GObject fashion.
 if has_enumerations
   enum_header = '@0@-enum-types.h'.format(name)
@@ -56,7 +59,7 @@ if has_enumerations
     identifier_prefix: namespace,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
-    header_prefix: '#include <alsarawmidi.h>',
+    header_prefix: '#include <@0@>'.format(top_header),
   )
 else
   enums = []
@@ -111,6 +114,6 @@ alsarawmidi_gir = gnome.generate_gir(library,
   export_packages: name,
   dependencies: dependencies,
   includes: gir_includes,
-  header: 'alsarawmidi.h',
+  header: top_header,
   install: true,
 )

@@ -24,7 +24,6 @@ sources = files(
 )
 
 headers = files(
-  'alsatimer.h',
   'query.h',
   'device-id.h',
   'device-info.h',
@@ -61,6 +60,9 @@ build_dirs += {'alsatimer': meson.current_build_dir()}
 
 inc_dir = join_paths(meson.project_name(), path)
 
+top_header = '@0@.h'.format(name)
+headers += top_header
+
 # Generate enumerations for GObject fashion.
 if has_enumerations
   enum_header = '@0@-enum-types.h'.format(name)
@@ -71,7 +73,7 @@ if has_enumerations
     identifier_prefix: namespace,
     install_header: true,
     install_dir: join_paths(get_option('includedir'), inc_dir),
-    header_prefix: '#include <alsatimer.h>',
+    header_prefix: '#include <@0@>'.format(top_header),
   )
 else
   enums = []
@@ -126,7 +128,7 @@ alsatimer_gir = gnome.generate_gir(library,
   export_packages: name,
   dependencies: dependencies,
   includes: gir_includes,
-  header: 'alsatimer.h',
+  header: top_header,
   install: true,
 )
 
