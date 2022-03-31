@@ -95,7 +95,6 @@ install_headers(headers,
 )
 
 # Generate pkg-config file for development.
-pkg = import('pkgconfig')
 pkg.generate(library,
   description: 'GObject instrospection library for control interface in asound.h',
   subdirs: inc_dir,

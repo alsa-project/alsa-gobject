@@ -5,6 +5,9 @@ gobject_dependency = dependency('gobject-2.0',
 
 libudev_dependency = dependency('libudev')
 
+gnome = import('gnome')
+pkg = import('pkgconfig')
+
 build_dirs = {}
 
 subdir('ctl')
