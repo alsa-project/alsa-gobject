@@ -140,4 +140,5 @@ alsatimer_gir = gnome.generate_gir(library,
 alsatimer_dependency = declare_dependency(
   link_with: library,
   dependencies: dependencies,
+  include_directories: include_directories('.'),
 )

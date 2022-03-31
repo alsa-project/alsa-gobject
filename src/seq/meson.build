@@ -125,7 +125,7 @@ library = library(name,
   dependencies: dependencies,
   link_args : linker_flag,
   link_depends : mapfile_name,
-  include_directories: include_directories('.', '../timer'),
+  include_directories: include_directories('.'),
 )
 
 install_headers(headers,
