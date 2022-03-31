@@ -4,8 +4,6 @@ project('alsa-gobject', 'c',
   meson_version: '>= 0.48.0',
 )
 
-gnome = import('gnome')
-
 subdir('src')
 subdir('tests')
 

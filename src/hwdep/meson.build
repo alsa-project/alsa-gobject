@@ -87,7 +87,6 @@ install_headers(headers,
 )
 
 # Generate pkg-config file for development.
-pkg = import('pkgconfig')
 pkg.generate(library,
   description: 'GObject instrospection library for HwDep interface in asound.h',
   subdirs: inc_dir,
