@@ -1,3 +1,10 @@
+# Depends on glib-2.0 and gobject-2.0
+gobject_dependency = dependency('gobject-2.0',
+  version: '>=2.34.0'
+)
+
+libudev_dependency = dependency('libudev')
+
 build_dirs = {}
 
 subdir('ctl')
