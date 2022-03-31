@@ -96,8 +96,7 @@ if has_enumerations
     header_prefix: '#include <alsaseq.h>',
   )
 else
-  enum
-  s = []
+  enums = []
 endif
 
 # Generate marshallers for GObject signals.
