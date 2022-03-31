@@ -133,7 +133,7 @@ pkg.generate(library,
 
 # Generate metadata for gobject introspection.
 alsaseq_gir = gnome.generate_gir(library,
-  sources: enums + headers + sources,
+  sources: enums + marshallers + headers + sources,
   nsversion: '0.0',
   namespace: namespace,
   symbol_prefix: '@0@_'.format(name),
