@@ -50,6 +50,8 @@ dependencies = [
 
 pc_desc = 'GObject instrospection library for timer interface in asound.h'
 
+gir_includes = common_gir_includes
+
 # For test.
 build_dirs += {'alsatimer': meson.current_build_dir()}
 
@@ -123,10 +125,7 @@ alsatimer_gir = gnome.generate_gir(library,
   identifier_prefix: namespace,
   export_packages: name,
   dependencies: dependencies,
-  includes: [
-    'GLib-2.0',
-    'GObject-2.0',
-  ],
+  includes: gir_includes,
   header: 'alsatimer.h',
   install: true,
 )

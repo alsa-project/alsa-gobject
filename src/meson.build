@@ -8,6 +8,11 @@ libudev_dependency = dependency('libudev')
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
+common_gir_includes = [
+    'GLib-2.0',
+    'GObject-2.0',
+]
+
 build_dirs = {}
 
 subdir('ctl')

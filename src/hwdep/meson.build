@@ -30,6 +30,8 @@ dependencies = [
 
 pc_desc = 'GObject instrospection library for HwDep interface in asound.h'
 
+gir_includes = common_gir_includes
+
 # For test.
 build_dirs += {'alsahwdep': meson.current_build_dir()}
 
@@ -103,10 +105,7 @@ alsahwdep_gir = gnome.generate_gir(library,
   identifier_prefix: namespace,
   export_packages: name,
   dependencies: dependencies,
-  includes: [
-    'GLib-2.0',
-    'GObject-2.0',
-  ],
+  includes: gir_includes,
   header: 'alsahwdep.h',
   install: true,
 )

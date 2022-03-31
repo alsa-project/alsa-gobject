@@ -69,6 +69,8 @@ dependencies = [
 
 pc_desc = 'GObject instrospection library for sequencer interface in asequencer.h'
 
+gir_includes = [common_gir_includes, alsatimer_gir[0]]
+
 # For test.
 build_dirs += {'alsaseq': meson.current_build_dir()}
 
@@ -142,11 +144,7 @@ alsaseq_gir = gnome.generate_gir(library,
   identifier_prefix: namespace,
   export_packages: name,
   dependencies: dependencies,
-  includes: [
-    'GLib-2.0',
-    'GObject-2.0',
-    alsatimer_gir[0],
-  ],
+  includes: gir_includes,
   header: 'alsaseq.h',
   install: true,
 )
