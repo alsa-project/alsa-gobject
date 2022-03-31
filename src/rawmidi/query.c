@@ -363,8 +363,8 @@ err_sysname:
 
 /**
  * alsarawmidi_get_subdevice_id_list:
- * @card: The numberical value for sound card to query.
- * @device: The numerical value of rawmidi device to query.
+ * @card_id: The numberical value for sound card to query.
+ * @device_id: The numerical value of rawmidi device to query.
  * @direction: The direction of stream to query, one of
  *             ALSARawmidiStreamDirection.
  * @entries: (array length=entry_count)(out): The list of card.
@@ -377,14 +377,14 @@ err_sysname:
  * The call of function executes open(2), close(2), and ioctl(2) system call
  * with SNDRV_CTL_IOCTL_RAWMIDI_INFO command for ALSA control character device.
  */
-void alsarawmidi_get_subdevice_id_list(guint card, guint device,
+void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
                                        ALSARawmidiStreamDirection direction,
                                        guint **entries, gsize *entry_count,
                                        GError **error)
 {
     struct snd_rawmidi_info info = {
-        .card = card,
-        .device = device,
+        .card = card_id,
+        .device = device_id,
         .stream = direction,
         .subdevice = 0,
     };
@@ -394,7 +394,7 @@ void alsarawmidi_get_subdevice_id_list(guint card, guint device,
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    rawmidi_perform_ctl_ioctl(card, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", NULL, error);
+    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", NULL, error);
     if (*error != NULL)
         return;
 
