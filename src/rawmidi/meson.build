@@ -33,6 +33,8 @@ dependencies = [
   libudev_dependency,
 ]
 
+pc_desc = 'GObject instrospection library for RawMidi interface in asound.h'
+
 # For test.
 build_dirs += {'alsarawmidi': meson.current_build_dir()}
 
@@ -93,7 +95,7 @@ install_headers(headers,
 
 # Generate pkg-config file for development.
 pkg.generate(library,
-  description: 'GObject instrospection library for RawMidi interface in asound.h',
+  description: pc_desc,
   subdirs: inc_dir,
 )
 

@@ -28,6 +28,8 @@ dependencies = [
   libudev_dependency,
 ]
 
+pc_desc = 'GObject instrospection library for HwDep interface in asound.h'
+
 # For test.
 build_dirs += {'alsahwdep': meson.current_build_dir()}
 
@@ -88,7 +90,7 @@ install_headers(headers,
 
 # Generate pkg-config file for development.
 pkg.generate(library,
-  description: 'GObject instrospection library for HwDep interface in asound.h',
+  description: pc_desc,
   subdirs: inc_dir,
 )
 

@@ -67,6 +67,8 @@ dependencies = [
   alsatimer_dependency,
 ]
 
+pc_desc = 'GObject instrospection library for sequencer interface in asequencer.h'
+
 # For test.
 build_dirs += {'alsaseq': meson.current_build_dir()}
 
@@ -127,7 +129,7 @@ install_headers(headers,
 
 # Generate pkg-config file for development.
 pkg.generate(library,
-  description: 'GObject instrospection library for sequencer interface in asequencer.h',
+  description: pc_desc,
   subdirs: inc_dir,
 )
 
