@@ -61,25 +61,18 @@ privates = files(
   'privates.h',
 )
 
+dependencies = [
+  gobject_dependency,
+  libudev_dependency,
+  alsatimer_dependency,
+]
+
 # For test.
 build_dirs += {'alsaseq': meson.current_build_dir()}
 
 #
 # Common part except for identifier of dependency.
 #
-
-# Depends on glib-2.0 and gobject-2.0
-gobject = dependency('gobject-2.0',
-  version: '>=2.34.0'
-)
-
-libudev = dependency('libudev')
-
-dependencies = [
-  gobject,
-  libudev,
-  alsatimer_dependency,
-]
 
 inc_dir = join_paths(meson.project_name(), path)
 
