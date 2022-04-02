@@ -16,12 +16,6 @@
  *                     descriptor
  */
 
-#define generate_file_error(exception, errno, msg) \
-        g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
-
-#define generate_file_error_fmt(exception, errno, fmt, msg) \
-        g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
-
 /**
  * alsaseq_get_seq_sysname:
  * @sysname: (out): The sysname of ALSA Sequencer.
@@ -75,7 +69,7 @@ static int open_fd(GError **error)
 
     fd = open(devname, O_RDONLY);
     if (fd < 0)
-        generate_file_error_fmt(error, errno, "open(%s)", devname);
+        generate_file_error(error, errno, "open(%s)", devname);
     g_free(devname);
 
     return fd;

@@ -12,12 +12,6 @@
  *                     descriptor
  */
 
-#define generate_file_error(error, errno, msg)    \
-    g_set_error_literal(error, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
-
-#define generate_file_error_fmt(error, errno, fmt, msg) \
-    g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
-
 /**
  * alsarawmidi_get_device_id_list:
  * @card_id: The numerical ID of sound card.

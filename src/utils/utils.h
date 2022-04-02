@@ -6,6 +6,9 @@
 #include <stdarg.h>
 #include <libudev.h>
 
+#define generate_file_error(exception, errno, ...) \
+        g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), __VA_ARGS__)
+
 #define CARD_SYSNAME_PREFIX             "card"
 #define CARD_SYSNAME_TEMPLATE           CARD_SYSNAME_PREFIX "%u"
 #define CONTROL_SYSNAME_TEMPLATE        "controlC%u"
