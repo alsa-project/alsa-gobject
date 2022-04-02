@@ -3,11 +3,7 @@
 
 #include <utils.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <sys/ioctl.h>
-#include <unistd.h>
 
 /**
  * SECTION: query
@@ -96,37 +92,6 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
         generate_file_error(error, -err, "Fail to generate rawmidi devname");
 }
 
-static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
-                                      const char *req_label, int *ctl_fd, GError **error)
-{
-    char *devname;
-    int fd;
-    int err;
-
-    err = lookup_and_allocate_control_devname(&devname, card_id);
-    if (err < 0) {
-        generate_file_error(error, -err, "Fail to generate control devname");
-        return;
-    }
-
-    fd = open(devname, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devname);
-        goto end;
-    }
-
-    if (ioctl(fd, request, data) < 0)
-        generate_file_error_fmt(error, errno, "ioctl(%s)", req_label);
-
-    // The caller is responsible for closing the file descriptor.
-    if (ctl_fd != NULL)
-        *ctl_fd = fd;
-    else
-        close(fd);
-end:
-    free(devname);
-}
-
 /**
  * alsarawmidi_get_subdevice_id_list:
  * @card_id: The numberical value for sound card to query.
@@ -155,14 +120,17 @@ void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
         .subdevice = 0,
     };
     int i;
+    int err;
 
     g_return_if_fail(entries != NULL);
     g_return_if_fail(entry_count != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info, "RAWMIDI_INFO", NULL, error);
-    if (*error != NULL)
+    err = request_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info);
+    if (err < 0) {
+        generate_file_error(error, -err, "RAWMIDI_INFO");
         return;
+    }
 
     *entries = g_malloc0_n(info.subdevices_count, sizeof(guint));
 
@@ -193,6 +161,7 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
                                     GError **error)
 {
     struct snd_rawmidi_info *info;
+    int err;
 
     g_return_if_fail(substream_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
@@ -205,14 +174,19 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
     info->stream = direction;
     info->card = card_id;
 
-    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info, "RAWMIDI_INFO", NULL, error);
-    if (*error != NULL)
+    err = request_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, info);
+    if (err < 0) {
         g_object_unref(*substream_info);
+        generate_file_error(error, -err, "RAWMIDI_INFO");
+    }
 }
 
 void rawmidi_select_subdevice(guint card_id, guint subdevice_id, int *ctl_fd, GError **error)
 {
     guint data = subdevice_id;
-    rawmidi_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE,
-                              &data, "RAWMIDI_PREFER_SUBDEVICE", ctl_fd, error);
+    int err;
+
+    err = request_ctl_ioctl_opened(ctl_fd, card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE, &data);
+    if (err < 0)
+        generate_file_error(error, -err, "RAWMIDI_PREFER_SUBDEVICE");
 }

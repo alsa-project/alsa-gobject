@@ -3,11 +3,7 @@
 
 #include <utils.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <sys/ioctl.h>
-#include <unistd.h>
 
 /**
  * SECTION: query
@@ -96,35 +92,6 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
         generate_file_error(error, -err, "Fail to generate hwdep devname");
 }
 
-static void hwdep_perform_ctl_ioctl(guint card_id, long request, void *data,
-                                    const char *req_label, GError **error)
-{
-    char *devname;
-    int fd;
-    int err;
-
-    g_return_if_fail(error == NULL || *error == NULL);
-
-    err = lookup_and_allocate_control_devname(&devname, card_id);
-    if (err < 0) {
-        generate_file_error(error, -err, "Fail to generate control devname");
-        return;
-    }
-
-    fd = open(devname, O_RDONLY | O_NONBLOCK);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devname);
-        goto end;
-    }
-
-	if (ioctl(fd, request, data) < 0)
-	    generate_file_error_fmt(error, errno, "ioctl(%s)", req_label);
-
-	close(fd);
-end:
-    free(devname);
-}
-
 /**
  * alsahwdep_get_device_info:
  * @card_id: The numberical value for sound card to query.
@@ -142,6 +109,7 @@ void alsahwdep_get_device_info(guint card_id, guint device_id,
                                GError **error)
 {
     struct snd_hwdep_info *info;
+    int err;
 
     g_return_if_fail(device_info != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
@@ -151,7 +119,9 @@ void alsahwdep_get_device_info(guint card_id, guint device_id,
 
     info->device = device_id;
     info->card = card_id;
-    hwdep_perform_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_HWDEP_INFO, info, "HWDEP_INFO", error);
-    if (*error != NULL)
+    err = request_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_HWDEP_INFO, info);
+    if (err < 0) {
+        generate_file_error(error, -err, "ioctl(HWDEP_INFO)");
         g_object_unref(*device_info);
+    }
 }
