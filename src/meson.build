@@ -15,6 +15,7 @@ common_gir_includes = [
 
 build_dirs = {}
 
+subdir('utils')
 subdir('ctl')
 subdir('timer')
 subdir('seq')
