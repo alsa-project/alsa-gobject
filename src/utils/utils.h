@@ -28,6 +28,9 @@ int lookup_and_allocate_string_by_sysname(char **name, const char *sysname,
 int generate_sysnum_list_by_sysname_prefix(unsigned int **entries, unsigned long *entry_count,
                                            const char *prefix);
 
+int request_ctl_ioctl_opened(int *fd, unsigned int card_id, long request, void *data);
+int request_ctl_ioctl(unsigned int card_id, long request, void *data);
+
 static inline int lookup_and_allocate_name_by_sysname(char **name,
                                                       const char *(*func)(struct udev_device *),
                                                       const char *fmt, va_list ap)

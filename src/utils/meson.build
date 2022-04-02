@@ -5,6 +5,7 @@ headers = [
 sources = [
   'string.c',
   'sysfs.c',
+  'ioctl.c',
 ]
 
 dependencies = [
