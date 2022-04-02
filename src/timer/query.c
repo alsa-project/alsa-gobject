@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+#include <utils.h>
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <errno.h>
@@ -305,7 +307,7 @@ static void timer_get_node_param_value(const char *param_name, char *buf,
     int fd;
     ssize_t len;
     long v;
-    char *term;
+    int err;
 
     snprintf(literal, sizeof(literal), SYSFS_SND_TIMER_NODE "parameters/%s",
              param_name);
@@ -322,11 +324,9 @@ static void timer_get_node_param_value(const char *param_name, char *buf,
         goto end;
     }
 
-    v = strtol(buf, &term, 10);
-    if (errno > 0)
-        generate_file_error(error, errno, "strtol()");
-    else if (*term != '\n')
-        generate_file_error(error, EIO, "strtol()");
+    err = long_from_string(buf, &v);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to parse snd_timer module parameter as integer value");
     else
         *val = (int)v;
 end:
