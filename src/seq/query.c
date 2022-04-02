@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
+#include "utils.h"
 
 #include <errno.h>
 #include <sys/types.h>
@@ -18,8 +19,6 @@
  *                     descriptor
  */
 
-#define SEQ_SYSNAME   "seq"
-
 #define generate_file_error(exception, errno, msg) \
         g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
 
@@ -37,38 +36,14 @@
  */
 void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
 {
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *name;
+    int err;
 
     g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", SEQ_SYSNAME);
-    if (dev == NULL) {
-        generate_file_error(error, errno, "udev_enumerate_new()");
-        udev_unref(ctx);
-        return;
-    }
-
-    name = udev_device_get_sysname(dev);
-    if (name == NULL) {
-        generate_file_error(error, errno, "udev_enumerate_add_match_subsystem()");
-        udev_device_unref(dev);
-        udev_unref(ctx);
-        return;
-    }
-
-    *sysname = g_strdup(name);
-
-    udev_device_unref(dev);
-    udev_unref(ctx);
+    err = lookup_and_allocate_seq_sysname(sysname);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate seq sysname");
 }
 
 /**
@@ -82,56 +57,29 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
  */
 void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
 {
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *node;
+    int err;
 
     g_return_if_fail(devnode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", SEQ_SYSNAME);
-    if (dev == NULL) {
-        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
-        udev_unref(ctx);
-        return;
-    }
-
-    node = udev_device_get_devnode(dev);
-    if (node == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
-        udev_device_unref(dev);
-        udev_unref(ctx);
-        return;
-    }
-
-    *devnode = g_strdup(node);
-
-    udev_device_unref(dev);
-    udev_unref(ctx);
+    err = lookup_and_allocate_seq_devname(devnode);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate seq devname");
 }
 
 static int open_fd(GError **error)
 {
-    char *devnode;
+    char *devname;
     int fd;
 
-    alsaseq_get_seq_devnode(&devnode, error);
+    alsaseq_get_seq_devnode(&devname, error);
     if (*error != NULL)
         return -1;
 
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-        g_free(devnode);
-        return -1;
-    }
-    g_free(devnode);
+    fd = open(devname, O_RDONLY);
+    if (fd < 0)
+        generate_file_error_fmt(error, errno, "open(%s)", devname);
+    g_free(devname);
 
     return fd;
 }

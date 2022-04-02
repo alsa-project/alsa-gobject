@@ -24,7 +24,6 @@
  *                     file descriptor
  */
 
-#define TIMER_SYSNAME_TEMPLATE  "timer"
 #define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
 
 #define generate_file_error(exception, errno, msg) \
@@ -32,32 +31,6 @@
 
 #define generate_file_error_fmt(exception, errno, fmt, msg) \
         g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
-
-static bool check_existence(char *sysname, GError **error)
-{
-    struct udev *ctx;
-    struct udev_device *dev;
-    bool result;
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        return false;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
-    if (dev == NULL) {
-        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
-        result = false;
-    } else {
-        result = true;
-    }
-    udev_device_unref(dev);
-
-    udev_unref(ctx);
-
-    return result;
-}
 
 /**
  * alsatimer_get_sysname:
@@ -70,19 +43,14 @@ static bool check_existence(char *sysname, GError **error)
  */
 void alsatimer_get_sysname(char **sysname, GError **error)
 {
-    char *name;
+    int err;
 
     g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    name = g_strdup(TIMER_SYSNAME_TEMPLATE);
-
-    if (!check_existence(name, error)) {
-        g_free(name);
-        return;
-    }
-
-    *sysname = name;
+    err = lookup_and_allocate_timer_sysname(sysname);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate timer sysname");
 }
 
 /**
@@ -96,54 +64,29 @@ void alsatimer_get_sysname(char **sysname, GError **error)
  */
 void alsatimer_get_devnode(char **devnode, GError **error)
 {
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *node;
+    int err;
 
     g_return_if_fail(devnode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound",
-                                                 TIMER_SYSNAME_TEMPLATE);
-    if (dev == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
-        udev_unref(ctx);
-        return;
-    }
-
-    node = udev_device_get_devnode(dev);
-    if (node != NULL)
-        *devnode = g_strdup(node);
-    else
-        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
-
-    udev_device_unref(dev);
-    udev_unref(ctx);
+    err = lookup_and_allocate_timer_devname(devnode);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate timer devname");
 }
 
 static int open_fd(GError **error)
 {
-    char *devnode;
+    char *devname;
     int fd;
 
-    alsatimer_get_devnode(&devnode, error);
+    alsatimer_get_devnode(&devname, error);
     if (*error != NULL)
         return -1;
 
-    fd = open(devnode, O_RDONLY);
-    if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-    	g_free(devnode);
-        return -1;
-    }
-
-    g_free(devnode);
+    fd = open(devname, O_RDONLY);
+    if (fd < 0)
+        generate_file_error_fmt(error, errno, "open(%s)", devname);
+    g_free(devname);
 
     return fd;
 }

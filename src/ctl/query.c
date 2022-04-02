@@ -17,9 +17,6 @@
  *                     descriptor
  */
 
-#define CARD_SYSNAME_TEMPLATE       "card%u"
-#define CONTROL_SYSNAME_TEMPLATE    "controlC%u"
-
 #define generate_file_error(exception, errno, msg) \
         g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
 
@@ -173,52 +170,6 @@ end:
     release_udev_enum(enumerator);
 }
 
-static void allocate_sysname(char **sysname ,const char *template,
-                             guint card_id, GError **error)
-{
-    unsigned int digits;
-    unsigned int number;
-    unsigned int length;
-
-    digits = 0;
-    number = card_id;
-    while (number > 0) {
-        number /= 10;
-        ++digits;
-    }
-
-    length = strlen(template) + digits;
-    *sysname = g_malloc0(length + 1);
-
-    snprintf(*sysname, length, template, card_id);
-}
-
-static bool check_existence(char *sysname, GError **error)
-{
-    struct udev *ctx;
-    struct udev_device *dev;
-    bool result;
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        return false;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
-    if (dev == NULL) {
-        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
-        result = false;
-    } else {
-        result = true;
-    }
-    udev_device_unref(dev);
-
-    udev_unref(ctx);
-
-    return result;
-}
-
 /**
  * alsactl_get_card_sysname:
  * @card_id: The numeridcal ID of sound card.
@@ -231,21 +182,14 @@ static bool check_existence(char *sysname, GError **error)
  */
 void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
 {
-    char *name;
+    int err;
 
     g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    allocate_sysname(&name, CARD_SYSNAME_TEMPLATE, card_id, error);
-    if (*error != NULL)
-        return;
-
-    if (!check_existence(name, error)) {
-        g_free(name);
-        return;
-    }
-
-    *sysname = name;
+    err = lookup_and_allocate_card_sysname(sysname, card_id);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate card sysname");
 }
 
 /**
@@ -261,21 +205,14 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
  */
 void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
 {
-    char *name;
+    int err;
 
     g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    allocate_sysname(&name, CONTROL_SYSNAME_TEMPLATE, card_id, error);
-    if (*error != NULL)
-        return;
-
-    if (!check_existence(name, error)) {
-        g_free(name);
-        return;
-    }
-
-    *sysname = name;
+    err = lookup_and_allocate_control_sysname(sysname, card_id);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate control sysname");
 }
 
 /**
@@ -291,40 +228,12 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
  */
 void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error)
 {
-    char *sysname;
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *node;
+    int err;
 
     g_return_if_fail(devnode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    allocate_sysname(&sysname, CONTROL_SYSNAME_TEMPLATE, card_id, error);
-    if (*error != NULL)
-        return;
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        g_free(sysname);
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
-    if (dev == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
-        g_free(sysname);
-        udev_unref(ctx);
-        return;
-    }
-    g_free(sysname);
-
-    node = udev_device_get_devnode(dev);
-    if (node != NULL)
-        *devnode = g_strdup(node);
-    else
-        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
-
-    udev_device_unref(dev);
-    udev_unref(ctx);
+    err = lookup_and_allocate_control_devname(devnode, card_id);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate control devname");
 }

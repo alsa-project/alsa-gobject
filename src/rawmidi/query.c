@@ -23,8 +23,6 @@
 
 // 'C' is required apart from emulation of Open Sound System.
 #define PREFIX_SYSNAME_TEMPLATE     "midiC%u"
-#define RAWMIDI_SYSNAME_TEMPLATE    "midiC%uD%u"
-#define CTL_SYSNAME_TEMPLATE        "controlC%u"
 
 #define generate_file_error(error, errno, msg)    \
     g_set_error_literal(error, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
@@ -218,37 +216,14 @@ end:
 void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
                                      char **sysname, GError **error)
 {
-    unsigned int length;
-    char *name;
-    struct udev *ctx;
-    struct udev_device *dev;
+    int err;
 
     g_return_if_fail(sysname != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
-             calculate_digits(device_id) + 1;
-    name = g_malloc0(length);
-
-    snprintf(name, length, RAWMIDI_SYSNAME_TEMPLATE, card_id, device_id);
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        g_free(name);
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
-    if (dev == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
-        g_free(name);
-    } else {
-        *sysname = name;
-        udev_device_unref(dev);
-    }
-
-    udev_unref(ctx);
+    err = lookup_and_allocate_rawmidi_sysname(sysname, card_id, device_id);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate rawmidi sysname");
 }
 
 /**
@@ -265,83 +240,33 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
 void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
                                      char **devnode, GError **error)
 {
-    unsigned int length;
-    char *name;
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *node;
+    int err;
 
     g_return_if_fail(devnode != NULL);
     g_return_if_fail(error == NULL || *error == NULL);
 
-    length = strlen(RAWMIDI_SYSNAME_TEMPLATE) + calculate_digits(card_id) +
-             calculate_digits(device_id) + 1;
-    name = g_malloc0(length);
-
-    snprintf(name, length, RAWMIDI_SYSNAME_TEMPLATE, card_id, device_id);
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        g_free(name);
-        return;
-    }
-
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", name);
-    g_free(name);
-    if (dev == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_new_from_subsystem_sysname()");
-        udev_unref(ctx);
-        return;
-    }
-
-    node = udev_device_get_devnode(dev);
-    if (node == NULL)
-        generate_file_error(error, ENOENT, "udev_device_get_devnode()");
-    else
-        *devnode = g_strdup(node);
-
-    udev_device_unref(dev);
-    udev_unref(ctx);
+    err = lookup_and_allocate_rawmidi_devname(devnode, card_id, device_id);
+    if (err < 0)
+        generate_file_error(error, -err, "Fail to generate rawmidi devname");
 }
 
 static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
                                       const char *req_label, int *ctl_fd, GError **error)
 {
-    unsigned int length;
-    char *sysname;
-    struct udev *ctx;
-    struct udev_device *dev;
-    const char *devnode;
+    char *devname;
     int fd;
+    int err;
 
-    length = strlen(CTL_SYSNAME_TEMPLATE) + calculate_digits(card_id) + 1;
-    sysname = g_malloc0(length);
-
-    snprintf(sysname, length, CTL_SYSNAME_TEMPLATE, card_id);
-
-    ctx = udev_new();
-    if (ctx == NULL) {
-        generate_file_error(error, errno, "udev_new()");
-        goto err_sysname;
+    err = lookup_and_allocate_control_devname(&devname, card_id);
+    if (err < 0) {
+        generate_file_error(error, -err, "Fail to generate control devname");
+        return;
     }
 
-    dev = udev_device_new_from_subsystem_sysname(ctx, "sound", sysname);
-    if (dev == NULL) {
-        generate_file_error(error, errno, "udev_device_new_from_subsystem_sysname()");
-        goto err_ctx;
-    }
-
-    devnode = udev_device_get_devnode(dev);
-    if (devnode == NULL) {
-        generate_file_error(error, ENODEV, "udev_device_get_devnode()");
-        goto err_device;
-    }
-
-    fd = open(devnode, O_RDONLY);
+    fd = open(devname, O_RDONLY);
     if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", devnode);
-        goto err_device;
+        generate_file_error_fmt(error, errno, "open(%s)", devname);
+        goto end;
     }
 
     if (ioctl(fd, request, data) < 0)
@@ -352,12 +277,8 @@ static void rawmidi_perform_ctl_ioctl(guint card_id, long request, void *data,
         *ctl_fd = fd;
     else
         close(fd);
-err_device:
-    udev_device_unref(dev);
-err_ctx:
-    udev_unref(ctx);
-err_sysname:
-    g_free(sysname);
+end:
+    free(devname);
 }
 
 /**

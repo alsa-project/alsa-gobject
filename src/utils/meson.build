@@ -4,9 +4,11 @@ headers = [
 
 sources = [
   'string.c',
+  'sysfs.c',
 ]
 
 dependencies = [
+  dependency('libudev'),
 ]
 
 static_library = static_library('utils',
