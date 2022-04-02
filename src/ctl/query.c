@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+#include <utils.h>
+
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
@@ -153,12 +155,9 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
         if (dev != NULL) {
             const char *sysnum = udev_device_get_sysnum(dev);
             long val;
-            char *endptr;
 
-            errno = 0;
-            val = strtol(sysnum, &endptr, 10);
-            if (errno == 0 && *endptr == '\0' && val >= 0) {
-                (*entries)[index] = (guint)val;
+            if (!long_from_string(sysnum, &val)) {
+                (*entries)[index] = val;
                 ++index;
             }
             udev_device_unref(dev);

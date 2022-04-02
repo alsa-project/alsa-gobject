@@ -3,6 +3,7 @@ headers = [
 ]
 
 sources = [
+  'string.c',
 ]
 
 dependencies = [
