@@ -6,10 +6,15 @@
 #include <stdarg.h>
 #include <libudev.h>
 
-#define CARD_SYSNAME_TEMPLATE           "card%u"
+#define CARD_SYSNAME_PREFIX             "card"
+#define CARD_SYSNAME_TEMPLATE           CARD_SYSNAME_PREFIX "%u"
 #define CONTROL_SYSNAME_TEMPLATE        "controlC%u"
-#define RAWMIDI_SYSNAME_TEMPLATE        "midiC%uD%u"
-#define HWDEP_SYSNAME_TEMPLATE          "hwC%uD%u"
+// 'C' is required apart from emulation of Open Sound System.
+#define RAWMIDI_SYSNAME_PREFIX_TEMPLATE "midiC%u"
+#define RAWMIDI_SYSNAME_TEMPLATE        RAWMIDI_SYSNAME_PREFIX_TEMPLATE "D%u"
+// 'C' is required apart from emulation of Open Sound System.
+#define HWDEP_SYSNAME_PREFIX_TEMPLATE   "hwC%u"
+#define HWDEP_SYSNAME_TEMPLATE          HWDEP_SYSNAME_PREFIX_TEMPLATE "D%u"
 #define TIMER_SYSNAME                   "timer"
 #define SEQ_SYSNAME                     "seq"
 
@@ -19,6 +24,9 @@ int allocate_string(char **dst, const char *template, va_list ap);
 
 int lookup_and_allocate_string_by_sysname(char **name, const char *sysname,
                                           const char *(*func)(struct udev_device *));
+
+int generate_sysnum_list_by_sysname_prefix(unsigned int **entries, unsigned long *entry_count,
+                                           const char *prefix);
 
 static inline int lookup_and_allocate_name_by_sysname(char **name,
                                                       const char *(*func)(struct udev_device *),
@@ -119,6 +127,41 @@ static inline int lookup_and_allocate_seq_sysname(char **sysname)
 static inline int lookup_and_allocate_seq_devname(char **devname)
 {
     return lookup_and_allocate_devname_by_sysname(devname, SEQ_SYSNAME);
+}
+
+static inline int generate_sysnum_list(unsigned int **entries, unsigned long *entry_count,
+                                       const char *fmt, ...)
+{
+    char *prefix;
+    va_list ap;
+    int err;
+
+    va_start(ap, fmt);
+    err = allocate_string(&prefix, fmt, ap);
+    va_end(ap);
+
+    if (err >= 0)
+        err = generate_sysnum_list_by_sysname_prefix(entries, entry_count, prefix);
+    free(prefix);
+
+    return err;
+}
+
+static inline int generate_card_sysnum_list(unsigned int **entries, unsigned long *entry_count)
+{
+    return generate_sysnum_list(entries, entry_count, CARD_SYSNAME_PREFIX);
+}
+
+static inline int generate_hwdep_sysnum_list(unsigned int **entries, unsigned long *entry_count,
+                                             unsigned int card_id)
+{
+    return generate_sysnum_list(entries, entry_count, HWDEP_SYSNAME_PREFIX_TEMPLATE, card_id);
+}
+
+static inline int generate_rawmidi_sysnum_list(unsigned int **entries, unsigned long *entry_count,
+                                               unsigned int card_id)
+{
+    return generate_sysnum_list(entries, entry_count, RAWMIDI_SYSNAME_PREFIX_TEMPLATE, card_id);
 }
 
 #endif

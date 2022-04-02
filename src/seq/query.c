@@ -1,16 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
-#include "utils.h"
 
-#include <errno.h>
+#include <utils.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <sys/ioctl.h>
-#include <stdbool.h>
-
-#include <libudev.h>
+#include <unistd.h>
 
 /**
  * SECTION: query

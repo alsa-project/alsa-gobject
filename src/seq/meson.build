@@ -62,7 +62,6 @@ privates = files(
 
 dependencies = [
   gobject_dependency,
-  libudev_dependency,
   utils_dependencies,
   alsatimer_dependency,
 ]
