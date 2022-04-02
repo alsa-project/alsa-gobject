@@ -45,6 +45,7 @@ privates = files(
 dependencies = [
   gobject_dependency,
   libudev_dependency,
+  utils_dependencies,
 ]
 
 pc_desc = 'GObject instrospection library for timer interface in asound.h'
