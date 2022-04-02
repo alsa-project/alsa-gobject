@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+#include <utils.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -52,9 +54,6 @@ static const char *const err_msgs[] = {
 #define generate_syscall_error(exception, errno, fmt, arg) \
         g_set_error(exception, ALSASEQ_USER_CLIENT_ERROR, ALSASEQ_USER_CLIENT_ERROR_FAILED, \
                     fmt" %d(%s)", arg, errno, strerror(errno))
-
-#define generate_file_error(exception, code, fmt, arg) \
-        g_set_error(exception, G_FILE_ERROR, code, fmt, arg)
 
 typedef struct {
     GSource src;

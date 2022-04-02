@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "privates.h"
 
+#include <utils.h>
+
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
@@ -55,9 +57,6 @@ static const char *const err_msgs[] = {
 
 #define generate_local_error(error, code) \
         g_set_error_literal(error, ALSARAWMIDI_STREAM_PAIR_ERROR, code, err_msgs[code])
-
-#define generate_file_error(exception, code, format, arg) \
-        g_set_error(exception, G_FILE_ERROR, code, format, arg)
 
 #define generate_syscall_error(error, errno, format, arg)           \
         g_set_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR,           \

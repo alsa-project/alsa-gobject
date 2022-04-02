@@ -10,9 +10,6 @@
  *                     descriptor
  */
 
-#define generate_file_error(exception, errno, msg) \
-        g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
-
 /**
  * alsactl_get_card_id_list:
  * @entries: (array length=entry_count)(out): The list of numerical ID for sound

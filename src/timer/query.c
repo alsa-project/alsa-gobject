@@ -22,12 +22,6 @@
 
 #define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
 
-#define generate_file_error(exception, errno, msg) \
-        g_set_error_literal(exception, G_FILE_ERROR, g_file_error_from_errno(errno), msg)
-
-#define generate_file_error_fmt(exception, errno, fmt, msg) \
-        g_set_error(exception, G_FILE_ERROR, g_file_error_from_errno(errno), fmt, msg)
-
 /**
  * alsatimer_get_sysname:
  * @sysname: (out): The string for sysname of ALSA Timer.
@@ -81,7 +75,7 @@ static int open_fd(GError **error)
 
     fd = open(devname, O_RDONLY);
     if (fd < 0)
-        generate_file_error_fmt(error, errno, "open(%s)", devname);
+        generate_file_error(error, errno, "open(%s)", devname);
     g_free(devname);
 
     return fd;
@@ -253,7 +247,7 @@ static void timer_get_node_param_value(const char *param_name, char *buf,
 
     fd = open(literal, O_RDONLY);
     if (fd < 0) {
-        generate_file_error_fmt(error, errno, "open(%s)", literal);
+        generate_file_error(error, errno, "open(%s)", literal);
         return;
     }
 
