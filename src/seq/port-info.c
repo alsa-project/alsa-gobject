@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_port_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSASeqPortInfoPrivate {
+typedef struct {
     struct snd_seq_port_info info;
-};
+} ALSASeqPortInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqPortInfo, alsaseq_port_info, G_TYPE_OBJECT)
 
 enum seq_port_info_prop_type {
