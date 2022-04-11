@@ -8,39 +8,11 @@ G_BEGIN_DECLS
 
 #define ALSARAWMIDI_TYPE_STREAM_PAIR    (alsarawmidi_stream_pair_get_type())
 
-#define ALSARAWMIDI_STREAM_PAIR(obj)                            \
-    (G_TYPE_CHECK_INSTANCE_CAST((obj),                          \
-                                ALSARAWMIDI_TYPE_STREAM_PAIR,   \
-                                ALSARawmidiStreamPair))
-#define ALSARAWMIDI_IS_STREAM_PAIR(obj)                         \
-    (G_TYPE_CHECK_INSTANCE_TYPE((obj),                          \
-                                ALSARAWMIDI_TYPE_STREAM_PAIR))
-
-#define ALSARAWMIDI_STREAM_PAIR_CLASS(klass)                    \
-    (G_TYPE_CHECK_CLASS_CAST((klass),                           \
-                             ALSARAWMIDI_TYPE_STREAM_PAIR,      \
-                             ALSARawmidiStreamPairClass))
-#define ALSARAWMIDI_IS_STREAM_PAIR_CLASS(klass)                 \
-    (G_TYPE_CHECK_CLASS_TYPE((klass),                           \
-                             ALSARAWMIDI_TYPE_STREAM_PAIR))
-#define ALSARAWMIDI_STREAM_PAIR_GET_CLASS(obj)                  \
-    (G_TYPE_INSTANCE_GET_CLASS((obj),                           \
-                               ALSARAWMIDI_TYPE_STREAM_PAIR,    \
-                               ALSARawmidiStreamPairClass))
+G_DECLARE_DERIVABLE_TYPE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, ALSARAWMIDI, STREAM_PAIR, GObject);
 
 #define ALSARAWMIDI_STREAM_PAIR_ERROR           alsarawmidi_stream_pair_error_quark()
 
 GQuark alsarawmidi_stream_pair_error_quark();
-
-typedef struct _ALSARawmidiStreamPair           ALSARawmidiStreamPair;
-typedef struct _ALSARawmidiStreamPairClass      ALSARawmidiStreamPairClass;
-typedef struct _ALSARawmidiStreamPairPrivate    ALSARawmidiStreamPairPrivate;
-
-struct _ALSARawmidiStreamPair {
-    GObject parent_instance;
-
-    ALSARawmidiStreamPairPrivate *priv;
-};
 
 struct _ALSARawmidiStreamPairClass {
     GObjectClass parent_class;
@@ -64,8 +36,6 @@ struct _ALSARawmidiStreamPairClass {
      */
     void (*handle_disconnection)(ALSARawmidiStreamPair *self);
 };
-
-GType alsarawmidi_stream_pair_get_type(void) G_GNUC_CONST;
 
 ALSARawmidiStreamPair *alsarawmidi_stream_pair_new();
 
