@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_rawmidi_status' in UAPI of Linux sound subsystem.
  */
-struct _ALSARawmidiSubstreamStatusPrivate {
+typedef struct {
     struct snd_rawmidi_status status;
-};
+} ALSARawmidiSubstreamStatusPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiSubstreamStatus, alsarawmidi_substream_status, G_TYPE_OBJECT)
 
 enum rawmidi_substream_status_prop_type {
