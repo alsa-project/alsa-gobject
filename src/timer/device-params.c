@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_timer_gparams' in UAPI of Linux sound subsystem.
  */
-struct _ALSATimerDeviceParamsPrivate {
+typedef struct {
     struct snd_timer_gparams params;
-};
+} ALSATimerDeviceParamsPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerDeviceParams, alsatimer_device_params, G_TYPE_OBJECT)
 
 enum timer_device_params_prop_type {
