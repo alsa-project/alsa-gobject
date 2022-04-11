@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSATIMER_DEVICE_ID__H__
-#define __ALSA_GOBJECT_ALSATIMER_DEVICE_ID__H__
+#ifndef __ALSA_GOBJECT_ALSATIMER_DEVICE_ID_H__
+#define __ALSA_GOBJECT_ALSATIMER_DEVICE_ID_H__
 
 #include <alsatimer.h>
 

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSACTL_CARD_INFO__H__
-#define __ALSA_GOBJECT_ALSACTL_CARD_INFO__H__
+#ifndef __ALSA_GOBJECT_ALSACTL_CARD_INFO_H__
+#define __ALSA_GOBJECT_ALSACTL_CARD_INFO_H__
 
 #include <alsactl.h>
 

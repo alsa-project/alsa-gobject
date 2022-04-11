@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSAHWDEP_QUERY__H__
-#define __ALSA_GOBJECT_ALSAHWDEP_QUERY__H__
+#ifndef __ALSA_GOBJECT_ALSAHWDEP_QUERY_H__
+#define __ALSA_GOBJECT_ALSAHWDEP_QUERY_H__
 
 #include <alsahwdep.h>
 
