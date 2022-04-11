@@ -26,12 +26,12 @@
  * dispatcher to notify the event. The call of
  * alsaseq_user_client_schedule_event() schedules event with given parameters.
  */
-struct _ALSASeqUserClientPrivate {
+typedef struct {
     int fd;
     const char *devnode;
     int client_id;
     guint16 proto_ver_triplet[3];
-};
+} ALSASeqUserClientPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT)
 
 /**

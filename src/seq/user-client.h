@@ -8,39 +8,11 @@ G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_USER_CLIENT     (alsaseq_user_client_get_type())
 
-#define ALSASEQ_USER_CLIENT(obj)                            \
-    (G_TYPE_CHECK_INSTANCE_CAST((obj),                      \
-                                ALSASEQ_TYPE_USER_CLIENT,   \
-                                ALSASeqUserClient))
-#define ALSASEQ_IS_USER_CLIENT(obj)                         \
-    (G_TYPE_CHECK_INSTANCE_TYPE((obj),                      \
-                                ALSASEQ_TYPE_USER_CLIENT))
-
-#define ALSASEQ_USER_CLIENT_CLASS(klass)                    \
-    (G_TYPE_CHECK_CLASS_CAST((klass),                       \
-                             ALSASEQ_TYPE_USER_CLIENT,      \
-                             ALSASeqUserClientClass))
-#define ALSASEQ_IS_USER_CLIENT_CLASS(klass)                 \
-    (G_TYPE_CHECK_CLASS_TYPE((klass),                       \
-                             ALSASEQ_TYPE_USER_CLIENT))
-#define ALSASEQ_USER_CLIENT_GET_CLASS(obj)                  \
-    (G_TYPE_INSTANCE_GET_CLASS((obj),                       \
-                               ALSASEQ_TYPE_USER_CLIENT,    \
-                               ALSASeqUserClientClass))
+G_DECLARE_DERIVABLE_TYPE(ALSASeqUserClient, alsaseq_user_client, ALSASEQ, USER_CLIENT, GObject);
 
 #define ALSASEQ_USER_CLIENT_ERROR   alsaseq_user_client_error_quark()
 
 GQuark alsaseq_user_client_error_quark();
-
-typedef struct _ALSASeqUserClient           ALSASeqUserClient;
-typedef struct _ALSASeqUserClientClass      ALSASeqUserClientClass;
-typedef struct _ALSASeqUserClientPrivate    ALSASeqUserClientPrivate;
-
-struct _ALSASeqUserClient {
-    GObject parent_instance;
-
-    ALSASeqUserClientPrivate *priv;
-};
 
 struct _ALSASeqUserClientClass {
     GObjectClass parent_class;
@@ -59,8 +31,6 @@ struct _ALSASeqUserClientClass {
     void (*handle_event)(ALSASeqUserClient *self,
                          const ALSASeqEventCntr *ev_cntr);
 };
-
-GType alsaseq_user_client_get_type() G_GNUC_CONST;
 
 ALSASeqUserClient *alsaseq_user_client_new();
 
