@@ -22,12 +22,12 @@
  * After the call of alsactl_card_open() for the numerical ID of sound card,
  * the object maintains file descriptor till object destruction.
  */
-struct _ALSACtlCardPrivate {
+typedef struct {
     int fd;
     char *devnode;
     gint subscribers;
     guint16 proto_ver_triplet[3];
-};
+} ALSACtlCardPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 
 /**
@@ -949,7 +949,7 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
     priv = alsactl_card_get_instance_private(self);
 
     g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(ALSACTL_IS_ELEM_VALUE(elem_value));
+    g_return_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)elem_value));
     g_return_if_fail(error == NULL || *error == NULL);
 
     ctl_elem_value_refer_private((ALSACtlElemValue *)elem_value, &value);
