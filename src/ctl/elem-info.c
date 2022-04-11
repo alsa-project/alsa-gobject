@@ -14,7 +14,7 @@
  *
  * The object wraps 'struct snd_ctl_elem_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSACtlElemInfoPrivate {
+typedef struct {
     struct snd_ctl_elem_info info;
 
     struct {
@@ -23,7 +23,7 @@ struct _ALSACtlElemInfoPrivate {
         gint32 step;
     } int_data;
     gchar **enum_data;
-};
+} ALSACtlElemInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemInfo, alsactl_elem_info, G_TYPE_OBJECT)
 
 enum ctl_elem_info_prop_type {
