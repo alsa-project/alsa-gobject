@@ -12,9 +12,9 @@
  * The object wraps 'struct snd_seq_queue_status' in UAPI of Linux sound
  * subsystem.
  */
-struct _ALSASeqQueueStatusPrivate {
+typedef struct {
     struct snd_seq_queue_status status;
-};
+} ALSASeqQueueStatusPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqQueueStatus, alsaseq_queue_status, G_TYPE_OBJECT)
 
 enum seq_queue_status_prop_type {
