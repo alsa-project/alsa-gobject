@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_timer_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSATimerInstanceInfoPrivate {
+typedef struct {
     struct snd_timer_info info;
-};
+} ALSATimerInstanceInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerInstanceInfo, alsatimer_instance_info, G_TYPE_OBJECT)
 
 enum timer_instance_info_props {
