@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_timer_gstatus' in UAPI of Linux sound subsystem.
  */
-struct _ALSATimerDeviceStatusPrivate {
+typedef struct {
     struct snd_timer_gstatus status;
-};
+} ALSATimerDeviceStatusPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerDeviceStatus, alsatimer_device_status, G_TYPE_OBJECT)
 
 enum timer_device_status_prop_type {
