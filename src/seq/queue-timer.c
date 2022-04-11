@@ -11,9 +11,9 @@
  *
  * The object wraps 'struct snd_seq_queue_timer' in UAPI of Linux sound subsystem.
  */
-struct _ALSASeqQueueTimerPrivate {
+typedef struct {
     struct snd_seq_queue_timer timer;
-};
+} ALSASeqQueueTimerPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqQueueTimer, alsaseq_queue_timer, G_TYPE_OBJECT)
 
 enum seq_queue_timer_prop_type {
