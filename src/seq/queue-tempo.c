@@ -11,9 +11,9 @@
  *
  * The object wraps 'struct snd_seq_queue_tempo' in UAPI of Linux sound subsystem.
  */
-struct _ALSASeqQueueTempoPrivate {
+typedef struct {
     struct snd_seq_queue_tempo tempo;
-};
+} ALSASeqQueueTempoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqQueueTempo, alsaseq_queue_tempo, G_TYPE_OBJECT)
 
 enum seq_queue_tempo_prop_type {
