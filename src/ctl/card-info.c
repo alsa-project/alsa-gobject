@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_ctl_card_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSACtlCardInfoPrivate {
+typedef struct {
     struct snd_ctl_card_info info;
-};
+} ALSACtlCardInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCardInfo, alsactl_card_info, G_TYPE_OBJECT)
 
 enum ctl_card_info_prop_type {
