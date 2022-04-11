@@ -362,7 +362,7 @@ typedef enum /*< flags >*/
 
 /**
  * ALSASeqUserClientError:
- * @ALSASEQ_USER_CLIENT_ERROR_FAILED:	            The system call failed.
+ * @ALSASEQ_USER_CLIENT_ERROR_FAILED:               The system call failed.
  * @ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION:      The operation fails due to access permission of port.
  * @ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION:     The operation fails due to access permission of queue.
  *
