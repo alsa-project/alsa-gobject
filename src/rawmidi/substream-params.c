@@ -16,9 +16,9 @@
  *
  * The object wraps 'struct snd_rawmidi_params' in UAPI of Linux sound subsystem.
  */
-struct _ALSARawmidiSubstreamParamsPrivate {
+typedef struct {
     struct snd_rawmidi_params params;
-};
+} ALSARawmidiSubstreamParamsPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiSubstreamParams, alsarawmidi_substream_params, G_TYPE_OBJECT)
 
 enum rawmidi_substream_params_prop_type {
