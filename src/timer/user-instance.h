@@ -8,39 +8,12 @@ G_BEGIN_DECLS
 
 #define ALSATIMER_TYPE_USER_INSTANCE    (alsatimer_user_instance_get_type())
 
-#define ALSATIMER_USER_INSTANCE(obj)                            \
-    (G_TYPE_CHECK_INSTANCE_CAST((obj),                          \
-                                ALSATIMER_TYPE_USER_INSTANCE,   \
-                                ALSATimerUserInstance))
-#define ALSATIMER_IS_USER_INSTANCE(obj)                         \
-    (G_TYPE_CHECK_INSTANCE_TYPE((obj),                          \
-                                ALSATIMER_TYPE_USER_INSTANCE))
-
-#define ALSATIMER_USER_INSTANCE_CLASS(klass)                    \
-    (G_TYPE_CHECK_CLASS_CAST((klass),                           \
-                             ALSATIMER_TYPE_USER_INSTANCE,      \
-                             ALSATimerUserInstanceClass))
-#define ALSATIMER_IS_USER_INSTANCE_CLASS(klass)                 \
-    (G_TYPE_CHECK_CLASS_TYPE((klass),                           \
-                             ALSATIMER_TYPE_USER_INSTANCE))
-#define ALSATIMER_USER_INSTANCE_GET_CLASS(obj)                  \
-    (G_TYPE_INSTANCE_GET_CLASS((obj),                           \
-                               ALSATIMER_TYPE_USER_INSTANCE,    \
-                               ALSATimerUserInstanceClass))
+G_DECLARE_DERIVABLE_TYPE(ALSATimerUserInstance, alsatimer_user_instance, ALSATIMER, USER_INSTANCE,
+                         GObject);
 
 #define ALSATIMER_USER_INSTANCE_ERROR   alsatimer_user_instance_error_quark()
 
 GQuark alsatimer_user_instance_error_quark();
-
-typedef struct _ALSATimerUserInstance           ALSATimerUserInstance;
-typedef struct _ALSATimerUserInstanceClass      ALSATimerUserInstanceClass;
-typedef struct _ALSATimerUserInstancePrivate    ALSATimerUserInstancePrivate;
-
-struct _ALSATimerUserInstance {
-    GObject parent_instance;
-
-    ALSATimerUserInstancePrivate *priv;
-};
 
 struct _ALSATimerUserInstanceClass {
     GObjectClass parent_class;
@@ -66,8 +39,6 @@ struct _ALSATimerUserInstanceClass {
      */
     void (*handle_disconnection)(ALSATimerUserInstance *self);
 };
-
-GType alsatimer_user_instance_get_type() G_GNUC_CONST;
 
 ALSATimerUserInstance *alsatimer_user_instance_new();
 

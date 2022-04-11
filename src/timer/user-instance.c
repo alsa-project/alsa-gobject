@@ -23,11 +23,11 @@
  * the user instance is attached to any timer device or the other instance as
  * slave.
  */
-struct _ALSATimerUserInstancePrivate {
+typedef struct {
     int fd;
     ALSATimerEventDataType event_data_type;
     guint16 proto_ver_triplet[3];
-};
+} ALSATimerUserInstancePrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYPE_OBJECT)
 
 /**
