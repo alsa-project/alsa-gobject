@@ -15,9 +15,9 @@
  *
  * The object wraps 'struct snd_ctl_elem_value' in UAPI of Linux sound subsystem.
  */
-struct _ALSACtlElemValuePrivate {
+typedef struct {
     struct snd_ctl_elem_value value;
-};
+} ALSACtlElemValuePrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemValue, alsactl_elem_value, G_TYPE_OBJECT)
 
 enum ctl_elem_value_prop_type {
@@ -478,8 +478,8 @@ gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self,
                                   const ALSACtlElemValue *target) {
     const ALSACtlElemValuePrivate *lhs, *rhs;
 
-    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE(self), FALSE);
-    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE(target), FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)self), FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)target), FALSE);
     lhs = alsactl_elem_value_get_instance_private((ALSACtlElemValue *)self);
     rhs = alsactl_elem_value_get_instance_private((ALSACtlElemValue *)target);
 
