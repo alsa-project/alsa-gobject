@@ -13,9 +13,9 @@
  *
  * The object wraps 'struct snd_hwdep_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSAHwdepDeviceInfoPrivate {
+typedef struct {
     struct snd_hwdep_info info;
-};
+} ALSAHwdepDeviceInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSAHwdepDeviceInfo, alsahwdep_device_info, G_TYPE_OBJECT)
 
 enum hwdep_device_info_prop_type {

@@ -8,41 +8,11 @@ G_BEGIN_DECLS
 
 #define ALSAHWDEP_TYPE_DEVICE_INFO      (alsahwdep_device_info_get_type())
 
-#define ALSAHWDEP_DEVICE_INFO(obj)                          \
-    (G_TYPE_CHECK_INSTANCE_CAST((obj),                      \
-                                ALSAHWDEP_TYPE_DEVICE_INFO, \
-                                ALSAHwdepDeviceInfo))
-#define ALSAHWDEP_IS_DEVICE_INFO(obj)                       \
-    (G_TYPE_CHECK_INSTANCE_TYPE((obj),                      \
-                                ALSAHWDEP_TYPE_DEVICE_INFO))
-
-#define ALSAHWDEP_DEVICE_INFO_CLASS(klass)                  \
-    (G_TYPE_CHECK_CLASS_CAST((klass),                       \
-                             ALSAHWDEP_TYPE_DEVICE_INFO,    \
-                             ALSAHwdepDeviceInfoClass))
-#define ALSAHWDEP_IS_DEVICE_INFO_CLASS(klass)               \
-    (G_TYPE_CHECK_CLASS_TYPE((klass),                       \
-                             ALSAHWDEP_TYPE_DEVICE_INFO))
-#define ALSAHWDEP_DEVICE_INFO_GET_CLASS(obj)                \
-    (G_TYPE_INSTANCE_GET_CLASS((obj),                       \
-                               ALSAHWDEP_TYPE_DEVICE_INFO,  \
-                               ALSAHwdepDeviceInfoClass))
-
-typedef struct _ALSAHwdepDeviceInfo         ALSAHwdepDeviceInfo;
-typedef struct _ALSAHwdepDeviceInfoClass    ALSAHwdepDeviceInfoClass;
-typedef struct _ALSAHwdepDeviceInfoPrivate  ALSAHwdepDeviceInfoPrivate;
-
-struct _ALSAHwdepDeviceInfo {
-    GObject parent_instance;
-
-    ALSAHwdepDeviceInfoPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE(ALSAHwdepDeviceInfo, alsahwdep_device_info, ALSAHWDEP, DEVICE_INFO, GObject);
 
 struct _ALSAHwdepDeviceInfoClass {
     GObjectClass parent_class;
 };
-
-GType alsahwdep_device_info_get_type() G_GNUC_CONST;
 
 G_END_DECLS
 
