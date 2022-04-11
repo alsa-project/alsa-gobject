@@ -8,41 +8,11 @@ G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_CLIENT_INFO     (alsaseq_client_info_get_type())
 
-#define ALSASEQ_CLIENT_INFO(obj)                            \
-    (G_TYPE_CHECK_INSTANCE_CAST((obj),                      \
-                                ALSASEQ_TYPE_CLIENT_INFO,   \
-                                ALSASeqClientInfo))
-#define ALSASEQ_IS_CLIENT_INFO(obj)                         \
-    (G_TYPE_CHECK_INSTANCE_TYPE((obj),                      \
-                                ALSASEQ_TYPE_CLIENT_INFO))
-
-#define ALSASEQ_CLIENT_INFO_CLASS(klass)                    \
-    (G_TYPE_CHECK_CLASS_CAST((klass),                       \
-                             ALSASEQ_TYPE_CLIENT_INFO,      \
-                             ALSASeqClientInfoClass))
-#define ALSASEQ_IS_CLIENT_INFO_CLASS(klass)                 \
-    (G_TYPE_CHECK_CLASS_TYPE((klass),                       \
-                             ALSASEQ_TYPE_CLIENT_INFO))
-#define ALSASEQ_CLIENT_INFO_GET_CLASS(obj)                  \
-    (G_TYPE_INSTANCE_GET_CLASS((obj),                       \
-                               ALSASEQ_TYPE_CLIENT_INFO,    \
-                               ALSASeqClientInfoClass))
-
-typedef struct _ALSASeqClientInfo           ALSASeqClientInfo;
-typedef struct _ALSASeqClientInfoClass      ALSASeqClientInfoClass;
-typedef struct _ALSASeqClientInfoPrivate    ALSASeqClientInfoPrivate;
-
-struct _ALSASeqClientInfo {
-    GObject parent_instance;
-
-    ALSASeqClientInfoPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE(ALSASeqClientInfo, alsaseq_client_info, ALSASEQ, CLIENT_INFO, GObject);
 
 struct _ALSASeqClientInfoClass {
     GObjectClass parent_class;
 };
-
-GType alsaseq_client_info_get_type() G_GNUC_CONST;
 
 ALSASeqClientInfo *alsaseq_client_info_new();
 
