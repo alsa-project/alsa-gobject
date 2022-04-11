@@ -34,11 +34,11 @@
  * alsarawmidi_stream_pair_get_substream_status() is available to check the
  * space in the intermediate buffer according to direction argument.
  */
-struct _ALSARawmidiStreamPairPrivate {
+typedef struct {
     int fd;
     char *devnode;
     guint16 proto_ver_triplet[3];
-};
+} ALSARawmidiStreamPairPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYPE_OBJECT)
 
 /**
