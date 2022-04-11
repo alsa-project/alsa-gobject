@@ -15,9 +15,9 @@
  *
  * The object wraps 'struct snd_seq_client_pool' in UAPI of Linux sound subsystem.
  */
-struct _ALSASeqClientPoolPrivate {
+typedef struct {
     struct snd_seq_client_pool pool;
-};
+} ALSASeqClientPoolPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqClientPool, alsaseq_client_pool, G_TYPE_OBJECT)
 
 enum seq_client_pool_prop_type {
