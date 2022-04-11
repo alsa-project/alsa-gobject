@@ -15,9 +15,9 @@
  * The object wraps 'struct snd_seq_port_subscribe' in UAPI of Linux sound
  * subsystem.
  */
-struct _ALSASeqSubscribeDataPrivate {
+typedef struct {
     struct snd_seq_port_subscribe data;
-};
+} ALSASeqSubscribeDataPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqSubscribeData, alsaseq_subscribe_data, G_TYPE_OBJECT)
 
 enum seq_subscribe_data_prop_type {
