@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES__H__
-#define __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES__H__
+#ifndef __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES_H__
+#define __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES_H__
 
 /**
  * ALSARawmidiStreamDirection:

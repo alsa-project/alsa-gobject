@@ -1,5 +1,6 @@
-#ifndef __ALSA_GOBJECT_ALSATIMER_ENUM_TYPES__H__
-#define __ALSA_GOBJECT_ALSATIMER_ENUM_TYPES__H__
+// SPDX-License-Identifier: LGPL-3.0-or-later
+#ifndef __ALSA_GOBJECT_ALSATIMER_ENUM_TYPES_H__
+#define __ALSA_GOBJECT_ALSATIMER_ENUM_TYPES_H__
 
 /**
  * ALSATimerClass:

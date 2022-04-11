@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSACTL_PRIVATES__H__
-#define __ALSA_GOBJECT_ALSACTL_PRIVATES__H__
+#ifndef __ALSA_GOBJECT_ALSACTL_PRIVATES_H__
+#define __ALSA_GOBJECT_ALSACTL_PRIVATES_H__
 
 #include "alsactl.h"
 

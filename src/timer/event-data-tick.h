@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TICK__H__
-#define __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TICK__H__
+#ifndef __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TICK_H__
+#define __ALSA_GOBJECT_ALSATIMER_EVENT_DATA_TICK_H__
 
 #include <alsatimer.h>
 
