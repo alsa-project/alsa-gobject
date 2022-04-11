@@ -16,7 +16,7 @@
 struct _ALSATimerDeviceParamsPrivate {
     struct snd_timer_gparams params;
 };
-G_DEFINE_TYPE(ALSATimerDeviceParams, alsatimer_device_params, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerDeviceParams, alsatimer_device_params, G_TYPE_OBJECT)
 
 enum timer_device_params_prop_type {
     TIMER_DEVICE_PARAMS_PROP_PERIOD_NUM = 1,
