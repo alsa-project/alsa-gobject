@@ -17,9 +17,9 @@
  *
  * The object wraps 'struct snd_seq_client_info' in UAPI of Linux sound subsystem.
  */
-struct _ALSASeqClientInfoPrivate {
+typedef struct {
     struct snd_seq_client_info info;
-};
+} ALSASeqClientInfoPrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqClientInfo, alsaseq_client_info, G_TYPE_OBJECT)
 
 enum seq_client_info_prop_type {
