@@ -2,14 +2,11 @@
 #include "privates.h"
 
 /**
- * SECTION: queue-timer-data-alsa
- * @Title: ALSASeqQueueTimerDataAlsa
- * @Short_description: A boxed object to represent data of queue timer in the
- *                     case of ALSATimer
+ * ALSASeqQueueTimerDataAlsa:
+ * A boxed object to represent data of queue timer in the case of ALSATimer.
  *
- * A #ALSASeqQueueTimerDataAlsa is a boxed object to represent data of queue
- * timer in the case of ALSATimer. The instance of object is one of data
- * properties in queue timer.
+ * A [struct@QueueTimerDataAlsa] is a boxed object to represent data of queue timer in the case of
+ * ALSATimer. The instance of object is one of data properties in queue timer.
  */
 ALSASeqQueueTimerDataAlsa *seq_queue_timer_data_alsa_copy(const ALSASeqQueueTimerDataAlsa *self)
 {
@@ -28,10 +25,10 @@ G_DEFINE_BOXED_TYPE(ALSASeqQueueTimerDataAlsa, alsaseq_queue_timer_data_alsa, se
 
 /**
  * alsaseq_queue_timer_data_alsa_get_device_id:
- * @self: A #ALSASeqQueueTimerDataAlsa.
- * @device_id: (out)(transfer none): A #ALSATimerDeviceId.
+ * @self: A [struct@QueueTimerDataAlsa].
+ * @device_id: (out)(transfer none): A [struct@ALSATimer.DeviceId].
  *
- * Refer to the device ID of timer which drives the queue.
+ * Refer to the device identifier of timer which drives the queue.
  */
 void alsaseq_queue_timer_data_alsa_get_device_id(const ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId **device_id)
@@ -41,10 +38,10 @@ void alsaseq_queue_timer_data_alsa_get_device_id(const ALSASeqQueueTimerDataAlsa
 
 /**
  * alsaseq_queue_timer_data_alsa_set_device_id:
- * @self: A #ALSASeqQueueTimerDataAlsa.
- * @device_id: A #ALSATimerDeviceId.
+ * @self: A [struct@QueueTimerDataAlsa].
+ * @device_id: A [struct@ALSATimer.DeviceId].
  *
- * Copy the device ID of timer which drives the queue.
+ * Copy the device identifier of timer which drives the queue.
  */
 void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self,
                                         const ALSATimerDeviceId *device_id)
@@ -54,7 +51,7 @@ void alsaseq_queue_timer_data_alsa_set_device_id(ALSASeqQueueTimerDataAlsa *self
 
 /**
  * alsaseq_queue_timer_data_alsa_get_resolution:
- * @self: A #ALSASeqQueueTimerDataAlsa.
+ * @self: A [struct@QueueTimerDataAlsa].
  * @resolution: (out): The resolution of timer.
  *
  * Get the resolution of timer which drives the queue.
@@ -67,7 +64,7 @@ void alsaseq_queue_timer_data_alsa_get_resolution(const ALSASeqQueueTimerDataAls
 
 /**
  * alsaseq_queue_timer_data_alsa_set_resolution:
- * @self: A #ALSASeqQueueTimerDataAlsa.
+ * @self: A [struct@QueueTimerDataAlsa].
  * @resolution: The resolution of timer.
  *
  * Set the resolution of timer which drives the queue.
