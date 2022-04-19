@@ -2,14 +2,12 @@
 #include "privates.h"
 
 /**
- * SECTION: queue-tempo
- * @Title: ALSASeqQueueTempo
- * @Short_description: A GObject-derived object to represent tempo of queue
+ * ALSASeqQueueTempo:
+ * A GObject-derived object to represent tempo of queue.
  *
- * A #ALSASeqQueueTempo is a GObject-derived object to represent tempo of queue.
- * The call of alsaseq_get_queue_status() returns the instance of object.
+ * A [class@QueueTempo] is a GObject-derived object to represent tempo of queue.
  *
- * The object wraps 'struct snd_seq_queue_tempo' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_queue_tempo` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_queue_tempo tempo;
@@ -112,9 +110,9 @@ static void alsaseq_queue_tempo_init(ALSASeqQueueTempo *self)
 /**
  * alsaseq_queue_tempo_new:
  *
- * Allocate and return an instance of ALSASeqQueueTempo.
+ * Allocate and return an instance of [class@QueueTempo].
  *
- * Returns: A #ALSASeqQueueTempo.
+ * Returns: An instance of [class@QueueTempo].
  */
 ALSASeqQueueTempo *alsaseq_queue_tempo_new()
 {
@@ -123,9 +121,9 @@ ALSASeqQueueTempo *alsaseq_queue_tempo_new()
 
 /**
  * alsaseq_queue_tempo_get_skew:
- * @self: A #ALSASeqQueueTempo.
- * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements
- *        for numerator and denominator of fraction for skew.
+ * @self: A [class@QueueTempo].
+ * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements for numerator and
+ *        denominator of fraction for skew.
  *
  * Refer to numerator and denominator of fraction for skew.
  */
@@ -146,9 +144,9 @@ void alsaseq_queue_tempo_get_skew(ALSASeqQueueTempo *self, const guint32 *skew[2
 
 /**
  * alsaseq_queue_tempo_set_skew:
- * @self: A #ALSASeqQueueTempo.
- * @skew: (array fixed-size=2)(transfer none): The array with two elements for
- *        numerator and denominator of fraction for skew.
+ * @self: A [class@QueueTempo].
+ * @skew: (array fixed-size=2)(transfer none): The array with two elements for numerator and
+ *        denominator of fraction for skew.
  *
  * Copy numerator and denominator of fraction for skew.
  */
