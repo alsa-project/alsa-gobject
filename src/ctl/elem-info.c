@@ -4,15 +4,13 @@
 #include <errno.h>
 
 /**
- * SECTION: elem-info
- * @Title: ALSACtlElemInfo
- * @Short_description: An GObject-derived object to represent the information
- *                     of any type of element
+ * ALSACtlElemInfo:
+ * An GObject-derived object to represent the information of any type of element.
  *
- * A #ALSACtlElemInfo is an GObject-derived object to represent the information
- * of any type of element.
+ * A [class@ElemInfo] is an GObject-derived object to represent the information of any type of
+ * element.
  *
- * The object wraps 'struct snd_ctl_elem_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_ctl_elem_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_ctl_elem_info info;
@@ -155,12 +153,12 @@ static void alsactl_elem_info_init(ALSACtlElemInfo *self)
 
 /**
  * alsactl_elem_info_new:
- * @elem_type: The type of element, one of #ALSACtlElemType.
- * @error: A #GError.
+ * @elem_type: The type of element, one of [enum@ElemType].
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return the instance of #ALSACtlElemInfo.
+ * Allocate and return the instance of [class@ElemInfo].
  *
- * Returns: A #ALSACtlElemInfo.
+ * Returns: An instance of [class@ElemInfo].
  */
 ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error)
 {
@@ -183,18 +181,16 @@ ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error
 
 /**
  * alsactl_elem_info_get_int_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array fixed-size=3)(out)(transfer none): The array with elements for
- *        the data of integer element; minimum value, maximum value, and value
- *        step in the order.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array fixed-size=3)(out)(transfer none): The array with elements for the data of integer
+ *        element; minimum value, maximum value, and value step in the order.
+ * @error: A [struct@GLib.Error].
  *
- * Refer to the array with elements for the data of integer element; minimum
- * value, maximum value, and value step in the order. The call of function is
- * successful as long as the information is for integer type.
+ * Refer to the array with elements for the data of integer element; minimum value, maximum value,
+ * and value step in the order. The call of function is successful as long as the information is
+ * for integer type.
  */
-void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
-                                    const gint32 *data[3], GError **error)
+void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self, const gint32 *data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -215,18 +211,16 @@ void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self,
 
 /**
  * alsactl_elem_info_set_int_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array fixed-size=3)(transfer none): The array with elements for
- *        the data of integer element; minimum value, maximum value, and value
- *        step in the order.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array fixed-size=3)(transfer none): The array with elements for the data of integer
+ *        element; minimum value, maximum value, and value step in the order.
+ * @error: A [struct@GLib.Error].
  *
- * Get the array with elements for the data of integer element; minimum value,
- * maximum value, and value step in the order. The call of function is
- * successful as long as the information is for integer type.
+ * Get the array with elements for the data of integer element; minimum value, maximum value, and
+ * value step in the order. The call of function is successful as long as the information is for
+ * integer type.
  */
-void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
-                                    const gint32 data[3], GError **error)
+void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self, const gint32 data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -245,18 +239,16 @@ void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self,
 
 /**
  * alsactl_elem_info_get_int64_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array fixed-size=3)(out)(transfer none): The array with elements for
- *        the data of integer64 element; minimum value, maximum value, and value
- *        step in the order.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array fixed-size=3)(out)(transfer none): The array with elements for the data of
+ *        integer64 element; minimum value, maximum value, and value step in the order.
+ * @error: A [struct@GLib.Error].
  *
- * Refer to the array with elements for the data of integer64 element; minimum
- * value, maximum value, and value step in the order. The call of function is
- * successful as long as the information is for integer64 type.
+ * Refer to the array with elements for the data of integer64 element; minimum value, maximum
+ * value, and value step in the order. The call of function is successful as long as the
+ * information is for integer64 type.
  */
-void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
-                                      const gint64 *data[3], GError **error)
+void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self, const gint64 *data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -277,18 +269,16 @@ void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self,
 
 /**
  * alsactl_elem_info_set_int64_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array fixed-size=3)(transfer none): The array with elements for
- *        the data of integer64 element; minimum value, maximum value, and value
- *        step in the order.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array fixed-size=3)(transfer none): The array with elements for the data of integer64
+ *        element; minimum value, maximum value, and value step in the order.
+ * @error: A [struct@GLib.Error].
  *
- * Get the array with elements for the data of integer64 element; minimum value,
- * maximum value, and value step in the order. The call of function is
- * successful as long as the information is for integer64 type.
+ * Get the array with elements for the data of integer64 element; minimum value, maximum value, and
+ * value step in the order. The call of function is successful as long as the information is for
+ * integer64 type.
  */
-void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
-                                      const gint64 data[3], GError **error)
+void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self, const gint64 data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -307,17 +297,15 @@ void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self,
 
 /**
  * alsactl_elem_info_get_enum_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array zero-terminated=1)(out)(transfer none): The array with elements
- *        for the label entries of enumerated element.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array zero-terminated=1)(out)(transfer none): The array with elements for the label
+ *        entries of enumerated element.
+ * @error: A [struct@GLib.Error].
  *
- * Refer to the array with elements for the label entries of enumerated element
- * in internal storage. The call of function is successful as long as the
- * information is for enumerated type.
+ * Refer to the array with elements for the label entries of enumerated element in internal storage.
+ * The call of function is successful as long as the information is for enumerated type.
  */
-void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self,
-                                     const gchar ***data, GError **error)
+void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self, const gchar ***data, GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -334,17 +322,15 @@ void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self,
 
 /**
  * alsactl_elem_info_set_enum_data:
- * @self: A #ALSACtlElemInfo.
- * @data: (array zero-terminated=1): The array with elements for the label
- *        entries of enumerated element.
- * @error: A #GError.
+ * @self: A [class@ElemInfo].
+ * @data: (array zero-terminated=1): The array with elements for the label entries of enumerated
+ *        element.
+ * @error: A [struct@GLib.Error].
  *
- * Copy the array with elements for the label entries of enumerated element
- * into internal storage. The call of function is successful as long as the
- * information is for enumerated type.
+ * Copy the array with elements for the label entries of enumerated element into internal storage.
+ * The call of function is successful as long as the information is for enumerated type.
  */
-void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self,
-                                     const gchar **data, GError **error)
+void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self, const gchar **data, GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
@@ -361,8 +347,7 @@ void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self,
     priv->enum_data = g_strdupv((gchar **)data);
 }
 
-void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
-                                 struct snd_ctl_elem_info **info)
+void ctl_elem_info_refer_private(ALSACtlElemInfo *self, struct snd_ctl_elem_info **info)
 {
     ALSACtlElemInfoPrivate *priv = alsactl_elem_info_get_instance_private(self);
 
