@@ -19,8 +19,8 @@ struct _ALSASeqUserClientClass {
 
     /**
      * ALSASeqUserClientClass::handle_event:
-     * @self: A #ALSASeqUserClient.
-     * @ev_cntr: (transfer none): The instance of ALSASeqEventCntr which
+     * @self: A [class@UserClient].
+     * @ev_cntr: (transfer none): The instance of [class@EventCntr] which
      *             points to the batch of events.
      *
      * When event occurs, this signal is emit with the instance of object which

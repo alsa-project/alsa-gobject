@@ -11,20 +11,18 @@
 #include <errno.h>
 
 /**
- * SECTION: user-client
- * @Title: ALSASeqUserClient
- * @Short_description: A GObject-derived object to represent user client
+ * ALSASeqUserClient:
+ * A GObject-derived object to represent user client.
  *
- * A #ALSASeqUserClient is a GObject-derived object to represent user client.
- * Any port can be added to the client as destination or source for any event.
+ * A [class@UserClient] is a GObject-derived object to represent user client. Any port can be added
+ * to the client as destination or source for any event.
  *
- * When the call of alsaseq_user_client_open(), the object maintain file
- * descriptor till object destruction. The call of
- * alsaseq_user_client_create_source() returns the instance of GSource. Once
- * attached to the GSource, GMainContext/GMainLoop is available as event
- * dispatcher. The #handle-event GObject signal is emitted in the event
- * dispatcher to notify the event. The call of
- * alsaseq_user_client_schedule_event() schedules event with given parameters.
+ * When the call of [method@UserClient.open] the object maintain file descriptor till object
+ * destruction. The call of [method@UserClient.create_source] returns the instance of
+ * [struct@GLib.Source]. Once attached to the [struct@GLib.Source],
+ * [struct@GLib.MainContext] / [struct@GLib.MainLoop] is available as event dispatcher. The
+ * [signal@UserClient::handle-event] signal is emitted in the event dispatcher to notify the
+ * event. The call of [method@UserClient.schedule_event] schedules event with given parameters.
  */
 typedef struct {
     int fd;
@@ -37,9 +35,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT
 /**
  * alsaseq_user_client_error_quark:
  *
- * Return the GQuark for error domain of GError which has code in #ALSASeqUserClientError enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code of [enum@UserClientError]
+ * enumerations.
  *
- * Returns: A #GQuark.
+ * Returns: A [alias@GLib.Quark].
  */
 G_DEFINE_QUARK(alsaseq-user-client-error-quark, alsaseq_user_client_error)
 
@@ -115,7 +114,7 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
 
     seq_user_client_props[SEQ_USER_CLIENT_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
-                           "The numerical ID of the client.",
+                           "The numeric ID of the client.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READABLE);
@@ -126,14 +125,13 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
 
     /**
      * ALSASeqUserClient::handle-event:
-     * @self: A #ALSASeqUserClient.
-     * @ev_cntr: (transfer none): The instance of ALSASeqEventCntr which
-     *             points to the batch of events.
+     * @self: A [class@UserClient].
+     * @ev_cntr: (transfer none): The instance of [class@EventCntr] which points to the batch of
+     *           events.
      *
-     * When event occurs, this signal is emit with the instance of object which
-     * points to a batch of events. The instance should not be passed directly
-     * to alsaseq_user_client_schedule_event() again because its memory
-     * alignment is different for events with blob data.
+     * When event occurs, this signal is emit with the instance of object which points to a batch
+     * of events. The instance should not be passed directly to [method@UserClient.schedule_event]
+     * again because its memory alignment is different for events with blob data.
      */
     seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT] =
         g_signal_new("handle-event",
@@ -155,7 +153,9 @@ static void alsaseq_user_client_init(ALSASeqUserClient *self)
 /**
  * alsaseq_user_client_new:
  *
- * Allocate and return an instance of ALSASeqUserClient class.
+ * Allocate and return an instance of [class@UserClient].
+ *
+ * Returns: An instance of [class@UserClient].
  */
 ALSASeqUserClient *alsaseq_user_client_new()
 {
@@ -164,16 +164,15 @@ ALSASeqUserClient *alsaseq_user_client_new()
 
 /**
  * alsaseq_user_client_open:
- * @self: A #ALSASeqUserClient.
- * @open_flag: The flag of open(2) system call. O_RDWR is forced to fulfil internally.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @open_flag: The flag of `open(2)` system call. `O_RDWR` is forced to fulfil internally.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSASeq.UserClientError`.
  *
  * Open ALSA sequencer character device.
  *
- * The call of function executes open(2) system call, then executes ioctl(2)
- * system call with SNDRV_SEQ_IOCTL_CLIENT_ID command for ALSA sequencer
- * character device.
+ * The call of function executes `open(2)` system call, then executes `ioctl(2)` system call with
+ * `SNDRV_SEQ_IOCTL_CLIENT_ID` command for ALSA sequencer character device.
  */
 void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
                               GError **error)
@@ -227,15 +226,14 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
 
 /**
  * alsaseq_user_client_get_protocol_version:
- * @self: A #ALSASeqUserClient.
- * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
- *                     protocol currently used.
- * @error: A #GError.
+ * @self: A [class@UserClient].
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of protocol currently
+ *                     used.
+ * @error: A [struct@GLib.Error].
  *
- * Get the version of sequencer protocol currently used. The version is
- * represented as the array with three elements; major, minor, and micro version
- * in the order. The length of major version is 16 bit, the length of minor
- * and micro version is 8 bit each.
+ * Get the version of sequencer protocol currently used. The version is represented as the array
+ * with three elements; major, minor, and micro version in the order. The length of major version
+ * is 16 bit, the length of minor and micro version is 8 bit each.
  */
 void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
                                         const guint16 *proto_ver_triplet[3],
@@ -255,14 +253,14 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_set_info:
- * @self: A #ALSASeqUserClient.
- * @client_info: A #ALSASeqClientInfo.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @client_info: A [class@ClientInfo].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get client information.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_CLIENT_INFO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_CLIENT_INFO`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *client_info,
@@ -286,14 +284,14 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_get_info:
- * @self: A #ALSASeqUserClient.
- * @client_info: (inout): A #ALSASeqClientInfo.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @client_info: (inout): A [class@ClientInfo].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Set client information.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_GET_CLIENT_INFO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_info(ALSASeqUserClient *self,
                                   ALSASeqClientInfo *const *client_info,
@@ -317,14 +315,14 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_create_port:
- * @self: A #ALSASeqUserClient.
- * @port_info: (inout): A #ALSASeqPortInfo.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @port_info: (inout): A [class@PortInfo].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Create a port into the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_CREATE_PORT command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_PORT` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_port(ALSASeqUserClient *self,
                                      ALSASeqPortInfo *const *port_info,
@@ -348,15 +346,15 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_create_port_at:
- * @self: A #ALSASeqUserClient.
- * @port_info: (inout): A #ALSASeqPortInfo.
- * @port_id: The numerical ID of port to create.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @port_info: (inout): A [class@PortInfo].
+ * @port_id: The numeric ID of port to create.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
- * Create a port into the client with the given numerical port ID.
+ * Create a port into the client with the given numeric port ID.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_CREATE_PORT command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_PORT` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
                                         ALSASeqPortInfo *const *port_info,
@@ -378,15 +376,15 @@ void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_update_port:
- * @self: A #ALSASeqUserClient.
- * @port_info: A #ALSASeqPortInfo.
- * @port_id: The numerical ID of port.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @port_info: A [class@PortInfo].
+ * @port_id: The numeric ID of port.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Update port information.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_PORT_INFO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_PORT_INFO` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_update_port(ALSASeqUserClient *self,
                                      ALSASeqPortInfo *port_info,
@@ -412,14 +410,14 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_delete_port:
- * @self: A #ALSASeqUserClient.
- * @port_id: The numerical ID of port.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @port_id: The numeric ID of port.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Delete a port from the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_DELETE_PORT command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_DELETE_PORT` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
                                      guint8 port_id, GError **error)
@@ -440,14 +438,14 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_set_pool:
- * @self: A #ALSASeqUserClient.
- * @client_pool: A #ALSASeqClientPool to be configured for the client.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @client_pool: A [class@ClientPool] to be configured for the client.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Configure memory pool in the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_CLIENT_POOL command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_CLIENT_POOL`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
                                   ALSASeqClientPool *client_pool,
@@ -470,14 +468,14 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_get_pool:
- * @self: A #ALSASeqUserClient.
- * @client_pool: (inout): A #ALSASeqClientPool to be configured for the client.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @client_pool: (inout): A [class@ClientPool] to be configured for the client.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get information of memory pool in the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_GET_CLIENT_POOL command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_CLIENT_POOL`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
                                   ALSASeqClientPool *const *client_pool,
@@ -500,16 +498,15 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_schedule_event:
- * @self: A #ALSASeqUserClient.
- * @ev_cntr: An instance of #ALSASeqEventCntr pointing to events.
+ * @self: A [class@UserClient].
+ * @ev_cntr: An instance of [class@EventCntr] pointing to events.
  * @count: The number of events in the ev_cntr to write.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark()
- *         and #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSASeq.UserClientError`.
  *
  * Deliver the event immediately, or schedule it into memory pool of the client.
  *
- * The call of function executes write(2) system call for ALSA sequencer
- * character device.
+ * The call of function executes `write(2)` system call for ALSA sequencer character device.
  */
 void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
                                         ALSASeqEventCntr *ev_cntr,
@@ -602,14 +599,14 @@ static void seq_user_client_finalize_src(GSource *gsrc)
 
 /**
  * alsaseq_user_client_create_source:
- * @self: A #ALSASeqUserClient.
+ * @self: A [class@UserClient].
  * @gsrc: (out): A #GSource to handle events from ALSA seq character device.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate GSource structure to handle events from ALSA seq character device.
- * In each iteration of GMainContext, the read(2) system call is exected to
- * dispatch sequencer event for 'handle-event' signal, according to the result
- * of poll(2) system call.
+ * Allocate [struct@GLib.Source] structure to handle events from ALSA seq character device. In each
+ * iteration of [struct@GLib.MainContext], the `read(2)` system call is exected to dispatch
+ * sequencer event for [signal@UserClient::handle-event] signal, according to the result of
+ * `poll(2)` system call.
  */
 void alsaseq_user_client_create_source(ALSASeqUserClient *self,
                                        GSource **gsrc, GError **error)
@@ -650,16 +647,15 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_operate_subscription:
- * @self: A #ALSASeqUserClient.
- * @subs_data: A #ALSASeqSubscribeData.
+ * @self: A [class@UserClient].
+ * @subs_data: A [class@SubscribeData].
  * @establish: Whether to establish subscription between two ports, or break it.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Operate subscription between two ports pointed by the data.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT and SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT commands
- * for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT` and
+ * `SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT` commands for ALSA sequencer character device.
  */
 void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
                                          ALSASeqSubscribeData *subs_data,
@@ -697,15 +693,14 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_create_queue:
- * @self: A #ALSASeqUserClient.
+ * @self: A [class@UserClient].
  * @queue_info: (inout): The information of queue to add.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
- * Create a new queue owned by the client. The content of information is updated
- * if success.
+ * Create a new queue owned by the client. The content of information is updated if success.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_CREATE_QUEUE command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_QUEUE` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
                                       ALSASeqQueueInfo *const *queue_info,
@@ -728,14 +723,14 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_delete_queue:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for one of ALSASeqSpecificQueueId.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for one of [enum@SpecificQueueId].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Delete the queue owned by the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_DELETE_QUEUE command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_DELETE_QUEUE` command
+ * for ALSA sequencer character device.
  */
 void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
                                       guint8 queue_id, GError **error)
@@ -756,14 +751,14 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_update_queue:
- * @self: A #ALSASeqUserClient.
+ * @self: A [class@UserClient].
  * @queue_info: The information of queue to add.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Update owned queue according to the information.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_QUEUE_INFO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_INFO`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
                                       ALSASeqQueueInfo *queue_info,
@@ -790,16 +785,15 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_get_queue_usage:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @use: (out): Whether the client uses the queue or not.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get usage of the queue by the client.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
                                          guint8 queue_id, gboolean *use,
@@ -825,16 +819,15 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_set_queue_usage:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @use: Whether to use the queue or not.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Start the queue to use or not.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
                                          guint8 queue_id, gboolean use,
@@ -858,16 +851,15 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_set_queue_tempo:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @queue_tempo: The data of tempo for queue.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Set the data of tempo to the queue.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
                                 guint8 queue_id, ALSASeqQueueTempo *queue_tempo,
@@ -894,16 +886,15 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_get_queue_tempo:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @queue_tempo: (out): The data of tempo for queue.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get the data of tempo for the queue.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
                                 guint8 queue_id, ALSASeqQueueTempo **queue_tempo,
@@ -930,16 +921,15 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_set_queue_timer:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @queue_timer: The data of timer for queue.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Set the data of timer for the queue.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
                                          guint8 queue_id,
@@ -977,16 +967,15 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_get_queue_timer:
- * @self: A #ALSASeqUserClient.
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @self: A [class@UserClient].
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @queue_timer: (out): The data of timer for queue.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get the data of timer for the queue.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
                                          guint8 queue_id,
@@ -1026,14 +1015,14 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
 
 /**
  * alsaseq_user_client_remove_events:
- * @self: A #ALSASeqUserClient.
- * @filter: A #ALSASeqRemoveFilter.
- * @error: A #GError. Error is generated with domain of #alsaseq_user_client_error_quark().
+ * @self: A [class@UserClient].
+ * @filter: A [struct@RemoveFilter].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Remove queued events according to the filter.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_SEQ_IOCTL_REMOVE_EVENTS command for ALSA sequencer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_REMOVE_EVENTS`
+ * command for ALSA sequencer character device.
  */
 void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
                                        ALSASeqRemoveFilter *filter,
