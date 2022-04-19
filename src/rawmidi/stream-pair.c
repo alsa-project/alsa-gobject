@@ -12,27 +12,22 @@
 #include <sys/ioctl.h>
 
 /**
- * SECTION: stream-pair
- * @Title: ALSARawmidiStreamPair
- * @Short_description: A GObject-derived object to represent a pair of Rawmidi
- *                     stream.
+ * ALSARawmidiStreamPair:
+ * GObject-derived object to represent a pair of Rawmidi stream.
  *
- * A #ALSARawmidiStreamPair is a GObject-derived object to represent a pair
- * of Rawmidi stream to which substreams are attached. The substream is pointed
- * by the combination of the numerical ID of device, subdevice, and direction.
- * When the call of alsarawmidi_stream_pair_open() with the combination,
- * corresponding substreams are attached to the object. Then the object maintains
- * file descriptor till object destruction. The call of
- * alsarawmidi_stream_pair_create_source() returns the instance of GSource. Once
- * attached to the GSource, GMainContext/GMainLoop is available as event
- * dispatcher. The 'handle-messages' GObject signal is emit in the event
- * dispatcher to notify the intermediate buffer of capture substream has
- * available messages. The call of alsarawmidi_stream_pair_read_from_substream()
- * fills the given buffer with the available messages. The call of
- * alsarawmidi_stream_pair_write_to_substream() write messages in the given
- * buffer into the intermediate buffer of playback substream. The call of
- * alsarawmidi_stream_pair_get_substream_status() is available to check the
- * space in the intermediate buffer according to direction argument.
+ * A [class@StreamPair] is a GObject-derived object to represent a pair of Rawmidi stream to which
+ * substreams are attached. The substream is pointed by the combination of the numeric identifier
+ * of device, subdevice, and direction. When the call of [method@StreamPair.open] with the
+ * combination, corresponding substreams are attached to the object. Then the object maintains file
+ * descriptor till object destruction. The call of [method@StreamPair.create_source] returns the
+ * instance of [struct@GLib.Source]. Once attached to the [struct@GLib.Source],
+ * [struct@GLib.MainContext] / [struct@GLib.MainLoop] is available as event dispatcher. The
+ * [signal@StreamPair::handle-messages] signal is emitted in the event dispatcher to notify the
+ * intermediate buffer of capture substream has available messages. The call of
+ * [method@StreamPair.read_from_substream] fills the given buffer with the available messages. The
+ * call of [method@StreamPair.write_to_substream] write messages in the given buffer into the
+ * intermediate buffer of playback substream. The call of [method@StreamPair.get_substream_status]
+ * is available to check the space in the intermediate buffer according to direction argument.
  */
 typedef struct {
     int fd;
@@ -44,9 +39,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYP
 /**
  * alsarawmidi_stream_pair_error_quark:
  *
- * Return the GQuark for error domain of GError which has code in #ALSARawmidiStreamPairError.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in [enum@StreamPairError]
+ * enumerations.
  *
- * Returns: A #GQuark.
+ * Returns: A [alias@GLib.Quark].
  */
 G_DEFINE_QUARK(alsarawmidi-stream-pair-error-quark, alsarawmidi_stream_pair_error)
 
@@ -131,7 +127,7 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
 
     /**
      * ALSARawmidiStreamPair::handle-messages:
-     * @self: A #ALSARawmidiStreamPair.
+     * @self: A [class@StreamPair].
      *
      * When any input message is available, this event is emit.
      */
@@ -146,12 +142,11 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
 
     /**
      * ALSARawmidiStreamPair::handle-disconnection:
-     * @self: A #ALSARawmidiStreamPair.
+     * @self: A [class@StreamPair].
      *
-     * When the sound card is not available anymore due to unbinding driver or
-     * hot unplugging, this signal is emit. The owner of this object should
-     * call g_object_free() as quickly as possible to release ALSA rawmidi
-     * character device.
+     * When the sound card is not available anymore due to unbinding driver or hot unplugging,
+     * this signal is emit. The owner of this object should call [method@GObject.Object.unref] as
+     * quickly as possible to release ALSA rawmidi character device.
      */
     rawmidi_stream_pair_sigs[RAWMIDI_STREAM_PAIR_SIG_DISCONNECTION] =
         g_signal_new("handle-disconnection",
@@ -174,7 +169,9 @@ static void alsarawmidi_stream_pair_init(ALSARawmidiStreamPair *self)
 /**
  * alsarawmidi_stream_pair_new:
  *
- * Allocate and return an instance of ALSARawmidiStreamPair class.
+ * Allocate and return an instance of [class@StreamPair].
+ *
+ * Returns: An instance of [class@StreamPair].
  */
 ALSARawmidiStreamPair *alsarawmidi_stream_pair_new()
 {
@@ -183,21 +180,20 @@ ALSARawmidiStreamPair *alsarawmidi_stream_pair_new()
 
 /**
  * alsarawmidi_stream_pair_open:
- * @self: A #ALSARawmidiStreamPair.
- * @card_id: The numerical ID of sound card.
- * @device_id: The numerical ID of rawmidi device for the sound card.
- * @subdevice_id: The numerical ID of subdevice for the rawmidi device.
+ * @self: A [class@StreamPair].
+ * @card_id: The numeric identifier of sound card.
+ * @device_id: The numeric identifier of rawmidi device for the sound card.
+ * @subdevice_id: The numeric identifier of subdevice for the rawmidi device.
  * @access_modes: Access flags for stream direction.
- * @open_flag: The flag of open(2) system call. O_RDWR, O_WRONLY and O_RDONLY
- *             are forced to fulfil internally according to the access_modes.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark()
- *         and #alsarawmidi_stream_pair_error_quark().
+ * @open_flag: The flag of `open(2)` system call. `O_RDWR`, `O_WRONLY` and `O_RDONLY` are forced
+ *             to fulfil internally according to the access_modes.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError`
+ *         and `ALSARawmidi.StreamPairError`.
  *
- * Open file descriptor for a pair of streams to attach input/output substreams
- * corresponding to the given subdevice.
+ * Open file descriptor for a pair of streams to attach input/output substreams corresponding to
+ * the given subdevice.
  *
- * The call of function executes open(2) system call for ALSA rawmidi character
- * device.
+ * The call of function executes `open(2)` system call for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                                   guint device_id, guint subdevice_id,
@@ -274,15 +270,14 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
 
 /**
  * alsarawmidi_stream_pair_get_protocol_version:
- * @self: A #ALSARawmidiStreamPair.
- * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
- *                     protocol currently used.
- * @error: A #GError.
+ * @self: A [class@StreamPair].
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of protocol currently
+ *                     used.
+ * @error: A [struct@GLib.Error].
  *
- * Get the version of rawmidi protocol currently used. The version is
- * represented as the array with three elements; major, minor, and micro version
- * in the order. The length of major version is 16 bit, the length of minor
- * and micro version is 8 bit each.
+ * Get the version of rawmidi protocol currently used. The version is represented as the array with
+ * three elements; major, minor, and micro version in the order. The length of major version is
+ * 16 bit, the length of minor and micro version is 8 bit each.
  */
 void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
                                        const guint16 *proto_ver_triplet[3],
@@ -302,15 +297,15 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_get_substream_info:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @direction: The direction of substream attached to the stream pair.
  * @substream_info: (out): The information for requested substream.
- * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSARawmidi.StreamPairError`.
  *
  * Get information of substream attached to the stream pair.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_RAWMIDI_IOCTL_INFO command for ALSA rawmidi character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_INFO` command
+ * for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
@@ -342,16 +337,15 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_set_substream_params:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @direction: The direction of substream attached to the stream pair.
  * @substream_params: The parameters of substream.
- * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSARawmidi.StreamPairError`.
  *
- * Set parameters of substream for given direction, which is attached to the
- * pair of streams.
+ * Set parameters of substream for given direction, which is attached to the pair of streams.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_RAWMIDI_IOCTL_PARAMS command for ALSA rawmidi character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_PARAMS` command
+ * for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
@@ -380,16 +374,15 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_get_substream_status:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @direction: The direction of substream attached to the stream pair.
  * @substream_status: (inout): The status of substream.
- * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSARawmidi.StreamPairError`.
  *
- * Retrieve status of substream for given direction, which is attached to the
- * pair of streams.
+ * Retrieve status of substream for given direction, which is attached to the pair of streams.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_RAWMIDI_IOCTL_STATUS command for ALSA rawmidi character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_STATUS` command
+ * for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
                             ALSARawmidiStreamDirection direction,
@@ -418,19 +411,17 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_read_from_substream:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @buf: (array length=buf_size)(inout): The buffer to copy data.
  * @buf_size: The size of buffer.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsarawmidi_stream_pair_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSARawmidi.StreamPairError`.
  *
- * Copy data from intermediate buffer to given buffer for substream attached to
- * the pair of streams. In a case that the instance is opened without
- * O_NONBLOCK flag and the intermediate buffer has no data, call of the API
- * is blocked till any data is available.
+ * Copy data from intermediate buffer to given buffer for substream attached to the pair of
+ * streams. In a case that the instance is opened without `O_NONBLOCK` flag and the intermediate
+ * buffer has no data, call of the API is blocked till any data is available.
  *
- * The call of function executes read(2) system for ALSA rawmidi character
- * device.
+ * The call of function executes `read(2)` system for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
                                         guint8 *const *buf, gsize *buf_size,
@@ -467,19 +458,17 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_write_to_substream:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @buf: (array length=buf_size): The buffer to copy data.
  * @buf_size: The size of buffer.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsarawmidi_stream_pair_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSARawmidi.StreamPairError`.
  *
- * Copy data from given buffer to intermediate buffer for substream attached to
- * the pair of streams. In a case that the instance is opened without
- * O_NONBLOCK flag and the intermediate buffer is full, call of the API is
- * blocked till the buffer has space for the data.
+ * Copy data from given buffer to intermediate buffer for substream attached to the pair of
+ * streams. In a case that the instance is opened without `O_NONBLOCK` flag and the intermediate
+ * buffer is full, call of the API is blocked till the buffer has space for the data.
  *
- * The call of function executes write(2) system for ALSA rawmidi character
- * device.
+ * The call of function executes `write(2) system for ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                                         const guint8 *buf, gsize buf_size,
@@ -513,17 +502,17 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_drain:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @direction: The direction of substream attached to the stream pair.
- * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSARawmidi.StreamPairError`.
  *
- * Drain queued data in intermediate buffer for substream attached to the pair
- * of streams. In a case that the instance is opened without O_NONBLOCK and the
- * call is for output substream and any data is in the intermediate buffer, the
- * call is blocked till no data is in the intermediate buffer.
+ * Drain queued data in intermediate buffer for substream attached to the pair of streams. In a
+ * case that the instance is opened without `O_NONBLOCK` and the call is for output substream and
+ * any data is in the intermediate buffer, the call is blocked till no data is in the intermediate
+ * buffer.
  *
- * The call of function executes ioctl(2) system with
- * SNDRV_RAWMIDI_IOCTL_DRAIN command for ALSA rawmidi character device.
+ * The call of function executes `ioctl(2)` system with `SNDRV_RAWMIDI_IOCTL_DRAIN` command for
+ * ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
@@ -546,16 +535,15 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
 
 /**
  * alsarawmidi_stream_pair_drop:
- * @self: A #ALSARawmidiStreamPair.
+ * @self: A [class@StreamPair].
  * @direction: The direction of substream attached to the stream pair.
- * @error: A #GError. Error is generated with domain of #alsarawmidi_stream_pair_error_quark.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSARawmidi.StreamPairError`.
  *
- * Drop queued data in intermediate buffer immediately for substream attached
- * to the pair of streams. In implementation of ALSA rawmidi core, the
- * direction should be for output substream.
+ * Drop queued data in intermediate buffer immediately for substream attached to the pair of
+ * streams. In implementation of ALSA rawmidi core, the direction should be for output substream.
  *
- * The call of function executes ioctl(2) system with
- * SNDRV_RAWMIDI_IOCTL_DROP command for ALSA rawmidi character device.
+ * The call of function executes `ioctl(2)` system with `SNDRV_RAWMIDI_IOCTL_DROP` command for
+ * ALSA rawmidi character device.
  */
 void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
@@ -626,15 +614,15 @@ static void rawmidi_stream_pair_finalize_src(GSource *gsrc)
 
 /**
  * alsarawmidi_stream_pair_create_source:
- * @self: A #ALSARawmidiStreamPair.
- * @gsrc: (out): A #GSource to handle events from ALSA rawmidi character device.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsarawmidi_stream_pair_error_quark().
+ * @self: A [class@StreamPair].
+ * @gsrc: (out): A [struct@GLib.Source] to handle events from ALSA rawmidi character device.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSARawmidi.StreamPairError`.
  *
- * Allocate GSource structure to handle events from ALSA rawmidi character
- * device for input substream. In each iteration of GManContext, the read(2)
- * system call is executed to dispatch control event for 'handle-message'
- * signal, according to the result of poll(2) system call.
+ * Allocate [struct@GLib.Source] structure to handle events from ALSA rawmidi character device for
+ * input substream. In each iteration of [struct@GLib.MainContext], the `read(2)` system call is
+ * executed to dispatch control event for [signal@StreamPair::handle-messages] signal, according to
+ * the result of `poll(2)` system call.
  */
 void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
                                            GSource **gsrc, GError **error)
