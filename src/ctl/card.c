@@ -12,15 +12,13 @@
 #include <unistd.h>
 
 /**
- * SECTION: card
- * @Title: ALSACtlCard
- * @Short_description: An GObject-derived object to represent sound card
+ * ALSACtlCard:
+ * An GObject-derived object to represent sound card.
  *
- * A #ALSACtlCard is a GObject-derived object to represent sound card.
- * Applications use the instance of object to manipulate functionalities on
- * sound card.
- * After the call of alsactl_card_open() for the numerical ID of sound card,
- * the object maintains file descriptor till object destruction.
+ * A [class@Card] is a GObject-derived object to represent sound card. Applications use the
+ * instance of object to manipulate functionalities on sound card. After the call of
+ * [method@Card.open] for the numeric ID of sound card, the object maintains file descriptor till
+ * object destruction.
  */
 typedef struct {
     int fd;
@@ -33,9 +31,9 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 /**
  * alsactl_card_error_quark:
  *
- * Return the GQuark for error domain of GError which has code in #ALSACtlCardError enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in [enum@CardError] enumerations.
  *
- * Returns: A #GQuark.
+ * Returns: A [alias@GLib.Quark].
  */
 G_DEFINE_QUARK(alsactl-card-error-quark, alsactl_card_error)
 
@@ -135,11 +133,11 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
 
     /**
      * ALSACtlCard::handle-elem-event:
-     * @self: A #ALSACtlCard.
-     * @elem_id: (transfer none): A #ALSACtlElemId.
-     * @events: A set of #ALSACtlElemEventMask.
+     * @self: A [class@Card].
+     * @elem_id: (transfer none): A [struct@ElemId].
+     * @events: A set of [flags@ElemEventMask].
      *
-     * When event occurs for any element, this signal is emit.
+     * Emitted when event occurs for any element.
      */
     ctl_card_sigs[CTL_CARD_SIG_HANDLE_ELEM_EVENT] =
         g_signal_new("handle-elem-event",
@@ -153,12 +151,11 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
 
     /**
      * ALSACtlCard::handle-disconnection:
-     * @self: A #ALSACtlCard.
+     * @self: A [class@Card].
      *
-     * When the sound card is not available anymore due to unbinding driver or
-     * hot unplugging, this signal is emit. The owner of this object should
-     * call g_object_unref() as quickly as possible to be going to release ALSA
-     * control character device.
+     * Emitted when the sound card is not available anymore due to unbinding driver or hot
+     * unplugging. The owner of this object should call [method@GObject.Object.unref] as quickly
+     * as possible to be going to release ALSA control character device.
      */
     ctl_card_sigs[CTL_CARD_SIG_HANDLE_DISCONNECTION] =
         g_signal_new("handle-disconnection",
@@ -180,7 +177,9 @@ static void alsactl_card_init(ALSACtlCard *self)
 /**
  * alsactl_card_new:
  *
- * Allocate and return an instance of ALSACtlCard class.
+ * Allocate and return an instance of [class@Card].
+ *
+ * Returns: An instance of [class@Card].
  */
 ALSACtlCard *alsactl_card_new()
 {
@@ -189,19 +188,17 @@ ALSACtlCard *alsactl_card_new()
 
 /**
  * alsactl_card_open:
- * @self: A #ALSACtlCard.
- * @card_id: The numerical ID of sound card.
- * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @card_id: The numeric ID of sound card.
+ * @open_flag: The flag of `open(2)` system call. O_RDONLY is forced to fulfil internally.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSACtl.CardError`.
  *
  * Open ALSA control character device for the sound card.
  *
- * The call of function executes open(2) system call for ALSA control character
- * device.
+ * The call of function executes `open(2)` system call for ALSA control character device.
  */
-void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
-                       GError **error)
+void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError **error)
 {
     ALSACtlCardPrivate *priv;
     char *devnode;
@@ -254,18 +251,16 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag,
 
 /**
  * alsactl_card_get_protocol_version:
- * @self: A #ALSACtlCard.
- * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
- *                     protocol currently used.
- * @error: A #GError.
+ * @self: A [class@Card].
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of protocol currently
+ *                     used.
+ * @error: A [struct@GLib.Error].
  *
- * Get the version of control protocol currently used. The version is
- * represented as the array with three elements; major, minor, and micro version
- * in the order. The length of major version is 16 bit, the length of minor
- * and micro version is 8 bit each.
+ * Get the version of control protocol currently used. The version is represented as the array with
+ * three elements; major, minor, and micro version in the order. The length of major version is
+ * 16 bit, the length of minor and micro version is 8 bit each.
  */
-void alsactl_card_get_protocol_version(ALSACtlCard *self,
-                                       const guint16 *proto_ver_triplet[3],
+void alsactl_card_get_protocol_version(ALSACtlCard *self, const guint16 *proto_ver_triplet[3],
                                        GError **error)
 {
     ALSACtlCardPrivate *priv;
@@ -282,17 +277,16 @@ void alsactl_card_get_protocol_version(ALSACtlCard *self,
 
 /**
  * alsactl_card_get_info:
- * @self: A #ALSACtlCard.
- * @card_info: (out): A #ALSACtlCardInfo for the sound card.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @card_info: (out): A [class@Card]Info for the sound card.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Get the information of sound card.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_CARD_INFO command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_CARD_INFO` command
+ * for ALSA control character device.
  */
-void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info,
-                           GError **error)
+void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_card_info *info;
@@ -371,16 +365,15 @@ static inline void deallocate_elem_ids(struct snd_ctl_elem_list *list)
 
 /**
  * alsactl_card_get_elem_id_list:
- * @self: A #ALSACtlCard.
- * @entries: (element-type ALSACtl.ElemId)(out): The list of entries for
- *           ALSACtlElemId.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of entries for [struct@ElemId].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Generate a list of ALSACtlElemId for ALSA control character device
- * associated to the sound card.
+ * Generate a list of [struct@ElemId] for ALSA control character device associated to the sound
+ * card.
  *
- * The call of function executes several ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_LIST command for ALSA control character device.
+ * The call of function executes several `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_LIST`
+ * command for ALSA control character device.
  */
 void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
                                    GError **error)
@@ -410,19 +403,18 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
 
 /**
  * alsactl_card_lock_elem:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
  * @lock: whether to lock or unlock the element.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Lock/Unlock indicated element not to be written by the other processes.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_LOCK and SNDRV_CTL_IOCTL_ELEM_UNLOCK commands for
- * ALSA control character device..
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_LOCK` and
+ * `SNDRV_CTL_IOCTL_ELEM_UNLOCK` commands for ALSA control character device.
  */
-void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            gboolean lock, GError **error)
+void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id, gboolean lock,
+                            GError **error)
 {
     ALSACtlCardPrivate *priv;
     unsigned long req;
@@ -486,17 +478,16 @@ error:
 
 /**
  * alsactl_card_get_elem_info:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
- * @elem_info: (out): A %ALSACtlElemInfo.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
+ * @elem_info: (out): A [class@ElemInfo].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Get information of element corresponding to given id.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_INFO command for ALSA control character device. For
- * enumerated element, it executes the system call for several times to
- * retrieve all of enumeration labels.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_INFO` command
+ * for ALSA control character device. For enumerated element, it executes the system call for
+ * several times to retrieve all of enumeration labels.
  */
 void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                 ALSACtlElemInfo **elem_info, GError **error)
@@ -558,23 +549,19 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_write_elem_tlv:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
- * @container: (array length=container_count): The array with qudalets for
- *             Type-Length-Value data.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
+ * @container: (array length=container_count): The array with qudalets for Type-Length-Value data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Write the given array of bytes as Type/Length/Value data for element pointed
- * by the identifier.
+ * Write the given array of bytes as Type/Length/Value data for element pointed by the identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_TLV_WRITE command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_WRITE` command
+ * for ALSA control character device.
  */
-void alsactl_card_write_elem_tlv(ALSACtlCard *self,
-                            const ALSACtlElemId *elem_id,
-                            const guint32 *container, gsize container_count,
-                            GError **error)
+void alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                 const guint32 *container, gsize container_count, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
@@ -613,22 +600,21 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self,
 
 /**
  * alsactl_card_read_elem_tlv:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
- * @container: (array length=container_count)(inout): The array with qudalets
- *             for Type-Length-Value data.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
+ * @container: (array length=container_count)(inout): The array with qudalets for Type-Length-Value
+ *             data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Read Type/Length/Value data from element pointed by the identifier and fulfil
- * the given array of bytes with the data.
+ * Read Type/Length/Value data from element pointed by the identifier and fulfil the given array of
+ * bytes with the data.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_TLV_READ command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_READ` command for
+ * ALSA control character device.
  */
 void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            guint32 *const *container, gsize *container_count,
-                            GError **error)
+                            guint32 *const *container, gsize *container_count, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
@@ -667,23 +653,20 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_command_elem_tlv:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
- * @container: (array length=container_count)(inout): The array with qudalets
- *             for Type-Length-Value data.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
+ * @container: (array length=container_count)(inout): The array with qudalets for Type-Length-Value
+ *             data.
  * @container_count: The number of quadlets in the container.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Command the given array of bytes as Type/Length/Value data for  element
- * pointed by the identifier.
+ * Command the given array of bytes as Type/Length/Value data for element pointed by the identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_TLV_COMMAND command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_COMMAND` command
+ * for ALSA control character device.
  */
-void alsactl_card_command_elem_tlv(ALSACtlCard *self,
-                            const ALSACtlElemId *elem_id,
-                            guint32 *const *container, gsize *container_count,
-                            GError **error)
+void alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                            guint32 *const *container, gsize *container_count, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
@@ -829,17 +812,17 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_add_elems:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
  * @elem_count: The number of elements going to be added.
- * @elem_info: A %ALSACtlElemInfo.
- * @entries: (element-type ALSACtl.ElemId)(out): The list of added element IDs.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @elem_info: A [class@ElemInfo].
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of added element identifiers.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Add the user-defined elements and return the list of their identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_ADD command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_ADD` command
+ * for ALSA control character device.
  */
 void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             guint elem_count, ALSACtlElemInfo *elem_info,
@@ -861,17 +844,17 @@ void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_replace_elems:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
  * @elem_count: The number of elements going to be added.
- * @elem_info: A %ALSACtlElemInfo.
- * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element IDs.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @elem_info: A [class@ElemInfo].
+ * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element identifiers.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Add user-defined elements to replace the existent ones.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_REPLACE command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_REPLACE` command
+ * for ALSA control character device.
  */
 void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                             guint elem_count, ALSACtlElemInfo *elem_info,
@@ -893,14 +876,14 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_remove_elems:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Remove user-defined elements pointed by the identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_REMOVE command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_REMOVE` command
+ * for ALSA control character device.
  */
 void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                GError **error)
@@ -927,15 +910,15 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
 /**
  * alsactl_card_write_elem_value:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
  * @elem_value: A derivative of #ALSACtlElemValue.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Write given value to element indicated by given ID.
+ * Write given value to element indicated by the given identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_WRITE command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_WRITE` command
+ * for ALSA control character device.
  */
 void alsactl_card_write_elem_value(ALSACtlCard *self,
                                    const ALSACtlElemId *elem_id,
@@ -969,18 +952,17 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
 
 /**
  * alsactl_card_read_elem_value:
- * @self: A #ALSACtlCard.
- * @elem_id: A #ALSACtlElemId.
+ * @self: A [class@Card].
+ * @elem_id: A [struct@ElemId].
  * @elem_value: (inout): A derivative of #ALSACtlElemValue.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Read given value from element indicated by given ID.
+ * Read given value from element indicated by the given identifier.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_CTL_IOCTL_ELEM_READ command for ALSA control character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_READ` command
+ * for ALSA control character device.
  */
-void alsactl_card_read_elem_value(ALSACtlCard *self,
-                                  const ALSACtlElemId *elem_id,
+void alsactl_card_read_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                   ALSACtlElemValue *const *elem_value,
                                   GError **error)
 {
@@ -1097,14 +1079,14 @@ static void ctl_card_finalize_src(GSource *gsrc)
 
 /**
  * alsactl_card_create_source:
- * @self: A #ALSACtlCard.
- * @gsrc: (out): A #GSource to handle events from ALSA control character device.
- * @error: A #GError. Error is generated with domain of #alsactl_card_error_quark().
+ * @self: A [class@Card].
+ * @gsrc: (out): A [struct@GLib.Source] to handle events from ALSA control character device.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
- * Allocate GSource structure to handle events from ALSA control character
- * device. In each iteration of GManContext, the read(2) system call is
- * executed to dispatch control event for 'handle-elem-event' signal,
- * according to the result of poll(2) system call.
+ * Allocate [struct@GLib.Source] structure to handle events from ALSA control character device. In
+ * each iteration of [struct@GLib.MainContext], the `read(2)` system call is executed to dispatch
+ * control event for [signal@Card::handle-elem-event] signal, according to the result of `poll(2)`
+ * system call.
  */
 void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
                                 GError **error)
