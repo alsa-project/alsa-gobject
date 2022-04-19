@@ -47,7 +47,7 @@
  * @ALSAHWDEP_IFACE_TYPE_FW_MOTU:           For MOTU FireWire series. Available in Linux kernel 4.12.0 or later.
  * @ALSAHWDEP_IFACE_TYPE_FW_FIREFACE:       For RME Fireface series. Available in Linux kernel 4.12.0 or later.
  *
- * A set of enumerators for the interface of hwdep device.
+ * A set of enumerations for the interface of hwdep device.
  */
 typedef enum {
     ALSAHWDEP_IFACE_TYPE_OPL2           = SNDRV_HWDEP_IFACE_OPL2,
