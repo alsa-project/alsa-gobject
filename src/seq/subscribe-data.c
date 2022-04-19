@@ -2,18 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: subscribe-data
- * @Title: ALSASeqSubscribeData
- * @Short_description: A GObject-derived object to represent data for
- *                     subscription between ports.
+ * ALSASeqSubscribeData:
+ * A GObject-derived object to represent data for subscription between ports.
  *
- * A #ALSASeqSubscribeData is a GObject-derived object to represent data for
- * subscription between a pair of ports. The call of
- * alsaseq_get_subscription_list() returns the list of data. The call of
- * alsaseq_user_client_operate_subscription() requires the instance of object.
+ * A [class@SubscribeData] is a GObject-derived object to represent data for subscription between
+ * a pair of ports. The call of [func@get_subscription_list] returns the list of data. The call of
+ * [method@UserClient.operate_subscription] requires the instance of object.
  *
- * The object wraps 'struct snd_seq_port_subscribe' in UAPI of Linux sound
- * subsystem.
+ * The object wraps `struct snd_seq_port_subscribe` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_port_subscribe data;
@@ -136,9 +132,9 @@ static void alsaseq_subscribe_data_init(ALSASeqSubscribeData *self)
 /**
  * alsaseq_subscribe_data_new:
  *
- * Allocates and returns the instance of ALSASeqSubscribeData class.
+ * Allocates and returns the instance of [class@SubscribeData].
  *
- * Returns: A #ALSASeqSubscribeData.
+ * Returns: A [class@SubscribeData].
  */
 ALSASeqSubscribeData *alsaseq_subscribe_data_new()
 {
