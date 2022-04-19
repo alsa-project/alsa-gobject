@@ -13,19 +13,12 @@
 
 #include <time.h>
 
-/**
- * SECTION: query
- * @Title: Global functions in ALSATimer
- * @Short_description: Global functions available without holding any
- *                     file descriptor
- */
-
 #define SYSFS_SND_TIMER_NODE    "/sys/module/snd_timer/"
 
 /**
  * alsatimer_get_sysname:
  * @sysname: (out): The string for sysname of ALSA Timer.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate sysname for ALSA Timer and return it when it exists.
  *
@@ -46,7 +39,7 @@ void alsatimer_get_sysname(char **sysname, GError **error)
 /**
  * alsatimer_get_devnode:
  * @devnode: (out): The string for devnode of ALSA Timer.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate string of devnode for ALSA Timer and return it if exists.
  *
@@ -83,14 +76,13 @@ static int open_fd(GError **error)
 
 /**
  * alsatimer_get_device_id_list:
- * @entries: (element-type ALSATimer.DeviceId)(out): The array with
- *           entries of ALSATimerId.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @entries: (element-type ALSATimer.DeviceId)(out): The array with entries of [struct@DeviceId].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the list of existent timer device.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_TIMER_IOCTL_NEXT_DEVICE command for ALSA timer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_TIMER_IOCTL_NEXT_DEVICE` command for ALSA timer character device.
  */
 void alsatimer_get_device_id_list(GList **entries, GError **error)
 {
@@ -125,14 +117,14 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
 
 /**
  * alsatimer_get_device_info:
- * @device_id: A #ALSATimerDeviceId to identify the timer device.
+ * @device_id: A [struct@DeviceId] to identify the timer device.
  * @device_info: (out): The information of timer device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the information of timer device.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_TIMER_IOCTL_GINFO command for ALSA timer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_TIMER_IOCTL_GINFO` command for ALSA timer character device.
  */
 void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
                                ALSATimerDeviceInfo **device_info,
@@ -163,14 +155,14 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
 
 /**
  * alsatimer_get_device_status:
- * @device_id: A #ALSATimerDeviceId to identify the timer device.
+ * @device_id: A [struct@DeviceId] to identify the timer device.
  * @device_status: (inout): The status of timer device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the status of timer device.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_TIMER_IOCTL_GSTATUS command for ALSA timer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_TIMER_IOCTL_GSTATUS` command for ALSA timer character device.
  */
 void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
                                  ALSATimerDeviceStatus *const *device_status,
@@ -200,14 +192,14 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
 
 /**
  * alsatimer_set_device_params:
- * @device_id: A #ALSATimerDeviceId to identify the timer device.
+ * @device_id: A [struct@DeviceId] to identify the timer device.
  * @device_params: The parameters of timer device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Set the given parameters to the timer indicated by the identifier.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_TIMER_IOCTL_GPARAMS command for ALSA timer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_TIMER_IOCTL_GPARAMS` command for ALSA timer character device.
  */
 void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                  const ALSATimerDeviceParams *device_params,
@@ -268,19 +260,18 @@ end:
 
 /**
  * alsatimer_get_tstamp_source:
- * @clock_id: (out): The clock source for timestamp. The value of CLOCK_XXX in
- *                   UAPI of Linux kernel.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @clock_id: (out): The clock source for timestamp. The value of `CLOCK_XXX` in UAPI of Linux
+ *            kernel.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the clock source for timestamp when #ALSATimerUserInstance is configured
- * to receive event with timestamp. The source is selected according to
- * parameter of 'snd-timer' kernel module, and the call of function is just to
- * refer to it.
+ * Get the clock source for timestamp when [class@UserInstance] is configured to receive event
+ * with timestamp. The source is selected according to parameter of `snd-timer` kernel module,
+ * and the call of function is just to refer to it.
  *
- * 0 means CLOCK_REALTIME is used. 1 means CLOCK_MONOTONIC is used.
+ * `0` means `CLOCK_REALTIME` is used. `1` means `CLOCK_MONOTONIC` is used.
  *
- * The call of function executes open(2), read(2), close(2) system calls for
- * the sysfs node corresponding to 'snd-timer' kernel module.
+ * The call of function executes `open(2)`, `read(2)`, `close(2)` system calls for the sysfs node
+ * corresponding to `snd-timer` kernel module.
  */
 void alsatimer_get_tstamp_source(int *clock_id, GError **error)
 {
