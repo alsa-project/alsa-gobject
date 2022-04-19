@@ -2,16 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: elem-id
- * @Title: ALSACtlElemId
- * @Short_description: A boxed object to represent the identifier of element.
+ * ALSACtlElemId:
+ * A boxed object to represent the identifier of element.
  *
- * A #ALSACtlElemId is a boxed object to represent the identifier of element.
- * It points to a element by two ways; by the numerical ID, or by the
- * combination of the type of interface, the numerical ID of device, the
- * numerical ID of subdevice, the name, and the index.
+ * A [struct@ElemId] is a boxed object to represent the identifier of element. It points to a
+ * element by two ways; by the numeric identifier, or by the combination of the type of interface,
+ * the numeric identifier of device, the numeric identifier of subdevice, the name, and the index.
  *
- * The object wraps 'struct snd_ctl_elem_id' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_ctl_elem_id` in UAPI of Linux sound subsystem.
  */
 ALSACtlElemId *ctl_elem_id_copy(const ALSACtlElemId *self)
 {
@@ -30,11 +28,11 @@ G_DEFINE_BOXED_TYPE(ALSACtlElemId, alsactl_elem_id, ctl_elem_id_copy, g_free);
 
 /**
  * alsactl_elem_id_new_by_numid:
- * @numid: The numerical ID of the element.
+ * @numid: The numeric identifier of the element.
  *
- * Allocates and return an instance of ALSACtlElemId by the numerical ID.
+ * Allocates and return an instance of [struct@ElemId] by the numeric identifier.
  *
- * Returns: A #ALSACtlElemId.
+ * Returns: A [struct@ElemId].
  */
 ALSACtlElemId *alsactl_elem_id_new_by_numid(guint numid)
 {
@@ -49,15 +47,15 @@ ALSACtlElemId *alsactl_elem_id_new_by_numid(guint numid)
 /**
  * alsactl_elem_id_new_by_name:
  * @iface:          The interface of element, one of ALSACtlElemIfaceType.
- * @device_id:      The numerical ID of device to which the element belongs.
- * @subdevice_id:   The numerical ID of subdevice to which the element belongs.
- * @name:           The name of element, up to 44 byte
- *                  (=SNDRV_CTL_ELEM_ID_NAME_MAXLEN) including terminator.
+ * @device_id:      The numeric identifier of device to which the element belongs.
+ * @subdevice_id:   The numeric identifier of subdevice to which the element belongs.
+ * @name:           The name of element, up to 44 byte (=`SNDRV_CTL_ELEM_ID_NAME_MAXLEN`) including
+ *                  terminator.
  * @index:          The index of element in a set of elements with the same name.
  *
- * Allocates and return an instance of ALSACtlElemId by the name.
+ * Allocates and return an instance of [struct@ElemId] by the name.
  *
- * Returns: A #ALSACtlElemId.
+ * Returns: A [struct@ElemId].
  */
 ALSACtlElemId *alsactl_elem_id_new_by_name(ALSACtlElemIfaceType iface,
                                            guint device_id, guint subdevice_id,
@@ -80,10 +78,10 @@ ALSACtlElemId *alsactl_elem_id_new_by_name(ALSACtlElemIfaceType iface,
 
 /**
  * alsactl_elem_id_get_numid:
- * @self: A #ALSACtlElemId.
- * @numid: (out): The numerical ID of element.
+ * @self: A [struct@ElemId].
+ * @numid: (out): The numeric identifier of element.
  *
- * Get the numerical ID of element.
+ * Get the numeric identifier of element.
  */
 void alsactl_elem_id_get_numid(const ALSACtlElemId *self, guint *numid)
 {
@@ -92,7 +90,7 @@ void alsactl_elem_id_get_numid(const ALSACtlElemId *self, guint *numid)
 
 /**
  * alsactl_elem_id_get_iface:
- * @self: A #ALSACtlElemId.
+ * @self: A [struct@ElemId].
  * @iface: (out): The interface of element.
  *
  * Get the interface of element.
@@ -105,10 +103,10 @@ void alsactl_elem_id_get_iface(const ALSACtlElemId *self,
 
 /**
  * alsactl_elem_id_get_device_id:
- * @self: A #ALSACtlElemId.
- * @device_id: (out): The numerical ID of device to which the element belongs.
+ * @self: A [struct@ElemId].
+ * @device_id: (out): The numeric identifier of device to which the element belongs.
  *
- * Get the numerical ID of device to which the element belongs.
+ * Get the numeric identifier of device to which the element belongs.
  */
 void alsactl_elem_id_get_device_id(const ALSACtlElemId *self, guint *device_id)
 {
@@ -117,10 +115,10 @@ void alsactl_elem_id_get_device_id(const ALSACtlElemId *self, guint *device_id)
 
 /**
  * alsactl_elem_id_get_subdevice_id:
- * @self: A #ALSACtlElemId.
- * @subdevice_id: (out): The numerical ID of subdevice to which the element belongs.
+ * @self: A [struct@ElemId].
+ * @subdevice_id: (out): The numeric identifier of subdevice to which the element belongs.
  *
- * Get the numerical ID of element.
+ * Get the numeric identifier of element.
  */
 void alsactl_elem_id_get_subdevice_id(const ALSACtlElemId *self,
                                       guint *subdevice_id)
@@ -130,7 +128,7 @@ void alsactl_elem_id_get_subdevice_id(const ALSACtlElemId *self,
 
 /**
  * alsactl_elem_id_get_name:
- * @self: A #ALSACtlElemId.
+ * @self: A [struct@ElemId].
  * @name: (transfer none)(out): The name of element.
  *
  * Get the name of element.
@@ -142,7 +140,7 @@ void alsactl_elem_id_get_name(const ALSACtlElemId *self, const gchar **name)
 
 /**
  * alsactl_elem_id_get_index:
- * @self: A #ALSACtlElemId.
+ * @self: A [struct@ElemId].
  * @index: (out): The index of element.
  *
  * Get the index of element.
@@ -154,8 +152,8 @@ void alsactl_elem_id_get_index(const ALSACtlElemId *self, guint *index)
 
 /**
  * alsactl_elem_id_equal:
- * @self: A #ALSACtlElemId.
- * @target: A #ALSACtlElemId to compare.
+ * @self: A [struct@ElemId].
+ * @target: A [struct@ElemId] to compare.
  *
  * Returns: whether the given object indicates the same element.
  */
