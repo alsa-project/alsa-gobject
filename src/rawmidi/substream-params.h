@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE(ALSARawmidiSubstreamParams, alsarawmidi_substream_params, ALSARAWMIDI,
                          SUBSTREAM_PARAMS, GObject);
+
 struct _ALSARawmidiSubstreamParamsClass {
     GObjectClass parent_class;
 };
