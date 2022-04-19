@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: addr
- * @Title: ALSASeqAddr
- * @Short_description: A boxed object to represent address in ALSA Sequencer.
+ * ALSASeqAddr:
+ * A boxed object to represent address in ALSA Sequencer.
  *
- * A #ALSASeqAddr is a boxed object to represent address in ALSA Sequencer. The
- * address consists of two parts; the numerical ID of client and port.
+ * A [struct@Addr] is a boxed object to represent address in ALSA Sequencer. The address consists
+ * of two parts; the numeric ID of client and port.
  *
- * The object wraps 'struct snd_seq_addr' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_addr` in UAPI of Linux sound subsystem.
  */
 ALSASeqAddr *seq_addr_copy(const ALSASeqAddr *self)
 {
@@ -28,12 +27,12 @@ G_DEFINE_BOXED_TYPE(ALSASeqAddr, alsaseq_addr, seq_addr_copy, g_free)
 
 /**
  * alsaseq_addr_new:
- * @client_id: The numerical ID of client to address.
- * @port_id: The numerical ID of port to address.
+ * @client_id: The numeric ID of client to address.
+ * @port_id: The numeric ID of port to address.
  *
- * Allocate and return an instance of ALSASeqAddr.
+ * Allocate and return an instance of [struct@Addr].
  *
- * Returns: A #ALSASeqAddr.
+ * Returns: A [struct@Addr].
  */
 ALSASeqAddr *alsaseq_addr_new(guint8 client_id, guint8 port_id)
 {
@@ -47,10 +46,10 @@ ALSASeqAddr *alsaseq_addr_new(guint8 client_id, guint8 port_id)
 
 /**
  * alsaseq_addr_get_client_id:
- * @self: A #ALSASeqAddr.
- * @client_id: (out): The numerical ID of client to address.
+ * @self: A [struct@Addr].
+ * @client_id: (out): The numeric ID of client to address.
  *
- * Get the numerical ID of client to address.
+ * Get the numeric ID of client to address.
  */
 void alsaseq_addr_get_client_id(const ALSASeqAddr *self, guint8 *client_id)
 {
@@ -59,10 +58,10 @@ void alsaseq_addr_get_client_id(const ALSASeqAddr *self, guint8 *client_id)
 
 /**
  * alsaseq_addr_get_port_id:
- * @self: A #ALSASeqAddr.
- * @port_id: (out): The numerical ID of port to address.
+ * @self: A [struct@Addr].
+ * @port_id: (out): The numeric ID of port to address.
  *
- * Get the numerical ID of port to address.
+ * Get the numeric ID of port to address.
  */
 void alsaseq_addr_get_port_id(const ALSASeqAddr *self, guint8 *port_id)
 {
@@ -71,8 +70,8 @@ void alsaseq_addr_get_port_id(const ALSASeqAddr *self, guint8 *port_id)
 
 /**
  * alsaseq_addr_equal:
- * @self: A #ALSASeqAddr.
- * @target: A #ALSASeqAddr to compare.
+ * @self: A [struct@Addr].
+ * @target: A [struct@Addr] to compare.
  *
  * Returns: whether the given object indicates the same element.
  */
