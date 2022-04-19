@@ -2,15 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: queue-status
- * @Title: ALSASeqQueueStatus
- * @Short_description: A GObject-derived object to represent status of queue
+ * ALSASeqQueueStatus:
+ * A GObject-derived object to represent status of queue.
  *
- * A #ALSASeqQueueStatus is a GObject-derived object to represent status of
- * queue. The call of alsaseq_get_queue_status() returns the instance of object.
+ * A [class@QueueStatus] is a GObject-derived object to represent status of queue. The call of
+ * [func@get_queue_status] returns the instance of object.
  *
- * The object wraps 'struct snd_seq_queue_status' in UAPI of Linux sound
- * subsystem.
+ * The object wraps `struct snd_seq_queue_status` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_queue_status status;
@@ -88,9 +86,9 @@ static void alsaseq_queue_status_init(ALSASeqQueueStatus *self)
 /**
  * alsaseq_queue_status_new:
  *
- * Allocate and returns an instance of #ALSASeqQueueStatus.
+ * Allocate and returns an instance of [class@QueueStatus].
  *
- * Returns: A #ALSASeqQueueStatus.
+ * Returns: An instance of [class@QueueStatus].
  */
 ALSASeqQueueStatus *alsaseq_queue_status_new()
 {
@@ -99,8 +97,8 @@ ALSASeqQueueStatus *alsaseq_queue_status_new()
 
 /**
  * alsaseq_queue_status_get_tick_time:
- * @self: A #ALSASeqQueueStatus.
- * @tick_time: (out): The number of MIDI ticks.
+ * @self: A [class@QueueStatus].
+ * @tick_time: (out): The value of MIDI ticks.
  *
  * Get time as MIDI ticks.
  */
@@ -119,9 +117,9 @@ void alsaseq_queue_status_get_tick_time(ALSASeqQueueStatus *self,
 
 /**
  * alsaseq_queue_status_get_real_time:
- * @self: A #ALSASeqQueueStatus.
- * @real_time: (array fixed-size=2)(out)(transfer none): The array with two
- *             elements for sec part and nsec part of real time.
+ * @self: A [class@QueueStatus].
+ * @real_time: (array fixed-size=2)(out)(transfer none): The array with two elements for sec part
+ *             and nsec part of real time.
  *
  * Get time as wall-clock time.
  */
