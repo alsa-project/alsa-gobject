@@ -7,7 +7,7 @@
  * @ALSARAWMIDI_STREAM_DIRECTION_OUTPUT:        Output direction of stream.
  * @ALSARAWMIDI_STREAM_DIRECTION_INPUT:         Input direction of stream.
  *
- * A set of enumerators for the direction of stream.
+ * A set of enumerations for the direction of stream.
  */
 typedef enum {
     ALSARAWMIDI_STREAM_DIRECTION_OUTPUT = SNDRV_RAWMIDI_STREAM_OUTPUT,
