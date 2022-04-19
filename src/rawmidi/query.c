@@ -6,21 +6,13 @@
 #include <sys/ioctl.h>
 
 /**
- * SECTION: query
- * @Title: Global functions in ALSARawmidi
- * @Short_description: Global functions available without holding any file
- *                     descriptor
- */
-
-/**
  * alsarawmidi_get_device_id_list:
- * @card_id: The numerical ID of sound card.
- * @entries: (array length=entry_count)(out): The list of numerical ID for
- *           rawmidi device.
+ * @card_id: The numeric identifier of sound card.
+ * @entries: (array length=entry_count)(out): The list of numeric identifier for rawmidi device.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the list of numerical ID for available rawmidi devices of sound card.
+ * Get the list of numeric identifier for available rawmidi devices of sound card.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
  */
@@ -40,10 +32,10 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
 
 /**
  * alsarawmidi_get_rawmidi_sysname:
- * @card_id: The numeridcal ID of sound card.
- * @device_id: The numerical ID of rawmidi device for the sound card.
+ * @card_id: The numeridcal identifier of sound card.
+ * @device_id: The numeric identifier of rawmidi device for the sound card.
  * @sysname: (out): The string for sysname of rawmidi device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate sysname for rawmidi device and return it when it exists.
  *
@@ -64,10 +56,10 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
 
 /**
  * alsarawmidi_get_rawmidi_devnode:
- * @card_id: The numeridcal ID of sound card.
- * @device_id: The numerical ID of rawmidi device for the sound card.
+ * @card_id: The numeridcal identifier of sound card.
+ * @device_id: The numeric identifier of rawmidi device for the sound card.
  * @devnode: (out): The string for devnode of rawmidi device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate devnode string for rawmidi device and return it when exists.
  *
@@ -88,19 +80,18 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
 
 /**
  * alsarawmidi_get_subdevice_id_list:
- * @card_id: The numberical value for sound card to query.
- * @device_id: The numerical value of rawmidi device to query.
- * @direction: The direction of stream to query, one of
- *             ALSARawmidiStreamDirection.
- * @entries: (array length=entry_count)(out): The list of card.
+ * @card_id: The numeric value for sound card to query.
+ * @device_id: The numeric value of rawmidi device to query.
+ * @direction: The direction of stream to query, one of [enum@StreamDirection].
+ * @entries: (array length=entry_count)(out): The list of numeric identifier of subdevice.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the list of numerical IDs for subdevices belongs to the numerical ID of
- * card, device, and the direction.
+ * Get the list of numeric identifier for subdevices belongs to the numerical identifier of card,
+ * device, and the direction.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_CTL_IOCTL_RAWMIDI_INFO command for ALSA control character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_CTL_IOCTL_RAWMIDI_INFO` command for ALSA control character device.
  */
 void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
                                        ALSARawmidiStreamDirection direction,
@@ -135,18 +126,18 @@ void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
 
 /**
  * alsarawmidi_get_substream_info:
- * @card_id: The numberical value for sound card to query.
- * @device_id: The numerical value of rawmidi device to query.
- * @direction: The direction of stream, one of ALSARawmidiStreamDirection.
- * @subdevice_id: The numerical value of subdevice in rawmidi device.
+ * @card_id: The numeric value for sound card to query.
+ * @device_id: The numeric value of rawmidi device to query.
+ * @direction: The direction of stream, one of [enum@StreamDirection].
+ * @subdevice_id: The numeric value of subdevice in rawmidi device.
  * @substream_info: (out): The information of substream for the subdevice.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the information of substream pointed by the numerical ID of card, device,
- * subdevice, and the direction.
+ * Get the information of substream pointed by the numeric identifier of card, device, subdevice,
+ * and the direction.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_CTL_IOCTL_RAWMIDI_INFO command for ALSA control character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
+ * `SNDRV_CTL_IOCTL_RAWMIDI_INFO` command for ALSA control character device.
  */
 void alsarawmidi_get_substream_info(guint card_id, guint device_id,
                                     ALSARawmidiStreamDirection direction,
