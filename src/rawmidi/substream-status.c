@@ -2,16 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: substream-status
- * @Title: ALSARawmidiSubstreamStatus
- * @Short_description: A GObject-derived object to represent status of substream
+ * ALSARawmidiSubstreamStatus:
+ * A GObject-derived object to represent status of substream.
  *
- * A #ALSARawmidiSubstreamStatus is a GObject-derived object to represent status
- * of substream attached to the pair of stream. The call of
- * alsarawmidi_stream_pair_get_substream_status() returns the instance of
- * object.
+ * A [class@SubstreamStatus] is a GObject-derived object to represent status of substream attached
+ * to the pair of stream. The call of [method@StreamPair.get_substream_status] returns the instance
+ * of object.
  *
- * The object wraps 'struct snd_rawmidi_status' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_rawmidi_status` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_rawmidi_status status;
@@ -78,7 +76,9 @@ static void alsarawmidi_substream_status_init(ALSARawmidiSubstreamStatus *self)
 /**
  * alsarawmidi_substream_status_new:
  *
- * Allocate and return an instance of ALSARawmidiSubstreamStatus class.
+ * Allocate and return an instance of [class@SubstreamStatus].
+ *
+ * Returns: An instance of [class@SubstreamStatus].
  */
 ALSARawmidiSubstreamStatus *alsarawmidi_substream_status_new()
 {
