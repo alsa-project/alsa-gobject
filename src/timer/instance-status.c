@@ -2,17 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: instance-status
- * @Title: ALSATimerInstanceStatus
- * @Short_description: A GObject-derived object to represent status of user
- *                     instance
+ * ALSATimerInstanceStatus:
+ * A GObject-derived object to represent status of user instance.
  *
- * A #ALSATimerInstanceStatus is a GObject-derived object to represent status
- * of user instance attached to any timer device or the other instance as slave.
- * The call of alsatimer_user_instance_get_status() returns the instance of
- * object.
+ * A [class@InstanceStatus] is a GObject-derived object to represent status of user instance
+ * attached to any timer device or the other instance as slave. The call of
+ * [method@UserInstance.get_status] returns the instance of object.
  *
- * The object wraps 'struct snd_timer_status' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_timer_status` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_timer_status status;
@@ -101,10 +98,9 @@ static void alsatimer_instance_status_init(ALSATimerInstanceStatus *self)
 
 /**
  * alsatimer_instance_status_get_tstamp:
- * @self: A #ALSATimerInstanceStatus.
- * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two
- *          elements for the seconds and nanoseconds parts of timestamp
- *          when the instance queues the latest event.
+ * @self: A [class@InstanceStatus].
+ * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two elements for the seconds
+ *          and nanoseconds parts of timestamp when the instance queues the latest event.
  *
  * Get timestamp for the latest event.
  */
@@ -127,9 +123,9 @@ void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
 /**
  * alsatimer_instance_status_new:
  *
- * Allocate and return an instance of #ALSATimerInstanceStatus.
+ * Allocate and return an instance of [class@InstanceStatus].
  *
- * Returns: A #ALSATimerInstanceStatus.
+ * Returns: A [class@InstanceStatus].
  */
 ALSATimerInstanceStatus *alsatimer_instance_status_new()
 {
