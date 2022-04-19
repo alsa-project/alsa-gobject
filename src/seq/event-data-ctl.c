@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: event-data-ctl
- * @Title: ALSASeqEventDataCtl
- * @Short_description: A boxed object to represent data of control event
+ * ALSASeqEventDataCtl:
+ * A boxed object to represent data of control event.
  *
- * A #ALSASeqEventDataCtl is a boxed object to represent data of control
- * event. The instance of object is one of data properties in event.
+ * A [struct@EventDataCtl] is a boxed object to represent data of control event. The instance of
+ * object is one of data properties in event.
  *
- * The object wraps 'struct snd_seq_ev_ctrl' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_ev_ctrl` in UAPI of Linux sound subsystem.
  */
 ALSASeqEventDataCtl *seq_event_data_ctl_copy(const ALSASeqEventDataCtl *self)
 {
@@ -28,7 +27,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataCtl, alsaseq_event_data_ctl, seq_event_data_
 
 /**
  * alsaseq_event_data_ctl_get_channel:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @channel: (out): The value of channel for the control event.
  *
  * Get the value of channel for the control event.
@@ -41,7 +40,7 @@ void alsaseq_event_data_ctl_get_channel(const ALSASeqEventDataCtl *self,
 
 /**
  * alsaseq_event_data_ctl_set_channel:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @channel: The channel for the control event.
  *
  * Set the channel for the control event.
@@ -54,7 +53,7 @@ void alsaseq_event_data_ctl_set_channel(ALSASeqEventDataCtl *self,
 
 /**
  * alsaseq_event_data_ctl_get_param:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @param: (out): The parameter for the control event.
  *
  * Get the parameter for the control event.
@@ -67,7 +66,7 @@ void alsaseq_event_data_ctl_get_param(const ALSASeqEventDataCtl *self,
 
 /**
  * alsaseq_event_data_ctl_set_param:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @param: The parameter for the control event.
  *
  * Set the parameter for the control event.
@@ -79,7 +78,7 @@ void alsaseq_event_data_ctl_set_param(ALSASeqEventDataCtl *self, guint param)
 
 /**
  * alsaseq_event_data_ctl_get_value:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @value: (out): The value for the control event.
  *
  * Get the value for the control event.
@@ -92,7 +91,7 @@ void alsaseq_event_data_ctl_get_value(const ALSASeqEventDataCtl *self,
 
 /**
  * alsaseq_event_data_ctl_set_value:
- * @self: A #ALSASeqEventDataCtl.
+ * @self: A [struct@EventDataCtl].
  * @value: The value for the control event.
  *
  * Set the value for the control event.
