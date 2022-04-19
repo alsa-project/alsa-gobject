@@ -2,15 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: event-data-queue
- * @Title: ALSASeqEventDataQueue
- * @Short_description: A boxed object to represent data of queue event
+ * ALSASeqEventDataQueue:
+ * A boxed object to represent data of queue event.
  *
- * A #ALSASeqEventDataQueue is a boxed object to represent data of queue event.
- * The instance of object is one of data properties in event.
+ * A [struct@EventDataQueue] is a boxed object to represent data of queue event. The instance of
+ * object is one of data properties in event.
  *
- * The object wraps 'struct snd_seq_ev_queue_control' in UAPI of Linux sound
- * subsystem.
+ * The object wraps `struct snd_seq_ev_queue_control` in UAPI of Linux sound subsystem.
  */
 ALSASeqEventDataQueue *seq_event_data_queue_copy(const ALSASeqEventDataQueue *self)
 {
@@ -29,10 +27,10 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataQueue, alsaseq_event_data_queue, seq_event_d
 
 /**
  * alsaseq_event_data_queue_get_queue_id:
- * @self: A #ALSASeqEventDataQueue.
- * @queue_id: (out): the numerical ID of queue for the event.
+ * @self: A [struct@EventDataQueue].
+ * @queue_id: (out): the numeric identifier of queue for the event.
  *
- * Get the numerical ID of queue for the event.
+ * Get the numeric identifier of queue for the event.
  */
 void alsaseq_event_data_queue_get_queue_id(const ALSASeqEventDataQueue *self,
                                            guint8 *queue_id)
@@ -42,10 +40,10 @@ void alsaseq_event_data_queue_get_queue_id(const ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_set_queue_id:
- * @self: A #ALSASeqEventDataQueue.
- * @queue_id: The numerical ID of queue for the event.
+ * @self: A [struct@EventDataQueue].
+ * @queue_id: The numeric identifier of queue for the event.
  *
- * Se the numerical ID of queue for the event.
+ * Se the numeric identifier of queue for the event.
  */
 void alsaseq_event_data_queue_set_queue_id(ALSASeqEventDataQueue *self,
                                            guint8 queue_id)
@@ -55,7 +53,7 @@ void alsaseq_event_data_queue_set_queue_id(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_value_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @value: (out): The value as param of the queue event.
  *
  * Get the value as param of the queue event.
@@ -68,7 +66,7 @@ void alsaseq_event_data_queue_get_value_param(const ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_set_value_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @value: The value as param of the queue event.
  *
  * Set the value as param of the queue event.
@@ -81,7 +79,7 @@ void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_tstamp_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @tstamp: (out)(transfer none): The timestamp as param of the queue event.
  *
  * Get the timestamp as param of the queue event.
@@ -94,7 +92,7 @@ void alsaseq_event_data_queue_get_tstamp_param(const ALSASeqEventDataQueue *self
 
 /**
  * alsaseq_event_data_queue_set_tstamp_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @tstamp: (transfer none): The timestamp as param of the queue event.
  *
  * Set the timestamp as param of the queue event.
@@ -107,7 +105,7 @@ void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_position_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @position: (out): The position as param of the queue event.
  *
  * Get the position as param of the queue event.
@@ -120,7 +118,7 @@ void alsaseq_event_data_queue_get_position_param(const ALSASeqEventDataQueue *se
 
 /**
  * alsaseq_event_data_queue_set_position_param:
- * @self: A #ALSASeqEventDataQueue.
+ * @self: A [struct@EventDataQueue].
  * @position: the position as param of the queue event.
  *
  * Set the position as param of the queue event.
@@ -133,12 +131,11 @@ void alsaseq_event_data_queue_set_position_param(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_skew_param:
- * @self: A #ALSASeqEventDataQueue.
- * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements
- *        for numerator and denominator of fraction for skew.
+ * @self: A [struct@EventDataQueue].
+ * @skew: (array fixed-size=2)(out)(transfer none): The array with two elements for numerator and
+ *        denominator of fraction for skew.
  *
- * Refer to numerator and denominator of fraction for skew as the parameter of
- * queue event.
+ * Refer to numerator and denominator of fraction for skew as the parameter of queue event.
  */
 void alsaseq_event_data_queue_get_skew_param(const ALSASeqEventDataQueue *self,
                                              const guint *skew[2])
@@ -150,12 +147,12 @@ void alsaseq_event_data_queue_get_skew_param(const ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_set_skew_param:
- * @self: A #ALSASeqEventDataQueue.
- * @skew: (array fixed-size=2)(transfer none): The array with two elements for
- *        numerator and denominator of fraction for skew.
+ * @self: A [struct@EventDataQueue].
+ * @skew: (array fixed-size=2)(transfer none): The array with two elements for numerator and
+ *        denominator of fraction for skew.
  *
- * Copy numerator and denominator of fraction for skew from the given buffer as
- * the parameter of queue event.
+ * Copy numerator and denominator of fraction for skew from the given buffer as the parameter of
+ * queue event.
  */
 void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
                                              const guint skew[2])
@@ -166,9 +163,9 @@ void alsaseq_event_data_queue_set_skew_param(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_quadlet_param:
- * @self: A #ALSASeqEventDataQueue.
- * @quadlets: (array fixed-size=2)(out)(transfer none): The array with two
- *            elements for quadlets as the parameter of queue event.
+ * @self: A [struct@EventDataQueue].
+ * @quadlets: (array fixed-size=2)(out)(transfer none): The array with two elements for quadlets as
+ *            the parameter of queue event.
  *
  * Refer to two quadlets as the parameter of queue event.
  */
@@ -180,9 +177,9 @@ void alsaseq_event_data_queue_get_quadlet_param(const ALSASeqEventDataQueue *sel
 
 /**
  * alsaseq_event_data_queue_set_quadlet_param:
- * @self: A #ALSASeqEventDataQueue.
- * @quadlets: (array fixed-size=2)(transfer none): The array with two elements
- *            for quadlets as the parameter of queue event.
+ * @self: A [struct@EventDataQueue].
+ * @quadlets: (array fixed-size=2)(transfer none): The array with two elements for quadlets as the
+ *            parameter of queue event.
  *
  * Set two quadlets from the given buffer as the parameter of queue event.
  */
@@ -194,9 +191,9 @@ void alsaseq_event_data_queue_set_quadlet_param(ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_get_byte_param:
- * @self: A #ALSASeqEventDataQueue.
- * @bytes: (array fixed-size=8)(out)(transfer none): The array with eight
- *         elements for bytes parameter of the queue event.
+ * @self: A [struct@EventDataQueue].
+ * @bytes: (array fixed-size=8)(out)(transfer none): The array with eight elements for bytes
+ *         parameter of the queue event.
  *
  * Refer to eight bytes as the parameter of queue event.
  */
@@ -208,9 +205,9 @@ void alsaseq_event_data_queue_get_byte_param(const ALSASeqEventDataQueue *self,
 
 /**
  * alsaseq_event_data_queue_set_byte_param:
- * @self: A #ALSASeqEventDataQueue.
- * @bytes: (array fixed-size=8)(transfer none): The array with eight elements
- *         for bytes parameter of the queue event.
+ * @self: A [struct@EventDataQueue].
+ * @bytes: (array fixed-size=8)(transfer none): The array with eight elements for bytes parameter
+ *         of the queue event.
  *
  * Copy eight bytes from the given buffer as the parameter of queue event.
  */
