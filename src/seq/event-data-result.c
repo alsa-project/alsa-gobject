@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: event-data-result
- * @Title: ALSASeqEventDataResult
- * @Short_description: A boxed object to represent data of result event
+ * ALSASeqEventDataResult:
+ * A boxed object to represent data of result event.
  *
- * A #ALSASeqEventDataResult is a boxed object to represent data of result
- * event. The instance of object is one of data properties in event.
+ * A [struct@EventDataResult] is a boxed object to represent data of result event. The instance of
+ * object is one of data properties in event.
  *
- * The object wraps 'struct snd_seq_result' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_result` in UAPI of Linux sound subsystem.
  */
 ALSASeqEventDataResult *seq_event_data_result_copy(const ALSASeqEventDataResult *self)
 {
@@ -28,7 +27,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataResult, alsaseq_event_data_result, seq_event
 
 /**
  * alsaseq_event_data_result_get_event:
- * @self: A #ALSASeqEventDataResult.
+ * @self: A [struct@EventDataResult].
  * @event_type: (out): The type of event in which the data results.
  *
  * Get the type of event in which the data results.
@@ -41,7 +40,7 @@ void alsaseq_event_data_result_get_event(const ALSASeqEventDataResult *self,
 
 /**
  * alsaseq_event_data_result_set_event:
- * @self: A #ALSASeqEventDataResult.
+ * @self: A [struct@EventDataResult].
  * @event_type: A #ALSASeqEventType.
  *
  * Set the type of event in which the data results.
@@ -54,7 +53,7 @@ void alsaseq_event_data_result_set_event(ALSASeqEventDataResult *self,
 
 /**
  * alsaseq_event_data_result_get_result:
- * @self: A #ALSASeqEventDataResult.
+ * @self: A [struct@EventDataResult].
  * @result: (out): the status of the event.
  *
  * Get the status of event.
@@ -67,7 +66,7 @@ void alsaseq_event_data_result_get_result(const ALSASeqEventDataResult *self,
 
 /**
  * alsaseq_event_data_result_set_result:
- * @self: A #ALSASeqEventDataResult.
+ * @self: A [struct@EventDataResult].
  * @result: The status of event.
  *
  * Set the status of event.
