@@ -4,16 +4,13 @@
 #include <errno.h>
 
 /**
- * SECTION: event-cntr
- * @Title: ALSASeqEventCntr
- * @Short_description: A GObject-derived object to represent container for a
- *                     batch of events
+ * ALSASeqEventCntr:
+ * A GObject-derived object to represent container for a batch of events.
  *
- * A #ALSASeqEventCntr is a GObject-derived object to represent container for
- * a batch of events. The instance of object has accessor methods to properties
- * and data for each events expanded to the flat memory space. The object is
- * designed for applications to maintain collections of event by the convenient
- * way which each programming language produces.
+ * A [class@EventCntr] is a GObject-derived object to represent container for a batch of events.
+ * The instance of object has accessor methods to properties and data for each events expanded to
+ * the flat memory space. The object is designed for applications to maintain collections of event
+ * by the convenient way which each programming language produces.
  *
  * This is the list of properties for event:
  * - the type of event
@@ -22,13 +19,13 @@
  * - the mode of length
  * - the mode of priority
  * - associated tag
- * - the numerical ID of associated queue
+ * - the numeric ID of associated queue
  * - time stamp
  * - destination address
  * - source address
  *
- * This is the list of data for event. These data shared the same storage and
- * an event can have the sole type of data:
+ * This is the list of data for event. These data shared the same storage and an event can have the
+ * sole type of data:
  * - note
  * - control
  * - 12 bytes
@@ -40,8 +37,8 @@
  * - connection with source and destination addresses
  * - result
  *
- * The data shares the same storage in event. An event can have the sole type
- * of data. The type of data is not associated to the type of event directly.
+ * The data shares the same storage in event. An event can have the sole type of data. The type of
+ * data is not associated to the type of event directly.
  */
 typedef struct _ALSASeqEventCntrPrivate {
     guint8 *buf;
@@ -83,12 +80,11 @@ static void alsaseq_event_cntr_init(ALSASeqEventCntr *self)
 /**
  * alsaseq_event_cntr_new:
  * @count: The number of events going to be allocated.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocates and return an instance of #ALSASeqEventCntr to store the count
- * of events.
+ * Allocates and return an instance of [class@EventCntr] to store the count of events.
  *
- * Returns: A #ALSASeqEventCntr.
+ * Returns: A [class@EventCntr].
  */
 ALSASeqEventCntr *alsaseq_event_cntr_new(guint count, GError **error)
 {
@@ -189,7 +185,7 @@ static struct snd_seq_event *event_iterator_find(struct event_iterator *iter,
 
 /**
  * alsaseq_event_cntr_count_events:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @count: (out): The count of stored events.
  *
  * count stored events.
@@ -214,13 +210,12 @@ void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count)
 
 /**
  * alsaseq_event_cntr_calculate_pool_consumption:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @count: The amount of events for calculation.
  * @cells: (out): The amount of cells to be consumed in pool.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Calculate the amount of cells in client pool to be consumed by a part
- * of events in the container.
+ * Calculate the amount of cells in client pool to be consumed by a part of events in the container.
  */
 void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
                                     gsize count, gsize *cells, GError **error)
@@ -251,10 +246,10 @@ void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
 
 /**
  * alsaseq_event_cntr_get_event_type:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to refer to.
  * @ev_type: (out): The type of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the type of event pointed by the index.
  */
@@ -281,10 +276,10 @@ void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_event_type:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @ev_type: A #ALSASeqEventType.
- * @error: A #GError.
+ * @ev_type: A [enum@EventType].
+ * @error: A [struct@GLib.Error].
  *
  * Set the type to event pointed by the index;
  */
@@ -311,10 +306,10 @@ void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
 
 /**
  * alsaseq_event_cntr_get_tstamp_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of timestamping, one of #ALSASeqEventTimestampMode.
- * @error: A #GError.
+ * @mode: (out): The mode of timestamping, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Get the mode of timestamping for the event pointed by the index.
  */
@@ -342,10 +337,10 @@ void alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_tstamp_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of timestamping, one of #ALSASeqEventTimestampMode.
- * @error: A #GError.
+ * @mode: The mode of timestamping, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Set the mode of timestamping for the event pointed by the index.
  */
@@ -373,10 +368,10 @@ void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_time_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of time, one of #ALSASeqEventTimeMode.
- * @error: A #GError.
+ * @mode: (out): The mode of time, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Get the mode of time for the event pointed by the index.
  */
@@ -404,10 +399,10 @@ void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_time_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of time, one of #ALSASeqEventTimeMode.
- * @error: A #GError.
+ * @mode: The mode of time, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Set the mode of time for the event pointed by the index.
  */
@@ -435,10 +430,10 @@ void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_length_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of length, one of #ALSASeqEventLengthMode.
- * @error: A #GError.
+ * @mode: (out): The mode of length, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Get the mode of length for the event pointed by the index.
  */
@@ -466,10 +461,10 @@ void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_priority_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of priority, one of #ALSASeqEventPriorityMode.
- * @error: A #GError.
+ * @mode: (out): The mode of priority, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Get the mode of priority for the event pointed by the index.
  */
@@ -497,10 +492,10 @@ void alsaseq_event_cntr_get_priority_mode(
 
 /**
  * alsaseq_event_cntr_set_priority_mode:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of priority, one of #ALSASeqEventPriorityMode.
- * @error: A #GError.
+ * @mode: The mode of priority, one of [enum@EventTimestampMode].
+ * @error: A [struct@GLib.Error].
  *
  * Set the mode of priority for the event pointed by the index.
  */
@@ -528,10 +523,10 @@ void alsaseq_event_cntr_set_priority_mode(
 
 /**
  * alsaseq_event_cntr_get_tag:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @tag: (out): The tag assigned to the event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the tag assignd to the event pointed by the index.
  */
@@ -558,10 +553,10 @@ void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_tag:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @tag: The tag going to be assignd to the event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the tag assignd to the event pointed by the index.
  */
@@ -587,13 +582,13 @@ void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_queue_id:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @queue_id: (out): The numerical ID of queue to deliver the event. One of
- *                   #ALSASeqSpecificQueueId is available as well.
- * @error: A #GError.
+ * @queue_id: (out): The numeric ID of queue to deliver the event. One of [enum@SpecificQueueId]
+ *            is available as well.
+ * @error: A [struct@GLib.Error].
  *
- * Get the numerical ID of queue to deliver the event.
+ * Get the numeric ID of queue to deliver the event.
  */
 void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
                                        guint8 *queue_id, GError **error)
@@ -618,13 +613,13 @@ void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_queue_id:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @queue_id: The numerical ID of queue to deliver the event. One of
- *            #ALSASeqSpecificQueueId is available as well.
- * @error: A #GError.
+ * @queue_id: The numeric ID of queue to deliver the event. One of [enum@SpecificQueueId] is
+ *            available as well.
+ * @error: A [struct@GLib.Error].
  *
- * Set the numerical ID of queue to deliver the event.
+ * Set the numeric ID of queue to deliver the event.
  */
 void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
                                        guint8 queue_id, GError **error)
@@ -648,11 +643,11 @@ void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_tstamp:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @tstamp: (out)(transfer none): The timestamp for the event. The content is
- *          affected by the mode of tstamping.
- * @error: A #GError.
+ * @tstamp: (out)(transfer none): The timestamp for the event. The content is affected by the mode
+ *          of tstamping.
+ * @error: A [struct@GLib.Error].
  *
  * Get the timestamp of event pointed by index.
  */
@@ -679,11 +674,10 @@ void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_tstamp:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @tstamp: The timestamp for the event. The content is affected by the mode of
- *          tstamping.
- * @error: A #GError.
+ * @tstamp: The timestamp for the event. The content is affected by the mode of tstamping.
+ * @error: A [struct@GLib.Error].
  *
  * Set the timestamp for the event pointed by index.
  */
@@ -710,10 +704,10 @@ void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_dst:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @dst: (out)(transfer none): The destination of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the destination of event pointed by index.
  */
@@ -740,10 +734,10 @@ void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_dst:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @dst: The destination of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Set the destination of event pointed by index.
  */
@@ -770,10 +764,10 @@ void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_src:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @src: (out)(transfer none): The source of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the destination of event pointed by index.
  */
@@ -800,10 +794,10 @@ void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_src:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @src: The source of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Set the destination of event pointed by index.
  */
@@ -909,10 +903,10 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
 
 /**
  * alsaseq_event_cntr_get_note_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The note data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the note data of event pointed by the index.
  */
@@ -938,10 +932,10 @@ void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_note_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The note data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the note data to the event pointed by the index.
  */
@@ -971,10 +965,10 @@ void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_ctl_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The control data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the control data of event pointed by the index.
  */
@@ -1000,10 +994,10 @@ void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_ctl_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The control data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the control data to the event pointed by the index.
  */
@@ -1033,10 +1027,10 @@ void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_byte_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array fixed-size=12)(out)(transfer none): The byte data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the byte data of event pointed by the index.
  */
@@ -1062,10 +1056,10 @@ void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_byte_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array fixed-size=12): The byte data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the byte data to the event pointed by the index.
  */
@@ -1095,10 +1089,10 @@ void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_quadlet_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array fixed-size=3)(out)(transfer none): The quadlet data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the quadlet data of event pointed by the index.
  */
@@ -1125,10 +1119,10 @@ void alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_quadlet_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array fixed-size=3): The quadlet data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the quadlet data to the event pointed by the index.
  */
@@ -1159,11 +1153,11 @@ void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_blob_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array length=size)(out)(transfer none): The pointer to blob data.
  * @size: The size of data.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Refer to the blob data of event.
  */
@@ -1205,11 +1199,11 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_blob_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (array length=size): The pointer to blob data for the event.
  * @size: The size of data.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the quadlet data to the event pointed by the index.
  */
@@ -1236,10 +1230,10 @@ void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_queue_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The queue data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the queue data of event pointed by the index.
  */
@@ -1265,10 +1259,10 @@ void alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_queue_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The queue data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the queue data to the event pointed by the index.
  */
@@ -1298,10 +1292,10 @@ void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_tstamp_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The timestamp data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the timestamp data of event pointed by the index.
  */
@@ -1327,10 +1321,10 @@ void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_tstamp_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The timestamp data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the timestamp data to the event pointed by the index.
  */
@@ -1360,10 +1354,10 @@ void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_addr_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The address data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the address data of event pointed by the index.
  */
@@ -1389,10 +1383,10 @@ void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_addr_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The address data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the address data to the event pointed by the index.
  */
@@ -1422,10 +1416,10 @@ void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_connect_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The connect data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the connect data of event pointed by the index.
  */
@@ -1451,10 +1445,10 @@ void alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_connect_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The connect data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the connect data to the event pointed by the index.
  */
@@ -1484,10 +1478,10 @@ void alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_get_result_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: (out)(transfer none): The result data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the result data of event pointed by the index.
  */
@@ -1513,10 +1507,10 @@ void alsaseq_event_cntr_get_result_data(ALSASeqEventCntr *self, gsize index,
 
 /**
  * alsaseq_event_cntr_set_result_data:
- * @self: A #ALSASeqEventCntr.
+ * @self: A [class@EventCntr].
  * @index: The index of event to set.
  * @data: The result data of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Copy the result data to the event pointed by the index.
  */
