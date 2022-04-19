@@ -19,20 +19,17 @@ struct _ALSARawmidiStreamPairClass {
 
     /**
      * ALSARawmidiStreamPairClass::handle_messages:
-     * @self: A #ALSARawmidiStreamPair.
+     * @self: A [class@StreamPair].
      *
-     * When any input message in available, this event is emit.
+     * Class closure for the [signal@StreamPair::handle-messages] singal.
      */
     void (*handle_messages)(ALSARawmidiStreamPair *self);
 
     /**
      * ALSARawmidiStreamPairClass::handle_disconnection:
-     * @self: A #ALSARawmidiStreamPair.
+     * @self: A [class@StreamPair].
      *
-     * When the sound card is not available anymore due to unbinding driver or
-     * hot unplugging, this signal is emit. The owner of this object should
-     * call g_object_free() as quickly as possible to release ALSA rawmidi
-     * character device.
+     * Class closure for the [signal@StreamPair::handle-disconnection] signal.
      */
     void (*handle_disconnection)(ALSARawmidiStreamPair *self);
 };
