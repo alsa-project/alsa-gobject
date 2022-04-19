@@ -2,16 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: system-info
- * @Title: ALSASeqSystemInfo
- * @Short_description: A GObject-derived object to represent information of
- *                     ALSA Sequencer
+ * ALSASeqSystemInfo:
+ * A GObject-derived object to represent information of ALSA Sequencer.
  *
- * A #ALSASeqSystemInfo is a GObject-derived object to represent information of
- * ALSA Sequencer. The call of alsaseq_get_system_info() returns the instance of
- * object.
+ * A [class@SystemInfo] is a GObject-derived object to represent information of ALSA Sequencer. The
+ * call of [func@get_system_info] returns the instance of object.
  *
- * The object wraps 'struct snd_seq_system_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_system_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_system_info info;
