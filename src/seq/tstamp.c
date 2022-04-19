@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: tstamp
- * @Title: ALSASeqTstamp
- * @Short_description: A boxed object to represent timestamp
+ * ALSASeqTstamp:
+ * A boxed object to represent timestamp.
  *
- * A #ALSASeqTstamp is a boxed object to represent timestamp. The object shares
- * storage for two types of time; tick time and real time.
+ * A [struct@Tstamp] is a boxed object to represent timestamp. The object shares storage for two
+ * types of time; tick time and real time.
  *
- * The object wraps 'struct snd_seq_timestamp' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_timestamp` in UAPI of Linux sound subsystem.
  */
 ALSASeqTstamp *seq_tstamp_copy(const ALSASeqTstamp *self)
 {
@@ -28,8 +27,8 @@ G_DEFINE_BOXED_TYPE(ALSASeqTstamp, alsaseq_tstamp, seq_tstamp_copy, g_free)
 
 /**
  * alsaseq_tstamp_get_tick_time:
- * @self: A #ALSASeqTstamp.
- * @tick_time: (out): The number of MIDI ticks.
+ * @self: A [struct@Tstamp].
+ * @tick_time: (out): The value of MIDI ticks.
  *
  * Get time as MIDI ticks.
  */
@@ -40,7 +39,7 @@ void alsaseq_tstamp_get_tick_time(const ALSASeqTstamp *self, guint32 *tick_time)
 
 /**
  * alsaseq_tstamp_set_tick_time:
- * @self: A #ALSASeqTstamp.
+ * @self: A [struct@Tstamp].
  * @tick_time: The number of MIDI ticks.
  *
  * Set time as MIDI ticks.
@@ -52,9 +51,9 @@ void alsaseq_tstamp_set_tick_time(ALSASeqTstamp *self, const guint32 tick_time)
 
 /**
  * alsaseq_tstamp_get_real_time:
- * @self: A #ALSASeqTstamp.
- * @real_time: (array fixed-size=2)(out)(transfer none): The array with two
- *             elements for sec part and nsec part of real time.
+ * @self: A [struct@Tstamp].
+ * @real_time: (array fixed-size=2)(out)(transfer none): The array with two elements for sec part
+ *             and nsec part of real time.
  *
  * Refer to the time as wall-clock time.
  */
@@ -69,9 +68,9 @@ void alsaseq_tstamp_get_real_time(const ALSASeqTstamp *self,
 
 /**
  * alsaseq_tstamp_set_real_time:
- * @self: A #ALSASeqTstamp.
- * @real_time: (array fixed-size=2)(transfer none): The array with two elements
- *             for sec part and nsec part of real time.
+ * @self: A [struct@Tstamp].
+ * @real_time: (array fixed-size=2)(transfer none): The array with two elements for sec part and
+ *             nsec part of real time.
  *
  * Copy the time as wall-clock time.
  */
