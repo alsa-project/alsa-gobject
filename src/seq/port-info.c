@@ -2,16 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: port-info
- * @Title: ALSASeqPortInfo
- * @Short_description: A GObject-derived object to represent information of port
+ * ALSASeqPortInfo:
+ * A GObject-derived object to represent information of port.
  *
- * A #ALSASeqPortInfo is a GObject-derived object to represent information of
- * port. The call of alsaseq_get_port_info() returns the instance of object.
- * The call of alsaseq_user_client_create_port() and
- * alsaseq_user_client_update_port() requires the instance of object.
+ * A [class@PortInfo] is a GObject-derived object to represent information of port. The call of
+ * [func@get_port_info] returns the instance of object. The call of [method@UserClient.create_port]
+ * and [method@UserClient.update_port] requires the instance of object.
  *
- * The object wraps 'struct snd_port_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_port_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_port_info info;
@@ -253,7 +251,9 @@ static void alsaseq_port_info_init(ALSASeqPortInfo *self)
 /**
  * alsaseq_port_info_new:
  *
- * Allocate and return an instance of ALSASeqPortInfo class.
+ * Allocate and return an instance of [class@PortInfo].
+ *
+ * Returns: An instance of [class@PortInfo].
  */
 ALSASeqPortInfo *alsaseq_port_info_new()
 {
