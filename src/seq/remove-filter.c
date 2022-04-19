@@ -4,18 +4,14 @@
 #include <errno.h>
 
 /**
- * SECTION: remove-filter
- * @Title: ALSASeqRemoveFilter
- * @Short_description: A boxed object to represent filter to remove scheduled
- *                     event in queue
+ * ALSASeqRemoveFilter:
+ * A boxed object to represent filter to remove scheduled event in queue.
  *
- * A #ALSASeqRemoveFilter is a boxed object to represent filter to remove
- * scheduled event in queue. The call of alsaseq_user_client_remove_events()
- * requires the instance of object. In the object, data shares the same storage,
- * thus it's not possible to use several purposes.
+ * A [struct@RemoveFilter] is a boxed object to represent filter to remove scheduled event in
+ * queue. The call of [method@UserClient.remove_events] requires the instance of object. In the
+ * object, data shares the same storage, thus it's not possible to use several purposes.
  *
- * The object wraps 'struct snd_seq_remove_events' in UAPI of Linux sound
- * subsystem.
+ * The object wraps `struct snd_seq_remove_events` in UAPI of Linux sound subsystem.
  */
 ALSASeqRemoveFilter *seq_remove_filter_copy(const ALSASeqRemoveFilter *self)
 {
@@ -34,14 +30,16 @@ G_DEFINE_BOXED_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, seq_remove_filte
 
 /**
  * alsaseq_remove_filter_new_with_dest_addr:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @dest: The address of destination.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events towards the destination.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events towards the
+ * destination.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -61,14 +59,16 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
 
 /**
  * alsaseq_remove_filter_new_with_note_channel:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @channel: The channel for note event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events with note type towards the channel.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with note
+ * type towards the channel.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -88,14 +88,16 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
 
 /**
  * alsaseq_remove_filter_new_with_event_type:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @ev_type: The type of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events with the type.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
+ * type.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -115,13 +117,15 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
 
 /**
  * alsaseq_remove_filter_new_with_note:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
- * @error: A #GError.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events for note, except for ALSASEQ_EVENT_TYPE_NOTEOFF.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events for note,
+ * except for [enum@EventType:NOTEOFF].
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -140,14 +144,16 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
 
 /**
  * alsaseq_remove_filter_new_with_tag:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @tag: The tag of event to remove.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events with the tag.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
+ * tag.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -167,16 +173,17 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
 
 /**
  * alsaseq_remove_filter_new_with_tick_time:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @tick_time: The count of tick.
- * @after: Remove events after the tick time if true, else remove events before
- *         the tick time.
- * @error: A #GError.
+ * @after: Remove events after the tick time if true, else remove events before the tick time.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events before/after the tick time.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
+ * before/after the tick time.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
@@ -201,17 +208,18 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
 
 /**
  * alsaseq_remove_filter_new_with_real_time:
- * @inout: The direction of queue; ALSASEQ_REMOVE_FILTER_FLAG_INPUT or
- *         ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT.
- * @queue_id: The numerical ID of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
+ *         [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric identifier of queue.
  * @tv_sec: The second part of time.
  * @tv_nsec: The nanosecond part of time.
- * @after: Remove events after the real time if true, else remove events before
- *         the real time.
- * @error: A #GError.
+ * @after: Remove events after the real time if true, else remove events before the real time.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate and return a memory object of ALSASeqRemoveFilter to remove queued
- * events before/after the real time.
+ * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
+ * before/after the real time.
+ *
+ * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
