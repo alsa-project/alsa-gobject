@@ -60,11 +60,17 @@ Dependencies
 
 * GLib <https://gitlab.gnome.org/GNOME/glib>
 * GObject introspection <https://gi.readthedocs.io/>
-* UAPI of Linux kernel version 4.5 or later for sound subsystem
 * libudev1 <https://www.freedesktop.org/wiki/Software/systemd/>
-* Meson <https://mesonbuild.com/>
-* (optional) PyGObject <https://pygobject.readthedocs.io/> to execute tests
-* (optional) gi-docgen <https://gnome.pages.gitlab.gnome.org/gi-docgen/> to generate documentation
+* Linux kernel version 4.5 or later
+
+Requirements to build
+=====================
+
+* UAPI header of Linux kernel
+* Meson build system <https://mesonbuild.com/>
+* Ninja build system <https://ninja-build.org/>
+* PyGObject <https://pygobject.readthedocs.io/> (optional to run unit tests)
+* gi-docgen <https://gnome.pages.gitlab.gnome.org/gi-docgen/> (optional to generate API documentation)
 
 How to build
 ============
