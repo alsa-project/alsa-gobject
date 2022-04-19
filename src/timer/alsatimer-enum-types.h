@@ -130,7 +130,7 @@ typedef enum {
  * @ALSATIMER_USER_INSTANCE_ERROR_ATTACHED:         The timer instance is already attached to timer
  *                                                  device or the other instance.
  *
- * A set of error code for GError with domain which equals to #alsatimer_user_instance_error_quark()
+ * A set of error code for [struct@GLib.Error] with `ALSATimer.UserInstanceError` domain.
  */
 typedef enum {
     ALSATIMER_USER_INSTANCE_ERROR_FAILED,
