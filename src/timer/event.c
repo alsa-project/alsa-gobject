@@ -2,15 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: event
- * @Title: ALSATimerEvent
- * @Short_description: A boxed object to represent event of timer
+ * ALSATimerEvent:
+ * A boxed object to represent event of timer.
  *
- * A #ALSATimerEvent is a boxed object to represent event of timer. The
- * instance of object uses single storage for two types of event data;
- * #ALSATimerEventDataTick for and #ALSATimerEventDataTstamp. Applications can
- * decide to use one of the two by passing one of #ALSATimerEventType to the
- * call of alsatimer_user_instance_attach().
+ * A [struct@Event] is a boxed object to represent event of timer. The instance of object uses
+ * single storage for two types of event data; [struct@EventDataTick] for and
+ * [struct@EventDataTstamp]. Applications can decide to use one of the two by passing one of
+ * [enum@EventType] to the call of [method@UserInstance.attach].
  */
 ALSATimerEvent *timer_event_copy(const ALSATimerEvent *self)
 {
@@ -30,9 +28,9 @@ G_DEFINE_BOXED_TYPE(ALSATimerEvent, alsatimer_event, timer_event_copy, g_free)
 /**
  * alsatimer_event_new:
  *
- * Allocate and return the instance of #ALSATimerEvent.
+ * Allocate and return the instance of [struct@Event].
  *
- * Returns: A #ALSATimerEvent.
+ * Returns: An instance of [struct@Event].
  */
 ALSATimerEvent *alsatimer_event_new()
 {
@@ -41,10 +39,10 @@ ALSATimerEvent *alsatimer_event_new()
 
 /**
  * alsatimer_event_get_tick_data:
- * @self: A #ALSATimerEvent.
- * @tick: (out)(transfer none): The instance of #ALSATimerEventDataTick.
+ * @self: A [struct@Event].
+ * @tick: (out)(transfer none): The instance of [struct@EventDataTick].
  *
- * Refer to the instance of #ALSATimerEventDataTick.
+ * Refer to the instance of [struct@EventDataTick].
  */
 void alsatimer_event_get_tick_data(ALSATimerEvent *self,
                                    const ALSATimerEventDataTick **tick)
@@ -54,10 +52,10 @@ void alsatimer_event_get_tick_data(ALSATimerEvent *self,
 
 /**
  * alsatimer_event_get_tstamp_data:
- * @self: A #ALSATimerEvent.
- * @tstamp: (out)(transfer none): The instance of #ALSATimerEventDataTstamp.
+ * @self: A [struct@Event].
+ * @tstamp: (out)(transfer none): The instance of [struct@EventDataTstamp].
  *
- * Refer to the instance of #ALSATimerEventDataTstamp.
+ * Refer to the instance of [struct@EventDataTstamp].
  */
 void alsatimer_event_get_tstamp_data(ALSATimerEvent *self,
                                      const ALSATimerEventDataTstamp **tstamp)
