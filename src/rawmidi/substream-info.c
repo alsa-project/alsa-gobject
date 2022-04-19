@@ -2,17 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: substream-info
- * @Title: ALSARawmidiSubstreamInfo
- * @Short_description: A GObject-derived object to represent information of
- *                     substream
+ * ALSARawmidiSubstreamInfo:
+ * A GObject-derived object to represent information of substream.
  *
- * A #ALSARawmidiSubstreamInfo is a GObject-derived object to represent
- * information of substream attached to the pair of streams. The call of
- * alsarawmidi_stream_pair_get_substream_info() or
- * alsarawmidi_get_substream_info() return the instance of object.
+ * A [class@SubstreamInfo] is a GObject-derived object to represent information of substream
+ * attached to the pair of streams. The call of [method@StreamPair.get_substream_info] or
+ * [func@get_substream_info] return the instance of object.
  *
- * The object wraps 'struct snd_rawmidi_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_rawmidi_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_rawmidi_info info;
@@ -86,14 +83,14 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
 
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_DEVICE_ID] =
         g_param_spec_uint("device-id", "device-id",
-                         "The numerical ID of rawmidi device.",
+                         "The numerical identifier of rawmidi device.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READABLE);
 
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_SUBDEVICE_ID] =
         g_param_spec_uint("subdevice-id", "subdevice-id",
-                          "The numerical ID of subdevice for rawmidi device..",
+                          "The numerical identifier of subdevice for rawmidi device..",
                           0, G_MAXINT,
                           0,
                           G_PARAM_READABLE);
@@ -108,7 +105,7 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
 
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card.",
+                         "The numerical identifier of sound card.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
@@ -123,7 +120,7 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
 
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
-                            "The string ID of rawmidi device.",
+                            "The string identifier of rawmidi device.",
                             "",
                             G_PARAM_READABLE);
 

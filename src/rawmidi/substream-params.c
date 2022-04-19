@@ -118,7 +118,7 @@ static void alsarawmidi_substream_params_init(ALSARawmidiSubstreamParams *self)
 /**
  * alsarawmidi_substream_params_new:
  *
- * Allocate and return an instance of ALSARawmidiSubstreamParams class.
+ * Allocate and return an instance of [class@SubstreamParams] class.
  */
 ALSARawmidiSubstreamParams *alsarawmidi_substream_params_new()
 {
