@@ -5,17 +5,14 @@
 #include <errno.h>
 
 /**
- * SECTION: client-info
- * @Title: ALSASeqClientInfo
- * @Short_description: A GObject-derived object to represent information of
- *                     client.
+ * ALSASeqClientInfo:
+ * A GObject-derived object to represent information of client.
  *
- * A #ALSASeqClientInfo is a GObject-derived object to represent information of
- * client. The call of alsaseq_get_client_info() returns the instance of object.
- * The call of alsaseq_user_client_set_info() and alsaseq_user_client_get_info()
- * require the instance of object.
+ * A [class@ClientInfo] is a GObject-derived object to represent information of client. The call
+ * of [func@get_client_info] returns the instance of object.  The call of
+ * [method@UserClient.set_info] and [method@UserClient.get_info] require the instance of object.
  *
- * The object wraps 'struct snd_seq_client_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_client_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_client_info info;
@@ -201,7 +198,9 @@ static void alsaseq_client_info_init(ALSASeqClientInfo *self)
 /**
  * alsaseq_client_info_new:
  *
- * Allocate and return an instance of ALSASeqClientinfo class.
+ * Allocate and return an instance of [class@ClientInfo].
+ *
+ * Returns: An instance of [class@ClientInfo].
  */
 ALSASeqClientInfo *alsaseq_client_info_new()
 {
@@ -210,11 +209,11 @@ ALSASeqClientInfo *alsaseq_client_info_new()
 
 /**
  * alsaseq_client_info_set_event_filter:
- * @self: A #ALSASeqClientInfo.
- * @event_types: (array length=event_type_count): The array with elements for
- *               the type of event to listen.
+ * @self: A [class@ClientInfo].
+ * @event_types: (array length=event_type_count): The array with elements for the type of event to
+ *               listen.
  * @event_type_count: The number of elements for the type of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Set the list of type of events configured to be listen.
  */
@@ -246,11 +245,11 @@ void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
 
 /**
  * alsaseq_client_info_get_event_filter:
- * @self: A #ALSASeqClientInfo.
- * @event_types: (array length=event_type_count)(out): The array with elements
- *               for the type of event to listen.
+ * @self: A [class@ClientInfo].
+ * @event_types: (array length=event_type_count)(out): The array with elements for the type of
+ *               event to listen.
  * @event_type_count: The number of elements for the type of event.
- * @error: A #GError.
+ * @error: A [struct@GLib.Error].
  *
  * Get the list of type of events configured to be listen.
  */
