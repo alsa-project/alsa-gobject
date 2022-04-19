@@ -43,7 +43,7 @@ ALSARawmidi-0.0
 Documentation
 =============
 
-<https://alsa-project.github.io/alsa-gobject-docs/>
+`<https://alsa-project.github.io/alsa-gobject-docs/>`_
 
 Python 3 Samples
 ================
@@ -58,19 +58,19 @@ This software is licensed under GNU Lesser General Public License version 3 or l
 Dependencies
 ============
 
-* GLib <https://gitlab.gnome.org/GNOME/glib>
-* GObject introspection <https://gi.readthedocs.io/>
-* libudev1 <https://www.freedesktop.org/wiki/Software/systemd/>
+* GLib `<https://gitlab.gnome.org/GNOME/glib>`_
+* GObject introspection `<https://gi.readthedocs.io/>`_
+* libudev1 `<https://www.freedesktop.org/wiki/Software/systemd/>`_
 * Linux kernel version 4.5 or later
 
 Requirements to build
 =====================
 
 * UAPI header of Linux kernel
-* Meson build system <https://mesonbuild.com/>
-* Ninja build system <https://ninja-build.org/>
-* PyGObject <https://pygobject.readthedocs.io/> (optional to run unit tests)
-* gi-docgen <https://gnome.pages.gitlab.gnome.org/gi-docgen/> (optional to generate API documentation)
+* Meson build system `<https://mesonbuild.com/>`_
+* Ninja build system `<https://ninja-build.org/>`_
+* PyGObject `<https://pygobject.readthedocs.io/>`_ (optional to run unit tests)
+* gi-docgen `<https://gnome.pages.gitlab.gnome.org/gi-docgen/>`_ (optional to generate API documentation)
 
 How to build
 ============
@@ -123,9 +123,9 @@ Design note
 Supplemental information for language bindings
 ==============================================
 
-* PyGObject <https://pygobject.readthedocs.io/> is a dynamic loader for
+* PyGObject `<https://pygobject.readthedocs.io/>`_ is a dynamic loader for
   libraries compatible with g-i.
-* alsa-gobject-rs <https://github.com/alsa-project/alsa-gobject-rs/> includes
+* alsa-gobject-rs `<https://github.com/alsa-project/alsa-gobject-rs/>`_ includes
   creates to use these libraries.
 
 Valgrind suppression file for leak detected in glib
