@@ -4,20 +4,12 @@
 #include <utils.h>
 
 /**
- * SECTION: query
- * @Title: Global functions in ALSACtl
- * @Short_description: Global functions available without holding any file
- *                     descriptor
- */
-
-/**
  * alsactl_get_card_id_list:
- * @entries: (array length=entry_count)(out): The list of numerical ID for sound
- *           cards.
+ * @entries: (array length=entry_count)(out): The list of numeric ID for sound cards.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with `GLib.FileError` domain.
  *
- * Get the list of numerical ID for available sound cards.
+ * Get the list of numeric ID for available sound cards.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
  */
@@ -37,9 +29,9 @@ void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
 
 /**
  * alsactl_get_card_sysname:
- * @card_id: The numeridcal ID of sound card.
+ * @card_id: The numeric ID of sound card.
  * @sysname: (out): The string for sysname of the sound card.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate sysname for the sound card and return it when it exists.
  *
@@ -61,10 +53,9 @@ void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error)
  * alsactl_get_control_sysname:
  * @card_id: The numeridcal ID of sound card.
  * @sysname: (out): The string for sysname of control device for the sound card.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Allocate sysname of control device for the sound card and return it when
- * it exists.
+ * Allocate sysname of control device for the sound card and return it if exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
  */
@@ -82,12 +73,11 @@ void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error)
 
 /**
  * alsactl_get_control_devnode:
- * @card_id: The numerical ID of sound card.
+ * @card_id: The numeric ID of sound card.
  * @devnode: (out): The string for devnode of control device for the sound card.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Allocate string of devnode for control device of the sound card and return it
- * if exists.
+ * Allocate string of devnode for control device of the sound card and return it if exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
  */
