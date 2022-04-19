@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: event-data-connect
- * @Title: ALSASeqEventDataConnect
- * @Short_description: A boxed object to represent data of connect event
+ * ALSASeqEventDataConnect:
+ * A boxed object to represent data of connect event.
  *
- * A #ALSASeqEventDataConnect is a boxed object to represent data of connect
- * event. The instance of object is one of data properties in event.
+ * A [struct@EventDataConnect] is a boxed object to represent data of connect event. The instance
+ * of object is one of data properties in event.
  *
- * The object wraps 'struct snd_seq_connect' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_connect` in UAPI of Linux sound subsystem.
  */
 ALSASeqEventDataConnect *seq_event_data_connect_copy(const ALSASeqEventDataConnect *self)
 {
@@ -28,7 +27,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEventDataConnect, alsaseq_event_data_connect, seq_eve
 
 /**
  * alsaseq_event_data_connect_get_src:
- * @self: A #ALSASeqEventDataConnect.
+ * @self: A [struct@EventDataConnect].
  * @src: (out)(transfer none): The source of connection event.
  *
  * Get the source of connection event.
@@ -41,8 +40,8 @@ void alsaseq_event_data_connect_get_src(const ALSASeqEventDataConnect *self,
 
 /**
  * alsaseq_event_data_connect_set_src:
- * @self: A #ALSASeqEventDataConnect.
- * @src: A #ALSASeqAddr.
+ * @self: A [struct@EventDataConnect].
+ * @src: A [struct@Addr].
  *
  * Set the source to the connection event.
  */
@@ -54,7 +53,7 @@ void alsaseq_event_data_connect_set_src(ALSASeqEventDataConnect *self,
 
 /**
  * alsaseq_event_data_connect_get_dst:
- * @self: A #ALSASeqEventDataConnect.
+ * @self: A [struct@EventDataConnect].
  * @dst: (out)(transfer none): The destination of connection event.
  *
  * Get the destination of connection event.
@@ -67,8 +66,8 @@ void alsaseq_event_data_connect_get_dst(const ALSASeqEventDataConnect *self,
 
 /**
  * alsaseq_event_data_connect_set_dst:
- * @self: A #ALSASeqEventDataConnect.
- * @dst: A #ALSASeqAddr.
+ * @self: A [struct@EventDataConnect].
+ * @dst: A [struct@Addr].
  *
  * Set the source to the connection event.
  */
