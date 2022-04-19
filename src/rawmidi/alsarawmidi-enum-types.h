@@ -35,7 +35,7 @@ typedef enum /*< flags >*/
  * @ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED: The card associated to the instance is in disconnect state.
  * @ALSARAWMIDI_STREAM_PAIR_ERROR_UNREADABLE:   The instance is not for read operation.
  *
- * A set of error code for GError with domain which equals to #alsarawmidi_stream_pair_error_quark()
+ * A set of error code for [struct@GLib.Error] with `ALSARawmidi.StreamPairError` domain.
  */
 typedef enum {
     ALSARAWMIDI_STREAM_PAIR_ERROR_FAILED,
