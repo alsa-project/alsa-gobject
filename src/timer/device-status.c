@@ -2,14 +2,11 @@
 #include "privates.h"
 
 /**
- * SECTION: device-status
- * @Title: ALSATimerDeviceStatus
- * @Short_description: A GObject-derived object to represent status of timer
- *                     device.
+ * ALSATimerDeviceStatus:
+ * A GObject-derived object to represent status of timer device.
  *
- * A #ALSATimerDeviceStatus is a GObject-derived object to represent status of
- * timer device. The call of alsatimer_get_device_status() returns the instance
- * of object.
+ * A [class@DeviceStatus] is a GObject-derived object to represent status of timer device. The
+ * call of [func@get_device_status] returns the instance of object.
  *
  * The object wraps 'struct snd_timer_gstatus' in UAPI of Linux sound subsystem.
  */
@@ -90,9 +87,9 @@ static void alsatimer_device_status_init(ALSATimerDeviceStatus *self)
 /**
  * alsatimer_device_status_new:
  *
- * Allocate and return an instance of #ALSATimerDeviceStatus.
+ * Allocate and return an instance of [class@DeviceStatus].
  *
- * Returns: A #ALSATimerDeviceStatus.
+ * Returns: An instance of [class@DeviceStatus].
  */
 ALSATimerDeviceStatus *alsatimer_device_status_new()
 {
