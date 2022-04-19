@@ -2,15 +2,12 @@
 #include "privates.h"
 
 /**
- * SECTION: event-data-tstamp
- * @Title: ALSATimerEventDataTstamp
- * @Short_description: A boxed object to represent event of timer with
- *                     tstamp
+ * ALSATimerEventDataTstamp:
+ * A boxed object to represent event of timer with tstamp.
  *
- * A #ALSATimerEventDataTstamp is a boxed object to represent event of timer
- * with tstamp.
+ * A [struct@EventDataTstamp] is a boxed object to represent event of timer with tstamp.
  *
- * The object wraps 'struct snd_timer_tread' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_timer_tread` in UAPI of Linux sound subsystem.
  */
 ALSATimerEventDataTstamp *timer_event_data_tstamp_copy(const ALSATimerEventDataTstamp *self)
 {
@@ -29,8 +26,8 @@ G_DEFINE_BOXED_TYPE(ALSATimerEventDataTstamp, alsatimer_event_data_tstamp, timer
 
 /**
  * alsatimer_event_data_tstamp_get_event:
- * @self: A #ALSATimerEventDataTstamp.
- * @event: (out): The type of tstamp event, one of ALSATimerEventType.
+ * @self: A [struct@EventDataTstamp].
+ * @event: (out): The type of tstamp event, one of [enum@EventType].
  *
  * Get the kind of event for the timestamp event.
  */
@@ -42,10 +39,9 @@ void alsatimer_event_data_tstamp_get_event(const ALSATimerEventDataTstamp *self,
 
 /**
  * alsatimer_event_data_tstamp_get_tstamp:
- * @self: A #ALSATimerEventDataTstamp.
- * @tstamp: (array fixed-size=2)(inout): The array with two elements for the
- *          seconds and nanoseconds part of timestamp when the instance queues
- *          the timestamp event.
+ * @self: A [struct@EventDataTstamp].
+ * @tstamp: (array fixed-size=2)(inout): The array with two elements for the seconds and
+ *          nanoseconds part of timestamp when the instance queues the timestamp event.
  *
  * Get the seconds and nanoseconds part for the timestamp event.
  */
@@ -58,7 +54,7 @@ void alsatimer_event_data_tstamp_get_tstamp(const ALSATimerEventDataTstamp *self
 
 /**
  * alsatimer_event_data_tstamp_get_val:
- * @self: A #ALSATimerEventDataTstamp.
+ * @self: A [struct@EventDataTstamp].
  * @val: (out): The value depending on the type of timestamp event.
  *
  * Get the value depending on the type of timestamp event.
