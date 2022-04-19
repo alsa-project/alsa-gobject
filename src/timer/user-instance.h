@@ -20,22 +20,19 @@ struct _ALSATimerUserInstanceClass {
 
     /**
      * ALSATimerUserInstanceClass::handle_event:
-     * @self: A #ALSATimerUserInstance.
-     * @event: (transfer none): An object derived from #ALSATimerEvent.
+     * @self: A [class@UserInstance].
+     * @event: (transfer none): An object derived from [struct@Event].
      *
-     * When event occurs, this signal is emit.
+     * Class closure for the [signal@UserInstance::handle-event] signal.
      */
     void (*handle_event)(ALSATimerUserInstance *self,
                          const ALSATimerEvent *event);
 
     /**
      * ALSATimerUserInstanceClass::handle_disconnection:
-     * @self: A #ALSATimerUserInstance.
+     * @self: A [class@UserInstance].
      *
-     * When the attached timer device is not available anymore due to unbinding
-     * driver or hot unplugging, this signal is emit. The owner of this object
-     * should call g_object_free() as quickly as possible to release ALSA timer
-     * character device.
+     * Class closure for the [signal@UserInstance::handle-disconnection] signal.
      */
     void (*handle_disconnection)(ALSATimerUserInstance *self);
 };

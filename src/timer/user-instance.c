@@ -11,17 +11,14 @@
 #include <errno.h>
 
 /**
- * SECTION: user-instance
- * @Title: ALSATimerUserInstance
- * @Short_description: A GObject-derived object to represent user instance
+ * ALSATimerUserInstance:
+ * A GObject-derived object to represent user instance.
  *
- * A #ALSATimerUserInstance is a GObject-derived object to represent information
- * of user instance attached to any timer device or the other instance as slave.
- * After calling alsatimer_user_instance_open(), the object maintains file
- * descriptor till object destruction. After calling
- * alsatimer_user_instance_attach() or alsatimer_user_instance_attach_as_slave(),
- * the user instance is attached to any timer device or the other instance as
- * slave.
+ * A [class@UserInstance] is a GObject-derived object to represent information of user instance
+ * attached to any timer device or the other instance as slave. After calling
+ * [method@UserInstance.open], the object maintains file descriptor till object destruction. After
+ * calling [method@UserInstance.attach] or [method@UserInstance.attach_as_slave], the user instance
+ * is attached to any timer device or the other instance as slave.
  */
 typedef struct {
     int fd;
@@ -33,9 +30,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYP
 /**
  * alsatimer_user_instance_error_quark:
  *
- * Return the GQuark for error domain of GError which has code in #ALSATimerUserInstanceError enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code in [enum@UserInstanceError]
+ * enumerations.
  *
- * Returns: A #GQuark.
+ * Returns: A [alias@GLib.Quark].
  */
 G_DEFINE_QUARK(alsatimer-user-instance-error-quark, alsatimer_user_instance_error)
 
@@ -87,10 +85,10 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
 
     /**
      * ALSATimerUserInstance::handle-event:
-     * @self: A #ALSATimerUserInstance.
-     * @event: (transfer none): The instance of #ALSATimerEvent.
+     * @self: A [class@UserInstance].
+     * @event: (transfer none): The instance of [struct@Event].
      *
-     * When event occurs for any element, this signal is emit.
+     * Emitted when event occurs.
      */
     timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_EVENT] =
         g_signal_new("handle-event",
@@ -103,12 +101,11 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
 
     /**
      * ALSATimerUserInstance::handle-disconnection:
-     * @self: A #ALSATimerUserInstance.
+     * @self: A [class@UserInstance].
      *
-     * When the attached timer device is not available anymore due to unbinding
-     * driver or hot unplugging, this signal is emit. The owner of this object
-     * should call g_object_free() as quickly as possible to release ALSA timer
-     * character device.
+     * Emitted when the attached timer device is not available anymore due to unbinding driver or
+     * hot unplugging. The owner of this object should call [method@GObject.Object.unref] as quickly
+     * as possible to release ALSA timer character device.
      */
     timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_DISCONNECTION] =
         g_signal_new("handle-disconnection",
@@ -130,15 +127,14 @@ static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
 
 /**
  * alsatimer_user_instance_open:
- * @self: A #ALSATimerUserInstance.
- * @open_flag: The flag of open(2) system call. O_RDONLY is forced to fulfil internally.
- * @error: A #GError. Error is generated with two domains; #g_file_error_quark() and
- *         #alsatimer_user_instance_error_quark().
+ * @self: A [class@UserInstance].
+ * @open_flag: The flag of `open(2)` system call. `O_RDONLY` is forced to fulfil internally.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSATimer.UserInstanceError`.
  *
  * Open ALSA Timer character device to allocate queue.
  *
- * The call of function executes open(2) system call for ALSA timer character
- * device.
+ * The call of function executes `open(2)` system call for ALSA timer character device.
  */
 void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
                                   GError **error)
@@ -184,6 +180,13 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
 }
 
+/**
+ * alsatimer_user_instance_new:
+ *
+ * Allocate and return an instance of [class@UserInstance].
+ *
+ * Returns: An instance of [class@UserInstance].
+ */
 ALSATimerUserInstance *alsatimer_user_instance_new()
 {
     return g_object_new(ALSATIMER_TYPE_USER_INSTANCE, NULL);
@@ -191,15 +194,14 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
 
 /**
  * alsatimer_user_instance_get_protocol_version:
- * @self: A #ALSATimerUserInstance.
- * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of
- *                     protocol currently used.
- * @error: A #GError.
+ * @self: A [class@UserInstance].
+ * @proto_ver_triplet: (array fixed-size=3)(out)(transfer none): The version of protocol currently
+ *                     used.
+ * @error: A [struct@GLib.Error].
  *
- * Get the version of timer protocol currently used. The version is
- * represented as the array with three elements; major, minor, and micro version
- * in the order. The length of major version is 16 bit, the length of minor
- * and micro version is 8 bit each.
+ * Get the version of timer protocol currently used. The version is represented as the array with
+ * three elements; major, minor, and micro version in the order. The length of major version is
+ * 16 bit, the length of minor and micro version is 8 bit each.
  */
 void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
                                         const guint16 *proto_ver_triplet[3],
@@ -219,18 +221,18 @@ void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_choose_event_data_type:
- * @self: A #ALSATimerUserInstance.
- * @event_data_type: The type of event data, one of ALSATimerEventDataType.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark().
+ * @self: A [class@UserInstance].
+ * @event_data_type: The type of event data, one of [enum@EventDataType].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Choose the type of event data to receive.
  *
- * The call of function is successful just before the instance is not attached
- * yet. ALSATIMER_EVENT_DATA_TYPE_TICK is used as a default if the function is
- * not called for ALSATIMER_EVENT_DATA_TYPE_TSTAMP explicitly.
+ * The call of function is successful just before the instance is not attached yet.
+ * [enum@EventDataType:TICK] is used as a default if the function is not called for
+ * [enum@EventDataType:TSTAMP] explicitly.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_TREAD command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_TREAD` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
                                         ALSATimerEventDataType event_data_type,
@@ -257,15 +259,15 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_attach:
- * @self: A #ALSATimerUserInstance.
- * @device_id: A #ALSATimerDeviceId to which the instance is attached.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @device_id: A [struct@DeviceId] to which the instance is attached.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
- * Attach the instance to the timer device. If the given device_id is for
- * absent timer device, the instance can be detached with error.
+ * Attach the instance to the timer device. If the given device_id is for absent timer device, the
+ * instance can be detached with error.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_SELECT command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_SELECT` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
                                     ALSATimerDeviceId *device_id,
@@ -291,21 +293,18 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_attach_as_slave:
- * @self: A #ALSATimerUserInstance.
- * @slave_class: The class identifier of master instance, one of
- *               #ALSATimerSlaveClass.
- * @slave_id: The numerical identifier of master instance.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @slave_class: The class identifier of master instance, one of [enum@SlaveClass].
+ * @slave_id: The numeric identifier of master instance.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
- * Attach the instance as an slave to another instance indicated by a pair of
- * slave_class and slave_id. If the slave_class is for application
- * (=ALSATIMER_SLAVE_CLASS_APPLICATION), the slave_id is for the PID of
+ * Attach the instance as an slave to another instance indicated by a pair of slave_class and
+ * slave_id. If the slave_class is [enum@SlaveClass:APPLICATION], the slave_id is for the PID of
  * application process which owns the instance of timer. If the slave_class is
- * for ALSA sequencer (=ALSATIMER_SLAVE_CLASS_SEQUENCER), the slave_id is the
- * numerical ID of queue bound for timer device.
+ * [enum@SlaveClass:SEQUENCER], the slave_id is the numeric ID of queue bound for timer device.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_SELECT command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_SELECT` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
                                         ALSATimerSlaveClass slave_class,
@@ -329,14 +328,14 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_get_info:
- * @self: A #ALSATimerUserInstance.
- * @instance_info: (out): A #ALSATimerInstanceInfo.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @instance_info: (out): A [class@InstanceInfo].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Return the information of device if attached to the instance.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_INFO command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_INFO` command for
+ * ALSA timer character device.
  */
 void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
                                       ALSATimerInstanceInfo **instance_info,
@@ -365,14 +364,14 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_set_params:
- * @self: A #ALSATimerUserInstance.
- * @instance_params: (inout): A #ALSATimerInstanceParams.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @instance_params: (inout): A [class@InstanceParams].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Configure the instance with the parameters and return the latest parameters.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_PARAMS command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_PARAMS` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
                                 ALSATimerInstanceParams *const *instance_params,
@@ -399,14 +398,14 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_get_status:
- * @self: A #ALSATimerUserInstance.
- * @instance_status: (inout): A #ALSATimerInstanceStatus.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @instance_status: (inout): A [class@InstanceStatus].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Get the latest status of instance.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_STATUS command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_STATUS` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
                                 ALSATimerInstanceStatus *const *instance_status,
@@ -511,14 +510,14 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
 
 /**
  * alsatimer_user_instance_create_source:
- * @self: A #ALSATimerUserInstance.
- * @gsrc: (out): A #GSource to handle events from ALSA timer character device.
- * @error: A #GError.
+ * @self: A [class@UserInstance].
+ * @gsrc: (out): A [struct@GLib.Source] to handle events from ALSA timer character device.
+ * @error: A [struct@GLib.Error].
  *
- * Allocate GSource structure to handle events from ALSA timer character
- * device. In each iteration of GMainContext, the read(2) system call is
- * executed to dispatch timer event for 'handle-event' signal, according to
- * the result of poll(2) system call.
+ * Allocate [struct@GLib.Source] structure to handle events from ALSA timer character device. In
+ * each iteration of [struct@GLib.MainContext], the `read(2)` system call is executed to dispatch
+ * timer event for [signal@UserInstance::handle-event] signal, according to the result of `poll(2)`
+ * system call.
  */
 void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
                                          GSource **gsrc, GError **error)
@@ -557,13 +556,13 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
 
 /**
  * alsatimer_user_instance_start:
- * @self: A #ALSATimerUserInstance.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Start timer event emission.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_START command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_START` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 {
@@ -584,13 +583,13 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 
 /**
  * alsatimer_user_instance_stop:
- * @self: A #ALSATimerUserInstance.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Stop timer event emission.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_STOP command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_STOP` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 {
@@ -611,13 +610,13 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 
 /**
  * alsatimer_user_instance_pause:
- * @self: A #ALSATimerUserInstance.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Pause timer event emission.
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_PAUSE command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_PAUSE` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 {
@@ -638,13 +637,13 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 
 /**
  * alsatimer_user_instance_continue:
- * @self: A #ALSATimerUserInstance.
- * @error: A #GError. Error is generated with domain of #alsatimer_user_instance_error_quark.
+ * @self: A [class@UserInstance].
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
- * Continue timer event emission paused by alsatimer_user_instance_pause().
+ * Continue timer event emission paused by [method@UserInstance.pause].
  *
- * The call of function executes ioctl(2) system call with
- * SNDRV_TIMER_IOCTL_CONTINUE command for ALSA timer character device.
+ * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_CONTINUE` command
+ * for ALSA timer character device.
  */
 void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
                                       GError **error)
