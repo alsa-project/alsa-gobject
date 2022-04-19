@@ -2,18 +2,15 @@
 #include "privates.h"
 
 /**
- * SECTION: queue-info
- * @Title: ALSASeqQueueInfo
- * @Short_description: A GObject-derived object to represent information of
- *                     queue
+ * ALSASeqQueueInfo:
+ * A GObject-derived object to represent information of queue.
  *
- * A #ALSASeqQueueInfo is a GObject-derived object to represent information of
- * queue. The call of alsaseq_get_queue_info_by_id() and
- * alsaseq_get_queue_info_by_name() returns the instance of object. The call of
- * alsaseq_user_client_create_queue() and alsaseq_user_client_update_queue()
- * requires the instance of object.
+ * A [class@QueueInfo] is a GObject-derived object to represent information of queue. The call of
+ * [func@get_queue_info_by_id] and [func@get_queue_info_by_name] returns the instance of object.
+ * The call of [method@UserClient.create_queue] and [method@UserClient.update_queue] requires the
+ * instance of object.
  *
- * The object wraps 'struct snd_seq_queue_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_queue_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_queue_info info;
@@ -129,9 +126,9 @@ static void alsaseq_queue_info_init(ALSASeqQueueInfo *self)
 /**
  * alsaseq_queue_info_new:
  *
- * Allocate and return an instance of ALSASeqQueueInfo.
+ * Allocate and return an instance of [class@QueueInfo].
  *
- * Returns: A #ALSASeqQueueInfo.
+ * Returns: An instance of [class@QueueInfo].
  */
 ALSASeqQueueInfo *alsaseq_queue_info_new()
 {
