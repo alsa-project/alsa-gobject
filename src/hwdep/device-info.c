@@ -2,16 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: device-info
- * @Title: ALSAHwdepDeviceInfo
- * @Short_description: A GObject-derived object to represent information of
- *                     ALSA hwdep device.
+ * ALSAHwdepDeviceInfo:
+ * A GObject-derived object to represent information of ALSA hwdep device.
  *
- * A #ALSAHwdepDeviceInfo is a GObject-derived object to represent information
- * of ALSA hwdep device. The call of alsahwdep_get_device_info() returns an
- * instance of the object.
+ * A [class@DeviceInfo] is a GObject-derived object to represent information of ALSA hwdep device.
+ * The call of [func@get_device_info] returns an instance of the object.
  *
- * The object wraps 'struct snd_hwdep_info' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_hwdep_info` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_hwdep_info info;
