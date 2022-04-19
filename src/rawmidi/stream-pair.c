@@ -217,13 +217,14 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                      ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) == 0);
     g_return_if_fail(error == NULL || *error == NULL);
 
+    open_flag &= ~(O_RDWR | O_WRONLY | O_RDONLY);
     if ((access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT) &&
         (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT))
-        open_flag = O_RDWR;
+        open_flag |= O_RDWR;
     else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT)
-        open_flag = O_WRONLY;
+        open_flag |= O_WRONLY;
     else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)
-        open_flag = O_RDONLY;
+        open_flag |= O_RDONLY;
     else
         g_return_if_reached();
 
