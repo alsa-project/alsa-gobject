@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2022/03/16
+2022/04/03
 Takashi Sakamoto
 
 Introduction
@@ -98,7 +98,7 @@ Generate documentation ::
     $ meson --prefix=xxx -D doc=true . build
     $ cd build
     $ meson install
-    $ xdg-open xxx/share/doc/html/index.html
+    $ xdg-open xxx/share/doc/alsa-gobject/index.html
 
 Design note
 ===========
