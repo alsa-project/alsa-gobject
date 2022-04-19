@@ -2,18 +2,16 @@
 #include "privates.h"
 
 /**
- * SECTION: elem-value
- * @Title: ALSACtlElemValue
- * @Short_description: A boxed object to represent the container of array of
- *                     values for any type of element.
+ * ALSACtlElemValue:
+ * A boxed object to represent the container of array of values for any type of element.
  *
- * A #ALSACtlElemValue is boxed object to represent the container of values for
- * any type of element. The arrays of values for each type of element shares the
- * same storage, thus it's important for applications to distinguish the type of
- * element in advance of accessing the array. The object is used for the call of
- * alsactl_card_write_elem_value() and alsactl_card_read_elem_value().
+ * A [class@ElemValue] is boxed object to represent the container of values for any type of
+ * element. The arrays of values for each type of element shares the same storage, thus it's
+ * important for applications to distinguish the type of element in advance of accessing the
+ * array. The object is used for the call of [method@Card.write_elem_value] and
+ * [method@Card.read_elem_value].
  *
- * The object wraps 'struct snd_ctl_elem_value' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_ctl_elem_value` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_ctl_elem_value value;
@@ -69,17 +67,16 @@ static void alsactl_elem_value_init(ALSACtlElemValue *self)
 /**
  * alsactl_elem_value_new:
  *
- * Allocate and return an instance of ALSACtlElemValue.
+ * Allocate and return an instance of [class@ElemValue].
  *
- * Returns: A #ALSACtlElemValue.
+ * Returns: An instance of [class@ElemValue].
  */
 ALSACtlElemValue *alsactl_elem_value_new()
 {
     return g_object_new(ALSACTL_TYPE_ELEM_VALUE, NULL);
 }
 
-void ctl_elem_value_refer_private(ALSACtlElemValue *self,
-                                  struct snd_ctl_elem_value **value)
+void ctl_elem_value_refer_private(ALSACtlElemValue *self, struct snd_ctl_elem_value **value)
 {
     ALSACtlElemValuePrivate *priv =
                                 alsactl_elem_value_get_instance_private(self);
@@ -88,14 +85,13 @@ void ctl_elem_value_refer_private(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_bool:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count): The array for values of boolean type.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of boolean type into internal data.
  */
-void alsactl_elem_value_set_bool(ALSACtlElemValue *self,
-                                 const gboolean *values, gsize value_count)
+void alsactl_elem_value_set_bool(ALSACtlElemValue *self, const gboolean *values, gsize value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -114,15 +110,14 @@ void alsactl_elem_value_set_bool(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_get_bool:
- * @self: A #ALSACtlElemValue.
- * @values: (array length=value_count)(inout): The array for values of boolean
- *          type.
+ * @self: A [class@ElemValue].
+ * @values: (array length=value_count)(inout): The array for values of boolean type.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of boolean type from internal data.
  */
-void alsactl_elem_value_get_bool(ALSACtlElemValue *self,
-                                 gboolean *const *values, gsize *value_count)
+void alsactl_elem_value_get_bool(ALSACtlElemValue *self, gboolean *const *values,
+                                 gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -142,14 +137,13 @@ void alsactl_elem_value_get_bool(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_int:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count): The array for values of integer type.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of integer type into internal storage.
  */
-void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values,
-                                gsize value_count)
+void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values, gsize value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -168,15 +162,14 @@ void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values,
 
 /**
  * alsactl_elem_value_get_int:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count)(inout): The array for values of integer
  *          type.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of integer type from internal storage.
  */
-void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values,
-                                gsize *value_count)
+void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -196,15 +189,13 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values,
 
 /**
  * alsactl_elem_value_set_enum:
- * @self: A #ALSACtlElemValue.
- * @values: (array length=value_count): The array for values of enumeration
- *          index.
+ * @self: A [class@ElemValue].
+ * @values: (array length=value_count): The array for values of enumeration index.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of enumeration index into internal storage.
  */
-void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
-                                 const guint32 *values, gsize value_count)
+void alsactl_elem_value_set_enum(ALSACtlElemValue *self, const guint32 *values, gsize value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -223,15 +214,13 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_get_enum:
- * @self: A #ALSACtlElemValue.
- * @values: (array length=value_count)(inout): The array for values of
- *          enumeration index.
+ * @self: A [class@ElemValue].
+ * @values: (array length=value_count)(inout): The array for values of enumeration index.
  * @value_count: The number of values up to 128.
  *
  * Copy the array for values of enumeration index from internal storage.
  */
-void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
-                                 guint32 *const *values, gsize *value_count)
+void alsactl_elem_value_get_enum(ALSACtlElemValue *self, guint32 *const *values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -251,14 +240,13 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_bytes:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count): The array for values of bytes type.
  * @value_count: The number of values up to 512.
  *
  * Copy the array for values of bytes type into internal storage.
  */
-void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
-                                  const guint8 *values, gsize value_count)
+void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, gsize value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -277,14 +265,13 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_get_bytes:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count)(inout): The array for values of bytes type.
  * @value_count: The number of values up to 512.
  *
  * Copy the array for values of bytes type into internal storage.
  */
-void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
-                                  guint8 *const *values, gsize *value_count)
+void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, guint8 *const *values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -304,15 +291,14 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_iec60958_channel_status:
- * @self: A #ALSACtlElemValue.
- * @status: (array length=length): The array of byte data for channel status
- *          bits in IEC 60958.
+ * @self: A [class@ElemValue].
+ * @status: (array length=length): The array of byte data for channel status bits in IEC 60958.
  * @length: The number of bytes in channel_status argument, up to 24.
  *
  * Copy the given channel status of IEC 60958 into internal storage.
  */
-void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
-                                        const guint8 *status, gsize length)
+void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self, const guint8 *status,
+                                                    gsize length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -331,15 +317,15 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_get_iec60958_channel_status:
- * @self: A #ALSACtlElemValue.
- * @status: (array length=length)(inout): The array of byte data for channel
- *          status bits for IEC 60958 element.
+ * @self: A [class@ElemValue].
+ * @status: (array length=length)(inout): The array of byte data for channel status bits for
+ *          IEC 60958 element.
  * @length: The number of bytes in status argument, up to 24.
  *
  * Copy channel status of IEC 60958 from internal storage.
  */
-void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self,
-                                        guint8 *const *status, gsize *length)
+void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, guint8 *const *status,
+                                                    gsize *length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -359,15 +345,14 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_iec60958_user_data:
- * @self: A #ALSACtlElemValue.
- * @data: (array length=length): The array of byte data for user data bits in
- *        IEC 60958.
+ * @self: A [class@ElemValue].
+ * @data: (array length=length): The array of byte data for user data bits in IEC 60958.
  * @length: The number of bytes in data argument, up to 147.
  *
  * Copy the given user data of IEC 60958 into internal storage.
  */
-void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self,
-                                        const guint8 *data, gsize length)
+void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self, const guint8 *data,
+                                               gsize length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -386,15 +371,14 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_get_iec60958_user_data:
- * @self: A #ALSACtlElemValue.
- * @data: (array length=length)(inout): The array of byte data for user data
- *        bits in IEC 60958.
+ * @self: A [class@ElemValue].
+ * @data: (array length=length)(inout): The array of byte data for user data bits in IEC 60958.
  * @length: The number of bytes in user_data argument, up to 147.
  *
  * Copy user data of IEC 60958 from internal storage.
  */
-void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self,
-                                        guint8 *const *data, gsize *length)
+void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, guint8 *const *data,
+                                               gsize *length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -414,14 +398,13 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_set_int64:
- * @self: A #ALSACtlElemValue.
+ * @self: A [class@ElemValue].
  * @values: (array length=value_count): The array for values of integer64 type.
  * @value_count: The number of values up to 64.
  *
  * Copy the array for values of integer64 type into internal storage.
  */
-void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
-                                  gsize value_count)
+void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values, gsize value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -440,15 +423,13 @@ void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
 
 /**
  * alsactl_elem_value_get_int64:
- * @self: A #ALSACtlElemValue.
- * @values: (array length=value_count)(inout): The array for values of integer64
- *          type.
+ * @self: A [class@ElemValue].
+ * @values: (array length=value_count)(inout): The array for values of integer64 type.
  * @value_count: The number of values up to 64.
  *
  * Copy the array for values of integer64 type from internal storage.
  */
-void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
-                                  gint64 *const *values, gsize *value_count)
+void alsactl_elem_value_get_int64(ALSACtlElemValue *self, gint64 *const *values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -468,14 +449,14 @@ void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
 
 /**
  * alsactl_elem_value_equal:
- * @self: A #ALSACtlElemValue.
- * @target: A #ALSACtlElemValue to compare.
+ * @self: A [class@ElemValue].
+ * @target: A [class@ElemValue] to compare.
  *
- * Returns: whether the given object includes the same values as the instance.
- *          The other fields are ignored to be compared.
+ * Returns: Whether the given object includes the same values as the instance. The other fields are
+ *          ignored to be compared.
  */
-gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self,
-                                  const ALSACtlElemValue *target) {
+gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self, const ALSACtlElemValue *target)
+{
     const ALSACtlElemValuePrivate *lhs, *rhs;
 
     g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)self), FALSE);
