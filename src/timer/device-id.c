@@ -2,17 +2,14 @@
 #include "privates.h"
 
 /**
- * SECTION: device-id
- * @Title: ALSATimerDeviceId
- * @Short_description: A boxed object to represent the identifier of timer
- *                     device.
+ * ALSATimerDeviceId:
+ * A boxed object to represent the identifier of timer device.
  *
- * A #ALSATimerDeviceId is a boxed object to represent the identifier of timer
- * device. The identifier mainly consists of the class of timer device. The
- * other members; the numerical ID of card, device, and subdevice are optional
- * according to the class of timer device.
+ * A [struct@DeviceId] is a boxed object to represent the identifier of timer device. The
+ * identifier mainly consists of the class of timer device. The other members; the numeric ID of
+ * card, device, and subdevice are optional according to the class of timer device.
  *
- * The object wraps 'struct snd_timer_id' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_timer_id` in UAPI of Linux sound subsystem.
  */
 ALSATimerDeviceId *timer_device_id_copy(const ALSATimerDeviceId *self)
 {
@@ -31,14 +28,14 @@ G_DEFINE_BOXED_TYPE(ALSATimerDeviceId, alsatimer_device_id, timer_device_id_copy
 
 /**
  * alsatimer_device_id_new:
- * @class: The class of device, one of #ALSATimerClass.
- * @card_id: The numerical ID of relevant sound card.
- * @device_id: The numerical ID of relevant device.
- * @subdevice_id: The numerical ID of relevant subdevice.
+ * @class: The class of device, one of [enum@Class].
+ * @card_id: The numeric ID of relevant sound card.
+ * @device_id: The numeric ID of relevant device.
+ * @subdevice_id: The numeric ID of relevant subdevice.
  *
- * Allocate and return an instance of ALSATimerDeviceId.
+ * Allocate and return an instance of [struct@DeviceId].
  *
- * Returns: A #ALSATimerDeviceId.
+ * Returns: A [struct@DeviceId].
  */
 ALSATimerDeviceId *alsatimer_device_id_new(ALSATimerClass class,
                                            gint card_id, gint device_id,
@@ -56,8 +53,8 @@ ALSATimerDeviceId *alsatimer_device_id_new(ALSATimerClass class,
 
 /**
  * alsatimer_device_id_get_class:
- * @self: A #ALSATimerDeviceId.
- * @class: (out): The class of timer, one of #ALSATimerClass.
+ * @self: A [struct@DeviceId].
+ * @class: (out): The class of timer, one of [enum@Class].
  *
  * Get the class of timer.
  */
@@ -69,10 +66,10 @@ void alsatimer_device_id_get_class(const ALSATimerDeviceId *self,
 
 /**
  * alsatimer_device_id_get_card_id:
- * @self: A #ALSATimerDeviceId.
- * @card_id: (out): The numerical ID of sound card to which the timer belongs.
+ * @self: A [struct@DeviceId].
+ * @card_id: (out): The numeric ID of sound card to which the timer belongs.
  *
- * Get the numerical ID of sound card to which the device belongs.
+ * Get the numeric ID of sound card to which the device belongs.
  */
 void alsatimer_device_id_get_card_id(const ALSATimerDeviceId *self,
                                      gint *card_id)
@@ -82,10 +79,10 @@ void alsatimer_device_id_get_card_id(const ALSATimerDeviceId *self,
 
 /**
  * alsatimer_device_id_get_device_id:
- * @self: A #ALSATimerDeviceId.
- * @device_id: (out): The numerical ID of device to which the timer belongs.
+ * @self: A [struct@DeviceId].
+ * @device_id: (out): The numeric ID of device to which the timer belongs.
  *
- * Get the numerical ID of device to which the timer belongs.
+ * Get the numeric ID of device to which the timer belongs.
  */
 void alsatimer_device_id_get_device_id(const ALSATimerDeviceId *self,
                                        gint *device_id)
@@ -95,10 +92,10 @@ void alsatimer_device_id_get_device_id(const ALSATimerDeviceId *self,
 
 /**
  * alsatimer_device_id_get_subdevice_id:
- * @self: A #ALSATimerDeviceId.
- * @subdevice_id: (out): The numerical ID of subdevice to which the timer belongs.
+ * @self: A [struct@DeviceId].
+ * @subdevice_id: (out): The numeric ID of subdevice to which the timer belongs.
  *
- * Get the numerical ID of subdevice to which the timer belongs.
+ * Get the numeric ID of subdevice to which the timer belongs.
  */
 void alsatimer_device_id_get_subdevice_id(const ALSATimerDeviceId *self,
                                           gint *subdevice_id)
