@@ -4,17 +4,14 @@
 #include <unistd.h>
 
 /**
- * SECTION: substream-params
- * @Title: ALSARawmidiSubstreamParams
- * @Short_description: A GObject-derived object to represent parameters of
- *                     substream.
+ * ALSARawmidiSubstreamParams:
+ * A GObject-derived object to represent parameters of substream.
  *
- * A #ALSARawmidiSubstreamParams is a GObject-derived object to represent
- * parameters of substream attached to the pair of streams. The call of
- * alsarawmidi_stream_pair_set_substream_params() requires the instance of
- * object.
+ * A [class@SubstreamParams] is a GObject-derived object to represent parameters of substream
+ * attached to the pair of streams. The call of [method@StreamPair.set_substream_params] requires
+ * the instance of object.
  *
- * The object wraps 'struct snd_rawmidi_params' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_rawmidi_params` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_rawmidi_params params;
@@ -118,7 +115,9 @@ static void alsarawmidi_substream_params_init(ALSARawmidiSubstreamParams *self)
 /**
  * alsarawmidi_substream_params_new:
  *
- * Allocate and return an instance of [class@SubstreamParams] class.
+ * Allocate and return an instance of [class@SubstreamParams].
+ *
+ * Returns: An instance of [class@SubstreamParams].
  */
 ALSARawmidiSubstreamParams *alsarawmidi_substream_params_new()
 {
