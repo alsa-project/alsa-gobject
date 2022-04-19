@@ -4,17 +4,14 @@
 #include <errno.h>
 
 /**
- * SECTION: instance-params
- * @Title: ALSATimerInstanceParams
- * @Short_description: A GObject-derived object to represent parameters of user
- *                     instance
+ * ALSATimerInstanceParams:
+ * A GObject-derived object to represent parameters of user instance.
  *
- * A #ALSATimerInstanceParams is a GObject-derived object to represent
- * parameters of user instance attached to any timer device or the other
- * instance as slave. The call of alsatimer_user_instance_set_params() requires
- * the instance of object.
+ * A [class@InstanceParams] is a GObject-derived object to represent parameters of user instance
+ * attached to any timer device or the other instance as slave. The call of
+ * [method@UserInstance.set_params] requires the instance of object.
  *
- * The object wraps 'struct snd_timer_params' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_timer_params` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_timer_params params;
@@ -117,7 +114,9 @@ static void alsatimer_instance_params_init(ALSATimerInstanceParams *self)
 /**
  * alsatimer_instance_params_new:
  *
- * Allocate and return an instance of ALSATimerInstanceParams.
+ * Allocate and return an instance of [class@InstanceParams].
+ *
+ * Returns: An instance of [class@InstanceParams].
  */
 ALSATimerInstanceParams *alsatimer_instance_params_new()
 {
@@ -126,14 +125,13 @@ ALSATimerInstanceParams *alsatimer_instance_params_new()
 
 /**
  * alsatimer_instance_params_set_event_filter:
- * @self: A #ALSATimerInstanceParams.
- * @entries: (array length=entry_count): The array with elements for entries of
- *           #ALSATimerEventType.
+ * @self: A [class@InstanceParams].
+ * @entries: (array length=entry_count): The array with elements for entries of [enum@EventType].
  * @entry_count: The number of elements in the above array.
- * @error: A #GError at failure.
+ * @error: A [struct@GLib.Error] at failure.
  *
- * Set the list of ALSATimerEventType to filter events. This parameter is only
- * effective for target instance with ALSATimerEventDataType.TIMESTAMP.
+ * Set the list of [enum@EventType] to filter events. This parameter is effective only for target
+ * instance with [enum@EventDataType:TIMESTAMP].
  */
 void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
                                             const ALSATimerEventType *entries,
@@ -172,14 +170,13 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
 
 /**
  * alsatimer_instance_params_get_event_filter:
- * @self: A #ALSATimerInstanceParams.
- * @entries: (array length=entry_count)(out): The array with elements for
- *           entries of #ALSATimerEventType.
+ * @self: A [class@InstanceParams].
+ * @entries: (array length=entry_count)(out): The array with elements for entries of [enum@EventType].
  * @entry_count: The number of elements in the above array.
- * @error: A #GError at failure.
+ * @error: A [struct@GLib.Error] at failure.
  *
- * Get the list of ALSATimerEventType to filter events. This parameter is only
- * effective for target instance with ALSATimerEventDataType.TIMESTAMP.
+ * Get the list of ALSATimerEventType to filter events. This parameter is effective only for target
+ * instance with [enum@EventDataType:TIMESTAMP].
  */
 void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
                                             ALSATimerEventType **entries,
