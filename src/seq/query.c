@@ -10,16 +10,9 @@
 #include <unistd.h>
 
 /**
- * SECTION: query
- * @Title: Global functions in ALSASeq
- * @Short_description: Global functions available without holding any file
- *                     descriptor
- */
-
-/**
  * alsaseq_get_seq_sysname:
  * @sysname: (out): The sysname of ALSA Sequencer.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate sysname string for ALSA sequencer and return it when exists.
  *
@@ -40,7 +33,7 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
 /**
  * alsaseq_get_seq_devnode:
  * @devnode: (out): The devnode of ALSA Sequencer.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate devnode string for ALSA Sequencer and return it when exists.
  *
@@ -78,12 +71,12 @@ static int open_fd(GError **error)
 /**
  * alsaseq_get_system_info:
  * @system_info: (out): The information of ALSA Sequencer.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get information of ALSA Sequencer.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_SYSTEM_INFO command for ALSA sequencer character device.
+ * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
+ * `SNDRV_SEQ_IOCTL_SYSTEM_INFO` command for ALSA sequencer character device.
  */
 void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 {
@@ -115,18 +108,17 @@ end:
 
 /**
  * alsaseq_get_client_id_list:
- * @entries: (array length=entry_count)(out): The array with elements for
- *           numerical ID of client. One of ALSASeqSpecificClientId can be
- *           included in result as well as any numerical value.
+ * @entries: (array length=entry_count)(out): The array with elements for numeric identified of
+ *           client. One of [enum@SpecificClientId] can be included in result as well as any
+ *           numeric value.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the list of clients as the numerical ID.
+ * Get the list of clients as the numeric identifier.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_CLIENT_ID, SNDRV_SEQ_IOCTL_SYSTEM_INFO, and
- * SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
+ * `SNDRV_SEQ_IOCTL_CLIENT_ID`, `SNDRV_SEQ_IOCTL_SYSTEM_INFO`, and
+ * `SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT` command for ALSA sequencer character device.
  */
 void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
                                 GError **error)
@@ -197,17 +189,15 @@ end:
 
 /**
  * alsaseq_get_client_info:
- * @client_id: The numerical ID of client to query. One of
- *             ALSASeqSpecificClientId is available as well as any numerical
- *             value.
- * @client_info: (out): A #ALSASeqClientInfo for the client.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @client_id: The numeric identifier of client to query. One of [enum@SpecificClientId] is
+ *             available as well as any numeric value.
+ * @client_info: (out): A [class@ClientInfo] for the client.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the information of client according to the numerical ID.
+ * Get the information of client according to the numeric ID.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_CLIENT_INFO command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO` command for ALSA sequencer character device.
  */
 void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
                              GError **error)
@@ -237,20 +227,18 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
 
 /**
  * alsaseq_get_port_id_list:
- * @client_id: The numerical ID of client to query. One of
- *             ALSASeqSpecificClientId is available as well as any numerical
- *             value.
- * @entries: (array length=entry_count)(out): The array with elements for
- *           numerical ID of port. One of ALSASeqSpecificPortId is available as
- *           well as any numerical value.
+ * @client_id: The numeric ID of client to query. One of [enum@SpecificClientId] is available as
+ *             well as any numeric value.
+ * @entries: (array length=entry_count)(out): The array with elements for numeric identifier of
+ *           port. One of [enum@SpecificPortId] is available as well as any numeric value.
  * @entry_count: The number of entries in the array.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the list of numerical IDs for port added by the client.
+ * Get the list of numeric identifiers for port added by the client.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_CLIENT_INFO and SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT
- * commands for ALSA sequencer character device.
+ * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO` and `SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT` commands for ALSA
+ * sequencer character device.
  */
 void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
                               gsize *entry_count, GError **error)
@@ -310,19 +298,17 @@ end:
 
 /**
  * alsaseq_get_port_info:
- * @client_id: The numerical ID of client to query. One of
- *             ALSASeqSpecificClientId is available as well as any numerica
- *             value.
- * @port_id: The numerical ID of port in the client. One of
- *           ALSASeqSpecificPortId is available as well as any numerical value.
- * @port_info: (out): A #ALSASeqPortInfo for the port.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @client_id: The numeric identifier of client to query. One of [enum@SpecificClientId] is
+ *             available as well as any numerica value.
+ * @port_id: The numeric identifier of port in the client. One of [enum@SpecificPortId] is
+ *           available as well as any numeric value.
+ * @port_info: (out): A [class@PortInfo] for the port.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the information of port in client.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_PORT_INFO command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_PORT_INFO` command for ALSA sequencer character device.
  */
 void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
                            ALSASeqPortInfo **port_info, GError **error)
@@ -353,17 +339,15 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
 
 /**
  * alsaseq_get_client_pool:
- * @client_id: The numerical ID of client to query. One of
- *             ALSASeqSpecificClientId is available as well as any numerical
- *             value.
+ * @client_id: The numeric ID of client to query. One of [enum@SpecificClientId] is available as
+ *             well as any numeric value.
  * @client_pool: (out): The information of memory pool for the client.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get statistical information of memory pool for the given client.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_CLIENT_POOL command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_CLIENT_POOL` command for ALSA sequencer character device.
  */
 void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
                              GError **error)
@@ -406,16 +390,16 @@ static void fill_data_with_result(struct snd_seq_port_subscribe *data,
 
 /**
  * alsaseq_get_subscription_list:
- * @addr: A #ALSASeqAddr to query.
- * @query_type: The type of query, one of #ALSASeqQuerySubscribeType.
- * @entries: (element-type ALSASeq.SubscribeData)(out): The array with element
- *           for subscription data.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @addr: A [struct@Addr] to query.
+ * @query_type: The type of query, one of [enum@QuerySubscribeType].
+ * @entries: (element-type ALSASeq.SubscribeData)(out): The array with element for subscription
+ *           data.
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the list of subscription for given address and query type.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_QUERY_SUBS command for ALSA sequencer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_QUERY_SUBS` command for ALSA sequencer character device.
  */
 void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
                                    ALSASeqQuerySubscribeType query_type,
@@ -475,16 +459,15 @@ end:
 
 /**
  * alsaseq_get_queue_id_list:
- * @entries: (array length=entry_count)(out): The array of elements for
- *           numerical ID of queue.
+ * @entries: (array length=entry_count)(out): The array of elements for numeric identifier of queue.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the list of queue in ALSA Sequencer.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_SYSTEM_INFO and SNDRV_SEQ_IOCTL_GET_QUEUE_INFO commands
- * for ALSA sequencer character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_SYSTEM_INFO` and `SNDRV_SEQ_IOCTL_GET_QUEUE_INFO` commands for ALSA
+ * sequencer character device.
  */
 void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
                                GError **error)
@@ -540,16 +523,14 @@ end:
 
 /**
  * alsaseq_get_queue_info_by_id:
- * @queue_id: The numerical ID of queue, except for one of
- *            ALSASeqSpecificQueueId.
+ * @queue_id: The numeric ID of queue, except for one of [enum@SpecificQueueId].
  * @queue_info: (out): The information of queue.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the information of queue, according to the numerical ID.
+ * Get the information of queue, according to the numeric ID.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_QUEUE_INFO command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_QUEUE_INFO` command for ALSA sequencer character device.
  */
 void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info,
                                   GError **error)
@@ -580,13 +561,12 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
  * alsaseq_get_queue_info_by_name:
  * @name: The name string of queue to query.
  * @queue_info: (out): The information of queue.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get the information of queue, according to the name string.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE` command for ALSA sequencer character device.
  */
 void alsaseq_get_queue_info_by_name(const gchar *name,
                                     ALSASeqQueueInfo **queue_info,
@@ -616,16 +596,14 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
 
 /**
  * alsaseq_get_queue_status:
- * @queue_id: The numerical ID of queue, except for entries in
- *            ALSASeqSpecificQueueId.
+ * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
  * @queue_status: (inout): The current status of queue.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Get current status of queue.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system calls
- * with SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS command for ALSA sequencer character
- * device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
+ * `SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS` command for ALSA sequencer character device.
  */
 void alsaseq_get_queue_status(guint8 queue_id,
                               ALSASeqQueueStatus *const *queue_status,
