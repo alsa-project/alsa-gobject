@@ -2,14 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: queue-timer
- * @Title: ALSASeqQueueTimer
- * @Short_description: A GObject-derived object to represent timer for queue
+ * ALSASeqQueueTimer:
+ * A GObject-derived object to represent timer for queue.
  *
- * A #ALSASeqQueueTimer is a GObject-derived object to represent the information
- * of timer which drives the queue.
+ * A [class@QueueTimer] is a GObject-derived object to represent the information of timer which
+ * drives the queue.
  *
- * The object wraps 'struct snd_seq_queue_timer' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_seq_queue_timer` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_seq_queue_timer timer;
@@ -78,9 +77,9 @@ static void alsaseq_queue_timer_init(ALSASeqQueueTimer *self)
 /**
  * alsaseq_queue_timer_new:
  *
- * Allocate and return the instance of #ALSASeqQueueTimer.
+ * Allocate and return an instance of [class@QueueTimer].
  *
- * Returns: the instance of #ALSASeqQueueTimer.
+ * Returns: An instance of [class@QueueTimer].
  */
 ALSASeqQueueTimer *alsaseq_queue_timer_new()
 {
@@ -89,11 +88,10 @@ ALSASeqQueueTimer *alsaseq_queue_timer_new()
 
 /**
  * alsaseq_queue_timer_get_alsa_data:
- * @self: A #ALSASeqQueueTimer.
- * @data: (out)(transfer none): A #ALSASeqQueueTimerDataAlsa.
+ * @self: A [class@QueueTimer].
+ * @data: (out)(transfer none): A [struct@QueueTimerDataAlsa].
  *
- * Refer to the data of timer for queue in the case that the device in ALSATimer
- * drives the timer.
+ * Refer to the data of timer for queue in the case that the device in ALSATimer drives the timer.
  */
 void alsaseq_queue_timer_get_alsa_data(ALSASeqQueueTimer *self,
                                        const ALSASeqQueueTimerDataAlsa **data)
@@ -110,11 +108,10 @@ void alsaseq_queue_timer_get_alsa_data(ALSASeqQueueTimer *self,
 
 /**
  * alsaseq_queue_timer_set_alsa_data:
- * @self: A #ALSASeqQueueTimer.
- * @data: A #ALSASeqQueueTimerDataAlsa.
+ * @self: A [class@QueueTimer].
+ * @data: A [struct@QueueTimerDataAlsa].
  *
- * Set the data of timer for queue in the case that the device in ALSATimer
- * drives the timer.
+ * Set the data of timer for queue in the case that the device in ALSATimer drives the timer.
  */
 void alsaseq_queue_timer_set_alsa_data(ALSASeqQueueTimer *self,
                                        const ALSASeqQueueTimerDataAlsa *data)
