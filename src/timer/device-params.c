@@ -2,16 +2,13 @@
 #include "privates.h"
 
 /**
- * SECTION: device-params
- * @Title: ALSATimerDeviceParams
- * @Short_description: A GObject-derived object to represent parameter of timer
- *                     device.
+ * ALSATimerDeviceParams:
+ * A GObject-derived object to represent parameter of timer device.
  *
- * A #ALSATimerDeviceParams is a GObject-derived object to represent parameter
- * of timer device. The call of alsatimer_set_device_params() requires the
- * instance of object.
+ * A [class@DeviceParams] is a GObject-derived object to represent parameter of timer device. The
+ * call of alsatimer_set_device_params() requires the instance of object.
  *
- * The object wraps 'struct snd_timer_gparams' in UAPI of Linux sound subsystem.
+ * The object wraps `struct snd_timer_gparams` in UAPI of Linux sound subsystem.
  */
 typedef struct {
     struct snd_timer_gparams params;
@@ -98,9 +95,9 @@ static void alsatimer_device_params_init(ALSATimerDeviceParams *self)
 /**
  * alsatimer_device_params_new:
  *
- * Instantiate #ALSATimerDeviceParams object and return the instance.
+ * Instantiate [class@DeviceParams] object and return the instance.
  *
- * Returns: an instance of #ALSATimerDeviceParams.
+ * Returns: an instance of [class@DeviceParams].
  */
 ALSATimerDeviceParams *alsatimer_device_params_new()
 {
