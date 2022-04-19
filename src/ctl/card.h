@@ -19,23 +19,20 @@ struct _ALSACtlCardClass {
 
     /**
      * ALSACtlCardClass::handle_elem_event:
-     * @self: A #ALSACtlCard.
-     * @elem_id: (transfer none): A #ALSACtlElemId.
-     * @events: A set of #ALSACtlElemEventMask.
+     * @self: A [class@Card].
+     * @elem_id: (transfer none): A [struct@ElemId].
+     * @events: A set of [flags@ElemEventMask].
      *
-     * When event occurs for any element, this signal is emit.
+     * Class closure for the [signal@Card::handle-elem-event] signal.
      */
     void (*handle_elem_event)(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                               ALSACtlElemEventMask events);
 
     /**
      * ALSACtlCardClass::handle_disconnection:
-     * @self: A #ALSACtlCard.
+     * @self: A [class@Card].
      *
-     * When the sound card is not available anymore due to unbinding driver or
-     * hot unplugging, this signal is emit. The owner of this object should
-     * call g_object_free() as quickly as possible to be going to release ALSA
-     * control character device.
+     * Class closure for the [signal@Card::handle-disconnection] signal.
      */
     void (*handle_disconnection)(ALSACtlCard *self);
 };
