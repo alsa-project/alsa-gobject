@@ -6,21 +6,13 @@
 #include <sys/ioctl.h>
 
 /**
- * SECTION: query
- * @Title: Global functions in ALSAHwdep
- * @Short_description: Global functions available without holding any file
- *                     descriptor
- */
-
-/**
  * alsahwdep_get_device_id_list:
- * @card_id: The numerical ID of sound card.
- * @entries: (array length=entry_count)(out): The list of numerical ID for
- *           hwdep device.
+ * @card_id: The numeric ID of sound card.
+ * @entries: (array length=entry_count)(out): The list of numeric ID for hwdep device.
  * @entry_count: The number of entries.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the list of numerical ID for available hwdep devices of sound card.
+ * Get the list of numeric ID for available hwdep devices of sound card.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
  */
@@ -41,9 +33,9 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
 /**
  * alsahwdep_get_hwdep_sysname:
  * @card_id: The numeridcal ID of sound card.
- * @device_id: The numerical ID of hwdep device for the sound card.
+ * @device_id: The numeric ID of hwdep device for the sound card.
  * @sysname: (out): The string for sysname of hwdep device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate sysname for hwdep device and return it when it exists.
  *
@@ -65,9 +57,9 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
 /**
  * alsahwdep_get_hwdep_devnode:
  * @card_id: The numeridcal ID of sound card.
- * @device_id: The numerical ID of hwdep device for the sound card.
+ * @device_id: The numeric ID of hwdep device for the sound card.
  * @devnode: (out): The string for devnode of hwdep device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
  * Allocate devnode string for hwdep device and return it when exists.
  *
@@ -88,15 +80,15 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
 
 /**
  * alsahwdep_get_device_info:
- * @card_id: The numberical value for sound card to query.
- * @device_id: The numerical value of hwdep device to query.
+ * @card_id: The numeric value for sound card to query.
+ * @device_id: The numeric value of hwdep device to query.
  * @device_info: (out): The information of the device.
- * @error: A #GError. Error is generated with domain of #g_file_error_quark().
+ * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the information according to given numerical IDs for card and device.
+ * Get the information according to given numeric IDs for card and device.
  *
- * The call of function executes open(2), close(2), and ioctl(2) system call
- * with SNDRV_CTL_IOCTL_HWDEP_INFO command for ALSA control character device.
+ * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call
+ * with `SNDRV_CTL_IOCTL_HWDEP_INFO` command for ALSA control character device.
  */
 void alsahwdep_get_device_info(guint card_id, guint device_id,
                                ALSAHwdepDeviceInfo **device_info,
