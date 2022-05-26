@@ -3,9 +3,12 @@ version = "@VERSION@"
 description = "alsahwdep"
 authors = "Takashi Sakamoto"
 license = "LGPL-3.0-or-later"
-website_url = "https://alsa-project.github.io/alsa-gobject-docs/alsahwdep/"
+website_url = "https://alsa-project.github.io/gobject-introspection-docs/alsahwdep/"
+docs_url = "https://alsa-project.github.io/gobject-introspection-docs/alsahwdep/"
 browse_url = "https://github.com/alsa-project/alsa-gobject"
 repository_url = "https://github.com/alsa-project/alsa-gobject.git"
+devhelp=true
+search_index=true
 
 dependencies = [
   "GLib-2.0",
