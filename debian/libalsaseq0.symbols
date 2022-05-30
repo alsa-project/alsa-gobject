@@ -1,15 +1,16 @@
 libalsaseq.so.0 libalsaseq0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
  ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
+ ALSA_GOBJECT_0_3_0@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_addr_get_client_id@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_addr_get_port_id@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_addr_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_addr_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_addr_equal@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_client_info_get_event_filter@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_client_info_get_event_filter@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_client_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_client_info_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_client_info_set_event_filter@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_client_info_set_event_filter@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_client_pool_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_client_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_event_data_connect_get_dst@ALSA_GOBJECT_0_0_0 0.1.0
@@ -61,19 +62,19 @@ libalsaseq.so.0 libalsaseq0 #MINVER#
  alsaseq_event_timestamp_mode_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_event_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_filter_attr_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_client_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_client_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_client_pool@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_port_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_port_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_queue_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_queue_info_by_id@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_queue_info_by_name@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_queue_status@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_seq_devnode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_seq_sysname@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_subscription_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_get_system_info@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_get_client_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_client_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_client_pool@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_port_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_port_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_queue_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_queue_info_by_id@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_queue_info_by_name@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_queue_status@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_seq_devnode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_seq_sysname@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_subscription_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_get_system_info@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_port_attr_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_port_cap_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_port_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
@@ -90,15 +91,9 @@ libalsaseq.so.0 libalsaseq0 #MINVER#
  alsaseq_queue_tempo_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_queue_tempo_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_queue_tempo_set_skew@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_get_alsa_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_set_alsa_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_data_alsa_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_data_alsa_get_device_id@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_data_alsa_set_device_id@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_data_alsa_get_resolution@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_queue_timer_data_alsa_set_resolution@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_queue_timer_alsa_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_queue_timer_alsa_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_queue_timer_common_get_type@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_queue_timer_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_remove_filter_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_remove_filter_get_type@ALSA_GOBJECT_0_0_0 0.1.0
@@ -121,72 +116,72 @@ libalsaseq.so.0 libalsaseq0 #MINVER#
  alsaseq_tstamp_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_tstamp_set_real_time@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_tstamp_set_tick_time@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_create_port@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_create_port_at@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_create_queue@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_create_source@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_delete_port@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_delete_queue@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_pool@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_queue_tempo@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_queue_timer@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_queue_usage@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_user_client_create_port@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_create_port_at@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_create_queue@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_create_source@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_delete_port@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_delete_queue@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_get_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_get_pool@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_get_queue_tempo@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_get_queue_timer@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_get_queue_usage@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_user_client_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_user_client_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_get_protocol_version@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_open@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_operate_subscription@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_schedule_event@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_set_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_set_pool@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_set_queue_tempo@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_set_queue_timer@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_set_queue_usage@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_update_port@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_user_client_update_queue@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_user_client_get_protocol_version@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_open@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_operate_subscription@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_schedule_event@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_set_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_set_pool@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_set_queue_tempo@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_set_queue_timer@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_set_queue_usage@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_update_port@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_user_client_update_queue@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_event_cntr_count_events@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_calculate_pool_consumption@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_addr_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_blob_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_byte_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_connect_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_ctl_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_dst@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_event_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_length_mode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_note_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_priority_mode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_quadlet_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_queue_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_queue_id@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_result_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_src@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_tag@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_time_mode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_tstamp@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_tstamp_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_get_tstamp_mode@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_event_cntr_calculate_pool_consumption@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_addr_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_blob_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_byte_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_connect_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_ctl_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_dst@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_event_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_length_mode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_note_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_priority_mode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_quadlet_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_queue_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_queue_id@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_result_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_src@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_tag@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_time_mode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_tstamp@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_tstamp_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_get_tstamp_mode@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_event_cntr_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsaseq_event_cntr_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_addr_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_blob_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_byte_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_connect_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_ctl_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_dst@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_event_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_note_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_priority_mode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_quadlet_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_queue_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_queue_id@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_result_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_src@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_tag@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_time_mode@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_tstamp@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_tstamp_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsaseq_event_cntr_set_tstamp_mode@ALSA_GOBJECT_0_0_0 0.1.0
+ alsaseq_event_cntr_set_addr_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_blob_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_byte_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_connect_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_ctl_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_dst@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_event_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_note_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_priority_mode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_quadlet_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_queue_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_queue_id@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_result_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_src@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_tag@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_time_mode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_tstamp@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_tstamp_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsaseq_event_cntr_set_tstamp_mode@ALSA_GOBJECT_0_3_0 0.3.0
  alsaseq_user_client_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
  alsaseq_user_client_error_quark@ALSA_GOBJECT_0_2_0 0.2.0

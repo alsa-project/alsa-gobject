@@ -1,21 +1,22 @@
 libalsactl.so.0 libalsactl0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
  ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
- alsactl_card_add_elems@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_create_source@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_get_elem_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_get_elem_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_get_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_get_protocol_version@ALSA_GOBJECT_0_0_0 0.1.0
+ ALSA_GOBJECT_0_3_0@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_add_elems@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_create_source@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_get_elem_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_get_elem_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_get_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_get_protocol_version@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_card_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_card_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_lock_elem@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_card_lock_elem@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_card_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_open@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_read_elem_value@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_remove_elems@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_replace_elems@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_card_write_elem_value@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_card_open@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_read_elem_value@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_remove_elems@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_replace_elems@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_write_elem_value@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_elem_access_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_event_mask_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_id_equal@ALSA_GOBJECT_0_0_0 0.1.0
@@ -29,14 +30,20 @@ libalsactl.so.0 libalsactl0 #MINVER#
  alsactl_elem_id_new_by_name@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_id_new_by_numid@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_iface_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_get_int_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_set_int_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_get_int64_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_set_int64_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_get_enum_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_info_set_enum_data@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_elem_info_boolean_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_boolean_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_bytes_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_bytes_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_common_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_enumerated_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_enumerated_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_iec60958_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_iec60958_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_integer64_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_integer64_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_integer_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_integer_new@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_info_single_array_get_type@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_elem_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_equal@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_get_bool@ALSA_GOBJECT_0_0_0 0.1.0
@@ -56,13 +63,12 @@ libalsactl.so.0 libalsactl0 #MINVER#
  alsactl_elem_value_set_int64@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_set_int@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_event_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_get_card_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_get_card_sysname@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_get_control_devnode@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_get_control_sysname@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_sigs_marshal_VOID__BOXED_FLAGS@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_get_card_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_get_card_sysname@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_get_control_devnode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_get_control_sysname@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_card_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
  alsactl_card_error_quark@ALSA_GOBJECT_0_2_0 0.2.0
- alsactl_card_command_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
- alsactl_card_read_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
- alsactl_card_write_elem_tlv@ALSA_GOBJECT_0_2_0 0.2.0
+ alsactl_card_command_elem_tlv@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_read_elem_tlv@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_card_write_elem_tlv@ALSA_GOBJECT_0_3_0 0.3.0

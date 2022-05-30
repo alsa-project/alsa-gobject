@@ -1,6 +1,7 @@
 libalsatimer.so.0 libalsatimer0 #MINVER#
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
  ALSA_GOBJECT_0_2_0@ALSA_GOBJECT_0_2_0 0.2.0
+ ALSA_GOBJECT_0_3_0@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_class_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_id_get_card_id@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_id_get_class@ALSA_GOBJECT_0_0_0 0.1.0
@@ -14,25 +15,21 @@ libalsatimer.so.0 libalsatimer0 #MINVER#
  alsatimer_device_params_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_status_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_status_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_get_tick_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_get_tstamp_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tick_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tick_get_resolution@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tick_get_ticks@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tstamp_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tstamp_get_event@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tstamp_get_tstamp@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_tstamp_get_val@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_data_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_event_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_device_id_list@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_device_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_device_status@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_devnode@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_sysname@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_get_tstamp_source@ALSA_GOBJECT_0_0_0 0.1.0
+ alsatimer_tick_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tick_event_get_resolution@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tick_event_get_ticks@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tstamp_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tstamp_event_get_event@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tstamp_event_get_tstamp@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tstamp_event_get_val@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_event_type_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tstamp_event_type_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_device_id_list@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_device_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_device_status@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_devnode@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_sysname@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_tstamp_source@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_instance_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_param_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_params_get_event_filter@ALSA_GOBJECT_0_0_0 0.1.0
@@ -44,20 +41,20 @@ libalsatimer.so.0 libalsatimer0 #MINVER#
  alsatimer_instance_status_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_slave_class_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_specific_global_device_get_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_attach@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_attach_as_slave@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_choose_event_data_type@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_continue@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_create_source@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_get_info@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_get_protocol_version@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_get_status@ALSA_GOBJECT_0_0_0 0.1.0
+ alsatimer_user_instance_attach@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_attach_as_slave@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_choose_event_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_continue@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_create_source@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_get_info@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_get_protocol_version@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_get_status@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_user_instance_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_user_instance_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_open@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_pause@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_set_params@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_start@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_user_instance_stop@ALSA_GOBJECT_0_0_0 0.1.0
+ alsatimer_user_instance_open@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_pause@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_set_params@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_start@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_user_instance_stop@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_user_instance_error_get_type@ALSA_GOBJECT_0_2_0 0.2.0
  alsatimer_user_instance_error_quark@ALSA_GOBJECT_0_2_0 0.2.0
