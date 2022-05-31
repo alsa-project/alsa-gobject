@@ -15,19 +15,25 @@
  * Get the list of numeric ID for available hwdep devices of sound card.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsahwdep_get_device_id_list(guint card_id, guint **entries,
-                                  gsize *entry_count, GError **error)
+gboolean alsahwdep_get_device_id_list(guint card_id, guint **entries, gsize *entry_count,
+                                      GError **error)
 {
     int err;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = generate_hwdep_sysnum_list(entries, entry_count, card_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate list of hwdep sysnum");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -40,18 +46,24 @@ void alsahwdep_get_device_id_list(guint card_id, guint **entries,
  * Allocate sysname for hwdep device and return it when it exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
-                                 char **sysname, GError **error)
+gboolean alsahwdep_get_hwdep_sysname(guint card_id, guint device_id, char **sysname,
+                                     GError **error)
 {
     int err;
 
-    g_return_if_fail(sysname != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(sysname != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_hwdep_sysname(sysname, card_id, device_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate hwdep sysname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -64,18 +76,24 @@ void alsahwdep_get_hwdep_sysname(guint card_id, guint device_id,
  * Allocate devnode string for hwdep device and return it when exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
-                                 char **devnode, GError **error)
+gboolean alsahwdep_get_hwdep_devnode(guint card_id, guint device_id, char **devnode,
+                                     GError **error)
 {
     int err;
 
-    g_return_if_fail(devnode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(devnode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_hwdep_devname(devnode, card_id, device_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate hwdep devname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -89,16 +107,17 @@ void alsahwdep_get_hwdep_devnode(guint card_id, guint device_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call
  * with `SNDRV_CTL_IOCTL_HWDEP_INFO` command for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsahwdep_get_device_info(guint card_id, guint device_id,
-                               ALSAHwdepDeviceInfo **device_info,
-                               GError **error)
+gboolean alsahwdep_get_device_info(guint card_id, guint device_id,
+                                   ALSAHwdepDeviceInfo **device_info, GError **error)
 {
     struct snd_hwdep_info *info;
     int err;
 
-    g_return_if_fail(device_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(device_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *device_info = g_object_new(ALSAHWDEP_TYPE_DEVICE_INFO, NULL);
     hwdep_device_info_refer_private(*device_info, &info);
@@ -109,5 +128,8 @@ void alsahwdep_get_device_info(guint card_id, guint device_id,
     if (err < 0) {
         generate_file_error(error, -err, "ioctl(HWDEP_INFO)");
         g_object_unref(*device_info);
+        return FALSE;
     }
+
+    return TRUE;
 }

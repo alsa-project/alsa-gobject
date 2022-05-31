@@ -8,9 +8,10 @@ from gi.repository import ALSACtl, ALSAHwdep
 _, card_id_list = ALSACtl.get_card_id_list()
 for card_id in card_id_list:
     print('Card {}:'.format(card_id))
-    for device_id in ALSAHwdep.get_device_id_list(card_id):
+    _, device_id_list = ALSAHwdep.get_device_id_list(card_id)
+    for device_id in device_id_list:
         print('  Device {}:'.format(device_id))
-        info = ALSAHwdep.get_device_info(card_id, device_id)
+        _, info = ALSAHwdep.get_device_info(card_id, device_id)
         for prop in ('device-id', 'card-id', 'id', 'name'):
             print('    {}: {}'.format(prop, info.get_property(prop)))
         print('    iface: {}'.format(info.get_property('iface').value_nick))
