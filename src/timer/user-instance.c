@@ -96,7 +96,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
                      G_SIGNAL_RUN_LAST,
                      G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_event),
                      NULL, NULL,
-                     g_cclosure_marshal_VOID__OBJECT,
+                     g_cclosure_marshal_VOID__BOXED,
                      G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT);
 
     /**
