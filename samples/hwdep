@@ -5,7 +5,8 @@ gi.require_version('ALSACtl', '0.0')
 gi.require_version('ALSAHwdep', '0.0')
 from gi.repository import ALSACtl, ALSAHwdep
 
-for card_id in ALSACtl.get_card_id_list():
+_, card_id_list = ALSACtl.get_card_id_list()
+for card_id in card_id_list:
     print('Card {}:'.format(card_id))
     for device_id in ALSAHwdep.get_device_id_list(card_id):
         print('  Device {}:'.format(device_id))

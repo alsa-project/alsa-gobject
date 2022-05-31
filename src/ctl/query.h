@@ -6,14 +6,14 @@
 
 G_BEGIN_DECLS
 
-void alsactl_get_card_id_list(guint **entries, gsize *entry_count,
+gboolean alsactl_get_card_id_list(guint **entries, gsize *entry_count,
                               GError **error);
 
-void alsactl_get_card_sysname(guint card_id, char **sysname, GError **error);
+gboolean alsactl_get_card_sysname(guint card_id, char **sysname, GError **error);
 
-void alsactl_get_control_sysname(guint card_id, char **sysname, GError **error);
+gboolean alsactl_get_control_sysname(guint card_id, char **sysname, GError **error);
 
-void alsactl_get_control_devnode(guint card_id, char **devnode, GError **error);
+gboolean alsactl_get_control_devnode(guint card_id, char **devnode, GError **error);
 
 G_END_DECLS
 

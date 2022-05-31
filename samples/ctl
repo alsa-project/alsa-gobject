@@ -8,7 +8,7 @@ from gi.repository import GLib, ALSACtl
 from signal import SIGINT
 
 # Retrieve the list of available sound cards.
-card_id_list = ALSACtl.get_card_id_list()
+_, card_id_list = ALSACtl.get_card_id_list()
 
 # Open ALSA control character device.
 card = ALSACtl.Card.new()
