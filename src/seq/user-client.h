@@ -34,88 +34,66 @@ struct _ALSASeqUserClientClass {
 
 ALSASeqUserClient *alsaseq_user_client_new();
 
-void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
-                              GError **error);
+gboolean alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag, GError **error);
 
-void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
-                                        const guint16 *proto_ver_triplet[3],
-                                        GError **error);
+gboolean alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
+                                                  const guint16 *proto_ver_triplet[3],
+                                                  GError **error);
 
-void alsaseq_user_client_set_info(ALSASeqUserClient *self,
-                                  ALSASeqClientInfo *client_info,
-                                  GError **error);
-void alsaseq_user_client_get_info(ALSASeqUserClient *self,
-                                  ALSASeqClientInfo *const *client_info,
-                                  GError **error);
-
-void alsaseq_user_client_create_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *const *port_info,
-                                     GError **error);
-void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
-                                        ALSASeqPortInfo *const *port_info,
-                                        guint8 port_id, GError **error);
-
-void alsaseq_user_client_update_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
-                                     guint8 port_id, GError **error);
-
-void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
-                                     guint8 port_id, GError **error);
-
-void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
-                                  ALSASeqClientPool *client_pool,
-                                  GError **error);
-
-void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
-                                  ALSASeqClientPool *const *client_pool,
-                                  GError **error);
-
-void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
-                                        ALSASeqEventCntr *ev_cntr,
-                                        gsize count, GError **error);
-
-void alsaseq_user_client_create_source(ALSASeqUserClient *self,
-                                       GSource **gsrc, GError **error);
-
-void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
-                                              ALSASeqSubscribeData *subs_data,
-                                              gboolean establish,
-                                              GError **error);
-
-void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
-                                      ALSASeqQueueInfo *const *queue_info,
+gboolean alsaseq_user_client_set_info(ALSASeqUserClient *self, ALSASeqClientInfo *client_info,
                                       GError **error);
-void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
-                                      guint8 queue_id, GError **error);
-void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
-                                ALSASeqQueueInfo *queue_info, GError **error);
+gboolean alsaseq_user_client_get_info(ALSASeqUserClient *self,
+                                      ALSASeqClientInfo *const *client_info, GError **error);
 
-void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
-                                         guint8 queue_id, gboolean *use,
-                                         GError **error);
-void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
-                                         guint8 queue_id, gboolean use,
-                                         GError **error);
+gboolean alsaseq_user_client_create_port(ALSASeqUserClient *self,
+                                         ALSASeqPortInfo *const *port_info, GError **error);
+gboolean alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
+                                            ALSASeqPortInfo *const *port_info,
+                                            guint8 port_id, GError **error);
 
-void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
-                                guint8 queue_id, ALSASeqQueueTempo *queue_tempo,
-                                GError **error);
-void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
-                                guint8 queue_id, ALSASeqQueueTempo **queue_tempo,
-                                GError **error);
+gboolean alsaseq_user_client_update_port(ALSASeqUserClient *self, ALSASeqPortInfo *port_info,
+                                         guint8 port_id, GError **error);
 
-void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
-                                         guint8 queue_id,
-                                         ALSASeqQueueTimer *queue_timer,
-                                         GError **error);
-void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
-                                         guint8 queue_id,
-                                         ALSASeqQueueTimer **queue_timer,
-                                         GError **error);
+gboolean alsaseq_user_client_delete_port(ALSASeqUserClient *self, guint8 port_id, GError **error);
 
-void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
-                                       ALSASeqRemoveFilter *filter,
-                                       GError **error);
+gboolean alsaseq_user_client_set_pool(ALSASeqUserClient *self, ALSASeqClientPool *client_pool,
+                                      GError **error);
+
+gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
+                                      ALSASeqClientPool *const *client_pool, GError **error);
+
+gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, ALSASeqEventCntr *ev_cntr,
+                                            gsize count, GError **error);
+
+gboolean alsaseq_user_client_create_source(ALSASeqUserClient *self, GSource **gsrc, GError **error);
+
+gboolean alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
+                                                  ALSASeqSubscribeData *subs_data,
+                                                  gboolean establish, GError **error);
+
+gboolean alsaseq_user_client_create_queue(ALSASeqUserClient *self,
+                                          ALSASeqQueueInfo *const *queue_info, GError **error);
+gboolean alsaseq_user_client_delete_queue(ALSASeqUserClient *self, guint8 queue_id, GError **error);
+gboolean alsaseq_user_client_update_queue(ALSASeqUserClient *self, ALSASeqQueueInfo *queue_info,
+                                          GError **error);
+
+gboolean alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self, guint8 queue_id,
+                                             gboolean *use, GError **error);
+gboolean alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self, guint8 queue_id,
+                                             gboolean use, GError **error);
+
+gboolean alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTempo *queue_tempo, GError **error);
+gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTempo **queue_tempo, GError **error);
+
+gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTimer *queue_timer, GError **error);
+gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTimer **queue_timer, GError **error);
+
+gboolean alsaseq_user_client_remove_events(ALSASeqUserClient *self, ALSASeqRemoveFilter *filter,
+                                           GError **error);
 
 G_END_DECLS
 

@@ -173,21 +173,22 @@ ALSASeqUserClient *alsaseq_user_client_new()
  *
  * The call of function executes `open(2)` system call, then executes `ioctl(2)` system call with
  * `SNDRV_SEQ_IOCTL_CLIENT_ID` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
-                              GError **error)
+gboolean alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     char *devnode;
     int proto_ver;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (!alsaseq_get_seq_devnode(&devnode, error))
-        return;
+        return FALSE;
 
     open_flag |= O_RDWR;
     priv->fd = open(devnode, open_flag);
@@ -200,7 +201,7 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
             generate_syscall_error(error, errno, "open(%s)", devnode);
 
         g_free(devnode);
-        return;
+        return FALSE;
     }
     priv->devnode = devnode;
 
@@ -208,6 +209,7 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
         generate_syscall_error(error, errno, "ioctl(%s)", "CLIENT_ID");
         close(priv->fd);
         priv->fd = -1;
+        return FALSE;
     }
 
     // Remember the version of protocol currently used.
@@ -215,12 +217,14 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
         generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
-        return;
+        return FALSE;
     }
 
     priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
     priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+
+    return TRUE;
 }
 
 /**
@@ -233,21 +237,25 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
  * Get the version of sequencer protocol currently used. The version is represented as the array
  * with three elements; major, minor, and micro version in the order. The length of major version
  * is 16 bit, the length of minor and micro version is 8 bit each.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
-                                        const guint16 *proto_ver_triplet[3],
-                                        GError **error)
+gboolean alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
+                                                  const guint16 *proto_ver_triplet[3],
+                                                  GError **error)
 {
     ALSASeqUserClientPrivate *priv;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(proto_ver_triplet != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(proto_ver_triplet != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
+
+    return TRUE;
 }
 
 /**
@@ -260,25 +268,30 @@ void alsaseq_user_client_get_protocol_version(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_CLIENT_INFO`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_set_info(ALSASeqUserClient *self,
-                                  ALSASeqClientInfo *client_info,
-                                  GError **error)
+gboolean alsaseq_user_client_set_info(ALSASeqUserClient *self, ALSASeqClientInfo *client_info,
+                                      GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_client_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_INFO(client_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_client_info_refer_private(client_info, &info);
     info->client = priv->client_id;
     info->type = USER_CLIENT;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_INFO, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_INFO, info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "SET_CLIENT_INFO");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -291,25 +304,30 @@ void alsaseq_user_client_set_info(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_info(ALSASeqUserClient *self,
-                                  ALSASeqClientInfo *const *client_info,
-                                  GError **error)
+gboolean alsaseq_user_client_get_info(ALSASeqUserClient *self,
+                                      ALSASeqClientInfo *const *client_info, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_client_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(client_info != NULL);
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(client_info != NULL, FALSE);
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_INFO(*client_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_client_info_refer_private(*client_info, &info);
     info->client = priv->client_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_CLIENT_INFO");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -322,25 +340,30 @@ void alsaseq_user_client_get_info(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_PORT` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_create_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *const *port_info,
-                                     GError **error)
+gboolean alsaseq_user_client_create_port(ALSASeqUserClient *self,
+                                         ALSASeqPortInfo *const *port_info, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_PORT_INFO(*port_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_port_info_refer_private(*port_info, &info);
 
     info->addr.client = priv->client_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_PORT, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_PORT, info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "CREATE_PORT");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -354,23 +377,25 @@ void alsaseq_user_client_create_port(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_PORT` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
-                                        ALSASeqPortInfo *const *port_info,
-                                        guint8 port_id, GError **error)
+gboolean alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
+                                            ALSASeqPortInfo *const *port_info,
+                                            guint8 port_id, GError **error)
 {
     struct snd_seq_port_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(*port_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
+    g_return_val_if_fail(ALSASEQ_IS_PORT_INFO(*port_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_port_info_refer_private(*port_info, &info);
 
     info->addr.port = port_id;
     info->flags |= SNDRV_SEQ_PORT_FLG_GIVEN_PORT;
 
-    alsaseq_user_client_create_port(self, port_info, error);
+    return alsaseq_user_client_create_port(self, port_info, error);
 }
 
 /**
@@ -384,27 +409,32 @@ void alsaseq_user_client_create_port_at(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_PORT_INFO` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_update_port(ALSASeqUserClient *self,
-                                     ALSASeqPortInfo *port_info,
-                                     guint8 port_id, GError **error)
+gboolean alsaseq_user_client_update_port(ALSASeqUserClient *self, ALSASeqPortInfo *port_info,
+                                         guint8 port_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_PORT_INFO(port_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_PORT_INFO(port_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_port_info_refer_private(port_info, &info);
 
     info->addr.client = priv->client_id;
     info->addr.port = port_id;
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_PORT_INFO, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_PORT_INFO, info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "SET_PORT_INFO");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -417,22 +447,27 @@ void alsaseq_user_client_update_port(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_DELETE_PORT` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
-                                     guint8 port_id, GError **error)
+gboolean alsaseq_user_client_delete_port(ALSASeqUserClient *self, guint8 port_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_info info = {0};
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     info.addr.client = priv->client_id;
     info.addr.port = port_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, &info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_PORT, &info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "DELETE_PORT");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -445,24 +480,29 @@ void alsaseq_user_client_delete_port(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_CLIENT_POOL`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
-                                  ALSASeqClientPool *client_pool,
-                                  GError **error)
+gboolean alsaseq_user_client_set_pool(ALSASeqUserClient *self, ALSASeqClientPool *client_pool,
+                                      GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_client_pool *pool;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_POOL(client_pool), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_client_pool_refer_private(client_pool, &pool);
     pool->client = priv->client_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_POOL, pool) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_CLIENT_POOL, pool) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "SET_CLIENT_POOL");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -475,24 +515,29 @@ void alsaseq_user_client_set_pool(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_CLIENT_POOL`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
-                                  ALSASeqClientPool *const *client_pool,
-                                  GError **error)
+gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
+                                      ALSASeqClientPool *const *client_pool, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_client_pool *pool;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_POOL(*client_pool), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_client_pool_refer_private(*client_pool, &pool);
     pool->client = priv->client_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_CLIENT_POOL");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -506,10 +551,11 @@ void alsaseq_user_client_get_pool(ALSASeqUserClient *self,
  * Deliver the event immediately, or schedule it into memory pool of the client.
  *
  * The call of function executes `write(2)` system call for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
-                                        ALSASeqEventCntr *ev_cntr,
-                                        gsize count, GError **error)
+gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, ALSASeqEventCntr *ev_cntr,
+                                            gsize count, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     gsize total;
@@ -517,17 +563,17 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
     gsize length;
     ssize_t len;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     alsaseq_event_cntr_count_events(ev_cntr, &total);
-    g_return_if_fail(count <= total);
+    g_return_val_if_fail(count <= total, FALSE);
 
     seq_event_cntr_get_buf(ev_cntr, count, &buf, &length);
-    g_return_if_fail(buf != NULL && length > 0);
+    g_return_val_if_fail(buf != NULL && length > 0, FALSE);
 
     len = write(priv->fd, buf, length);
     if (len < 0) {
@@ -537,7 +583,11 @@ void alsaseq_user_client_schedule_event(ALSASeqUserClient *self,
             generate_file_error(error, code, "write(%s)", priv->devnode);
         else
             generate_syscall_error(error, errno, "write(%s)", priv->devnode);
+
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 static gboolean seq_user_client_check_src(GSource *gsrc)
@@ -606,9 +656,10 @@ static void seq_user_client_finalize_src(GSource *gsrc)
  * iteration of [struct@GLib.MainContext], the `read(2)` system call is exected to dispatch
  * sequencer event for [signal@UserClient::handle-event] signal, according to the result of
  * `poll(2)` system call.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_create_source(ALSASeqUserClient *self,
-                                       GSource **gsrc, GError **error)
+gboolean alsaseq_user_client_create_source(ALSASeqUserClient *self, GSource **gsrc, GError **error)
 {
     static GSourceFuncs funcs = {
             .check          = seq_user_client_check_src,
@@ -620,12 +671,12 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     void *buf;
     long page_size = sysconf(_SC_PAGESIZE);
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(gsrc != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(gsrc != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     buf = g_malloc0(page_size);
 
@@ -642,6 +693,8 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
+
+    return TRUE;
 }
 
 /**
@@ -655,22 +708,23 @@ void alsaseq_user_client_create_source(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SUBSCRIBE_PORT` and
  * `SNDRV_SEQ_IOCTL_UNSUBSCRIBE_PORT` commands for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
-                                         ALSASeqSubscribeData *subs_data,
-                                         gboolean establish,
-                                         GError **error)
+gboolean alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
+                                                  ALSASeqSubscribeData *subs_data,
+                                                  gboolean establish, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_port_subscribe *data;
     long request;
     const char *label;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_SUBSCRIBE_DATA(subs_data), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_subscribe_data_refer_private(subs_data, &data);
 
@@ -687,7 +741,10 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
             generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", label);
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -700,24 +757,29 @@ void alsaseq_user_client_operate_subscription(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_CREATE_QUEUE` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
-                                      ALSASeqQueueInfo *const *queue_info,
-                                      GError **error)
+gboolean alsaseq_user_client_create_queue(ALSASeqUserClient *self,
+                                          ALSASeqQueueInfo *const *queue_info, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_INFO(*queue_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_queue_info_refer_private(*queue_info, &info);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_CREATE_QUEUE, info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "CREATE_QUEUE");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -730,22 +792,27 @@ void alsaseq_user_client_create_queue(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_DELETE_QUEUE` command
  * for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
-                                      guint8 queue_id, GError **error)
+gboolean alsaseq_user_client_delete_queue(ALSASeqUserClient *self, guint8 queue_id, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info info = {0};
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     info.queue = (int)queue_id;
     info.owner = priv->client_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_QUEUE, &info) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_DELETE_QUEUE, &info) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "DELETE_QUEUE");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -758,19 +825,20 @@ void alsaseq_user_client_delete_queue(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_INFO`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
-                                      ALSASeqQueueInfo *queue_info,
-                                      GError **error)
+gboolean alsaseq_user_client_update_queue(ALSASeqUserClient *self, ALSASeqQueueInfo *queue_info,
+                                          GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_info *info;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_INFO(queue_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_queue_info_refer_private(queue_info, &info);
 
@@ -779,7 +847,10 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
             generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_INFO");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -793,27 +864,29 @@ void alsaseq_user_client_update_queue(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
-                                         guint8 queue_id, gboolean *use,
-                                         GError **error)
+gboolean alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self, guint8 queue_id,
+                                             gboolean *use, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_client data = {0};
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(use != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(use != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     data.queue = (int)queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_CLIENT, &data) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_CLIENT");
-        return;
+        return FALSE;
     }
 
     *use = data.used;
+    return TRUE;
 }
 
 /**
@@ -827,25 +900,30 @@ void alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
-                                         guint8 queue_id, gboolean use,
-                                         GError **error)
+gboolean alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self, guint8 queue_id,
+                                             gboolean use, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_client data = {0};
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     data.queue = (int)queue_id;
     data.client = priv->client_id;
     data.used = use;
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_CLIENT, &data) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_CLIENT");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -859,19 +937,20 @@ void alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_TEMPO`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
-                                guint8 queue_id, ALSASeqQueueTempo *queue_tempo,
-                                GError **error)
+gboolean alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTempo *queue_tempo, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_tempo *tempo;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_TEMPO(queue_tempo), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_queue_tempo_refer_private(queue_tempo, &tempo);
     tempo->queue = queue_id;
@@ -880,7 +959,10 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
             generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TEMPO");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -894,19 +976,20 @@ void alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
-                                guint8 queue_id, ALSASeqQueueTempo **queue_tempo,
-                                GError **error)
+gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTempo **queue_tempo, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_tempo *tempo;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(queue_tempo != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_tempo != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *queue_tempo = g_object_new(ALSASEQ_TYPE_QUEUE_TEMPO, NULL);
     seq_queue_tempo_refer_private(*queue_tempo, &tempo);
@@ -915,7 +998,10 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TEMPO, tempo) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_TEMPO");
         g_object_unref(*queue_tempo);
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -929,20 +1015,20 @@ void alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
-                                         guint8 queue_id,
-                                         ALSASeqQueueTimer *queue_timer,
-                                         GError **error)
+gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTimer *queue_timer, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_timer *timer;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     seq_queue_timer_refer_private(queue_timer, &timer);
 
@@ -952,7 +1038,7 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
     case SNDRV_SEQ_TIMER_MIDI_CLOCK:
     case SNDRV_SEQ_TIMER_MIDI_TICK:
     default:
-        g_return_if_reached();
+        g_return_val_if_reached(FALSE);
     }
 
     timer->queue = queue_id;
@@ -961,7 +1047,10 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
             generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "SET_QUEUE_TIMER");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -975,20 +1064,20 @@ void alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
-                                         guint8 queue_id,
-                                         ALSASeqQueueTimer **queue_timer,
-                                         GError **error)
+gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
+                                             ALSASeqQueueTimer **queue_timer, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
     struct snd_seq_queue_timer *timer;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(queue_timer != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_timer != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *queue_timer = g_object_new(ALSASEQ_TYPE_QUEUE_TIMER, NULL);
     seq_queue_timer_refer_private(*queue_timer, &timer);
@@ -996,7 +1085,7 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
     timer->queue = queue_id;
     if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER, timer) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_TIMER");
-        return;
+        return FALSE;
     }
 
     switch (timer->type) {
@@ -1008,8 +1097,10 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
         // Not available.
         g_object_unref(*queue_timer);
         *queue_timer = NULL;
-        g_return_if_reached();
+        g_return_val_if_reached(FALSE);
     }
+
+    return TRUE;
 }
 
 /**
@@ -1022,19 +1113,24 @@ void alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_SEQ_IOCTL_REMOVE_EVENTS`
  * command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_user_client_remove_events(ALSASeqUserClient *self,
-                                       ALSASeqRemoveFilter *filter,
-                                       GError **error)
+gboolean alsaseq_user_client_remove_events(ALSASeqUserClient *self, ALSASeqRemoveFilter *filter,
+                                           GError **error)
 {
     ALSASeqUserClientPrivate *priv;
 
-    g_return_if_fail(ALSASEQ_IS_USER_CLIENT(self));
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_if_fail(filter != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(filter != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0)
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "REMOVE_EVENTS");
+        return FALSE;
+    }
+
+    return TRUE;
 }
