@@ -197,21 +197,22 @@ ALSACtlCard *alsactl_card_new()
  * Open ALSA control character device for the sound card.
  *
  * The call of function executes `open(2)` system call for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError **error)
+gboolean alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError **error)
 {
     ALSACtlCardPrivate *priv;
     char *devnode;
     int proto_ver;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    alsactl_get_control_devnode(card_id, &devnode, error);
-    if (*error != NULL)
-        return;
+    if (!alsactl_get_control_devnode(card_id, &devnode, error))
+        return FALSE;
 
     open_flag |= O_RDONLY;
     priv->fd = open(devnode, open_flag);
@@ -228,7 +229,7 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError 
         }
 
         g_free(devnode);
-        return;
+        return FALSE;
     }
 
     // Remember the version of protocol currently used.
@@ -240,13 +241,15 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError 
         close(priv->fd);
         priv->fd = -1;
         g_free(devnode);
-        return;
+        return FALSE;
     }
 
     priv->devnode = devnode;
     priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
     priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+
+    return TRUE;
 }
 
 /**
@@ -259,20 +262,24 @@ void alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GError 
  * Get the version of control protocol currently used. The version is represented as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_get_protocol_version(ALSACtlCard *self, const guint16 *proto_ver_triplet[3],
-                                       GError **error)
+gboolean alsactl_card_get_protocol_version(ALSACtlCard *self, const guint16 *proto_ver_triplet[3],
+                                           GError **error)
 {
     ALSACtlCardPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(proto_ver_triplet != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(proto_ver_triplet != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
+
+    return TRUE;
 }
 
 /**
@@ -285,17 +292,19 @@ void alsactl_card_get_protocol_version(ALSACtlCard *self, const guint16 *proto_v
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_CARD_INFO` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info, GError **error)
+gboolean alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_card_info *info;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(card_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(card_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *card_info = g_object_new(ALSACTL_TYPE_CARD_INFO, NULL);
 
@@ -306,11 +315,13 @@ void alsactl_card_get_info(ALSACtlCard *self, ALSACtlCardInfo **card_info, GErro
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "CARD_INFO");
         g_object_unref(*card_info);
+        return FALSE;
     }
+
+    return TRUE;
 }
 
-static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
-                              GError **error)
+static gboolean allocate_elem_ids(int fd, struct snd_ctl_elem_list *list, GError **error)
 {
     struct snd_ctl_elem_id *ids;
 
@@ -323,12 +334,12 @@ static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
-        return;
+        return FALSE;
     }
 
     // No elements found.
     if (list->count == 0)
-        return;
+        return TRUE;
 
     // Allocate spaces for these elements.
     ids = g_malloc_n(list->count, sizeof(*ids));
@@ -348,13 +359,15 @@ static void allocate_elem_ids(int fd, struct snd_ctl_elem_list *list,
                 generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_LIST");
             free(ids);
             list->pids = NULL;
-            return;
+            return FALSE;
         }
 
         list->offset += list->space;
     }
     list->pids = ids;
     list->space = list->count;
+
+    return TRUE;
 }
 
 static inline void deallocate_elem_ids(struct snd_ctl_elem_list *list)
@@ -374,23 +387,23 @@ static inline void deallocate_elem_ids(struct snd_ctl_elem_list *list)
  *
  * The call of function executes several `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_LIST`
  * command for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
-                                   GError **error)
+gboolean alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_elem_list list = {0};
     int i;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    allocate_elem_ids(priv->fd, &list, error);
-    if (*error != NULL)
-        return;
+    if (!allocate_elem_ids(priv->fd, &list, error))
+        return FALSE;
 
     for (i = 0; i < list.count; ++i) {
         struct snd_ctl_elem_id *id = list.pids + i;
@@ -399,6 +412,8 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
     }
 
     deallocate_elem_ids(&list);
+
+    return TRUE;
 }
 
 /**
@@ -412,20 +427,22 @@ void alsactl_card_get_elem_id_list(ALSACtlCard *self, GList **entries,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_LOCK` and
  * `SNDRV_CTL_IOCTL_ELEM_UNLOCK` commands for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id, gboolean lock,
-                            GError **error)
+gboolean alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id, gboolean lock,
+                                GError **error)
 {
     ALSACtlCardPrivate *priv;
     unsigned long req;
     const char *req_name;
     int ret;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (lock) {
         req = SNDRV_CTL_IOCTL_ELEM_LOCK;
@@ -445,12 +462,14 @@ void alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id, gbo
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
+        return FALSE;
     }
+
+    return TRUE;
 }
 
-static void parse_enum_names(ALSACtlCardPrivate *priv,
-                             struct snd_ctl_elem_info *info,
-                             gchar ***labels, GError **error)
+static gboolean parse_enum_names(ALSACtlCardPrivate *priv, struct snd_ctl_elem_info *info,
+                                 gchar ***labels, GError **error)
 {
     gsize count = info->value.enumerated.items;
     int i;
@@ -471,9 +490,10 @@ static void parse_enum_names(ALSACtlCardPrivate *priv,
     }
 
     (*labels)[count] = NULL;
-    return;
+    return TRUE;
 error:
     g_strfreev(*labels);
+    return FALSE;
 }
 
 /**
@@ -488,19 +508,21 @@ error:
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_INFO` command
  * for ALSA control character device. For enumerated element, it executes the system call for
  * several times to retrieve all of enumeration labels.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                ALSACtlElemInfo **elem_info, GError **error)
+gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                    ALSACtlElemInfo **elem_info, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_elem_info *info;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(elem_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(elem_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO, NULL);
     ctl_elem_info_refer_private(*elem_info, &info);
@@ -513,7 +535,7 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_INFO");
-        return;
+        return FALSE;
     }
 
     switch (info->type) {
@@ -527,24 +549,23 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     {
         gchar **labels;
 
-        parse_enum_names(priv, info, &labels, error);
-        if (*error != NULL)
-            return;
+        if (!parse_enum_names(priv, info, &labels, error))
+            return FALSE;
 
-        alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels,
-                                        error);
+        alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels, error);
         g_strfreev(labels);
-        if (*error != NULL) {
+	if (*error != NULL) {
             g_object_unref(*elem_info);
-            return;
+            return FALSE;
         }
 
         break;
     }
     default:
-        g_return_if_reached();
-        return;
+        g_return_val_if_reached(FALSE);
     }
+
+    return TRUE;
 }
 
 /**
@@ -559,22 +580,25 @@ void alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_WRITE` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                 const guint32 *container, gsize container_count, GError **error)
+gboolean alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                     const guint32 *container, gsize container_count,
+                                     GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
     size_t container_size;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
     // At least two quadlets should be included for type and length.
-    g_return_if_fail(container != NULL);
-    g_return_if_fail(container_count >= 2);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(container != NULL, FALSE);
+    g_return_val_if_fail(container_count >= 2, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     container_size = container_count * sizeof(*container);
 
@@ -593,9 +617,11 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_WRITE");
+        return FALSE;
     }
 
     g_free(packet);
+    return TRUE;
 }
 
 /**
@@ -612,22 +638,25 @@ void alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_READ` command for
  * ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            guint32 *const *container, gsize *container_count, GError **error)
+gboolean alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                    guint32 *const *container, gsize *container_count,
+                                    GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
     size_t container_size;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
     // At least two quadlets should be included for type and length.
-    g_return_if_fail(container != NULL);
-    g_return_if_fail(container_count != NULL && *container_count >= 2);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(container != NULL, FALSE);
+    g_return_val_if_fail(container_count != NULL && *container_count >= 2, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     container_size = *container_count * sizeof(**container);
 
@@ -643,12 +672,14 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_READ");
+        return FALSE;
     }
 
     memcpy(*container, packet->tlv, packet->length);
     *container_count = packet->length / sizeof(**container);
 
     g_free(packet);
+    return TRUE;
 }
 
 /**
@@ -664,22 +695,25 @@ void alsactl_card_read_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_TLV_COMMAND` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            guint32 *const *container, gsize *container_count, GError **error)
+gboolean alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                       guint32 *const *container, gsize *container_count,
+                                       GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_tlv *packet;
     size_t container_size;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
     // At least two quadlets should be included for type and length.
-    g_return_if_fail(container != NULL);
-    g_return_if_fail(container_count != NULL && *container_count >= 2);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(container != NULL, FALSE);
+    g_return_val_if_fail(container_count != NULL && *container_count >= 2, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     container_size = *container_count * sizeof(**container);
 
@@ -698,12 +732,14 @@ void alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TLV_COMMAND");
+        return FALSE;
     }
 
     memcpy(*container, packet->tlv, packet->length);
     *container_count = packet->length / sizeof(**container);
 
     g_free(packet);
+    return TRUE;
 }
 
 static void prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labels)
@@ -737,14 +773,14 @@ static void prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **lab
     info->value.enumerated.items = count;
 }
 
-static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
-                                 guint elem_count, ALSACtlElemInfo *elem_info,
-                                 gboolean replace, GList **entries,
-                                 GError **error)
+static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint elem_count,
+                                     ALSACtlElemInfo *elem_info, gboolean replace, GList **entries,
+                                     GError **error)
 {
     struct snd_ctl_elem_info *info;
     long request;
     const char *req_name;
+    gboolean result;
     int i;
 
     ctl_elem_info_refer_private(elem_info, &info);
@@ -762,14 +798,14 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
 
         alsactl_elem_info_get_enum_data(elem_info, &labels, error);
         if (*error != NULL)
-            return;
+            return FALSE;
 
         prepare_enum_names(info, labels);
 
         break;
     }
     default:
-        g_return_if_reached();
+        g_return_val_if_reached(FALSE);
     }
 
     info->id = *elem_id;
@@ -796,10 +832,13 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
         } else {
             generate_syscall_error(error, errno, "ioctl(%s)", req_name);
         }
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
     g_free((void *)info->value.enumerated.names_ptr);
-    if (*error != NULL)
-        return;
+    if (!result)
+        return FALSE;
 
     for (i = 0; i < elem_count; ++i) {
         ALSACtlElemId *entry = g_boxed_copy(ALSACTL_TYPE_ELEM_ID, &info->id);
@@ -808,6 +847,8 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
         ++info->id.numid;
         ++info->id.index;
     }
+
+    return TRUE;
 }
 
 /**
@@ -823,23 +864,23 @@ static void add_or_replace_elems(int fd, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_ADD` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            guint elem_count, ALSACtlElemInfo *elem_info,
-                            GList **entries, GError **error)
+gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, guint elem_count,
+                                ALSACtlElemInfo *elem_info, GList **entries, GError **error)
 {
     ALSACtlCardPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(elem_count > 0);
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(elem_count > 0, FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(elem_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, FALSE,
-                         entries, error);
+    return add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, FALSE, entries, error);
 }
 
 /**
@@ -855,23 +896,24 @@ void alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_REPLACE` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                            guint elem_count, ALSACtlElemInfo *elem_info,
-                            GList **entries, GError **error)
+gboolean alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                    guint elem_count, ALSACtlElemInfo *elem_info, GList **entries,
+                                    GError **error)
 {
     ALSACtlCardPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(elem_count > 0);
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(elem_info));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(elem_count > 0, FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(elem_info), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE,
-                         entries, error);
+    return add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE, entries, error);
 }
 
 /**
@@ -884,17 +926,18 @@ void alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_REMOVE` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                               GError **error)
+gboolean alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, GError **error)
 {
     ALSACtlCardPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_REMOVE, elem_id) < 0) {
         if (errno == ENODEV)
@@ -905,7 +948,10 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_OWNED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_REMOVE");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -919,21 +965,21 @@ void alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_WRITE` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_write_elem_value(ALSACtlCard *self,
-                                   const ALSACtlElemId *elem_id,
-                                   const ALSACtlElemValue *elem_value,
-                                   GError **error)
+gboolean alsactl_card_write_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                       const ALSACtlElemValue *elem_value, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_elem_value *value;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)elem_value));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_VALUE((ALSACtlElemValue *)elem_value), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     ctl_elem_value_refer_private((ALSACtlElemValue *)elem_value, &value);
     value->id = *elem_id;
@@ -947,7 +993,10 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_WRITE");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -961,20 +1010,21 @@ void alsactl_card_write_elem_value(ALSACtlCard *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_CTL_IOCTL_ELEM_READ` command
  * for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_read_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                  ALSACtlElemValue *const *elem_value,
-                                  GError **error)
+gboolean alsactl_card_read_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_id,
+                                      ALSACtlElemValue *const *elem_value, GError **error)
 {
     ALSACtlCardPrivate *priv;
     struct snd_ctl_elem_value *value;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
 
-    g_return_if_fail(elem_id != NULL);
-    g_return_if_fail(elem_value != NULL && ALSACTL_IS_ELEM_VALUE(*elem_value));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(elem_id != NULL, FALSE);
+    g_return_val_if_fail(elem_value != NULL && ALSACTL_IS_ELEM_VALUE(*elem_value), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     ctl_elem_value_refer_private(*elem_value, &value);
     value->id = *elem_id;
@@ -988,7 +1038,9 @@ void alsactl_card_read_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_i
             generate_local_error(error, ALSACTL_CARD_ERROR_ELEM_NOT_SUPPORTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "ELEM_READ");
+        return FALSE;
     }
+    return TRUE;
 }
 
 static void handle_elem_event(CtlCardSource *src, struct snd_ctl_event *ev)
@@ -1087,9 +1139,10 @@ static void ctl_card_finalize_src(GSource *gsrc)
  * each iteration of [struct@GLib.MainContext], the `read(2)` system call is executed to dispatch
  * control event for [signal@Card::handle-elem-event] signal, according to the result of `poll(2)`
  * system call.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
-                                GError **error)
+gboolean alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc, GError **error)
 {
     static GSourceFuncs funcs = {
             .check          = ctl_card_check_src,
@@ -1101,12 +1154,12 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
     long page_size = sysconf(_SC_PAGESIZE);
     void *buf;
 
-    g_return_if_fail(ALSACTL_IS_CARD(self));
+    g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(gsrc != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(gsrc != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     buf = g_malloc0(page_size);
 
@@ -1134,6 +1187,9 @@ void alsactl_card_create_source(ALSACtlCard *self, GSource **gsrc,
             else
                 generate_syscall_error(error, errno, "ioctl(%s)", "SUBSCRIBE_EVENTS");
             g_source_unref(*gsrc);
+            return FALSE;
         }
     }
+
+    return TRUE;
 }

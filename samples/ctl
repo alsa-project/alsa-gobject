@@ -12,10 +12,10 @@ _, card_id_list = ALSACtl.get_card_id_list()
 
 # Open ALSA control character device.
 card = ALSACtl.Card.new()
-card.open(card_id_list[0], 0)
+_ = card.open(card_id_list[0], 0)
 
 # Get the information of card and dump.
-info = card.get_info()
+_, info = card.get_info()
 print('Sound card:')
 for prop in ('card-id', 'id', 'driver', 'name', 'long-name', 'mixer-name',
              'components'):
@@ -23,8 +23,9 @@ for prop in ('card-id', 'id', 'driver', 'name', 'long-name', 'mixer-name',
 
 # Enumerate available elements for the card.
 print('Elements:')
-for elem_id in card.get_elem_id_list():
-    info = card.get_elem_info(elem_id)
+_, elem_id_list = card.get_elem_id_list()
+for elem_id in elem_id_list:
+    _, info = card.get_elem_info(elem_id)
     print('  name:', elem_id.get_name())
     print('    type', info.get_property('type').value_nick)
     print('    access', info.get_property('access').value_nicks)
@@ -34,10 +35,10 @@ for elem_id in card.get_elem_id_list():
 def handle_elem_event(card, elem_id, events):
     print('Event:')
     print('  ', elem_id.get_name(), events.value_nicks)
-    info = card.get_elem_info(elem_id)
+    _, info = card.get_elem_info(elem_id)
     value_count = info.get_property('value-count')
     elem_value = ALSACtl.ElemValue.new()
-    elem_value = card.read_elem_value(elem_id, elem_value)
+    _, elem_value = card.read_elem_value(elem_id, elem_value)
     value = [0] * value_count
     if info.get_property('type') == ALSACtl.ElemType.BOOLEAN:
         value = elem_value.get_bool(value)
@@ -65,11 +66,11 @@ flags = (ALSACtl.ElemAccessFlag.READ |
 elem_info.set_property('access', flags)
 elem_info.set_property('value-count', 32)
 elem_info.set_int_data((-123, 456, 21))
-elem_id_list = card.add_elems(elem_id, 10, elem_info)
+_, elem_id_list = card.add_elems(elem_id, 10, elem_info)
 
 # Create event dispatcher.
 dispatcher = GLib.MainLoop.new(None, False)
-src = card.create_source()
+_, src = card.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.
@@ -82,4 +83,4 @@ GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT,
 dispatcher.run()
 
 # Remove my elems.
-card.remove_elems(elem_id_list[0])
+_ = card.remove_elems(elem_id_list[0])

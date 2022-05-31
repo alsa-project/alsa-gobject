@@ -8,18 +8,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsactl_card_get_type";
     "alsactl_card_new";
-    "alsactl_card_open";
-    "alsactl_card_get_protocol_version";
-    "alsactl_card_get_info";
-    "alsactl_card_get_elem_id_list";
-    "alsactl_card_lock_elem";
-    "alsactl_card_get_elem_info";
-    "alsactl_card_add_elems";
-    "alsactl_card_replace_elems";
-    "alsactl_card_remove_elems";
-    "alsactl_card_write_elem_value";
-    "alsactl_card_read_elem_value";
-    "alsactl_card_create_source";
 
     "alsactl_card_info_get_type";
 
@@ -68,9 +56,6 @@ ALSA_GOBJECT_0_2_0 {
   global:
     "alsactl_card_error_get_type";
     "alsactl_card_error_quark";
-    "alsactl_card_write_elem_tlv";
-    "alsactl_card_read_elem_tlv";
-    "alsactl_card_command_elem_tlv";
 } ALSA_GOBJECT_0_0_0;
 
 ALSA_GOBJECT_0_3_0 {
@@ -79,4 +64,20 @@ ALSA_GOBJECT_0_3_0 {
     "alsactl_get_card_sysname";
     "alsactl_get_control_sysname";
     "alsactl_get_control_devnode";
+
+    "alsactl_card_open";
+    "alsactl_card_get_protocol_version";
+    "alsactl_card_get_info";
+    "alsactl_card_get_elem_id_list";
+    "alsactl_card_lock_elem";
+    "alsactl_card_get_elem_info";
+    "alsactl_card_write_elem_tlv";
+    "alsactl_card_read_elem_tlv";
+    "alsactl_card_command_elem_tlv";
+    "alsactl_card_add_elems";
+    "alsactl_card_replace_elems";
+    "alsactl_card_remove_elems";
+    "alsactl_card_write_elem_value";
+    "alsactl_card_read_elem_value";
+    "alsactl_card_create_source";
 } ALSA_GOBJECT_0_2_0;
