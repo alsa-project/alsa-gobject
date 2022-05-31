@@ -17,11 +17,11 @@ struct _ALSATimerInstanceParamsClass {
 
 ALSATimerInstanceParams *alsatimer_instance_params_new();
 
-void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
+gboolean alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
                                             const ALSATimerEventType *entries,
                                             gsize entry_count, GError **error);
 
-void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
+gboolean alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
                                             ALSATimerEventType **entries,
                                             gsize *entry_count, GError **error);
 
