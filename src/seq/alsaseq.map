@@ -27,28 +27,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_user_client_get_type";
     "alsaseq_user_client_new";
-    "alsaseq_user_client_open";
-    "alsaseq_user_client_get_protocol_version";
-    "alsaseq_user_client_set_info";
-    "alsaseq_user_client_get_info";
-    "alsaseq_user_client_create_port";
-    "alsaseq_user_client_create_port_at";
-    "alsaseq_user_client_update_port";
-    "alsaseq_user_client_delete_port";
-    "alsaseq_user_client_set_pool";
-    "alsaseq_user_client_get_pool";
-    "alsaseq_user_client_schedule_event";
-    "alsaseq_user_client_create_source";
-    "alsaseq_user_client_operate_subscription";
-    "alsaseq_user_client_create_queue";
-    "alsaseq_user_client_delete_queue";
-    "alsaseq_user_client_update_queue";
-    "alsaseq_user_client_get_queue_usage";
-    "alsaseq_user_client_set_queue_usage";
-    "alsaseq_user_client_set_queue_tempo";
-    "alsaseq_user_client_get_queue_tempo";
-    "alsaseq_user_client_set_queue_timer";
-    "alsaseq_user_client_get_queue_timer";
 
     "alsaseq_addr_get_type";
     "alsaseq_addr_new";
@@ -221,4 +199,27 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_get_queue_info_by_id";
     "alsaseq_get_queue_info_by_name";
     "alsaseq_get_queue_status";
+
+    "alsaseq_user_client_open";
+    "alsaseq_user_client_get_protocol_version";
+    "alsaseq_user_client_set_info";
+    "alsaseq_user_client_get_info";
+    "alsaseq_user_client_create_port";
+    "alsaseq_user_client_create_port_at";
+    "alsaseq_user_client_update_port";
+    "alsaseq_user_client_delete_port";
+    "alsaseq_user_client_set_pool";
+    "alsaseq_user_client_get_pool";
+    "alsaseq_user_client_schedule_event";
+    "alsaseq_user_client_create_source";
+    "alsaseq_user_client_operate_subscription";
+    "alsaseq_user_client_create_queue";
+    "alsaseq_user_client_delete_queue";
+    "alsaseq_user_client_update_queue";
+    "alsaseq_user_client_get_queue_usage";
+    "alsaseq_user_client_set_queue_usage";
+    "alsaseq_user_client_set_queue_tempo";
+    "alsaseq_user_client_get_queue_tempo";
+    "alsaseq_user_client_set_queue_timer";
+    "alsaseq_user_client_get_queue_timer";
 } ALSA_GOBJECT_0_2_0;

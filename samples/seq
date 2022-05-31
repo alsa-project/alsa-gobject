@@ -18,7 +18,7 @@ info.set_property('name', 'focal')
 client.set_info(info)
 
 # Dump client information.
-info = client.get_info(info)
+_, info = client.get_info(info)
 print('The information of client:')
 print('  type: {}'.format(info.get_property('type').value_nick))
 print('  filter-attributes: {}'.format(info.get_property('filter-attributes').value_nicks))
@@ -39,7 +39,7 @@ attrs = (ALSASeq.PortAttrFlag.MIDI_GENERIC |
          ALSASeq.PortAttrFlag.SOFTWARE |
          ALSASeq.PortAttrFlag.APPLICATION)
 info.set_property('attrs', attrs)
-info = client.create_port(info)
+_, info = client.create_port(info)
 
 # Dump port information.
 print('The information of port:')
@@ -57,7 +57,7 @@ info = ALSASeq.QueueInfo.new()
 info.set_property('name', '20.04')
 info.set_property('client-id', client.get_property('client-id'))
 info.set_property('locked', True)
-info = client.create_queue(info)
+_, info = client.create_queue(info)
 
 # Dump queue information.
 print('The information of queue:')
@@ -119,7 +119,7 @@ client.connect('handle-event', handle_event)
 
 # Create event dispatcher.
 dispatcher = GLib.MainLoop.new(None, False)
-src = client.create_source()
+_, src = client.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.
