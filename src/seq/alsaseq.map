@@ -22,8 +22,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsaseq_client_info_get_type";
     "alsaseq_client_info_new";
-    "alsaseq_client_info_set_event_filter";
-    "alsaseq_client_info_get_event_filter";
 
     "alsaseq_user_client_get_type";
     "alsaseq_user_client_new";
@@ -222,4 +220,7 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_user_client_get_queue_tempo";
     "alsaseq_user_client_set_queue_timer";
     "alsaseq_user_client_get_queue_timer";
+
+    "alsaseq_client_info_set_event_filter";
+    "alsaseq_client_info_get_event_filter";
 } ALSA_GOBJECT_0_2_0;

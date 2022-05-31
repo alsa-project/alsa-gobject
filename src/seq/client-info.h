@@ -16,15 +16,13 @@ struct _ALSASeqClientInfoClass {
 
 ALSASeqClientInfo *alsaseq_client_info_new();
 
-void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
-                                          const ALSASeqEventType *event_types,
-                                          gsize event_type_count,
-                                          GError **error);
+gboolean alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
+                                              const ALSASeqEventType *event_types,
+                                              gsize event_type_count, GError **error);
 
-void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
-                                          ALSASeqEventType **event_types,
-                                          gsize *event_type_count,
-                                          GError **error);
+gboolean alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
+                                              ALSASeqEventType **event_types,
+                                              gsize *event_type_count, GError **error);
 
 G_END_DECLS
 
