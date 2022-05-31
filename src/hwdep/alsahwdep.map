@@ -2,12 +2,15 @@ ALSA_GOBJECT_0_0_0 {
   global:
     "alsahwdep_iface_type_get_type";
 
-    "alsahwdep_get_device_id_list";
-    "alsahwdep_get_hwdep_sysname";
-    "alsahwdep_get_hwdep_devnode";
-    "alsahwdep_get_device_info";
-
     "alsahwdep_device_info_get_type";
   local:
     *;
 };
+
+ALSA_GOBJECT_0_3_0 {
+  global:
+    "alsahwdep_get_device_id_list";
+    "alsahwdep_get_hwdep_sysname";
+    "alsahwdep_get_hwdep_devnode";
+    "alsahwdep_get_device_info";
+} ALSA_GOBJECT_0_0_0;
