@@ -548,13 +548,14 @@ gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem
     case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
     {
         gchar **labels;
+	gboolean result;
 
         if (!parse_enum_names(priv, info, &labels, error))
             return FALSE;
 
-        alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels, error);
+        result = alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels, error);
         g_strfreev(labels);
-	if (*error != NULL) {
+	if (!result) {
             g_object_unref(*elem_info);
             return FALSE;
         }
@@ -796,8 +797,7 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
     {
         const gchar **labels;
 
-        alsactl_elem_info_get_enum_data(elem_info, &labels, error);
-        if (*error != NULL)
+        if (!alsactl_elem_info_get_enum_data(elem_info, &labels, error))
             return FALSE;
 
         prepare_enum_names(info, labels);
