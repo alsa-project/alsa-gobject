@@ -72,7 +72,7 @@ events = (ALSATimer.EventType.RESOLUTION,
           ALSATimer.EventType.SUSPEND,
           ALSATimer.EventType.RESUME)
 params.set_event_filter(events)
-params = instance.set_params(params)
+_, params = instance.set_params(params)
 
 # Dump the parameters.
 print('\nThe parameter of instance:')
@@ -85,7 +85,7 @@ instance.start()
 
 # Create event dispatcher.
 dispatcher = GLib.MainLoop.new(None, False)
-src = instance.create_source()
+_, src = instance.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.

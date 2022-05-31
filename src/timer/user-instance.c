@@ -135,21 +135,22 @@ static void alsatimer_user_instance_init(ALSATimerUserInstance *self)
  * Open ALSA Timer character device to allocate queue.
  *
  * The call of function executes `open(2)` system call for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
-                                  GError **error)
+gboolean alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag, GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     char *devnode;
     int proto_ver;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (!alsatimer_get_devnode(&devnode, error))
-        return;
+        return FALSE;
 
     open_flag |= O_RDONLY;
     priv->fd = open(devnode, open_flag);
@@ -162,7 +163,7 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
             generate_syscall_error(error, errno, "open(%s)", devnode);
 
         g_free(devnode);
-        return;
+        return FALSE;
     }
     g_free(devnode);
 
@@ -171,12 +172,14 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
         generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
-        return;
+        return FALSE;
     }
 
     priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
     priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+
+    return TRUE;
 }
 
 /**
@@ -201,21 +204,25 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
  * Get the version of timer protocol currently used. The version is represented as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
+gboolean alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
                                         const guint16 *proto_ver_triplet[3],
                                         GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(proto_ver_triplet != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(proto_ver_triplet != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
+
+    return TRUE;
 }
 
 /**
@@ -232,18 +239,20 @@ void alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_TREAD` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
+gboolean alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
                                         ALSATimerEventDataType event_data_type,
                                         GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     int tread;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     tread = (int)event_data_type;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
@@ -251,9 +260,11 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "TREAD");
-    } else {
-        priv->event_data_type = event_data_type;
+        return FALSE;
     }
+
+    priv->event_data_type = event_data_type;
+    return TRUE;
 }
 
 /**
@@ -267,19 +278,20 @@ void alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_SELECT` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
-                                    ALSATimerDeviceId *device_id,
-                                    GError **error)
+gboolean alsatimer_user_instance_attach(ALSATimerUserInstance *self, ALSATimerDeviceId *device_id,
+                                        GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_select sel = {0};
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(device_id != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(device_id != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     sel.id = *device_id;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0) {
@@ -287,7 +299,10 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_TIMER_NOT_FOUND);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -304,25 +319,31 @@ void alsatimer_user_instance_attach(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_SELECT` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
-                                        ALSATimerSlaveClass slave_class,
-                                        int slave_id,
-                                        GError **error)
+gboolean alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
+                                                 ALSATimerSlaveClass slave_class,
+                                                 int slave_id,
+                                                 GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_select sel = {0};
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     sel.id.dev_class = SNDRV_TIMER_CLASS_SLAVE;
     sel.id.dev_sclass = slave_class;
     sel.id.device = slave_id;
-    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0)
+    if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_SELECT, &sel) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "SELECT");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -335,19 +356,21 @@ void alsatimer_user_instance_attach_as_slave(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_INFO` command for
  * ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
-                                      ALSATimerInstanceInfo **instance_info,
-                                      GError **error)
+gboolean alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
+                                          ALSATimerInstanceInfo **instance_info,
+                                          GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_info *info;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(instance_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(instance_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *instance_info = g_object_new(ALSATIMER_TYPE_INSTANCE_INFO, NULL);
     timer_instance_info_refer_private(*instance_info, &info);
@@ -358,7 +381,10 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
         g_object_unref(*instance_info);
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -371,19 +397,21 @@ void alsatimer_user_instance_get_info(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_PARAMS` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
+gboolean alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
                                 ALSATimerInstanceParams *const *instance_params,
                                 GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_params *params;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(instance_params != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(instance_params != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     timer_instance_params_refer_private(*instance_params, &params);
 
@@ -392,7 +420,10 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -405,21 +436,23 @@ void alsatimer_user_instance_set_params(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_STATUS` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
+gboolean alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
                                 ALSATimerInstanceStatus *const *instance_status,
                                 GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
     struct snd_timer_status *status;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(instance_status != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(instance_status != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status));
+    g_return_val_if_fail(ALSATIMER_IS_INSTANCE_STATUS(*instance_status), FALSE);
     timer_instance_status_refer_private(*instance_status, &status);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STATUS, status) < 0) {
@@ -427,7 +460,10 @@ void alsatimer_user_instance_get_status(ALSATimerUserInstance *self,
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 static gboolean timer_user_instance_check_src(GSource *gsrc)
@@ -517,9 +553,11 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
  * each iteration of [struct@GLib.MainContext], the `read(2)` system call is executed to dispatch
  * timer event for [signal@UserInstance::handle-event] signal, according to the result of `poll(2)`
  * system call.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
-                                         GSource **gsrc, GError **error)
+gboolean alsatimer_user_instance_create_source(ALSATimerUserInstance *self, GSource **gsrc,
+                                               GError **error)
 {
     static GSourceFuncs funcs = {
             .check          = timer_user_instance_check_src,
@@ -531,12 +569,12 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     long page_size = sysconf(_SC_PAGESIZE);
     void *buf;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(gsrc != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(gsrc != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     buf = g_malloc0(page_size);
 
@@ -551,6 +589,8 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
     src->buf = buf;
     src->buf_len = page_size;
+
+    return TRUE;
 }
 
 /**
@@ -562,22 +602,27 @@ void alsatimer_user_instance_create_source(ALSATimerUserInstance *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_START` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
+gboolean alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_START) < 0) {
         if (errno == EBADFD)
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "START");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -589,22 +634,27 @@ void alsatimer_user_instance_start(ALSATimerUserInstance *self, GError **error)
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_STOP` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
+gboolean alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_STOP) < 0) {
         if (errno == EBADFD)
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "STOP");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -616,22 +666,27 @@ void alsatimer_user_instance_stop(ALSATimerUserInstance *self, GError **error)
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_PAUSE` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
+gboolean alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_PAUSE) < 0) {
         if (errno == EBADFD)
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "PAUSE");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -643,21 +698,25 @@ void alsatimer_user_instance_pause(ALSATimerUserInstance *self, GError **error)
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_CONTINUE` command
  * for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_user_instance_continue(ALSATimerUserInstance *self,
-                                      GError **error)
+gboolean alsatimer_user_instance_continue(ALSATimerUserInstance *self, GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
 
-    g_return_if_fail(ALSATIMER_IS_USER_INSTANCE(self));
+    g_return_val_if_fail(ALSATIMER_IS_USER_INSTANCE(self), FALSE);
     priv = alsatimer_user_instance_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_CONTINUE) < 0) {
         if (errno == EBADFD)
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_NOT_ATTACHED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "CONTINUE");
+        return FALSE;
     }
+
+    return TRUE;
 }
