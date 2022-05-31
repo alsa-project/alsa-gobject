@@ -15,19 +15,25 @@
  * Get the list of numeric identifier for available rawmidi devices of sound card.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
-                                    gsize *entry_count, GError **error)
+gboolean alsarawmidi_get_device_id_list(guint card_id, guint **entries, gsize *entry_count,
+                                        GError **error)
 {
     int err;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = generate_rawmidi_sysnum_list(entries, entry_count, card_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate list of rawmidi sysnum");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -40,18 +46,24 @@ void alsarawmidi_get_device_id_list(guint card_id, guint **entries,
  * Allocate sysname for rawmidi device and return it when it exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
-                                     char **sysname, GError **error)
+gboolean alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id, char **sysname,
+                                         GError **error)
 {
     int err;
 
-    g_return_if_fail(sysname != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(sysname != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_rawmidi_sysname(sysname, card_id, device_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate rawmidi sysname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -64,18 +76,24 @@ void alsarawmidi_get_rawmidi_sysname(guint card_id, guint device_id,
  * Allocate devnode string for rawmidi device and return it when exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
-                                     char **devnode, GError **error)
+gboolean alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id, char **devnode,
+                                         GError **error)
 {
     int err;
 
-    g_return_if_fail(devnode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(devnode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_rawmidi_devname(devnode, card_id, device_id);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate rawmidi devname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -92,11 +110,13 @@ void alsarawmidi_get_rawmidi_devnode(guint card_id, guint device_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_CTL_IOCTL_RAWMIDI_INFO` command for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
-                                       ALSARawmidiStreamDirection direction,
-                                       guint **entries, gsize *entry_count,
-                                       GError **error)
+gboolean alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
+                                           ALSARawmidiStreamDirection direction,
+                                           guint **entries, gsize *entry_count,
+                                           GError **error)
 {
     struct snd_rawmidi_info info = {
         .card = card_id,
@@ -107,14 +127,14 @@ void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
     int i;
     int err;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = request_ctl_ioctl(card_id, SNDRV_CTL_IOCTL_RAWMIDI_INFO, &info);
     if (err < 0) {
         generate_file_error(error, -err, "RAWMIDI_INFO");
-        return;
+        return FALSE;
     }
 
     *entries = g_malloc0_n(info.subdevices_count, sizeof(guint));
@@ -122,6 +142,8 @@ void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
     for (i = 0; i < info.subdevices_count; ++i)
         (*entries)[i] = i;
     *entry_count = info.subdevices_count;
+
+    return TRUE;
 }
 
 /**
@@ -138,18 +160,19 @@ void alsarawmidi_get_subdevice_id_list(guint card_id, guint device_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_CTL_IOCTL_RAWMIDI_INFO` command for ALSA control character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_get_substream_info(guint card_id, guint device_id,
-                                    ALSARawmidiStreamDirection direction,
-                                    guint subdevice_id,
-                                    ALSARawmidiSubstreamInfo **substream_info,
-                                    GError **error)
+gboolean alsarawmidi_get_substream_info(guint card_id, guint device_id,
+                                        ALSARawmidiStreamDirection direction,
+                                        guint subdevice_id,
+                                        ALSARawmidiSubstreamInfo **substream_info, GError **error)
 {
     struct snd_rawmidi_info *info;
     int err;
 
-    g_return_if_fail(substream_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(substream_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
 
@@ -163,15 +186,22 @@ void alsarawmidi_get_substream_info(guint card_id, guint device_id,
     if (err < 0) {
         g_object_unref(*substream_info);
         generate_file_error(error, -err, "RAWMIDI_INFO");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
-void rawmidi_select_subdevice(guint card_id, guint subdevice_id, int *ctl_fd, GError **error)
+gboolean rawmidi_select_subdevice(guint card_id, guint subdevice_id, int *ctl_fd, GError **error)
 {
     guint data = subdevice_id;
     int err;
 
     err = request_ctl_ioctl_opened(ctl_fd, card_id, SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE, &data);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "RAWMIDI_PREFER_SUBDEVICE");
+        return FALSE;
+    }
+
+    return TRUE;
 }

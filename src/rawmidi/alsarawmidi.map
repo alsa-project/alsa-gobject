@@ -3,12 +3,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsarawmidi_stream_direction_get_type";
     "alsarawmidi_stream_pair_info_flag_get_type";
 
-    "alsarawmidi_get_device_id_list";
-    "alsarawmidi_get_rawmidi_sysname";
-    "alsarawmidi_get_rawmidi_devnode";
-    "alsarawmidi_get_subdevice_id_list";
-    "alsarawmidi_get_substream_info";
-
     "alsarawmidi_substream_info_get_type";
 
     "alsarawmidi_stream_pair_get_type";
@@ -34,6 +28,16 @@ ALSA_GOBJECT_0_0_0 {
 };
 
 ALSA_GOBJECT_0_2_0 {
+  global:
     "alsarawmidi_stream_pair_error_get_type";
     "alsarawmidi_stream_pair_error_quark";
 } ALSA_GOBJECT_0_0_0;
+
+ALSA_GOBJECT_0_3_0 {
+  global:
+    "alsarawmidi_get_device_id_list";
+    "alsarawmidi_get_rawmidi_sysname";
+    "alsarawmidi_get_rawmidi_devnode";
+    "alsarawmidi_get_subdevice_id_list";
+    "alsarawmidi_get_substream_info";
+} ALSA_GOBJECT_0_2_0;
