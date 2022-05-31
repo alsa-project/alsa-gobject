@@ -189,24 +189,28 @@ ALSACtlElemInfo *alsactl_elem_info_new(ALSACtlElemType elem_type, GError **error
  * Refer to the array with elements for the data of integer element; minimum value, maximum value,
  * and value step in the order. The call of function is successful as long as the information is
  * for integer type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self, const gint32 *data[3], GError **error)
+gboolean alsactl_elem_info_get_int_data(ALSACtlElemInfo *self, const gint32 *data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER, FALSE);
 
     priv->int_data.min = (gint32)priv->info.value.integer.min;
     priv->int_data.max = (gint32)priv->info.value.integer.max;
     priv->int_data.step = (gint32)priv->info.value.integer.step;
 
     *data = (const gint32 *)&priv->int_data;
+
+    return TRUE;
 }
 
 /**
@@ -219,22 +223,26 @@ void alsactl_elem_info_get_int_data(ALSACtlElemInfo *self, const gint32 *data[3]
  * Get the array with elements for the data of integer element; minimum value, maximum value, and
  * value step in the order. The call of function is successful as long as the information is for
  * integer type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self, const gint32 data[3], GError **error)
+gboolean alsactl_elem_info_set_int_data(ALSACtlElemInfo *self, const gint32 data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER, FALSE);
 
     priv->info.value.integer.min = (long)data[0];
     priv->info.value.integer.max = (long)data[1];
     priv->info.value.integer.step = (long)data[2];
+
+    return TRUE;
 }
 
 /**
@@ -247,24 +255,28 @@ void alsactl_elem_info_set_int_data(ALSACtlElemInfo *self, const gint32 data[3],
  * Refer to the array with elements for the data of integer64 element; minimum value, maximum
  * value, and value step in the order. The call of function is successful as long as the
  * information is for integer64 type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self, const gint64 *data[3], GError **error)
+gboolean alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self, const gint64 *data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64, FALSE);
 
     priv->int_data.min = (gint64)priv->info.value.integer.min;
     priv->int_data.max = (gint64)priv->info.value.integer.max;
     priv->int_data.step = (gint64)priv->info.value.integer.step;
 
     *data = (const gint64 *)&priv->info.value.integer64;
+
+    return TRUE;
 }
 
 /**
@@ -277,22 +289,26 @@ void alsactl_elem_info_get_int64_data(ALSACtlElemInfo *self, const gint64 *data[
  * Get the array with elements for the data of integer64 element; minimum value, maximum value, and
  * value step in the order. The call of function is successful as long as the information is for
  * integer64 type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self, const gint64 data[3], GError **error)
+gboolean alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self, const gint64 data[3], GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_INTEGER64, FALSE);
 
     priv->info.value.integer.min = (long long)data[0];
     priv->info.value.integer.max = (long long)data[1];
     priv->info.value.integer.step = (long long)data[2];
+
+    return TRUE;
 }
 
 /**
@@ -304,20 +320,24 @@ void alsactl_elem_info_set_int64_data(ALSACtlElemInfo *self, const gint64 data[3
  *
  * Refer to the array with elements for the label entries of enumerated element in internal storage.
  * The call of function is successful as long as the information is for enumerated type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self, const gchar ***data, GError **error)
+gboolean alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self, const gchar ***data, GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED, FALSE);
 
     *data = (const gchar **)priv->enum_data;
+
+    return TRUE;
 }
 
 /**
@@ -329,22 +349,26 @@ void alsactl_elem_info_get_enum_data(ALSACtlElemInfo *self, const gchar ***data,
  *
  * Copy the array with elements for the label entries of enumerated element into internal storage.
  * The call of function is successful as long as the information is for enumerated type.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self, const gchar **data, GError **error)
+gboolean alsactl_elem_info_set_enum_data(ALSACtlElemInfo *self, const gchar **data, GError **error)
 {
     ALSACtlElemInfoPrivate *priv;
 
-    g_return_if_fail(ALSACTL_IS_ELEM_INFO(self));
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(self), FALSE);
     priv = alsactl_elem_info_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    g_return_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED);
+    g_return_val_if_fail(priv->info.type == SNDRV_CTL_ELEM_TYPE_ENUMERATED, FALSE);
 
     g_strfreev(priv->enum_data);
 
     priv->enum_data = g_strdupv((gchar **)data);
+
+    return TRUE;
 }
 
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self, struct snd_ctl_elem_info **info)
