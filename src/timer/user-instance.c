@@ -148,8 +148,7 @@ void alsatimer_user_instance_open(ALSATimerUserInstance *self, gint open_flag,
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsatimer_get_devnode(&devnode, error);
-    if (*error != NULL)
+    if (!alsatimer_get_devnode(&devnode, error))
         return;
 
     open_flag |= O_RDONLY;

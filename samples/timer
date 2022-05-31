@@ -31,7 +31,8 @@ targets = (
 # ALSA timer device produced by 'snd-hrtimer' is preferrable (based on hrtimer).
 # Secondary produced by 'snd-timer' (based on Linux timer wheel).
 for target in targets:
-    for device_id in ALSATimer.get_device_id_list():
+    _, device_id_list = ALSATimer.get_device_id_list()
+    for device_id in device_id_list:
         key = (device_id.get_class(), device_id.get_device_id())
         if key == target:
             break;
@@ -46,7 +47,7 @@ else:
 instance.attach(device_id)
 
 # Get the information of timer device.
-info = ALSATimer.get_device_info(device_id)
+_, info = ALSATimer.get_device_info(device_id)
 print('Timer device to which the instance is attached:')
 print('  flags:', info.get_property('flags').value_nicks)
 for prop in ('id', 'name', 'resolution', 'resolution-min', 'resolution-max',
