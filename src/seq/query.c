@@ -17,17 +17,23 @@
  * Allocate sysname string for ALSA sequencer and return it when exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
+gboolean alsaseq_get_seq_sysname(gchar **sysname, GError **error)
 {
     int err;
 
-    g_return_if_fail(sysname != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(sysname != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_seq_sysname(sysname);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate seq sysname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -38,34 +44,42 @@ void alsaseq_get_seq_sysname(gchar **sysname, GError **error)
  * Allocate devnode string for ALSA Sequencer and return it when exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_seq_devnode(gchar **devnode, GError **error)
+gboolean alsaseq_get_seq_devnode(gchar **devnode, GError **error)
 {
     int err;
 
-    g_return_if_fail(devnode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(devnode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_seq_devname(devnode);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate seq devname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
-static int open_fd(GError **error)
+static gboolean open_fd(int *fd, GError **error)
 {
     char *devname;
-    int fd;
+    gboolean result;
 
-    alsaseq_get_seq_devnode(&devname, error);
-    if (*error != NULL)
+    if (!alsaseq_get_seq_devnode(&devname, error))
         return -1;
 
-    fd = open(devname, O_RDONLY);
-    if (fd < 0)
+    result = TRUE;
+    *fd = open(devname, O_RDONLY);
+    if (*fd < 0) {
         generate_file_error(error, errno, "open(%s)", devname);
+        result = FALSE;
+    }
     g_free(devname);
 
-    return fd;
+    return result;
 }
 
 /**
@@ -77,18 +91,20 @@ static int open_fd(GError **error)
  *
  * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
  * `SNDRV_SEQ_IOCTL_SYSTEM_INFO` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
+gboolean alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
 {
     struct snd_seq_system_info *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(system_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(system_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *system_info = g_object_new(ALSASEQ_TYPE_SYSTEM_INFO, NULL);
     seq_system_info_refer_private(*system_info, &info);
@@ -97,13 +113,17 @@ void alsaseq_get_system_info(ALSASeqSystemInfo **system_info, GError **error)
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
         g_object_unref(*system_info);
         *system_info = NULL;
+        result = FALSE;
         goto end;
     }
 
     // Decrement count for the above connection.
     --info->cur_clients;
+
+    result = TRUE;
 end:
     close(fd);
+    return result;
 }
 
 /**
@@ -119,9 +139,10 @@ end:
  * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
  * `SNDRV_SEQ_IOCTL_CLIENT_ID`, `SNDRV_SEQ_IOCTL_SYSTEM_INFO`, and
  * `SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
-                                GError **error)
+gboolean alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count, GError **error)
 {
     int my_id;
     struct snd_seq_system_info system_info = {0};
@@ -130,22 +151,24 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
     unsigned int index;
     struct snd_seq_client_info client_info = {0};
     int fd;
+    gboolean result;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_CLIENT_ID, &my_id) < 0) {
         generate_file_error(error, errno, "ioctl(CLIENT_ID)");
+        result = FALSE;
         goto end;
     }
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &system_info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
+        result = FALSE;
         goto end;
     }
 
@@ -153,6 +176,7 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
     count = system_info.cur_clients - 1;
     if (count == 0)  {
         *entry_count = 0;
+        result = TRUE;
         goto end;
     }
 
@@ -160,11 +184,14 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
 
     index = 0;
 
+    result = TRUE;
     client_info.client = -1;
     while (index < count) {
         if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_NEXT_CLIENT, &client_info) < 0) {
-            if (errno != ENOENT)
+            if (errno != ENOENT) {
                 generate_file_error(error, errno, "ioctl(QUERY_NEXT_CLIENT)");
+                result = FALSE;
+            }
             break;
         }
 
@@ -174,7 +201,7 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
         }
     }
 
-    if (*error != NULL) {
+    if (!result) {
         g_free(list);
         goto end;
     }
@@ -185,6 +212,7 @@ void alsaseq_get_client_id_list(guint8 **entries, gsize *entry_count,
     *entry_count = count;
 end:
     close(fd);
+    return result;
 }
 
 /**
@@ -198,19 +226,20 @@ end:
  *
  * The call of function executes `open(2)``, ``close(2)``, and ``ioctl(2)`` system calls with
  * `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
-                             GError **error)
+gboolean alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info, GError **error)
 {
     struct snd_seq_client_info *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(client_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(client_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *client_info = g_object_new(ALSASEQ_TYPE_CLIENT_INFO, NULL);
     seq_client_info_refer_private(*client_info, &info);
@@ -220,9 +249,14 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
         generate_file_error(error, errno, "ioctl(GET_CLIENT_INFO)");
         g_object_unref(*client_info);
         *client_info = NULL;
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -240,8 +274,8 @@ void alsaseq_get_client_info(guint8 client_id, ALSASeqClientInfo **client_info,
  * `SNDRV_SEQ_IOCTL_GET_CLIENT_INFO` and `SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT` commands for ALSA
  * sequencer character device.
  */
-void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
-                              gsize *entry_count, GError **error)
+gboolean alsaseq_get_port_id_list(guint8 client_id, guint8 **entries, gsize *entry_count,
+                                  GError **error)
 {
     struct snd_seq_client_info client_info = {0};
     unsigned int count;
@@ -249,18 +283,19 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     unsigned int index;
     struct snd_seq_port_info port_info = {0};
     int fd;
+    gboolean result;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     client_info.client = client_id;
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_INFO, &client_info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_CLIENT_INFO)");
+        result = FALSE;
         goto end;
     }
 
@@ -269,12 +304,15 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
 
     index = 0;
 
+    result = TRUE;
     port_info.addr.client = client_id;
     port_info.addr.port = -1;
     while (index < count) {
         if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_NEXT_PORT, &port_info) < 0) {
-            if (errno != ENOENT)
+            if (errno != ENOENT) {
                 generate_file_error(error, errno, "ioctl(QUERY_NEXT_PORT)");
+                result = FALSE;
+            }
             break;
         }
 
@@ -283,7 +321,7 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     }
     close(fd);
 
-    if (*error != NULL) {
+    if (!result) {
         g_free(list);
         goto end;
     }
@@ -294,6 +332,7 @@ void alsaseq_get_port_id_list(guint8 client_id, guint8 **entries,
     *entry_count = count;
 end:
     close(fd);
+    return result;
 }
 
 /**
@@ -309,19 +348,21 @@ end:
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_GET_PORT_INFO` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
-                           ALSASeqPortInfo **port_info, GError **error)
+gboolean alsaseq_get_port_info(guint8 client_id, guint8 port_id, ALSASeqPortInfo **port_info,
+                               GError **error)
 {
     struct snd_seq_port_info *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(port_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(port_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *port_info = g_object_new(ALSASEQ_TYPE_PORT_INFO, NULL);
     seq_port_info_refer_private(*port_info, &info);
@@ -332,9 +373,14 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
         generate_file_error(error, errno, "ioctl(GET_PORT_INFO)");
         g_object_unref(*port_info);
         *port_info = NULL;
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -348,19 +394,20 @@ void alsaseq_get_port_info(guint8 client_id, guint8 port_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_GET_CLIENT_POOL` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
-                             GError **error)
+gboolean alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool, GError **error)
 {
     int fd;
     struct snd_seq_client_pool *pool;
+    gboolean result;
 
-    g_return_if_fail(client_pool != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(client_pool != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *client_pool = g_object_new(ALSASEQ_TYPE_CLIENT_POOL, NULL);
     seq_client_pool_refer_private(*client_pool, &pool);
@@ -369,9 +416,14 @@ void alsaseq_get_client_pool(guint8 client_id, ALSASeqClientPool **client_pool,
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_CLIENT_POOL, pool) < 0) {
         generate_file_error(error, errno, "ioctl(GET_CLIENT_POOL)");
         g_object_unref(*client_pool);
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
 
     close(fd);
+
+    return result;
 }
 
 static void fill_data_with_result(struct snd_seq_port_subscribe *data,
@@ -400,22 +452,24 @@ static void fill_data_with_result(struct snd_seq_port_subscribe *data,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_QUERY_SUBS` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
-                                   ALSASeqQuerySubscribeType query_type,
-                                   GList **entries, GError **error)
+gboolean alsaseq_get_subscription_list(const ALSASeqAddr *addr,
+                                       ALSASeqQuerySubscribeType query_type, GList **entries,
+                                       GError **error)
 {
     int fd;
     struct snd_seq_query_subs query = {0};
     unsigned int count;
     unsigned int index;
+    gboolean result;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     g_object_get((gpointer)addr, "client-id", &query.root.client,
                  "port-id", &query.root.port, NULL);
@@ -423,14 +477,14 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
     if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_SUBS, &query) < 0) {
         if (errno != ENOENT)
             generate_file_error(error, errno, "ioctl(QUERY_SUBS)");
+        result = FALSE;
         goto end;
     }
     count = query.num_subs;
 
     index = 0;
     while (index < count) {
-        ALSASeqSubscribeData *subs_data =
-                                g_object_new(ALSASEQ_TYPE_SUBSCRIBE_DATA, NULL);
+        ALSASeqSubscribeData *subs_data = g_object_new(ALSASEQ_TYPE_SUBSCRIBE_DATA, NULL);
         struct snd_seq_port_subscribe *data;
 
         seq_subscribe_data_refer_private(subs_data, &data);
@@ -443,11 +497,12 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
         if (ioctl(fd, SNDRV_SEQ_IOCTL_QUERY_SUBS, &query) < 0) {
             if (errno != ENOENT)
                 generate_file_error(error, errno, "ioctl(QUERY_SUBS)");
+            result = FALSE;
             break;
         }
     }
 
-    if (*error != NULL) {
+    if (!result) {
         g_list_free_full(*entries, g_object_unref);
         goto end;
     }
@@ -455,6 +510,7 @@ void alsaseq_get_subscription_list(const ALSASeqAddr *addr,
     g_warn_if_fail(index == count);
 end:
     close(fd);
+    return result;
 }
 
 /**
@@ -468,9 +524,10 @@ end:
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_SYSTEM_INFO` and `SNDRV_SEQ_IOCTL_GET_QUEUE_INFO` commands for ALSA
  * sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
-                               GError **error)
+gboolean alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count, GError **error)
 {
     int fd;
     struct snd_seq_system_info info = {0};
@@ -478,25 +535,28 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
     unsigned int count;
     guint8 *list;
     unsigned int index;
+    gboolean result;
     int i;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     if (ioctl(fd, SNDRV_SEQ_IOCTL_SYSTEM_INFO, &info) < 0) {
         generate_file_error(error, errno, "ioctl(SYSTEM_INFO)");
+        result = FALSE;
         goto end;
     }
     maximum_count = info.queues;
     count = info.cur_queues;
 
-    if (count == 0)
+    if (count == 0) {
+        result = TRUE;
         goto end;
+    }
 
     list = g_malloc0_n(count, sizeof(*entries));
 
@@ -517,8 +577,12 @@ void alsaseq_get_queue_id_list(guint8 **entries, gsize *entry_count,
 
     *entries = list;
     *entry_count = count;
+
+    result = TRUE;
 end:
     close(fd);
+
+    return result;
 }
 
 /**
@@ -531,19 +595,21 @@ end:
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_GET_QUEUE_INFO` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info,
-                                  GError **error)
+gboolean alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info,
+                                      GError **error)
 {
     struct snd_seq_queue_info *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(queue_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
     seq_queue_info_refer_private(*queue_info, &info);
@@ -552,9 +618,14 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_INFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_QUEUE_INFO)");
         g_object_unref(*queue_info);
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -567,20 +638,21 @@ void alsaseq_get_queue_info_by_id(guint8 queue_id, ALSASeqQueueInfo **queue_info
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_queue_info_by_name(const gchar *name,
-                                    ALSASeqQueueInfo **queue_info,
-                                    GError **error)
+gboolean alsaseq_get_queue_info_by_name(const gchar *name, ALSASeqQueueInfo **queue_info,
+                                        GError **error)
 {
     struct snd_seq_queue_info *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(queue_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *queue_info = g_object_new(ALSASEQ_TYPE_QUEUE_INFO, NULL);
     seq_queue_info_refer_private(*queue_info, &info);
@@ -589,9 +661,14 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
     if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_NAMED_QUEUE, info) < 0) {
         generate_file_error(error, errno, "ioctl(GET_NAMED_QUEUE)");
         g_object_unref(*queue_info);
+        result = FALSE;
+    } else {
+        result = TRUE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -604,27 +681,34 @@ void alsaseq_get_queue_info_by_name(const gchar *name,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system calls with
  * `SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS` command for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_get_queue_status(guint8 queue_id,
-                              ALSASeqQueueStatus *const *queue_status,
-                              GError **error)
+gboolean alsaseq_get_queue_status(guint8 queue_id, ALSASeqQueueStatus *const *queue_status,
+                                  GError **error)
 {
     struct snd_seq_queue_status *status;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(queue_status != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_status != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (fd < 0)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
-    g_return_if_fail(ALSASEQ_IS_QUEUE_STATUS(*queue_status));
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_STATUS(*queue_status), FALSE);
     seq_queue_status_refer_private(*queue_status, &status);
 
     status->queue = (int)queue_id;
-    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS, status) < 0)
+    if (ioctl(fd, SNDRV_SEQ_IOCTL_GET_QUEUE_STATUS, status) < 0) {
         generate_file_error(error, errno, "ioctl(GET_QUEUE_STATUS)");
+        result = FALSE;
+    } else {
+        result = TRUE;
+    }
 
     close(fd);
+
+    return result;
 }
