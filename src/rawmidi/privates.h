@@ -9,7 +9,7 @@ G_BEGIN_DECLS
 void rawmidi_substream_info_refer_private(ALSARawmidiSubstreamInfo *self,
                                           struct snd_rawmidi_info **info);
 
-void rawmidi_select_subdevice(guint card_id, guint subdevice_id, int *ctl_fd, GError **error);
+gboolean rawmidi_select_subdevice(guint card_id, guint subdevice_id, int *ctl_fd, GError **error);
 
 void rawmidi_substream_params_refer_private(ALSARawmidiSubstreamParams *self,
                                             struct snd_rawmidi_params **params);

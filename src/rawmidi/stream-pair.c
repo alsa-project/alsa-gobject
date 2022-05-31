@@ -224,12 +224,10 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     else
         g_return_if_reached();
 
-    alsarawmidi_get_rawmidi_devnode(card_id, device_id, &devnode, error);
-    if (*error != NULL)
+    if (!alsarawmidi_get_rawmidi_devnode(card_id, device_id, &devnode, error))
         return;
 
-    rawmidi_select_subdevice(card_id, subdevice_id, &ctl_fd, error);
-    if (*error != NULL) {
+    if (!rawmidi_select_subdevice(card_id, subdevice_id, &ctl_fd, error)) {
         g_free(devnode);
         return;
     }
