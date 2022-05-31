@@ -8,13 +8,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_event_type_get_type";
     "alsatimer_event_data_type_get_type";
 
-    "alsatimer_get_sysname";
-    "alsatimer_get_devnode";
-    "alsatimer_get_device_id_list";
-    "alsatimer_get_device_info";
-    "alsatimer_get_device_status";
-    "alsatimer_get_tstamp_source";
-
     "alsatimer_device_id_get_type";
     "alsatimer_device_id_new";
     "alsatimer_device_id_get_class";
@@ -78,3 +71,14 @@ ALSA_GOBJECT_0_2_0 {
     "alsatimer_user_instance_error_get_type";
     "alsatimer_user_instance_error_quark";
 } ALSA_GOBJECT_0_0_0;
+
+ALSA_GOBJECT_0_3_0 {
+  global:
+    "alsatimer_get_sysname";
+    "alsatimer_get_devnode";
+    "alsatimer_get_device_id_list";
+    "alsatimer_get_device_info";
+    "alsatimer_get_device_status";
+    "alsatimer_get_tstamp_source";
+
+} ALSA_GOBJECT_0_2_0;

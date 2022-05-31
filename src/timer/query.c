@@ -23,17 +23,23 @@
  * Allocate sysname for ALSA Timer and return it when it exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_sysname(char **sysname, GError **error)
+gboolean alsatimer_get_sysname(char **sysname, GError **error)
 {
     int err;
 
-    g_return_if_fail(sysname != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(sysname != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_timer_sysname(sysname);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate timer sysname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /**
@@ -44,34 +50,42 @@ void alsatimer_get_sysname(char **sysname, GError **error)
  * Allocate string of devnode for ALSA Timer and return it if exists.
  *
  * Nodes under sound subsystem in sysfs are used to gather the information.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_devnode(char **devnode, GError **error)
+gboolean alsatimer_get_devnode(char **devnode, GError **error)
 {
     int err;
 
-    g_return_if_fail(devnode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(devnode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     err = lookup_and_allocate_timer_devname(devnode);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to generate timer devname");
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
-static int open_fd(GError **error)
+static gboolean open_fd(int *fd, GError **error)
 {
     char *devname;
-    int fd;
+    gboolean result;
 
-    alsatimer_get_devnode(&devname, error);
-    if (*error != NULL)
+    if (!alsatimer_get_devnode(&devname, error))
         return -1;
 
-    fd = open(devname, O_RDONLY);
-    if (fd < 0)
+    result = TRUE;
+    *fd = open(devname, O_RDONLY);
+    if (*fd < 0) {
         generate_file_error(error, errno, "open(%s)", devname);
+        result = FALSE;
+    }
     g_free(devname);
 
-    return fd;
+    return result;
 }
 
 /**
@@ -83,26 +97,30 @@ static int open_fd(GError **error)
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_TIMER_IOCTL_NEXT_DEVICE` command for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_device_id_list(GList **entries, GError **error)
+gboolean alsatimer_get_device_id_list(GList **entries, GError **error)
 {
     struct snd_timer_id id = {
         .dev_class = -1,
     };
     int fd;
+    gboolean result;
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (*error != NULL)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
+    result = TRUE;
     while (true) {
         ALSATimerDeviceId *entry;
 
         if (ioctl(fd, SNDRV_TIMER_IOCTL_NEXT_DEVICE, &id) < 0) {
             generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_NEXT_DEVICE)");
+            result = FALSE;
             break;
         }
         if (id.dev_class == SNDRV_TIMER_CLASS_NONE)
@@ -113,6 +131,8 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -125,32 +145,38 @@ void alsatimer_get_device_id_list(GList **entries, GError **error)
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_TIMER_IOCTL_GINFO` command for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
+gboolean alsatimer_get_device_info(ALSATimerDeviceId *device_id,
                                ALSATimerDeviceInfo **device_info,
                                GError **error)
 {
     struct snd_timer_ginfo *info;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(device_id != NULL);
-    g_return_if_fail(device_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(device_id != NULL, FALSE);
+    g_return_val_if_fail(device_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (*error != NULL)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     *device_info = g_object_new(ALSATIMER_TYPE_DEVICE_INFO, NULL);
     timer_device_info_refer_private(*device_info, &info);
 
+    result = TRUE;
     info->tid = *device_id;
     if (ioctl(fd, SNDRV_TIMER_IOCTL_GINFO, info) < 0) {
         generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GINFO)");
         g_object_unref(*device_info);
+        result = FALSE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -163,31 +189,37 @@ void alsatimer_get_device_info(ALSATimerDeviceId *device_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_TIMER_IOCTL_GSTATUS` command for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
+gboolean alsatimer_get_device_status(ALSATimerDeviceId *device_id,
                                  ALSATimerDeviceStatus *const *device_status,
                                  GError **error)
 {
     struct snd_timer_gstatus *status;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(device_id != NULL);
-    g_return_if_fail(ALSATIMER_IS_DEVICE_STATUS(*device_status));
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(device_id != NULL, FALSE);
+    g_return_val_if_fail(ALSATIMER_IS_DEVICE_STATUS(*device_status), FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (*error != NULL)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
     timer_device_status_refer_private(*device_status, &status);
 
+    result = TRUE;
     status->tid = *device_id;
     if (ioctl(fd, SNDRV_TIMER_IOCTL_GSTATUS, status) < 0) {
         generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GSTATUS)");
         g_object_unref(*device_status);
+        result = FALSE;
     }
 
     close(fd);
+
+    return result;
 }
 
 /**
@@ -200,39 +232,47 @@ void alsatimer_get_device_status(ALSATimerDeviceId *device_id,
  *
  * The call of function executes `open(2)`, `close(2)`, and `ioctl(2)` system call with
  * `SNDRV_TIMER_IOCTL_GPARAMS` command for ALSA timer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_set_device_params(ALSATimerDeviceId *device_id,
+gboolean alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                  const ALSATimerDeviceParams *device_params,
                                  GError **error)
 {
     struct snd_timer_gparams *params;
     int fd;
+    gboolean result;
 
-    g_return_if_fail(device_id != NULL);
-    g_return_if_fail(device_params != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(device_id != NULL, FALSE);
+    g_return_val_if_fail(device_params != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    fd = open_fd(error);
-    if (*error != NULL)
-        return;
+    if (!open_fd(&fd, error))
+        return FALSE;
 
+    result = TRUE;
     timer_device_params_refer_private((ALSATimerDeviceParams *)device_params,
                                       &params);
     params->tid = *device_id;
-    if (ioctl(fd, SNDRV_TIMER_IOCTL_GPARAMS, params) < 0)
+    if (ioctl(fd, SNDRV_TIMER_IOCTL_GPARAMS, params) < 0) {
         generate_file_error(error, errno, "ioctl(SNDRV_TIMER_IOCTL_GPARAMS)");
+        result = FALSE;
+    }
 
     close(fd);
+
+    return result;
 }
 
-static void timer_get_node_param_value(const char *param_name, char *buf,
-                                       gsize size, int *val, GError **error)
+static gboolean timer_get_node_param_value(const char *param_name, char *buf, gsize size, int *val,
+                                           GError **error)
 {
     char literal[64];
     int fd;
     ssize_t len;
     long v;
     int err;
+    gboolean result;
 
     snprintf(literal, sizeof(literal), SYSFS_SND_TIMER_NODE "parameters/%s",
              param_name);
@@ -240,22 +280,28 @@ static void timer_get_node_param_value(const char *param_name, char *buf,
     fd = open(literal, O_RDONLY);
     if (fd < 0) {
         generate_file_error(error, errno, "open(%s)", literal);
-        return;
+        return FALSE;
     }
 
     len = read(fd, buf, size);
     if (len < 0) {
         generate_file_error(error, errno, "read()");
+        result = FALSE;
         goto end;
     }
 
     err = long_from_string(buf, &v);
-    if (err < 0)
+    if (err < 0) {
         generate_file_error(error, -err, "Fail to parse snd_timer module parameter as integer value");
-    else
+        result = FALSE;
+    } else {
         *val = (int)v;
+        result = TRUE;
+    }
 end:
     close(fd);
+
+    return result;
 }
 
 /**
@@ -272,14 +318,17 @@ end:
  *
  * The call of function executes `open(2)`, `read(2)`, `close(2)` system calls for the sysfs node
  * corresponding to `snd-timer` kernel module.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_get_tstamp_source(int *clock_id, GError **error)
+gboolean alsatimer_get_tstamp_source(int *clock_id, GError **error)
 {
     int val;
     gsize size;
     char *buf;
+    gboolean result;
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     // Count required digits.
     val = INT_MAX;
@@ -294,10 +343,10 @@ void alsatimer_get_tstamp_source(int *clock_id, GError **error)
 
     buf = g_malloc0(size);
 
-    timer_get_node_param_value("timer_tstamp_monotonic", buf, size, &val,
-                               error);
-    if (*error != NULL)
-        goto end;
+    result = timer_get_node_param_value("timer_tstamp_monotonic", buf, size, &val, error);
+    g_free(buf);
+    if (!result)
+        return FALSE;
 
     switch (val) {
     case 0:
@@ -308,8 +357,8 @@ void alsatimer_get_tstamp_source(int *clock_id, GError **error)
         break;
     default:
         generate_file_error(error, EPROTO, "timer_tstamp_monotonic");
-        break;
+        return FALSE;
     }
-end:
-    g_free(buf);
+
+    return TRUE;
 }
