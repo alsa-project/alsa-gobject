@@ -216,20 +216,22 @@ void alsaseq_event_cntr_count_events(ALSASeqEventCntr *self, gsize *count)
  * @error: A [struct@GLib.Error].
  *
  * Calculate the amount of cells in client pool to be consumed by a part of events in the container.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
-                                    gsize count, gsize *cells, GError **error)
+gboolean alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self, gsize count,
+                                                       gsize *cells, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
     gsize total;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(cells != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(cells != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *cells = 0;
     total = 0;
@@ -242,6 +244,8 @@ void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
             break;
         ++total;
     }
+
+    return TRUE;
 }
 
 /**
@@ -252,26 +256,30 @@ void alsaseq_event_cntr_calculate_pool_consumption(ALSASeqEventCntr *self,
  * @error: A [struct@GLib.Error].
  *
  * Get the type of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
-                                    ALSASeqEventType *ev_type, GError **error)
+gboolean alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
+                                           ALSASeqEventType *ev_type, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(ev_type != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(ev_type != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *ev_type = (ALSASeqEventType)ev->type;
+
+    return TRUE;
 }
 
 /**
@@ -282,26 +290,29 @@ void alsaseq_event_cntr_get_event_type(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the type to event pointed by the index;
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
-                                         gsize index, ALSASeqEventType ev_type,
-                                         GError **error)
+gboolean alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self, gsize index,
+                                           ALSASeqEventType ev_type, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->type = (snd_seq_event_type_t)ev_type;
+
+    return TRUE;
 }
 
 /**
@@ -312,27 +323,30 @@ void alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self,
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of timestamping for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                          ALSASeqEventTimestampMode *mode,
-                                          GError **error)
+gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
+                                            ALSASeqEventTimestampMode *mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(mode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(mode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *mode = (ALSASeqEventTimestampMode)(ev->flags & SNDRV_SEQ_TIME_STAMP_MASK);
+
+    return TRUE;
 }
 
 /**
@@ -343,27 +357,30 @@ void alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of timestamping for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                          ALSASeqEventTimestampMode mode,
-                                          GError **error)
+gboolean alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
+                                            ALSASeqEventTimestampMode mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->flags &= ~SNDRV_SEQ_TIME_STAMP_MASK;
     ev->flags |= (unsigned char)mode;
+
+    return TRUE;
 }
 
 /**
@@ -374,27 +391,30 @@ void alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of time for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
-                                        ALSASeqEventTimeMode *mode,
-                                        GError **error)
+gboolean alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
+                                          ALSASeqEventTimeMode *mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(mode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(mode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *mode = (ALSASeqEventTimeMode)(ev->flags & SNDRV_SEQ_TIME_MODE_MASK);
+
+    return TRUE;
 }
 
 /**
@@ -405,27 +425,30 @@ void alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of time for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
-                                        ALSASeqEventTimeMode mode,
-                                        GError **error)
+gboolean alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
+                                          ALSASeqEventTimeMode mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->flags &= ~SNDRV_SEQ_TIME_MODE_MASK;
     ev->flags |= (unsigned char)mode;
+
+    return TRUE;
 }
 
 /**
@@ -436,27 +459,30 @@ void alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of length for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
-                                          ALSASeqEventLengthMode *mode,
-                                          GError **error)
+gboolean alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
+                                            ALSASeqEventLengthMode *mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(mode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(mode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *mode = (ALSASeqEventLengthMode)(ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK);
+
+    return TRUE;
 }
 
 /**
@@ -467,27 +493,30 @@ void alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of priority for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_priority_mode(
-                                ALSASeqEventCntr *self, gsize index,
-                                ALSASeqEventPriorityMode *mode, GError **error)
+gboolean alsaseq_event_cntr_get_priority_mode(ALSASeqEventCntr *self, gsize index,
+                                              ALSASeqEventPriorityMode *mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(mode != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(mode != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *mode = (ALSASeqEventPriorityMode)(ev->flags & SNDRV_SEQ_PRIORITY_MASK);
+
+    return TRUE;
 }
 
 /**
@@ -498,27 +527,30 @@ void alsaseq_event_cntr_get_priority_mode(
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of priority for the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_priority_mode(
-                                ALSASeqEventCntr *self, gsize index,
-                                ALSASeqEventPriorityMode mode, GError **error)
+gboolean alsaseq_event_cntr_set_priority_mode(ALSASeqEventCntr *self, gsize index,
+                                              ALSASeqEventPriorityMode mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->flags &= ~SNDRV_SEQ_PRIORITY_MASK;
     ev->flags |= (unsigned char)mode;
+
+    return TRUE;
 }
 
 /**
@@ -529,26 +561,30 @@ void alsaseq_event_cntr_set_priority_mode(
  * @error: A [struct@GLib.Error].
  *
  * Get the tag assignd to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
-                                  gint8 *tag, GError **error)
+gboolean alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index, gint8 *tag,
+                                    GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(tag != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(tag != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *tag = ev->tag;
+
+    return TRUE;
 }
 
 /**
@@ -559,25 +595,28 @@ void alsaseq_event_cntr_get_tag(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the tag assignd to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
-                                  gint8 tag, GError **error)
+gboolean alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index, gint8 tag, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->tag = tag;
+
+    return TRUE;
 }
 
 /**
@@ -589,26 +628,30 @@ void alsaseq_event_cntr_set_tag(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the numeric ID of queue to deliver the event.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
-                                       guint8 *queue_id, GError **error)
+gboolean alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index, guint8 *queue_id,
+                                         GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(queue_id != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(queue_id != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *queue_id = ev->queue;
+
+    return TRUE;
 }
 
 /**
@@ -620,25 +663,29 @@ void alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the numeric ID of queue to deliver the event.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
-                                       guint8 queue_id, GError **error)
+gboolean alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index, guint8 queue_id,
+                                         GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->queue = queue_id;
+
+    return TRUE;
 }
 
 /**
@@ -650,26 +697,30 @@ void alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the timestamp of event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
-                                const ALSASeqTstamp **tstamp, GError **error)
+gboolean alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
+                                       const ALSASeqTstamp **tstamp, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(tstamp != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(tstamp != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *tstamp = (const ALSASeqTstamp *)&ev->time;
+
+    return TRUE;
 }
 
 /**
@@ -680,26 +731,30 @@ void alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the timestamp for the event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
-                                    const ALSASeqTstamp *tstamp, GError **error)
+gboolean alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
+                                       const ALSASeqTstamp *tstamp, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(tstamp != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(tstamp != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->time = *tstamp;
+
+    return TRUE;
 }
 
 /**
@@ -710,26 +765,30 @@ void alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the destination of event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
-                                  const ALSASeqAddr **dst, GError **error)
+gboolean alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index, const ALSASeqAddr **dst,
+                                    GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(dst != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(dst != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *dst = (const ALSASeqAddr *)&ev->dest;
+
+    return TRUE;
 }
 
 /**
@@ -740,26 +799,30 @@ void alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the destination of event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
-                                  const ALSASeqAddr *dst, GError **error)
+gboolean alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index, const ALSASeqAddr *dst,
+                                    GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(dst != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(dst != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->dest = *dst;
+
+    return TRUE;
 }
 
 /**
@@ -770,26 +833,30 @@ void alsaseq_event_cntr_set_dst(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the destination of event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
-                                  const ALSASeqAddr **src, GError **error)
+gboolean alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index, const ALSASeqAddr **src,
+                                    GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(src != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(src != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *src = (const ALSASeqAddr *)&ev->source;
+
+    return TRUE;
 }
 
 /**
@@ -800,35 +867,37 @@ void alsaseq_event_cntr_get_src(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Set the destination of event pointed by index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index,
-                                  const ALSASeqAddr *src, GError **error)
+gboolean alsaseq_event_cntr_set_src(ALSASeqEventCntr *self, gsize index, const ALSASeqAddr *src,
+                                    GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(src != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(src != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     ev->source = *src;
+
+    return TRUE;
 }
 
-static void ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv,
-                                      struct snd_seq_event *ev, GError **error)
+static gboolean ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv, struct snd_seq_event *ev,
+                                          GError **error)
 {
-    if (!priv->allocated) {
-        g_return_if_fail(priv->allocated);
-        return;
-    }
+    if (!priv->allocated)
+        g_return_val_if_fail(priv->allocated, FALSE);
 
     switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
     case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
@@ -852,11 +921,13 @@ static void ensure_fixed_length_event(ALSASeqEventCntrPrivate *priv,
 
     ev->flags &= ~SNDRV_SEQ_EVENT_LENGTH_MASK;
     ev->flags |= SNDRV_SEQ_EVENT_LENGTH_FIXED;
+
+    return TRUE;
 }
 
-static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
-                                struct snd_seq_event *ev, const guint8 *data,
-                                gsize size, GError **error)
+static gboolean ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
+                                             struct snd_seq_event *ev, const guint8 *data,
+                                             gsize size, GError **error)
 {
     guint8 *pos = (guint8 *)ev;
     ptrdiff_t from_head = pos + sizeof(*ev) - priv->buf;
@@ -864,10 +935,8 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
     guint8 *next_ev;
     guint8 *new;
 
-    if (!priv->allocated) {
-        g_return_if_fail(priv->allocated);
-        return;
-    }
+    if (!priv->allocated)
+        g_return_val_if_fail(priv->allocated, FALSE);
 
     switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
     case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
@@ -899,6 +968,8 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
 
     ev->flags &= ~SNDRV_SEQ_EVENT_LENGTH_MASK;
     ev->flags |= SNDRV_SEQ_EVENT_LENGTH_VARIABLE;
+
+    return TRUE;
 }
 
 /**
@@ -909,25 +980,29 @@ static void ensure_variable_length_event(ALSASeqEventCntrPrivate *priv,
  * @error: A [struct@GLib.Error].
  *
  * Get the note data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataNote **data, GError **error)
+gboolean alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
+                                          const ALSASeqEventDataNote **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqEventDataNote *)&ev->data.note;
+
+    return TRUE;
 }
 
 /**
@@ -938,29 +1013,32 @@ void alsaseq_event_cntr_get_note_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the note data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataNote *data, GError **error)
+gboolean alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
+                                          const ALSASeqEventDataNote *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.note = *(struct snd_seq_ev_note *)data;
+
+    return TRUE;
 }
 
 /**
@@ -971,25 +1049,29 @@ void alsaseq_event_cntr_set_note_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the control data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataCtl **data, GError **error)
+gboolean alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
+                                         const ALSASeqEventDataCtl **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqEventDataCtl *)&ev->data.control;
+
+    return TRUE;
 }
 
 /**
@@ -1000,29 +1082,32 @@ void alsaseq_event_cntr_get_ctl_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the control data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataCtl *data, GError **error)
+gboolean alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
+                                         const ALSASeqEventDataCtl *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.control = *(struct snd_seq_ev_ctrl *)data;
+
+    return TRUE;
 }
 
 /**
@@ -1033,25 +1118,29 @@ void alsaseq_event_cntr_set_ctl_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the byte data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint8 *data[12], GError **error)
+gboolean alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
+                                          const guint8 *data[12], GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = ev->data.raw8.d;
+
+    return TRUE;
 }
 
 /**
@@ -1062,29 +1151,32 @@ void alsaseq_event_cntr_get_byte_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the byte data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint8 data[12], GError **error)
+gboolean alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
+                                          const guint8 data[12], GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     memcpy(ev->data.raw8.d, data, sizeof(ev->data.raw8.d));
+
+    return TRUE;
 }
 
 /**
@@ -1095,26 +1187,30 @@ void alsaseq_event_cntr_set_byte_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the quadlet data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint32 *data[3], GError **error)
+gboolean alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
+                                             const guint32 *data[3], GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = ev->data.raw32.d;
+
+    return TRUE;
 }
 
 /**
@@ -1125,30 +1221,33 @@ void alsaseq_event_cntr_get_quadlet_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the quadlet data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint32 data[3], GError **error)
+gboolean alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
+                                             const guint32 data[3], GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
 
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     memcpy(ev->data.raw32.d, data, sizeof(ev->data.raw32.d));
+
+    return TRUE;
 }
 
 /**
@@ -1160,25 +1259,26 @@ void alsaseq_event_cntr_set_quadlet_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Refer to the blob data of event.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint8 **data, gsize *size,
-                                        GError **error)
+gboolean alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
+                                          const guint8 **data, gsize *size, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(size != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(size != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     switch (ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
     case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
@@ -1192,9 +1292,10 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
         break;
     }
     default:
-        g_return_if_reached();
-        break;
+        g_return_val_if_reached(FALSE);
     }
+
+    return TRUE;
 }
 
 /**
@@ -1206,26 +1307,27 @@ void alsaseq_event_cntr_get_blob_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the quadlet data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
-                                        const guint8 *data, gsize size,
-                                        GError **error)
+gboolean alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
+                                          const guint8 *data, gsize size, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_variable_length_event(priv, ev, data, size, error);
+    return ensure_variable_length_event(priv, ev, data, size, error);
 }
 
 /**
@@ -1236,25 +1338,29 @@ void alsaseq_event_cntr_set_blob_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the queue data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataQueue **data, GError **error)
+gboolean alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
+                                           const ALSASeqEventDataQueue **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqEventDataQueue *)&ev->data.queue;
+
+    return TRUE;
 }
 
 /**
@@ -1265,29 +1371,32 @@ void alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the queue data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataQueue *data, GError **error)
+gboolean alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
+                                           const ALSASeqEventDataQueue *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.queue = *(struct snd_seq_ev_queue_control *)data;
+
+    return TRUE;
 }
 
 /**
@@ -1298,25 +1407,29 @@ void alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the timestamp data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                    const ALSASeqTstamp **data, GError **error)
+gboolean alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
+                                            const ALSASeqTstamp **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqTstamp *)&ev->data.time;
+
+    return TRUE;
 }
 
 /**
@@ -1327,29 +1440,32 @@ void alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the timestamp data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                    const ALSASeqTstamp *data, GError **error)
+gboolean alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
+                                            const ALSASeqTstamp *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.time = *(union snd_seq_timestamp *)data;
+
+    return TRUE;
 }
 
 /**
@@ -1360,25 +1476,29 @@ void alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the address data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
-                                    const ALSASeqAddr **data, GError **error)
+gboolean alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
+                                          const ALSASeqAddr **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqAddr *)&ev->data.time;
+
+    return TRUE;
 }
 
 /**
@@ -1389,29 +1509,32 @@ void alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the address data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
-                                        const ALSASeqAddr *data, GError **error)
+gboolean alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
+                                          const ALSASeqAddr *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.addr = *(struct snd_seq_addr *)data;
+
+    return TRUE;
 }
 
 /**
@@ -1422,25 +1545,29 @@ void alsaseq_event_cntr_set_addr_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the connect data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
-                        const ALSASeqEventDataConnect **data, GError **error)
+gboolean alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
+                                             const ALSASeqEventDataConnect **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqEventDataConnect *)&ev->data.connect;
+
+    return TRUE;
 }
 
 /**
@@ -1451,29 +1578,32 @@ void alsaseq_event_cntr_get_connect_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the connect data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
-                        const ALSASeqEventDataConnect *data, GError **error)
+gboolean alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
+                                             const ALSASeqEventDataConnect *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.connect = *(struct snd_seq_connect *)data;
+
+    return TRUE;
 }
 
 /**
@@ -1484,25 +1614,29 @@ void alsaseq_event_cntr_set_connect_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Get the result data of event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_get_result_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataResult **data, GError **error)
+gboolean alsaseq_event_cntr_get_result_data(ALSASeqEventCntr *self, gsize index,
+                                            const ALSASeqEventDataResult **data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
     *data = (const ALSASeqEventDataResult *)&ev->data.result;
+
+    return TRUE;
 }
 
 /**
@@ -1513,29 +1647,32 @@ void alsaseq_event_cntr_get_result_data(ALSASeqEventCntr *self, gsize index,
  * @error: A [struct@GLib.Error].
  *
  * Copy the result data to the event pointed by the index.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_event_cntr_set_result_data(ALSASeqEventCntr *self, gsize index,
-                            const ALSASeqEventDataResult *data, GError **error)
+gboolean alsaseq_event_cntr_set_result_data(ALSASeqEventCntr *self, gsize index,
+                                            const ALSASeqEventDataResult *data, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
     struct snd_seq_event *ev;
 
-    g_return_if_fail(ALSASEQ_IS_EVENT_CNTR(self));
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_if_fail(data != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
-    g_return_if_fail(ev != NULL);
+    g_return_val_if_fail(ev != NULL, FALSE);
 
-    ensure_fixed_length_event(priv, ev, error);
-    if (*error != NULL)
-        return;
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
 
     ev->data.result = *(struct snd_seq_result *)data;
+
+    return TRUE;
 }
 
 void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
