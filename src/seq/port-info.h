@@ -16,4 +16,6 @@ struct _ALSASeqPortInfoClass {
 
 ALSASeqPortInfo *alsaseq_port_info_new();
 
+G_END_DECLS
+
 #endif
