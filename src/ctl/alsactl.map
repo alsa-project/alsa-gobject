@@ -6,11 +6,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_event_type_get_type";
     "alsactl_elem_event_mask_get_type";
 
-    "alsactl_get_card_id_list";
-    "alsactl_get_card_sysname";
-    "alsactl_get_control_sysname";
-    "alsactl_get_control_devnode";
-
     "alsactl_card_get_type";
     "alsactl_card_new";
     "alsactl_card_open";
@@ -70,9 +65,18 @@ ALSA_GOBJECT_0_0_0 {
 };
 
 ALSA_GOBJECT_0_2_0 {
+  global:
     "alsactl_card_error_get_type";
     "alsactl_card_error_quark";
     "alsactl_card_write_elem_tlv";
     "alsactl_card_read_elem_tlv";
     "alsactl_card_command_elem_tlv";
 } ALSA_GOBJECT_0_0_0;
+
+ALSA_GOBJECT_0_3_0 {
+  global:
+    "alsactl_get_card_id_list";
+    "alsactl_get_card_sysname";
+    "alsactl_get_control_sysname";
+    "alsactl_get_control_devnode";
+} ALSA_GOBJECT_0_2_0;

@@ -11,7 +11,8 @@ from signal import SIGINT
 
 # Open ALSA Rawmidi chracter device in which a pair of input/output substreams
 # is available in the same subdevice ID.
-for card_id in ALSACtl.get_card_id_list():
+_, card_id_list = ALSACtl.get_card_id_list()
+for card_id in card_id_list:
     for device_id in ALSARawmidi.get_device_id_list(card_id):
         outputs = ALSARawmidi.get_subdevice_id_list(card_id, device_id,
                                           ALSARawmidi.StreamDirection.OUTPUT)
