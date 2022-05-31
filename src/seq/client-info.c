@@ -216,20 +216,21 @@ ALSASeqClientInfo *alsaseq_client_info_new()
  * @error: A [struct@GLib.Error].
  *
  * Set the list of type of events configured to be listen.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
-                                          const ALSASeqEventType *event_types,
-                                          gsize event_type_count,
-                                          GError **error)
+gboolean alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
+                                              const ALSASeqEventType *event_types,
+                                              gsize event_type_count, GError **error)
 {
     ALSASeqClientInfoPrivate *priv;
     int i;
 
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_INFO(self), FALSE);
     priv = alsaseq_client_info_get_instance_private(self);
 
-    g_return_if_fail(event_types != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(event_types != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     memset(priv->info.event_filter, 0, sizeof(priv->info.event_filter));
 
@@ -241,6 +242,8 @@ void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
         if (order < G_N_ELEMENTS(priv->info.event_filter))
             priv->info.event_filter[order] |= 1u << idx;
     }
+
+    return TRUE;
 }
 
 /**
@@ -252,23 +255,24 @@ void alsaseq_client_info_set_event_filter(ALSASeqClientInfo *self,
  * @error: A [struct@GLib.Error].
  *
  * Get the list of type of events configured to be listen.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
-                                          ALSASeqEventType **event_types,
-                                          gsize *event_type_count,
-                                          GError **error)
+gboolean alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
+                                              ALSASeqEventType **event_types,
+                                              gsize *event_type_count, GError **error)
 {
     ALSASeqClientInfoPrivate *priv;
     unsigned int count;
     unsigned int index;
     int i;
 
-    g_return_if_fail(ALSASEQ_IS_CLIENT_INFO(self));
+    g_return_val_if_fail(ALSASEQ_IS_CLIENT_INFO(self), FALSE);
     priv = alsaseq_client_info_get_instance_private(self);
 
-    g_return_if_fail(event_types != NULL);
-    g_return_if_fail(event_type_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(event_types != NULL, FALSE);
+    g_return_val_if_fail(event_type_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     count = 0;
     for (i = 0; i < SNDRV_SEQ_EVENT_NONE + 1; ++i) {
@@ -283,7 +287,7 @@ void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
     if (count == 0) {
         *event_types = NULL;
         *event_type_count = 0;
-        return;
+        return TRUE;
     }
 
     *event_types = g_malloc0_n(count, sizeof(*event_types));
@@ -301,6 +305,8 @@ void alsaseq_client_info_get_event_filter(ALSASeqClientInfo *self,
             ++index;
         }
     }
+
+    return TRUE;
 }
 
 void seq_client_info_refer_private(ALSASeqClientInfo *self,
