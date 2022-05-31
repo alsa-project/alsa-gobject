@@ -186,8 +186,7 @@ void alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag,
 
     g_return_if_fail(error == NULL || *error == NULL);
 
-    alsaseq_get_seq_devnode(&devnode, error);
-    if (*error != NULL)
+    if (!alsaseq_get_seq_devnode(&devnode, error))
         return;
 
     open_flag |= O_RDWR;
