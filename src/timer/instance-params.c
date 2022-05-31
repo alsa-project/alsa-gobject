@@ -132,8 +132,10 @@ ALSATimerInstanceParams *alsatimer_instance_params_new()
  *
  * Set the list of [enum@EventType] to filter events. This parameter is effective only for target
  * instance with [enum@EventDataType:TIMESTAMP].
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
+gboolean alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
                                             const ALSATimerEventType *entries,
                                             gsize entry_count, GError **error)
 {
@@ -141,17 +143,17 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
     unsigned int filter;
     int i;
 
-    g_return_if_fail(ALSATIMER_IS_INSTANCE_PARAMS(self));
+    g_return_val_if_fail(ALSATIMER_IS_INSTANCE_PARAMS(self), FALSE);
     priv = alsatimer_instance_params_get_instance_private(self);
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     priv->params.filter = 0;
 
     // Clear the event filter.
     if (entries == NULL || entry_count == 0)
-        return;
+        return TRUE;
 
     filter = 0;
     for (i = 0; i < entry_count; ++i) {
@@ -160,12 +162,13 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
             (val > SNDRV_TIMER_EVENT_RESUME &&
              val < SNDRV_TIMER_EVENT_MSTART) ||
             val > SNDRV_TIMER_EVENT_MRESUME) {
-            g_return_if_reached();
+            g_return_val_if_reached(FALSE);
         }
         filter |= (1u << val);
     }
 
     priv->params.filter = filter;
+    return TRUE;
 }
 
 /**
@@ -177,8 +180,10 @@ void alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
  *
  * Get the list of ALSATimerEventType to filter events. This parameter is effective only for target
  * instance with [enum@EventDataType:TIMESTAMP].
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
+gboolean alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
                                             ALSATimerEventType **entries,
                                             gsize *entry_count, GError **error)
 {
@@ -189,12 +194,12 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     unsigned int index;
     int i;
 
-    g_return_if_fail(ALSATIMER_IS_INSTANCE_PARAMS(self));
+    g_return_val_if_fail(ALSATIMER_IS_INSTANCE_PARAMS(self), FALSE);
     priv = alsatimer_instance_params_get_instance_private(self);
 
-    g_return_if_fail(entries != NULL);
-    g_return_if_fail(entry_count != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(entries != NULL, FALSE);
+    g_return_val_if_fail(entry_count != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     count = 0;
     filter = priv->params.filter;
@@ -204,7 +209,7 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
     }
 
     if (count == 0)
-        return;
+        return TRUE;
 
     list = g_malloc0_n(count, sizeof(*list));
 
@@ -221,6 +226,7 @@ void alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
 
     *entries = list;
     *entry_count = count;
+    return TRUE;
 }
 
 void timer_instance_params_refer_private(ALSATimerInstanceParams *self,
