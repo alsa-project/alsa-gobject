@@ -39,7 +39,7 @@ else:
 # Retrieve the information of substream for both directions.
 for direction in (ALSARawmidi.StreamDirection.OUTPUT,
                   ALSARawmidi.StreamDirection.INPUT):
-    info = pair.get_substream_info(direction)
+    _, info = pair.get_substream_info(direction)
     print('The information of {} substream:'.format(direction.value_nick))
     print('  direction:', info.get_property('direction').value_nick)
     for prop in ('device-id', 'subdevice-id', 'card-id', 'id', 'name',
@@ -79,7 +79,7 @@ pair.connect('handle-messages', handle_messages)
 
 # Create event dispatcher.
 dispatcher = GLib.MainLoop.new(None, False)
-src = pair.create_source()
+_, src = pair.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.

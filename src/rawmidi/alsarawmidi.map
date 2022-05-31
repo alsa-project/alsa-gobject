@@ -7,16 +7,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsarawmidi_stream_pair_get_type";
     "alsarawmidi_stream_pair_new";
-    "alsarawmidi_stream_pair_open";
-    "alsarawmidi_stream_pair_get_protocol_version";
-    "alsarawmidi_stream_pair_get_substream_info";
-    "alsarawmidi_stream_pair_set_substream_params";
-    "alsarawmidi_stream_pair_get_substream_status";
-    "alsarawmidi_stream_pair_read_from_substream";
-    "alsarawmidi_stream_pair_write_to_substream";
-    "alsarawmidi_stream_pair_drain_substream";
-    "alsarawmidi_stream_pair_drop_substream";
-    "alsarawmidi_stream_pair_create_source";
 
     "alsarawmidi_substream_params_get_type";
     "alsarawmidi_substream_params_new";
@@ -40,4 +30,15 @@ ALSA_GOBJECT_0_3_0 {
     "alsarawmidi_get_rawmidi_devnode";
     "alsarawmidi_get_subdevice_id_list";
     "alsarawmidi_get_substream_info";
+
+    "alsarawmidi_stream_pair_open";
+    "alsarawmidi_stream_pair_get_protocol_version";
+    "alsarawmidi_stream_pair_get_substream_info";
+    "alsarawmidi_stream_pair_set_substream_params";
+    "alsarawmidi_stream_pair_get_substream_status";
+    "alsarawmidi_stream_pair_read_from_substream";
+    "alsarawmidi_stream_pair_write_to_substream";
+    "alsarawmidi_stream_pair_drain_substream";
+    "alsarawmidi_stream_pair_drop_substream";
+    "alsarawmidi_stream_pair_create_source";
 } ALSA_GOBJECT_0_2_0;

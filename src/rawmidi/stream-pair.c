@@ -194,24 +194,25 @@ ALSARawmidiStreamPair *alsarawmidi_stream_pair_new()
  * the given subdevice.
  *
  * The call of function executes `open(2)` system call for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
-                                  guint device_id, guint subdevice_id,
-                                  ALSARawmidiStreamPairInfoFlag access_modes,
-                                  gint open_flag, GError **error)
+gboolean alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id, guint device_id,
+                                      guint subdevice_id, ALSARawmidiStreamPairInfoFlag access_modes,
+                                      gint open_flag, GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
     char *devnode;
     int ctl_fd;
     int proto_ver;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
     // The flag is used to attach substreams for each direction.
-    g_return_if_fail((access_modes & ~(ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT |
-                     ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) == 0);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail((access_modes & ~(ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT |
+                         ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)) == 0, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     open_flag &= ~(O_RDWR | O_WRONLY | O_RDONLY);
     if ((access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_OUTPUT) &&
@@ -222,14 +223,14 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
     else if (access_modes & ALSARAWMIDI_STREAM_PAIR_INFO_FLAG_INPUT)
         open_flag |= O_RDONLY;
     else
-        g_return_if_reached();
+        g_return_val_if_reached(FALSE);
 
     if (!alsarawmidi_get_rawmidi_devnode(card_id, device_id, &devnode, error))
-        return;
+        return FALSE;
 
     if (!rawmidi_select_subdevice(card_id, subdevice_id, &ctl_fd, error)) {
         g_free(devnode);
-        return;
+        return FALSE;
     }
 
     priv->fd = open(devnode, open_flag);
@@ -246,7 +247,7 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
                 generate_syscall_error(error, errno, "open(%s)", devnode);
         }
         g_free(devnode);
-        return;
+        return FALSE;
     }
     priv->devnode = devnode;
 
@@ -258,12 +259,14 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
             generate_syscall_error(error, errno, "ioctl(%s)", "PVERSION");
         close(priv->fd);
         priv->fd = -1;
-        return;
+        return FALSE;
     }
 
     priv->proto_ver_triplet[0] = SNDRV_PROTOCOL_MAJOR(proto_ver);
     priv->proto_ver_triplet[1] = SNDRV_PROTOCOL_MINOR(proto_ver);
     priv->proto_ver_triplet[2] = SNDRV_PROTOCOL_MICRO(proto_ver);
+
+    return TRUE;
 }
 
 /**
@@ -276,21 +279,25 @@ void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
  * Get the version of rawmidi protocol currently used. The version is represented as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
-                                       const guint16 *proto_ver_triplet[3],
-                                       GError **error)
+gboolean alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
+                                        const guint16 *proto_ver_triplet[3],
+                                        GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(proto_ver_triplet != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(proto_ver_triplet != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *proto_ver_triplet = (const guint16 *)priv->proto_ver_triplet;
+
+    return TRUE;
 }
 
 /**
@@ -304,8 +311,10 @@ void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_INFO` command
  * for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamInfo **substream_info,
                                 GError **error)
@@ -313,11 +322,11 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
     ALSARawmidiStreamPairPrivate *priv;
     struct snd_rawmidi_info *info;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(substream_info != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(substream_info != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     *substream_info = g_object_new(ALSARAWMIDI_TYPE_SUBSTREAM_INFO, NULL);
 
@@ -330,7 +339,10 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "INFO");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -344,8 +356,10 @@ void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_PARAMS` command
  * for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamParams *substream_params,
                                 GError **error)
@@ -353,11 +367,11 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
     ALSARawmidiStreamPairPrivate *priv;
     struct snd_rawmidi_params *params;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(substream_params != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(substream_params != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     rawmidi_substream_params_refer_private(substream_params, &params);
 
@@ -367,7 +381,10 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "PARAMS");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -381,8 +398,10 @@ void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_RAWMIDI_IOCTL_STATUS` command
  * for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
                             ALSARawmidiStreamDirection direction,
                             ALSARawmidiSubstreamStatus *const *substream_status,
                             GError **error)
@@ -390,11 +409,11 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
     ALSARawmidiStreamPairPrivate *priv;
     struct snd_rawmidi_status *status;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(substream_status != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(substream_status != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     rawmidi_substream_status_refer_private(*substream_status, &status);
 
@@ -404,7 +423,10 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "STATUS");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -420,20 +442,22 @@ void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
  * buffer has no data, call of the API is blocked till any data is available.
  *
  * The call of function executes `read(2)` system for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
                                         guint8 *const *buf, gsize *buf_size,
                                         GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
     int len;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(buf != NULL);
-    g_return_if_fail(buf_size != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(buf != NULL, FALSE);
+    g_return_val_if_fail(buf_size != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     len = read(priv->fd, *buf, *buf_size);
     if (len < 0) {
@@ -448,10 +472,11 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
                 generate_syscall_error(error, errno, "read(%s)", priv->devnode);
         }
 
-        return;
+        return FALSE;
     }
 
     *buf_size = len;
+    return TRUE;
 }
 
 /**
@@ -467,19 +492,21 @@ void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
  * buffer is full, call of the API is blocked till the buffer has space for the data.
  *
  * The call of function executes `write(2) system for ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                                         const guint8 *buf, gsize buf_size,
                                         GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
     int len;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(buf != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(buf != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     len = write(priv->fd, buf, buf_size);
     if (len < 0) {
@@ -494,8 +521,10 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                 generate_syscall_error(error, errno, "write(%s)", priv->devnode);
         }
 
-        return;
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -511,24 +540,29 @@ void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
  *
  * The call of function executes `ioctl(2)` system with `SNDRV_RAWMIDI_IOCTL_DRAIN` command for
  * ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DRAIN, &direction) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "DRAIN");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -542,24 +576,29 @@ void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
  *
  * The call of function executes `ioctl(2)` system with `SNDRV_RAWMIDI_IOCTL_DROP` command for
  * ALSA rawmidi character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error)
 {
     ALSARawmidiStreamPairPrivate *priv;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
 
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     if (ioctl(priv->fd, SNDRV_RAWMIDI_IOCTL_DROP, &direction) < 0) {
         if (errno == ENODEV)
             generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED);
         else
             generate_syscall_error(error, errno, "ioctl(%s)", "DROP");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 static gboolean rawmidi_stream_pair_check_src(GSource *gsrc)
@@ -621,9 +660,11 @@ static void rawmidi_stream_pair_finalize_src(GSource *gsrc)
  * input substream. In each iteration of [struct@GLib.MainContext], the `read(2)` system call is
  * executed to dispatch control event for [signal@StreamPair::handle-messages] signal, according to
  * the result of `poll(2)` system call.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
-                                           GSource **gsrc, GError **error)
+gboolean alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self, GSource **gsrc,
+                                               GError **error)
 {
     static GSourceFuncs funcs = {
             .check          = rawmidi_stream_pair_check_src,
@@ -634,12 +675,12 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
     RawmidiStreamPairSource *src;
     int access_modes;
 
-    g_return_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self));
+    g_return_val_if_fail(ALSARAWMIDI_IS_STREAM_PAIR(self), FALSE);
     priv = alsarawmidi_stream_pair_get_instance_private(self);
-    g_return_if_fail(priv->fd >= 0);
+    g_return_val_if_fail(priv->fd >= 0, FALSE);
 
-    g_return_if_fail(gsrc != NULL);
-    g_return_if_fail(error == NULL || *error == NULL);
+    g_return_val_if_fail(gsrc != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     access_modes = fcntl(priv->fd, F_GETFL);
     if (access_modes < 0) {
@@ -650,12 +691,12 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
         else
             generate_syscall_error(error, errno, "fcntl(%s)", "F_GETFL");
 
-        return;
+        return FALSE;
     }
 
     if (!(access_modes & O_RDWR) && !(access_modes & O_WRONLY)) {
         generate_local_error(error, ALSARAWMIDI_STREAM_PAIR_ERROR_UNREADABLE);
-        return;
+        return FALSE;
     }
 
     *gsrc = g_source_new(&funcs, sizeof(RawmidiStreamPairSource));
@@ -667,4 +708,6 @@ void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
 
     src->self = g_object_ref(self);
     src->tag = g_source_add_unix_fd(*gsrc, priv->fd, G_IO_IN);
+
+    return TRUE;
 }

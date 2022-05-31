@@ -36,47 +36,46 @@ struct _ALSARawmidiStreamPairClass {
 
 ALSARawmidiStreamPair *alsarawmidi_stream_pair_new();
 
-void alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id,
-                                  guint device_id, guint subdevice_id,
-                                  ALSARawmidiStreamPairInfoFlag access_modes,
-                                  gint open_flag, GError **error);
+gboolean alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id, guint device_id,
+                                      guint subdevice_id, ALSARawmidiStreamPairInfoFlag access_modes,
+                                      gint open_flag, GError **error);
 
-void alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
-                                       const guint16 *proto_ver_triplet[3],
-                                       GError **error);
+gboolean alsarawmidi_stream_pair_get_protocol_version(ALSARawmidiStreamPair *self,
+                                        const guint16 *proto_ver_triplet[3],
+                                        GError **error);
 
-void alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_get_substream_info(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamInfo **substream_info,
                                 GError **error);
 
-void alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_set_substream_params(ALSARawmidiStreamPair *self,
                                 ALSARawmidiStreamDirection direction,
                                 ALSARawmidiSubstreamParams *substream_params,
                                 GError **error);
 
-void alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_get_substream_status(ALSARawmidiStreamPair *self,
                             ALSARawmidiStreamDirection direction,
                             ALSARawmidiSubstreamStatus *const *substream_status,
                             GError **error);
 
-void alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_read_from_substream(ALSARawmidiStreamPair *self,
                                         guint8 *const *buf, gsize *buf_size,
                                         GError **error);
-void alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_write_to_substream(ALSARawmidiStreamPair *self,
                                         const guint8 *buf, gsize buf_size,
                                         GError **error);
 
-void alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_drain_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error);
 
-void alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
+gboolean alsarawmidi_stream_pair_drop_substream(ALSARawmidiStreamPair *self,
                                         ALSARawmidiStreamDirection direction,
                                         GError **error);
 
-void alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self,
-                                           GSource **gsrc, GError **error);
+gboolean alsarawmidi_stream_pair_create_source(ALSARawmidiStreamPair *self, GSource **gsrc,
+                                               GError **error);
 
 G_END_DECLS
 
