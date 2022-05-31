@@ -25,19 +25,6 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_user_instance_get_type";
     "alsatimer_user_instance_new";
-    "alsatimer_user_instance_open";
-    "alsatimer_user_instance_get_protocol_version";
-    "alsatimer_user_instance_choose_event_data_type";
-    "alsatimer_user_instance_attach";
-    "alsatimer_user_instance_attach_as_slave";
-    "alsatimer_user_instance_get_info";
-    "alsatimer_user_instance_set_params";
-    "alsatimer_user_instance_get_status";
-    "alsatimer_user_instance_create_source";
-    "alsatimer_user_instance_start";
-    "alsatimer_user_instance_stop";
-    "alsatimer_user_instance_pause";
-    "alsatimer_user_instance_continue";
 
     "alsatimer_instance_info_get_type";
 
@@ -81,4 +68,17 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_get_device_status";
     "alsatimer_get_tstamp_source";
 
+    "alsatimer_user_instance_open";
+    "alsatimer_user_instance_get_protocol_version";
+    "alsatimer_user_instance_choose_event_data_type";
+    "alsatimer_user_instance_attach";
+    "alsatimer_user_instance_attach_as_slave";
+    "alsatimer_user_instance_get_info";
+    "alsatimer_user_instance_set_params";
+    "alsatimer_user_instance_get_status";
+    "alsatimer_user_instance_create_source";
+    "alsatimer_user_instance_start";
+    "alsatimer_user_instance_stop";
+    "alsatimer_user_instance_pause";
+    "alsatimer_user_instance_continue";
 } ALSA_GOBJECT_0_2_0;
