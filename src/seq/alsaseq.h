@@ -19,6 +19,8 @@
 #include <event-data-result.h>
 #include <remove-filter.h>
 
+#include <queue-timer-common.h>
+
 #include <system-info.h>
 #include <client-info.h>
 #include <client-pool.h>

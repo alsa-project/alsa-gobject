@@ -30,6 +30,7 @@ sources = files(
   'queue-timer-data-alsa.c',
   'remove-filter.c',
   'event-cntr.c',
+  'queue-timer-common.c',
 )
 
 headers = files(
@@ -54,6 +55,7 @@ headers = files(
   'queue-timer-data-alsa.h',
   'remove-filter.h',
   'event-cntr.h',
+  'queue-timer-common.h',
 )
 
 privates = files(
