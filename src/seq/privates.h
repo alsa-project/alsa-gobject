@@ -30,8 +30,8 @@ void seq_queue_status_refer_private(ALSASeqQueueStatus *self,
 void seq_queue_tempo_refer_private(ALSASeqQueueTempo *self,
                                    struct snd_seq_queue_tempo **tempo);
 
-void seq_queue_timer_refer_private(ALSASeqQueueTimer *self,
-                                   struct snd_seq_queue_timer **timer);
+void seq_queue_timer_alsa_refer_private(ALSASeqQueueTimerAlsa *self,
+                                        struct snd_seq_queue_timer **timer);
 
 void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
                               gsize length);

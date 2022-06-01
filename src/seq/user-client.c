@@ -1008,7 +1008,7 @@ gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 que
  * alsaseq_user_client_set_queue_timer:
  * @self: A [class@UserClient].
  * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
- * @queue_timer: The data of timer for queue.
+ * @queue_timer: The data of timer for queue, which implements [iface@QueueTimerCommon].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Set the data of timer for the queue.
@@ -1019,30 +1019,33 @@ gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 que
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
-                                             ALSASeqQueueTimer *queue_timer, GError **error)
+                                             ALSASeqQueueTimerCommon *queue_timer, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
-    struct snd_seq_queue_timer *timer;
+    ALSASeqQueueTimerType timer_type;
+    struct snd_seq_queue_timer *data;
 
     g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
 
-    g_return_val_if_fail(ALSASEQ_IS_QUEUE_TIMER(queue_timer), FALSE);
+    g_return_val_if_fail(ALSASEQ_IS_QUEUE_TIMER_COMMON(queue_timer), FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    seq_queue_timer_refer_private(queue_timer, &timer);
+    g_object_get(queue_timer, TIMER_TYPE_PROP_NAME, &timer_type, NULL);
 
-    switch (timer->type) {
+    switch ((int)timer_type) {
     case SNDRV_SEQ_TIMER_ALSA:
+        seq_queue_timer_alsa_refer_private(ALSASEQ_QUEUE_TIMER_ALSA(queue_timer), &data);
         break;
     case SNDRV_SEQ_TIMER_MIDI_CLOCK:
     case SNDRV_SEQ_TIMER_MIDI_TICK:
     default:
+        // Not supported.
         g_return_val_if_reached(FALSE);
     }
 
-    timer->queue = queue_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, timer) < 0) {
+    data->queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_SET_QUEUE_TIMER, data) < 0) {
         if (errno == EPERM)
             generate_local_error(error, ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION);
         else
@@ -1057,7 +1060,7 @@ gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 que
  * alsaseq_user_client_get_queue_timer:
  * @self: A [class@UserClient].
  * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
- * @queue_timer: (out): The data of timer for queue.
+ * @queue_timer: (out): The data of timer for queue, which implements [iface@QueueTimerCommon].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Get the data of timer for the queue.
@@ -1068,10 +1071,10 @@ gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 que
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
-                                             ALSASeqQueueTimer **queue_timer, GError **error)
+                                             ALSASeqQueueTimerCommon **queue_timer, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
-    struct snd_seq_queue_timer *timer;
+    struct snd_seq_queue_timer *dst, data = {0};
 
     g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
@@ -1079,26 +1082,25 @@ gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 que
     g_return_val_if_fail(queue_timer != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    *queue_timer = g_object_new(ALSASEQ_TYPE_QUEUE_TIMER, NULL);
-    seq_queue_timer_refer_private(*queue_timer, &timer);
-
-    timer->queue = queue_id;
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER, timer) < 0) {
+    data.queue = queue_id;
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_GET_QUEUE_TIMER, &data) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "GET_QUEUE_TIMER");
         return FALSE;
     }
 
-    switch (timer->type) {
+    switch (data.type) {
     case SNDRV_SEQ_TIMER_ALSA:
+        *queue_timer = g_object_new(ALSASEQ_TYPE_QUEUE_TIMER_ALSA, NULL);
+        seq_queue_timer_alsa_refer_private(ALSASEQ_QUEUE_TIMER_ALSA(*queue_timer), &dst);
         break;
     case SNDRV_SEQ_TIMER_MIDI_CLOCK:
     case SNDRV_SEQ_TIMER_MIDI_TICK:
     default:
-        // Not available.
-        g_object_unref(*queue_timer);
-        *queue_timer = NULL;
+        // Not supported.
         g_return_val_if_reached(FALSE);
     }
+
+    *dst = data;
 
     return TRUE;
 }

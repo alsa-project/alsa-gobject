@@ -125,3 +125,10 @@ ALSASeqQueueTimerAlsa *alsaseq_queue_timer_alsa_new()
 {
     return g_object_new(ALSASEQ_TYPE_QUEUE_TIMER_ALSA, NULL);
 }
+
+void seq_queue_timer_alsa_refer_private(ALSASeqQueueTimerAlsa *self,
+                                        struct snd_seq_queue_timer **timer)
+{
+    ALSASeqQueueTimerAlsaPrivate *priv = alsaseq_queue_timer_alsa_get_instance_private(self);
+    *timer = &priv->data;
+}
