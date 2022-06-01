@@ -88,9 +88,9 @@ gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 que
                                              ALSASeqQueueTempo **queue_tempo, GError **error);
 
 gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
-                                             ALSASeqQueueTimer *queue_timer, GError **error);
+                                             ALSASeqQueueTimerCommon *queue_timer, GError **error);
 gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 queue_id,
-                                             ALSASeqQueueTimer **queue_timer, GError **error);
+                                             ALSASeqQueueTimerCommon **queue_timer, GError **error);
 
 gboolean alsaseq_user_client_remove_events(ALSASeqUserClient *self, ALSASeqRemoveFilter *filter,
                                            GError **error);
