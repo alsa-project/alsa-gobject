@@ -42,6 +42,20 @@ void seq_event_cntr_get_buf(ALSASeqEventCntr *self, gsize count,
 #define QUEUE_ID_PROP_NAME          "queue-id"
 #define TIMER_TYPE_PROP_NAME        "timer-type"
 
+enum queue_timer_common_prop_type {
+    QUEUE_TIMER_COMMON_PROP_QUEUE_ID = 1,
+    QUEUE_TIMER_COMMON_PROP_TIMER_TYPE,
+    QUEUE_TIMER_COMMON_PROP_COUNT,
+};
+
+void queue_timer_common_class_override_properties(GObjectClass *gobject_class);
+
+void queue_timer_common_set_property(struct snd_seq_queue_timer *data, GObject *obj, guint id,
+                                     const GValue *val, GParamSpec *spec);
+
+void queue_timer_common_get_property(const struct snd_seq_queue_timer *data, GObject *obj, guint id,
+                                     GValue *val, GParamSpec *spec);
+
 G_END_DECLS
 
 #endif

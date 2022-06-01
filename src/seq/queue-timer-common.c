@@ -44,3 +44,44 @@ static void alsaseq_queue_timer_common_default_init(ALSASeqQueueTimerCommonInter
                           ALSASEQ_TYPE_QUEUE_TIMER_TYPE, ALSASEQ_QUEUE_TIMER_TYPE_ALSA,
                           G_PARAM_READABLE));
 }
+
+void queue_timer_common_class_override_properties(GObjectClass *gobject_class)
+{
+    g_object_class_override_property(gobject_class, QUEUE_TIMER_COMMON_PROP_QUEUE_ID,
+                                      QUEUE_ID_PROP_NAME);
+
+    g_object_class_override_property(gobject_class, QUEUE_TIMER_COMMON_PROP_TIMER_TYPE,
+                                     TIMER_TYPE_PROP_NAME);
+}
+
+void queue_timer_common_set_property(struct snd_seq_queue_timer *data, GObject *obj, guint id,
+                                     const GValue *val, GParamSpec *spec)
+{
+    switch (id) {
+    case QUEUE_TIMER_COMMON_PROP_QUEUE_ID:
+        data->queue = (int)g_value_get_uchar(val);
+        break;
+    case QUEUE_TIMER_COMMON_PROP_TIMER_TYPE:
+        data->type = (int)g_value_get_enum(val);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
+
+void queue_timer_common_get_property(const struct snd_seq_queue_timer *data, GObject *obj, guint id,
+                                     GValue *val, GParamSpec *spec)
+{
+    switch (id) {
+    case QUEUE_TIMER_COMMON_PROP_QUEUE_ID:
+        g_value_set_uchar(val, (guchar)data->queue);
+        break;
+    case QUEUE_TIMER_COMMON_PROP_TIMER_TYPE:
+        g_value_set_enum(val, (ALSASeqQueueTimerType)data->type);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
+        break;
+    }
+}
