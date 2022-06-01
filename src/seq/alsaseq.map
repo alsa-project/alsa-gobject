@@ -109,17 +109,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_queue_tempo_get_skew";
     "alsaseq_queue_tempo_set_skew";
 
-    "alsaseq_queue_timer_get_type";
-    "alsaseq_queue_timer_new";
-    "alsaseq_queue_timer_get_alsa_data";
-    "alsaseq_queue_timer_set_alsa_data";
-
-    "alsaseq_queue_timer_data_alsa_get_type";
-    "alsaseq_queue_timer_data_alsa_get_device_id";
-    "alsaseq_queue_timer_data_alsa_set_device_id";
-    "alsaseq_queue_timer_data_alsa_get_resolution";
-    "alsaseq_queue_timer_data_alsa_set_resolution";
-
     "alsaseq_remove_filter_get_type";
     "alsaseq_remove_filter_new_with_dest_addr";
     "alsaseq_remove_filter_new_with_note_channel";
