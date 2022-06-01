@@ -30,7 +30,6 @@ tests = {
     'alsaseq-queue-info',
     'alsaseq-queue-status',
     'alsaseq-queue-tempo',
-    'alsaseq-queue-timer',
     'alsaseq-queue-timer-alsa',
     'alsaseq-event-cntr',
   ],

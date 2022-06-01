@@ -30,8 +30,6 @@
 #include <queue-info.h>
 #include <queue-status.h>
 #include <queue-tempo.h>
-#include <queue-timer-data-alsa.h>
-#include <queue-timer.h>
 #include <queue-timer-alsa.h>
 
 #include <user-client.h>
