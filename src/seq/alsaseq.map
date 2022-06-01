@@ -224,4 +224,6 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_event_cntr_set_connect_data";
     "alsaseq_event_cntr_get_result_data";
     "alsaseq_event_cntr_set_result_data";
+
+    "alsaseq_queue_timer_common_get_type";
 } ALSA_GOBJECT_0_2_0;
