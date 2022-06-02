@@ -18,7 +18,6 @@
 #include <elem-info-single-array.h>
 
 #include <card-info.h>
-#include <elem-info.h>
 #include <elem-info-iec60958.h>
 #include <elem-info-boolean.h>
 #include <elem-info-bytes.h>
