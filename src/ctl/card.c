@@ -468,17 +468,17 @@ gboolean alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
     return TRUE;
 }
 
-static gboolean parse_enum_names(ALSACtlCardPrivate *priv, struct snd_ctl_elem_info *info,
+static gboolean parse_enum_names(ALSACtlCardPrivate *priv, struct snd_ctl_elem_info *data,
                                  gchar ***labels, GError **error)
 {
-    gsize count = info->value.enumerated.items;
+    gsize count = data->value.enumerated.items;
     int i;
 
     *labels = g_malloc0_n(count + 1, sizeof(**labels));
 
     for (i = 0; i < count; ++i) {
-        info->value.enumerated.item = i;
-        if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
+        data->value.enumerated.item = i;
+        if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, data)) {
             if (errno == ENODEV)
                 generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
             else
@@ -486,7 +486,7 @@ static gboolean parse_enum_names(ALSACtlCardPrivate *priv, struct snd_ctl_elem_i
             goto error;
         }
 
-        (*labels)[i] = g_strdup(info->value.enumerated.name);
+        (*labels)[i] = g_strdup(data->value.enumerated.name);
     }
 
     (*labels)[count] = NULL;
@@ -500,7 +500,7 @@ error:
  * alsactl_card_get_elem_info:
  * @self: A [class@Card].
  * @elem_id: A [struct@ElemId].
- * @elem_info: (out): A [class@ElemInfo].
+ * @elem_info: (out): An instance of object which implements [iface@ElemInfoCommon].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
  * Get information of element corresponding to given id.
@@ -512,10 +512,10 @@ error:
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                    ALSACtlElemInfo **elem_info, GError **error)
+                                    ALSACtlElemInfoCommon **elem_info, GError **error)
 {
     ALSACtlCardPrivate *priv;
-    struct snd_ctl_elem_info *info;
+    struct snd_ctl_elem_info *dst, data = {0};
 
     g_return_val_if_fail(ALSACTL_IS_CARD(self), FALSE);
     priv = alsactl_card_get_instance_private(self);
@@ -524,11 +524,8 @@ gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem
     g_return_val_if_fail(elem_info != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    *elem_info = g_object_new(ALSACTL_TYPE_ELEM_INFO, NULL);
-    ctl_elem_info_refer_private(*elem_info, &info);
-
-    info->id = *elem_id;
-    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, info)) {
+    data.id = *elem_id;
+    if (ioctl(priv->fd, SNDRV_CTL_IOCTL_ELEM_INFO, &data)) {
         if (errno == ENODEV)
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         else if (errno == ENOENT)
@@ -538,33 +535,63 @@ gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem
         return FALSE;
     }
 
-    switch (info->type) {
+    switch (data.type) {
     case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
-    case SNDRV_CTL_ELEM_TYPE_INTEGER:
-    case SNDRV_CTL_ELEM_TYPE_BYTES:
-    case SNDRV_CTL_ELEM_TYPE_IEC958:
-    case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+    {
+        ALSACtlElemInfoBoolean *info = alsactl_elem_info_boolean_new();
+        ctl_elem_info_boolean_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
         break;
+    }
+    case SNDRV_CTL_ELEM_TYPE_INTEGER:
+    {
+        ALSACtlElemInfoInteger *info = alsactl_elem_info_integer_new();
+        ctl_elem_info_integer_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
+        break;
+    }
+    case SNDRV_CTL_ELEM_TYPE_BYTES:
+    {
+        ALSACtlElemInfoBytes *info = alsactl_elem_info_bytes_new();
+        ctl_elem_info_bytes_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
+        break;
+    }
+    case SNDRV_CTL_ELEM_TYPE_IEC958:
+    {
+        ALSACtlElemInfoIec60958 *info = alsactl_elem_info_iec60958_new();
+        ctl_elem_info_iec60958_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
+        break;
+    }
+    case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+    {
+        ALSACtlElemInfoInteger64 *info = alsactl_elem_info_integer64_new();
+        ctl_elem_info_integer64_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
+        break;
+    }
     case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
     {
+        ALSACtlElemInfoEnumerated *info;
         gchar **labels;
-        gboolean result;
 
-        if (!parse_enum_names(priv, info, &labels, error))
+        if (!parse_enum_names(priv, &data, &labels, error))
             return FALSE;
 
-        result = alsactl_elem_info_set_enum_data(*elem_info, (const gchar **)labels, error);
+        info = alsactl_elem_info_enumerated_new();
+        g_object_set(info, "labels", labels, NULL);
         g_strfreev(labels);
-        if (!result) {
-            g_object_unref(*elem_info);
-            return FALSE;
-        }
+        ctl_elem_info_enumerated_refer_private(info, &dst);
+        *elem_info = ALSACTL_ELEM_INFO_COMMON(info);
 
         break;
     }
     default:
         g_return_val_if_reached(FALSE);
     }
+
+    *dst = data;
 
     return TRUE;
 }
@@ -743,7 +770,7 @@ gboolean alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *e
     return TRUE;
 }
 
-static gboolean prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labels)
+static gboolean prepare_enum_names(struct snd_ctl_elem_info *info, const gchar *const *labels)
 {
     unsigned int count;
     unsigned int length;
@@ -777,41 +804,77 @@ static gboolean prepare_enum_names(struct snd_ctl_elem_info *info, const gchar *
 }
 
 static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint elem_count,
-                                     ALSACtlElemInfo *elem_info, gboolean replace, GList **entries,
-                                     GError **error)
+                                     ALSACtlElemInfoCommon *elem_info, gboolean replace,
+                                     GList **entries, GError **error)
 {
-    struct snd_ctl_elem_info *info;
+    struct snd_ctl_elem_info *data;
+    ALSACtlElemType elem_type;
     long request;
     const char *req_name;
     gboolean result;
+    struct snd_ctl_elem_id src;
     int i;
 
-    ctl_elem_info_refer_private(elem_info, &info);
+    g_object_get(elem_info, "elem-type", &elem_type, NULL);
 
-    switch (info->type) {
+    switch (elem_type) {
     case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
-    case SNDRV_CTL_ELEM_TYPE_INTEGER:
-    case SNDRV_CTL_ELEM_TYPE_BYTES:
-    case SNDRV_CTL_ELEM_TYPE_IEC958:
-    case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+        ctl_elem_info_boolean_refer_private(ALSACTL_ELEM_INFO_BOOLEAN(elem_info), &data);
         break;
-    case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
+    case SNDRV_CTL_ELEM_TYPE_INTEGER:
     {
-        const gchar **labels;
-
-        if (!alsactl_elem_info_get_enum_data(elem_info, &labels, error))
-            return FALSE;
-
-        if (!prepare_enum_names(info, labels))
-            return FALSE;
-
+        gint min, max, step;
+        ctl_elem_info_integer_refer_private(ALSACTL_ELEM_INFO_INTEGER(elem_info), &data);
+        min = data->value.integer.min;
+        max = data->value.integer.max;
+        step = data->value.integer.step;
+        g_return_val_if_fail(min <= max, FALSE);
+        g_return_val_if_fail(min + step <= max, FALSE);
         break;
     }
+    case SNDRV_CTL_ELEM_TYPE_BYTES:
+        ctl_elem_info_bytes_refer_private(ALSACTL_ELEM_INFO_BYTES(elem_info), &data);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_IEC958:
+        ctl_elem_info_iec60958_refer_private(ALSACTL_ELEM_INFO_IEC60958(elem_info), &data);
+        break;
+    case SNDRV_CTL_ELEM_TYPE_INTEGER64:
+    {
+        gint64 min, max, step;
+        ctl_elem_info_integer64_refer_private(ALSACTL_ELEM_INFO_INTEGER64(elem_info), &data);
+        min = data->value.integer64.min;
+        max = data->value.integer64.max;
+        step = data->value.integer64.step;
+        g_return_val_if_fail(min <= max, FALSE);
+        g_return_val_if_fail(min + step <= max, FALSE);
+        break;
+    }
+    case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
+        ctl_elem_info_enumerated_refer_private(ALSACTL_ELEM_INFO_ENUMERATED(elem_info), &data);
+        break;
     default:
         g_return_val_if_reached(FALSE);
     }
 
-    info->id = *elem_id;
+    g_return_val_if_fail(data->type == elem_type, FALSE);
+    g_return_val_if_fail(data->access > 0, FALSE);
+    g_return_val_if_fail(data->count > 0, FALSE);
+
+    if (elem_type == SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        gchar **labels;
+        gboolean result;
+
+        g_object_get(ALSACTL_ELEM_INFO_ENUMERATED(elem_info), "labels", &labels, NULL);
+
+        result = prepare_enum_names(data, (const gchar *const *)labels);
+        g_strfreev(labels);
+        if (!result)
+            return FALSE;
+    } else {
+        data->value.enumerated.names_ptr = 0;
+    }
+
+    data->id = *elem_id;
 
     if (!replace) {
         request = SNDRV_CTL_IOCTL_ELEM_ADD;
@@ -821,8 +884,8 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
         req_name = "ELEM_REPLACE";
     }
 
-    info->owner = (__kernel_pid_t)elem_count;
-    if (ioctl(fd, request, info) < 0) {
+    data->owner = (__kernel_pid_t)elem_count;
+    if (ioctl(fd, request, data) < 0) {
         if (errno == ENODEV) {
             generate_local_error(error, ALSACTL_CARD_ERROR_DISCONNECTED);
         } else if (errno == ENOENT) {
@@ -839,16 +902,22 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
     } else {
         result = TRUE;
     }
-    g_free((void *)info->value.enumerated.names_ptr);
+
+    if (elem_type == SNDRV_CTL_ELEM_TYPE_ENUMERATED) {
+        g_free((void *)data->value.enumerated.names_ptr);
+        data->value.enumerated.names_ptr = 0;
+    }
+
     if (!result)
         return FALSE;
 
+    src = data->id;
     for (i = 0; i < elem_count; ++i) {
-        ALSACtlElemId *entry = g_boxed_copy(ALSACTL_TYPE_ELEM_ID, &info->id);
+        ALSACtlElemId *entry = g_boxed_copy(ALSACTL_TYPE_ELEM_ID, &src);
         *entries = g_list_append(*entries, (gpointer)entry);
 
-        ++info->id.numid;
-        ++info->id.index;
+        ++src.numid;
+        ++src.index;
     }
 
     return TRUE;
@@ -859,7 +928,7 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
  * @self: A [class@Card].
  * @elem_id: A [struct@ElemId].
  * @elem_count: The number of elements going to be added.
- * @elem_info: A [class@ElemInfo].
+ * @elem_info: An instance of object which implements [iface@ElemInfoCommon].
  * @entries: (element-type ALSACtl.ElemId)(out): The list of added element identifiers.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
@@ -871,7 +940,7 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, guint elem_count,
-                                ALSACtlElemInfo *elem_info, GList **entries, GError **error)
+                                ALSACtlElemInfoCommon *elem_info, GList **entries, GError **error)
 {
     ALSACtlCardPrivate *priv;
 
@@ -880,7 +949,7 @@ gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
 
     g_return_val_if_fail(elem_id != NULL, FALSE);
     g_return_val_if_fail(elem_count > 0, FALSE);
-    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(elem_info), FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO_COMMON(elem_info), FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     return add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, FALSE, entries, error);
@@ -891,7 +960,7 @@ gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * @self: A [class@Card].
  * @elem_id: A [struct@ElemId].
  * @elem_count: The number of elements going to be added.
- * @elem_info: A [class@ElemInfo].
+ * @elem_info: An instance of object which implements [iface@ElemInfoCommon].
  * @entries: (element-type ALSACtl.ElemId)(out): The list of renewed element identifiers.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSACtl.CardError`.
  *
@@ -903,8 +972,8 @@ gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                    guint elem_count, ALSACtlElemInfo *elem_info, GList **entries,
-                                    GError **error)
+                                    guint elem_count, ALSACtlElemInfoCommon *elem_info,
+                                    GList **entries, GError **error)
 {
     ALSACtlCardPrivate *priv;
 
@@ -913,7 +982,7 @@ gboolean alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem
 
     g_return_val_if_fail(elem_id != NULL, FALSE);
     g_return_val_if_fail(elem_count > 0, FALSE);
-    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO(elem_info), FALSE);
+    g_return_val_if_fail(ALSACTL_IS_ELEM_INFO_COMMON(elem_info), FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     return add_or_replace_elems(priv->fd, elem_id, elem_count, elem_info, TRUE, entries, error);

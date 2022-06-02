@@ -52,7 +52,7 @@ gboolean alsactl_card_lock_elem(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                 GError **error);
 
 gboolean alsactl_card_get_elem_info(ALSACtlCard *self, const ALSACtlElemId *elem_id,
-                                    ALSACtlElemInfo **elem_info, GError **error);
+                                    ALSACtlElemInfoCommon **elem_info, GError **error);
 
 gboolean alsactl_card_write_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *elem_id,
                                      const guint32 *container, gsize container_count,
@@ -65,9 +65,9 @@ gboolean alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *e
                                        GError **error);
 
 gboolean alsactl_card_add_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, guint elem_count,
-                                ALSACtlElemInfo *elem_info, GList **entries, GError **error);
+                                ALSACtlElemInfoCommon *elem_info, GList **entries, GError **error);
 gboolean alsactl_card_replace_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, guint elem_count,
-                                    ALSACtlElemInfo *elem_info, GList **entries, GError **error);
+                                    ALSACtlElemInfoCommon *elem_info, GList **entries, GError **error);
 gboolean alsactl_card_remove_elems(ALSACtlCard *self, const ALSACtlElemId *elem_id, GError **error);
 
 gboolean alsactl_card_write_elem_value(ALSACtlCard *self, const ALSACtlElemId *elem_id,

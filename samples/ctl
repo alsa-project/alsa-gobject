@@ -17,8 +17,7 @@ _ = card.open(card_id_list[0], 0)
 # Get the information of card and dump.
 _, info = card.get_info()
 print('Sound card:')
-for prop in ('card-id', 'id', 'driver', 'name', 'long-name', 'mixer-name',
-             'components'):
+for prop in ('card-id', 'id', 'driver', 'name', 'long-name', 'mixer-name', 'components'):
     print('  {}: {}'.format(prop, info.get_property(prop)))
 
 # Enumerate available elements for the card.
@@ -27,46 +26,52 @@ _, elem_id_list = card.get_elem_id_list()
 for elem_id in elem_id_list:
     _, info = card.get_elem_info(elem_id)
     print('  name:', elem_id.get_name())
-    print('    type', info.get_property('type').value_nick)
+    print('    elem-type', info.get_property('elem-type').value_nick)
     print('    access', info.get_property('access').value_nicks)
-    print('    value-count', info.get_property('value-count'))
+    if isinstance(info, ALSACtl.ElemInfoSingleArray):
+        print('    value-count', info.get_property('value-count'))
 
 # Dispatch event.
 def handle_elem_event(card, elem_id, events):
     print('Event:')
     print('  ', elem_id.get_name(), events.value_nicks)
     _, info = card.get_elem_info(elem_id)
-    value_count = info.get_property('value-count')
     elem_value = ALSACtl.ElemValue.new()
     _, elem_value = card.read_elem_value(elem_id, elem_value)
-    value = [0] * value_count
-    if info.get_property('type') == ALSACtl.ElemType.BOOLEAN:
-        value = elem_value.get_bool(value)
-    elif info.get_property('type') == ALSACtl.ElemType.INTEGER:
-        value = elem_value.get_int(value)
-    elif info.get_property('type') == ALSACtl.ElemType.ENUMERATED:
-        value = elem_value.get_enum(value)
-    elif info.get_property('type') == ALSACtl.ElemType.BYTES:
-        value = elem_value.get_bytes(value)
-    elif info.get_property('type') == ALSACtl.ElemType.IEC60958:
+    if isinstance(info, ALSACtl.ElemInfoSingleArray):
+        value_count = info.get_property('value-count')
+        value = [0] * value_count
+        if info.get_property('elem-type') == ALSACtl.ElemType.BOOLEAN:
+            value = elem_value.get_bool(value)
+        elif info.get_property('elem-type') == ALSACtl.ElemType.INTEGER:
+            value = elem_value.get_int(value)
+        elif info.get_property('elem-type') == ALSACtl.ElemType.ENUMERATED:
+            value = elem_value.get_enum(value)
+        elif info.get_property('elem-type') == ALSACtl.ElemType.BYTES:
+            value = elem_value.get_bytes(value)
+        elif info.get_property('elem-type') == ALSACtl.ElemType.INTEGER64:
+            value = elem_value.get_int64(value)
+        print(value)
+    elif info.get_property('elem-type') == ALSACtl.ElemType.IEC60958:
         channel_status = elem_value.get_channel_status()
         user_data = elem_value.get_user_data()
-    elif info.get_property('type') == ALSACtl.ElemType.INTEGER64:
-        value = elem_value.get_int64(value)
-    else:
-        return
-    print(value)
+        print(channel_status, user_data)
 card.connect('handle-elem-event', handle_elem_event)
 
 # Register my elements.
 elem_id = ALSACtl.ElemId.new_by_name(ALSACtl.ElemIfaceType.CARD, 10, 20, "my-elements", 0)
-elem_info = ALSACtl.ElemInfo.new(ALSACtl.ElemType.INTEGER)
+elem_info = ALSACtl.ElemInfoInteger.new()
 flags = (ALSACtl.ElemAccessFlag.READ |
          ALSACtl.ElemAccessFlag.WRITE)
 elem_info.set_property('access', flags)
 elem_info.set_property('value-count', 32)
-elem_info.set_int_data((-123, 456, 21))
+elem_info.set_property('value-min', -123)
+elem_info.set_property('value-max', 456)
+elem_info.set_property('value-step', 21)
 _, elem_id_list = card.add_elems(elem_id, 10, elem_info)
+
+for elem_id in elem_id_list:
+    card.lock_elem(elem_id, False)
 
 # Create event dispatcher.
 dispatcher = GLib.MainLoop.new(None, False)
@@ -74,13 +79,10 @@ _, src = card.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.
-def handle_unix_signal(dispatcher):
-    dispatcher.quit()
-GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT,
-                     handle_unix_signal, dispatcher)
+GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT, lambda d: d.quit(), dispatcher)
 
 # Start to dispatch events.
 dispatcher.run()
 
-# Remove my elems.
+## Remove my elems.
 _ = card.remove_elems(elem_id_list[0])
