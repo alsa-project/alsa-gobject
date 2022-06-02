@@ -152,3 +152,11 @@ ALSACtlElemInfoInteger *alsactl_elem_info_integer_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_INTEGER, ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_INTEGER,
                         NULL);
 }
+
+void ctl_elem_info_integer_refer_private(ALSACtlElemInfoInteger *self,
+                                         struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoIntegerPrivate *priv = alsactl_elem_info_integer_get_instance_private(self);
+
+    *data = &priv->data;
+}

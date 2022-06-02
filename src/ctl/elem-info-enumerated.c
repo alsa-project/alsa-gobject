@@ -127,3 +127,11 @@ ALSACtlElemInfoEnumerated *alsactl_elem_info_enumerated_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_ENUMERATED,
                         ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_ENUMERATED, NULL);
 }
+
+void ctl_elem_info_enumerated_refer_private(ALSACtlElemInfoEnumerated *self,
+                                            struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoEnumeratedPrivate *priv = alsactl_elem_info_enumerated_get_instance_private(self);
+
+    *data = &priv->data;
+}

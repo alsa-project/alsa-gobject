@@ -72,3 +72,11 @@ ALSACtlElemInfoIec60958 *alsactl_elem_info_iec60958_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_IEC60958,
                         ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_IEC60958, NULL);
 }
+
+void ctl_elem_info_iec60958_refer_private(ALSACtlElemInfoIec60958 *self,
+                                          struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoIec60958Private *priv = alsactl_elem_info_iec60958_get_instance_private(self);
+
+    *data = &priv->data;
+}

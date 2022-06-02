@@ -80,3 +80,10 @@ ALSACtlElemInfoBytes *alsactl_elem_info_bytes_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_BYTES, ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_BYTES,
                         NULL);
 }
+
+void ctl_elem_info_bytes_refer_private(ALSACtlElemInfoBytes *self, struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoBytesPrivate *priv = alsactl_elem_info_bytes_get_instance_private(self);
+
+    *data = &priv->data;
+}

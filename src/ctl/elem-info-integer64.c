@@ -152,3 +152,11 @@ ALSACtlElemInfoInteger64 *alsactl_elem_info_integer64_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_INTEGER64,
                         ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_INTEGER64, NULL);
 }
+
+void ctl_elem_info_integer64_refer_private(ALSACtlElemInfoInteger64 *self,
+                                           struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoInteger64Private *priv = alsactl_elem_info_integer64_get_instance_private(self);
+
+    *data = &priv->data;
+}

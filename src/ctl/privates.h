@@ -12,6 +12,23 @@ void ctl_card_info_refer_private(ALSACtlCardInfo *self,
 void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
                                  struct snd_ctl_elem_info **info);
 
+void ctl_elem_info_boolean_refer_private(ALSACtlElemInfoBoolean *self,
+                                         struct snd_ctl_elem_info **data);
+
+void ctl_elem_info_bytes_refer_private(ALSACtlElemInfoBytes *self, struct snd_ctl_elem_info **data);
+
+void ctl_elem_info_enumerated_refer_private(ALSACtlElemInfoEnumerated *self,
+                                            struct snd_ctl_elem_info **data);
+
+void ctl_elem_info_iec60958_refer_private(ALSACtlElemInfoIec60958 *self,
+                                          struct snd_ctl_elem_info **data);
+
+void ctl_elem_info_integer_refer_private(ALSACtlElemInfoInteger *self,
+                                         struct snd_ctl_elem_info **data);
+
+void ctl_elem_info_integer64_refer_private(ALSACtlElemInfoInteger64 *self,
+                                           struct snd_ctl_elem_info **data);
+
 void ctl_elem_value_refer_private(ALSACtlElemValue *self,
                                   struct snd_ctl_elem_value **value);
 

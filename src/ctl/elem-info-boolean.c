@@ -80,3 +80,11 @@ ALSACtlElemInfoBoolean *alsactl_elem_info_boolean_new()
     return g_object_new(ALSACTL_TYPE_ELEM_INFO_BOOLEAN,
                         ELEM_TYPE_PROP_NAME, ALSACTL_ELEM_TYPE_BOOLEAN, NULL);
 }
+
+void ctl_elem_info_boolean_refer_private(ALSACtlElemInfoBoolean *self,
+                                         struct snd_ctl_elem_info **data)
+{
+    ALSACtlElemInfoBooleanPrivate *priv = alsactl_elem_info_boolean_get_instance_private(self);
+
+    *data = &priv->data;
+}
