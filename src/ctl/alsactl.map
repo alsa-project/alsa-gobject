@@ -83,4 +83,7 @@ ALSA_GOBJECT_0_3_0 {
     "alsactl_elem_info_set_enum_data";
 
     "alsactl_elem_info_common_get_type";
+
+    "alsactl_elem_info_iec60958_get_type";
+    "alsactl_elem_info_iec60958_new";
 } ALSA_GOBJECT_0_2_0;
