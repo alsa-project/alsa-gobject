@@ -2,6 +2,8 @@
 #ifndef __ALSA_GOBJECT_ALSACTL_ENUM_TYPES_H__
 #define __ALSA_GOBJECT_ALSACTL_ENUM_TYPES_H__
 
+G_BEGIN_DECLS
+
 /**
  * ALSACtlElemType:
  * @ALSACTL_ELEM_TYPE_NONE:         Unudentified type.
@@ -126,5 +128,7 @@ typedef enum {
     ALSACTL_CARD_ERROR_ELEM_OWNED,
     ALSACTL_CARD_ERROR_ELEM_EXIST,
 } ALSACtlCardError;
+
+G_END_DECLS
 
 #endif
