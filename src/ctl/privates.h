@@ -38,6 +38,19 @@ void elem_info_common_get_property(const struct snd_ctl_elem_info *data, GObject
 
 #define VALUE_COUNT_PROP_NAME   "value-count"
 
+enum elem_info_single_array_prop_type {
+    ELEM_INFO_SINGLE_ARRAY_PROP_VALUE_COUNT = ELEM_INFO_COMMON_PROP_COUNT,
+    ELEM_INFO_SINGLE_ARRAY_PROP_COUNT,
+};
+
+void elem_info_single_array_class_override_properties(GObjectClass *gobject_class);
+
+void elem_info_single_array_set_property(struct snd_ctl_elem_info *data, GObject *obj, guint id,
+                                      const GValue *val, GParamSpec *spec);
+
+void elem_info_single_array_get_property(const struct snd_ctl_elem_info *data, GObject *obj, guint id,
+                                      GValue *val, GParamSpec *spec);
+
 G_END_DECLS
 
 #endif
