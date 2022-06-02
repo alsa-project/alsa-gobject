@@ -2,6 +2,8 @@
 #ifndef __ALSA_GOBJECT_ALSASEQ_ENUM_TYPES_H__
 #define __ALSA_GOBJECT_ALSASEQ_ENUM_TYPES_H__
 
+G_BEGIN_DECLS
+
 /**
  * ALSASeqSpecificAddress:
  * @ALSASEQ_SPECIFIC_ADDRESS_UNKNOWN:       The address for unknown client/port/queue.
@@ -373,5 +375,7 @@ typedef enum {
     ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION,
     ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION,
 } ALSASeqUserClientError;
+
+G_END_DECLS
 
 #endif

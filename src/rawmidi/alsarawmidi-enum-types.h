@@ -2,6 +2,8 @@
 #ifndef __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES_H__
 #define __ALSA_GOBJECT_ALSARAWMIDI_ENUM_TYPES_H__
 
+G_BEGIN_DECLS
+
 /**
  * ALSARawmidiStreamDirection:
  * @ALSARAWMIDI_STREAM_DIRECTION_OUTPUT:        Output direction of stream.
@@ -42,5 +44,7 @@ typedef enum {
     ALSARAWMIDI_STREAM_PAIR_ERROR_DISCONNECTED,
     ALSARAWMIDI_STREAM_PAIR_ERROR_UNREADABLE,
 } ALSARawmidiStreamPairError;
+
+G_END_DECLS
 
 #endif
