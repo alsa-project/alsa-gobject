@@ -12,6 +12,7 @@ tests = {
     'alsactl-elem-info-bytes',
     'alsactl-elem-info-integer',
     'alsactl-elem-info-integer64',
+    'alsactl-elem-info-enumerated',
     'alsactl-elem-value',
   ],
   'timer': [

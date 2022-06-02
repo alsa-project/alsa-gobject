@@ -22,6 +22,7 @@ sources = files(
   'elem-info-bytes.c',
   'elem-info-integer.c',
   'elem-info-integer64.c',
+  'elem-info-enumerated.c',
 )
 
 headers = files(
@@ -38,6 +39,7 @@ headers = files(
   'elem-info-bytes.h',
   'elem-info-integer.h',
   'elem-info-integer64.h',
+  'elem-info-enumerated.h',
 )
 
 privates = files(
