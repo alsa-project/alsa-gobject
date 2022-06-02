@@ -8,6 +8,7 @@ tests = {
     'alsactl-card-info',
     'alsactl-elem-info',
     'alsactl-elem-info-iec60958',
+    'alsactl-elem-info-boolean',
     'alsactl-elem-value',
   ],
   'timer': [
