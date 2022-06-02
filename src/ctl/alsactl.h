@@ -18,6 +18,7 @@
 
 #include <card-info.h>
 #include <elem-info.h>
+#include <elem-info-iec60958.h>
 #include <elem-value.h>
 #include <card.h>
 

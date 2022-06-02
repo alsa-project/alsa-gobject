@@ -16,6 +16,7 @@ sources = files(
   'elem-info.c',
   'elem-value.c',
   'elem-info-common.c',
+  'elem-info-iec60958.c',
 )
 
 headers = files(
@@ -26,6 +27,7 @@ headers = files(
   'elem-info.h',
   'elem-value.h',
   'elem-info-common.h',
+  'elem-info-iec60958.h',
 )
 
 privates = files(
