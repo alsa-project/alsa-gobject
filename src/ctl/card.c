@@ -743,7 +743,7 @@ gboolean alsactl_card_command_elem_tlv(ALSACtlCard *self, const ALSACtlElemId *e
     return TRUE;
 }
 
-static void prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labels)
+static gboolean prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **labels)
 {
     unsigned int count;
     unsigned int length;
@@ -753,12 +753,12 @@ static void prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **lab
     for (count = 0; labels[count] != NULL; ++count) {
         const gchar *label = labels[count];
 
-        g_return_if_fail(strlen(label) < 64);
+        g_return_val_if_fail(strlen(label) < 64, FALSE);
 
         length += strlen(label) + 1;
     }
 
-    g_return_if_fail(length <= 64 * 1024);
+    g_return_val_if_fail(length <= 64 * 1024, FALSE);
 
     pos = g_malloc0(length);
 
@@ -772,6 +772,8 @@ static void prepare_enum_names(struct snd_ctl_elem_info *info, const gchar **lab
         pos += strlen(label) + 1;
     }
     info->value.enumerated.items = count;
+
+    return TRUE;
 }
 
 static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint elem_count,
@@ -800,7 +802,8 @@ static gboolean add_or_replace_elems(int fd, const ALSACtlElemId *elem_id, guint
         if (!alsactl_elem_info_get_enum_data(elem_info, &labels, error))
             return FALSE;
 
-        prepare_enum_names(info, labels);
+        if (!prepare_enum_names(info, labels))
+            return FALSE;
 
         break;
     }
