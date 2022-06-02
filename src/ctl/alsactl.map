@@ -97,4 +97,7 @@ ALSA_GOBJECT_0_3_0 {
 
     "alsactl_elem_info_integer_get_type";
     "alsactl_elem_info_integer_new";
+
+    "alsactl_elem_info_integer64_get_type";
+    "alsactl_elem_info_integer64_new";
 } ALSA_GOBJECT_0_2_0;

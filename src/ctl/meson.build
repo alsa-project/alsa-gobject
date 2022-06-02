@@ -21,6 +21,7 @@ sources = files(
   'elem-info-boolean.c',
   'elem-info-bytes.c',
   'elem-info-integer.c',
+  'elem-info-integer64.c',
 )
 
 headers = files(
@@ -36,6 +37,7 @@ headers = files(
   'elem-info-boolean.h',
   'elem-info-bytes.h',
   'elem-info-integer.h',
+  'elem-info-integer64.h',
 )
 
 privates = files(
