@@ -9,9 +9,6 @@ G_BEGIN_DECLS
 void ctl_card_info_refer_private(ALSACtlCardInfo *self,
                                  struct snd_ctl_card_info **info);
 
-void ctl_elem_info_refer_private(ALSACtlElemInfo *self,
-                                 struct snd_ctl_elem_info **info);
-
 void ctl_elem_info_boolean_refer_private(ALSACtlElemInfoBoolean *self,
                                          struct snd_ctl_elem_info **data);
 
