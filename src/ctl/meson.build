@@ -20,6 +20,7 @@ sources = files(
   'elem-info-single-array.c',
   'elem-info-boolean.c',
   'elem-info-bytes.c',
+  'elem-info-integer.c',
 )
 
 headers = files(
@@ -34,6 +35,7 @@ headers = files(
   'elem-info-single-array.h',
   'elem-info-boolean.h',
   'elem-info-bytes.h',
+  'elem-info-integer.h',
 )
 
 privates = files(
