@@ -24,6 +24,7 @@
 #include <elem-info-bytes.h>
 #include <elem-info-integer.h>
 #include <elem-info-integer64.h>
+#include <elem-info-enumerated.h>
 #include <elem-value.h>
 #include <card.h>
 
