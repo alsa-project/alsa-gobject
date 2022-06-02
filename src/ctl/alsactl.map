@@ -91,4 +91,7 @@ ALSA_GOBJECT_0_3_0 {
 
     "alsactl_elem_info_boolean_get_type";
     "alsactl_elem_info_boolean_new";
+
+    "alsactl_elem_info_bytes_get_type";
+    "alsactl_elem_info_bytes_new";
 } ALSA_GOBJECT_0_2_0;

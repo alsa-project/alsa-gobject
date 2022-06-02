@@ -9,6 +9,7 @@ tests = {
     'alsactl-elem-info',
     'alsactl-elem-info-iec60958',
     'alsactl-elem-info-boolean',
+    'alsactl-elem-info-bytes',
     'alsactl-elem-value',
   ],
   'timer': [
