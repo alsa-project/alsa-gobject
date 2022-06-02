@@ -14,6 +14,8 @@
 
 #include <elem-id.h>
 
+#include <elem-info-common.h>
+
 #include <card-info.h>
 #include <elem-info.h>
 #include <elem-value.h>
