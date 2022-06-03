@@ -35,8 +35,18 @@ iface_types = (
     'FW_FIREFACE',
 )
 
+device_common_error_types = (
+    'FAILED',
+    'IS_OPENED',
+    'IS_NOT_OPENED',
+    'IS_USED',
+    'IS_NOT_SUPPORTED',
+    'IS_DISCONNECTED',
+)
+
 types = {
     ALSAHwdep.IfaceType:    iface_types,
+    ALSAHwdep.DeviceCommonError: device_common_error_types,
 }
 
 for obj, types in types.items():

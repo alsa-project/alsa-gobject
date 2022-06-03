@@ -7,7 +7,7 @@
 G_BEGIN_DECLS
 
 /**
- *ALSAHwdepIfaceType:
+ * ALSAHwdepIfaceType:
  * @ALSAHWDEP_IFACE_TYPE_OPL2:              For OPL2 sound chip.
  * @ALSAHWDEP_IFACE_TYPE_OPL3:              For OPL3 sound chip.
  * @ALSAHWDEP_IFACE_TYPE_OPL4:              For OPL4 sound chip.
@@ -67,6 +67,26 @@ typedef enum {
     ALSAHWDEP_IFACE_TYPE_FW_MOTU,
     ALSAHWDEP_IFACE_TYPE_FW_FIREFACE,
 } ALSAHwdepIfaceType;
+
+/**
+ * ALSAHwdepDeviceCommonError:
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_FAILED:              The operation failed due to unspecified reason.
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_IS_OPENED:           The instance is already associated to character device.
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_OPENED:       The instance is not associated to character device yet.
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_IS_USED:             The character device is already used.
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_SUPPORTED:    The HwDep device associated to the character device is not supported.
+ *  @ALSAHWDEP_DEVICE_COMMON_ERROR_IS_DISCONNECTED:     The sound card is under disconnected state.
+ *
+ * A set of enumerations for code of ALSAHwDep.DeviceCommonError error domain.
+ */
+typedef enum {
+    ALSAHWDEP_DEVICE_COMMON_ERROR_FAILED = 1,
+    ALSAHWDEP_DEVICE_COMMON_ERROR_IS_OPENED,
+    ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_OPENED,
+    ALSAHWDEP_DEVICE_COMMON_ERROR_IS_USED,
+    ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_SUPPORTED,
+    ALSAHWDEP_DEVICE_COMMON_ERROR_IS_DISCONNECTED,
+} ALSAHwdepDeviceCommonError;
 
 G_END_DECLS
 

@@ -19,4 +19,8 @@ ALSA_GOBJECT_0_3_0 {
     "alsahwdep_device_common_get_protocol_version";
     "alsahwdep_device_common_get_device_info";
     "alsahwdep_device_common_create_source";
+
+    "alsahwdep_device_common_error_quark";
+    "alsahwdep_device_common_error_get_type";
+    "alsahwdep_device_common_error_to_label";
 } ALSA_GOBJECT_0_0_0;

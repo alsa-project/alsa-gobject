@@ -14,6 +14,56 @@ static void alsahwdep_device_common_default_init(ALSAHwdepDeviceCommonInterface 
 
 G_DEFINE_INTERFACE(ALSAHwdepDeviceCommon, alsahwdep_device_common, G_TYPE_OBJECT)
 
+/**
+ * alsahwdep_device_common_error_quark:
+ *
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in ALSAHwdep.DeviceCommonError
+ * enumerations.
+ *
+ * Returns: A [alias@GLib.Quark].
+ */
+G_DEFINE_QUARK(alsahwdep-device-common-error-quark, alsahwdep_device_common_error)
+
+/**
+ * alsahwdep_device_common_error_to_label:
+ * @code: A ALSAHwdep.DeviceCommonError.
+ * @label: (out) (transfer none): The string label of error.
+ *
+ * Retrieve the string label of error from code.
+ */
+void alsahwdep_device_common_error_to_label(ALSAHwdepDeviceCommonError code, const char **label)
+{
+    static const char *const labels[] = {
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_FAILED] =
+                            "The operation failed due to unspecified reason.",
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_IS_OPENED] =
+                            "The instance is already associated to character device.",
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_OPENED] =
+                            "The instance is not associated to character device yet.",
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_IS_USED] =
+                            "The character device is already used.",
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_SUPPORTED] =
+                            "The HwDep device associated to the character device is not supported.",
+        [ALSAHWDEP_DEVICE_COMMON_ERROR_IS_DISCONNECTED] =
+                            "The sound card is under disconnected state.",
+    };
+
+    switch (code) {
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_FAILED:
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_IS_OPENED:
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_OPENED:
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_IS_USED:
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_IS_NOT_SUPPORTED:
+    case ALSAHWDEP_DEVICE_COMMON_ERROR_IS_DISCONNECTED:
+        break;
+    default:
+        code = ALSAHWDEP_DEVICE_COMMON_ERROR_FAILED;
+        break;
+    }
+
+    *label = labels[code];
+}
+
 static void alsahwdep_device_common_default_init(ALSAHwdepDeviceCommonInterface *iface)
 {
     /**
