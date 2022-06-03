@@ -11,11 +11,13 @@ has_marshaller = false
 sources = files(
   'query.c',
   'device-info.c',
+  'device-common.c',
 )
 
 headers = files(
   'query.h',
   'device-info.h',
+  'device-common.h',
 )
 
 privates = files(
