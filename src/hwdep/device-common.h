@@ -10,6 +10,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE(ALSAHwdepDeviceCommon, alsahwdep_device_common, ALSAHWDEP, DEVICE_COMMON, GObject)
 
+GQuark alsahwdep_device_common_error_quark();
+
+void alsahwdep_device_common_error_to_label(ALSAHwdepDeviceCommonError code, const char **label);
+
 struct _ALSAHwdepDeviceCommonInterface {
     GTypeInterface parent_iface;
 
