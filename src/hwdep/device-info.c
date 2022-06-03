@@ -25,6 +25,33 @@ enum hwdep_device_info_prop_type {
 };
 static GParamSpec *hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_COUNT] = { NULL, };
 
+static void hwdep_device_info_set_property(GObject *obj, guint id, const GValue *val,
+                                           GParamSpec *spec)
+{
+    ALSAHwdepDeviceInfo *self = ALSAHWDEP_DEVICE_INFO(obj);
+    ALSAHwdepDeviceInfoPrivate *priv = alsahwdep_device_info_get_instance_private(self);
+
+    switch (id) {
+    case HWDEP_DEVICE_INFO_PROP_DEVICE_ID:
+        priv->info.device = g_value_get_uint(val);
+        break;
+    case HWDEP_DEVICE_INFO_PROP_CARD_ID:
+        priv->info.card = g_value_get_int(val);
+        break;
+    case HWDEP_DEVICE_INFO_PROP_ID:
+        g_strlcpy((gchar *)priv->info.id, g_value_get_string(val), sizeof(priv->info.id));
+        break;
+    case HWDEP_DEVICE_INFO_PROP_NAME:
+        g_strlcpy((gchar *)priv->info.name, g_value_get_string(val), sizeof(priv->info.name));
+        break;
+    case HWDEP_DEVICE_INFO_PROP_IFACE:
+        priv->info.iface = (int)g_value_get_enum(val);
+        break;
+    default:
+        break;
+    }
+}
+
 static void hwdep_device_info_get_property(GObject *obj, guint id, GValue *val,
                                            GParamSpec *spec)
 {
@@ -58,6 +85,7 @@ static void alsahwdep_device_info_class_init(ALSAHwdepDeviceInfoClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
+    gobject_class->set_property = hwdep_device_info_set_property;
     gobject_class->get_property = hwdep_device_info_get_property;
 
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_DEVICE_ID] =
@@ -65,26 +93,26 @@ static void alsahwdep_device_info_class_init(ALSAHwdepDeviceInfoClass *klass)
                           "The numerical ID of device.",
                           0, G_MAXUINT,
                           0,
-                          G_PARAM_READABLE);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
                          "The numerical ID of sound card.",
                          G_MININT, G_MAXINT,
                          0,
-                         G_PARAM_READABLE);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
                             "The ID string of the hwdep device",
                             "",
-                            G_PARAM_READABLE);
+                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of the hwdep device",
                             "",
-                            G_PARAM_READABLE);
+                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_IFACE] =
         g_param_spec_enum("iface", "iface",
@@ -92,7 +120,7 @@ static void alsahwdep_device_info_class_init(ALSAHwdepDeviceInfoClass *klass)
                           "ALSAHwdepIfaceType.",
                           ALSAHWDEP_TYPE_IFACE_TYPE,
                           SNDRV_HWDEP_IFACE_OPL2,
-                          G_PARAM_READABLE);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     g_object_class_install_properties(gobject_class,
                                       HWDEP_DEVICE_INFO_PROP_COUNT,
