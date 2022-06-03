@@ -12,6 +12,8 @@
 
 #include <device-info.h>
 
+#include <device-common.h>
+
 #include <query.h>
 
 #endif
