@@ -132,7 +132,7 @@ ALSATimerInstanceParams *alsatimer_instance_params_new()
  * @error: A [struct@GLib.Error] at failure.
  *
  * Set the list of [enum@TstampEventType] to filter events. This parameter is effective only for
- * target instance with [enum@EventDataType:TIMESTAMP].
+ * target instance with [enum@EventType:TIMESTAMP].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
@@ -181,7 +181,7 @@ gboolean alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *sel
  * @error: A [struct@GLib.Error] at failure.
  *
  * Get the list of [enum@TstampEventType] to filter events. This parameter is effective only for
- * target instance with [enum@EventDataType:TIMESTAMP].
+ * target instance with [enum@EventType:TIMESTAMP].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */

@@ -112,16 +112,16 @@ typedef enum
 } ALSATimerTstampEventType;
 
 /**
- * ALSATimerEventDataType
- * @ALSATIMER_EVENT_DATA_TYPE_TICK:     The data for tick event.
- * @ALSATIMER_EVENT_DATA_TYPE_TSTAMP:   The data for timestamp event.
+ * ALSATimerEventType
+ * @ALSATIMER_EVENT_TYPE_TICK:      The data for tick event.
+ * @ALSATIMER_EVENT_TYPE_TSTAMP:    The data for timestamp event.
  *
- * A set of enumerations for the type of event data.
+ * A set of enumerations for the type of event.
  */
 typedef enum {
-    ALSATIMER_EVENT_DATA_TYPE_TICK,
-    ALSATIMER_EVENT_DATA_TYPE_TSTAMP,
-} ALSATimerEventDataType;
+    ALSATIMER_EVENT_TYPE_TICK,
+    ALSATIMER_EVENT_TYPE_TSTAMP,
+} ALSATimerEventType;
 
 /**
  * ALSATimerUserInstanceError:

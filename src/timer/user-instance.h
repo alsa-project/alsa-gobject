@@ -53,8 +53,8 @@ gboolean alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *sel
                                         const guint16 *proto_ver_triplet[3],
                                         GError **error);
 
-gboolean alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
-                                        ALSATimerEventDataType event_data_type,
+gboolean alsatimer_user_instance_choose_event_type(ALSATimerUserInstance *self,
+                                        ALSATimerEventType event_type,
                                         GError **error);
 
 gboolean alsatimer_user_instance_attach(ALSATimerUserInstance *self, ALSATimerDeviceId *device_id,

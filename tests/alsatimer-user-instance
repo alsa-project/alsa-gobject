@@ -15,7 +15,7 @@ methods = (
     'new',
     'open',
     'get_protocol_version',
-    'choose_event_data_type',
+    'choose_event_type',
     'attach',
     'attach_as_slave',
     'get_info',

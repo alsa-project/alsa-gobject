@@ -22,7 +22,7 @@
  */
 typedef struct {
     int fd;
-    ALSATimerEventDataType event_data_type;
+    ALSATimerEventType event_type;
     guint16 proto_ver_triplet[3];
 } ALSATimerUserInstancePrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYPE_OBJECT)
@@ -243,24 +243,24 @@ gboolean alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *sel
 }
 
 /**
- * alsatimer_user_instance_choose_event_data_type:
+ * alsatimer_user_instance_choose_event_type:
  * @self: A [class@UserInstance].
- * @event_data_type: The type of event data, one of [enum@EventDataType].
+ * @event_type: The type of event data, one of [enum@EventType].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Choose the type of event data to receive.
  *
  * The call of function is successful just before the instance is not attached yet.
- * [enum@EventDataType:TICK] is used as a default if the function is not called for
- * [enum@EventDataType:TSTAMP] explicitly.
+ * [enum@EventType:TICK] is used as a default if the function is not called for
+ * [enum@EventType:TSTAMP] explicitly.
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_TREAD` command
  * for ALSA timer character device.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *self,
-                                        ALSATimerEventDataType event_data_type,
+gboolean alsatimer_user_instance_choose_event_type(ALSATimerUserInstance *self,
+                                        ALSATimerEventType event_type,
                                         GError **error)
 {
     ALSATimerUserInstancePrivate *priv;
@@ -271,7 +271,7 @@ gboolean alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *s
 
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    tread = (int)event_data_type;
+    tread = (int)event_type;
     if (ioctl(priv->fd, SNDRV_TIMER_IOCTL_TREAD, &tread) < 0) {
         if (errno == EBUSY)
             generate_local_error(error, ALSATIMER_USER_INSTANCE_ERROR_ATTACHED);
@@ -280,7 +280,7 @@ gboolean alsatimer_user_instance_choose_event_data_type(ALSATimerUserInstance *s
         return FALSE;
     }
 
-    priv->event_data_type = event_data_type;
+    priv->event_type = event_type;
     return TRUE;
 }
 
@@ -553,11 +553,11 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
     }
 
-    switch (priv->event_data_type) {
-    case ALSATIMER_EVENT_DATA_TYPE_TICK:
+    switch (priv->event_type) {
+    case ALSATIMER_EVENT_TYPE_TICK:
         dispatch_tick_events(self, src->buf, (size_t)len);
         break;
-    case ALSATIMER_EVENT_DATA_TYPE_TSTAMP:
+    case ALSATIMER_EVENT_TYPE_TSTAMP:
         dispatch_tstamp_events(self, src->buf, (size_t)len);
         break;
     default:
