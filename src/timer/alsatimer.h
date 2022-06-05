@@ -11,7 +11,7 @@
 #include <alsatimer-enums.h>
 
 #include <tick-event.h>
-#include <event-data-tstamp.h>
+#include <tstamp-event.h>
 
 #include <device-id.h>
 #include <device-info.h>

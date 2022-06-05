@@ -34,11 +34,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_instance_status_get_type";
     "alsatimer_instance_status_new";
     "alsatimer_instance_status_get_tstamp";
-
-    "alsatimer_event_data_tstamp_get_type";
-    "alsatimer_event_data_tstamp_get_event";
-    "alsatimer_event_data_tstamp_get_tstamp";
-    "alsatimer_event_data_tstamp_get_val";
   local:
     *;
 };
@@ -77,4 +72,9 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_tick_event_get_type";
     "alsatimer_tick_event_get_resolution";
     "alsatimer_tick_event_get_ticks";
+
+    "alsatimer_tstamp_event_get_type";
+    "alsatimer_tstamp_event_get_event";
+    "alsatimer_tstamp_event_get_tstamp";
+    "alsatimer_tstamp_event_get_val";
 } ALSA_GOBJECT_0_2_0;
