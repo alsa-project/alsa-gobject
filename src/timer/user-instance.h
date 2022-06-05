@@ -21,11 +21,11 @@ struct _ALSATimerUserInstanceClass {
     /**
      * ALSATimerUserInstanceClass::handle_tick_event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): An object derived from [struct@EventDataTick].
+     * @event: (transfer none): An object derived from [struct@TickEvent].
      *
      * Class closure for the [signal@UserInstance::handle-tick-event] signal.
      */
-    void (*handle_tick_event)(ALSATimerUserInstance *self, const ALSATimerEventDataTick *event);
+    void (*handle_tick_event)(ALSATimerUserInstance *self, const ALSATimerTickEvent *event);
 
     /**
      * ALSATimerUserInstanceClass::handle_tstamp_event:

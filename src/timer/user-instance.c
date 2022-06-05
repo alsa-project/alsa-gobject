@@ -87,7 +87,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
     /**
      * ALSATimerUserInstance::handle-tick-event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): The instance of [struct@EventDataTick].
+     * @event: (transfer none): The instance of [struct@TickEvent].
      *
      * Emitted when tick event occurs.
      */
@@ -98,7 +98,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
                      G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_tick_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__BOXED,
-                     G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA_TICK);
+                     G_TYPE_NONE, 1, ALSATIMER_TYPE_TICK_EVENT);
 
     /**
      * ALSATimerUserInstance::handle-tstamp-event:

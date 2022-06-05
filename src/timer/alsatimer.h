@@ -10,7 +10,7 @@
 #include <alsatimer-enum-types.h>
 #include <alsatimer-enums.h>
 
-#include <event-data-tick.h>
+#include <tick-event.h>
 #include <event-data-tstamp.h>
 
 #include <device-id.h>
