@@ -33,7 +33,7 @@ instance_param_flags = (
     'EARLY_EVENT',
 )
 
-event_types = (
+tstamp_event_types = (
     'RESOLUTION',
     'TICK',
     'START',
@@ -69,7 +69,7 @@ types = {
     ALSATimer.SpecificGlobalDevice: specific_global_devices,
     ALSATimer.DeviceInfoFlag:       device_info_flags,
     ALSATimer.InstanceParamFlag:    instance_param_flags,
-    ALSATimer.EventType:            event_types,
+    ALSATimer.TstampEventType:      tstamp_event_types,
     ALSATimer.EventDataType:        event_data_types,
     ALSATimer.UserInstanceError:    user_instance_error_types,
 }
