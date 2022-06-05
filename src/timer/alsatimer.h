@@ -12,7 +12,6 @@
 
 #include <event-data-tick.h>
 #include <event-data-tstamp.h>
-#include <event.h>
 
 #include <device-id.h>
 #include <device-info.h>
