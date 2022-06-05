@@ -14,13 +14,12 @@ instance.open(0)
 
 # Choose tstamp type of data for event and register event handler.
 instance.choose_event_data_type(ALSATimer.EventDataType.TSTAMP)
-def handle_event(instance, event):
-    data = event.get_tstamp_data()
-    tstamp = data.get_tstamp([0, 0])
+def handle_tstamp_event(instance, event):
+    tstamp = event.get_tstamp([0, 0])
     print('\nEvent at', tstamp)
-    print('  ', data.get_event().value_nick)
-    print('  ', data.get_val())
-instance.connect('handle-event', handle_event)
+    print('  ', event.get_event().value_nick)
+    print('  ', event.get_val())
+instance.connect('handle-tstamp-event', handle_tstamp_event)
 
 # Decide ALSA timer device to which the instance is attached.
 targets = (

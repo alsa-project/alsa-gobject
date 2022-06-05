@@ -22,7 +22,8 @@ methods = (
     'set_params',
     'get_status',
     'create_source',
-    'do_handle_event',
+    'do_handle_tick_event',
+    'do_handle_tstamp_event',
     'do_handle_disconnection',
     'start',
     'stop',
@@ -30,7 +31,8 @@ methods = (
     'continue_',
 )
 signals = (
-    'handle-event',
+    'handle-tick-event',
+    'handle-tstamp-event',
     'handle-disconnection',
 )
 
