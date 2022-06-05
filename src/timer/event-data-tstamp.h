@@ -13,7 +13,7 @@ typedef struct snd_timer_tread ALSATimerEventDataTstamp;
 GType alsatimer_event_data_tstamp_get_type() G_GNUC_CONST;
 
 void alsatimer_event_data_tstamp_get_event(const ALSATimerEventDataTstamp *self,
-                                           ALSATimerEventType *event);
+                                           ALSATimerTstampEventType *event);
 
 void alsatimer_event_data_tstamp_get_tstamp(const ALSATimerEventDataTstamp *self,
                                             gint64 *const tstamp[2]);

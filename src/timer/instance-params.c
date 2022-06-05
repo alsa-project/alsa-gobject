@@ -126,17 +126,18 @@ ALSATimerInstanceParams *alsatimer_instance_params_new()
 /**
  * alsatimer_instance_params_set_event_filter:
  * @self: A [class@InstanceParams].
- * @entries: (array length=entry_count): The array with elements for entries of [enum@EventType].
+ * @entries: (array length=entry_count): The array with elements for entries of
+ *           [enum@TstampEventType].
  * @entry_count: The number of elements in the above array.
  * @error: A [struct@GLib.Error] at failure.
  *
- * Set the list of [enum@EventType] to filter events. This parameter is effective only for target
- * instance with [enum@EventDataType:TIMESTAMP].
+ * Set the list of [enum@TstampEventType] to filter events. This parameter is effective only for
+ * target instance with [enum@EventDataType:TIMESTAMP].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *self,
-                                            const ALSATimerEventType *entries,
+                                            const ALSATimerTstampEventType *entries,
                                             gsize entry_count, GError **error)
 {
     ALSATimerInstanceParamsPrivate *priv;
@@ -174,21 +175,22 @@ gboolean alsatimer_instance_params_set_event_filter(ALSATimerInstanceParams *sel
 /**
  * alsatimer_instance_params_get_event_filter:
  * @self: A [class@InstanceParams].
- * @entries: (array length=entry_count)(out): The array with elements for entries of [enum@EventType].
+ * @entries: (array length=entry_count)(out): The array with elements for entries of
+ *           [enum@TstampEventType].
  * @entry_count: The number of elements in the above array.
  * @error: A [struct@GLib.Error] at failure.
  *
- * Get the list of ALSATimerEventType to filter events. This parameter is effective only for target
- * instance with [enum@EventDataType:TIMESTAMP].
+ * Get the list of [enum@TstampEventType] to filter events. This parameter is effective only for
+ * target instance with [enum@EventDataType:TIMESTAMP].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *self,
-                                            ALSATimerEventType **entries,
+                                            ALSATimerTstampEventType **entries,
                                             gsize *entry_count, GError **error)
 {
     ALSATimerInstanceParamsPrivate *priv;
-    ALSATimerEventType *list;
+    ALSATimerTstampEventType *list;
     unsigned int filter;
     unsigned int count;
     unsigned int index;
@@ -216,7 +218,7 @@ gboolean alsatimer_instance_params_get_event_filter(ALSATimerInstanceParams *sel
     index = 0;
     for (i = 0; i < sizeof(filter) * 8; ++i) {
         if ((1u << i) & filter) {
-            list[index] = (ALSATimerEventType)i;
+            list[index] = (ALSATimerTstampEventType)i;
             if (++index >= count)
                 break;
         }

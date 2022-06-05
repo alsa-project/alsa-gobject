@@ -62,14 +62,14 @@ params.set_property('flags', flags)
 ticks = 500 * 1000 * 1000 // resolution  # 500msec
 params.set_property('interval', ticks)
 params.set_property('queue-size', 64)
-events = (ALSATimer.EventType.RESOLUTION,
-          ALSATimer.EventType.TICK,
-          ALSATimer.EventType.START,
-          ALSATimer.EventType.STOP,
-          ALSATimer.EventType.CONTINUE,
-          ALSATimer.EventType.PAUSE,
-          ALSATimer.EventType.SUSPEND,
-          ALSATimer.EventType.RESUME)
+events = (ALSATimer.TstampEventType.RESOLUTION,
+          ALSATimer.TstampEventType.TICK,
+          ALSATimer.TstampEventType.START,
+          ALSATimer.TstampEventType.STOP,
+          ALSATimer.TstampEventType.CONTINUE,
+          ALSATimer.TstampEventType.PAUSE,
+          ALSATimer.TstampEventType.SUSPEND,
+          ALSATimer.TstampEventType.RESUME)
 params.set_event_filter(events)
 _, params = instance.set_params(params)
 

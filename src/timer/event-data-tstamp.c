@@ -27,14 +27,14 @@ G_DEFINE_BOXED_TYPE(ALSATimerEventDataTstamp, alsatimer_event_data_tstamp, timer
 /**
  * alsatimer_event_data_tstamp_get_event:
  * @self: A [struct@EventDataTstamp].
- * @event: (out): The type of tstamp event, one of [enum@EventType].
+ * @event: (out): The type of tstamp event, one of [enum@TstampEventType].
  *
  * Get the kind of event for the timestamp event.
  */
 void alsatimer_event_data_tstamp_get_event(const ALSATimerEventDataTstamp *self,
-                                           ALSATimerEventType *event)
+                                           ALSATimerTstampEventType *event)
 {
-    *event = (ALSATimerEventType)self->event;
+    *event = (ALSATimerTstampEventType)self->event;
 }
 
 /**
