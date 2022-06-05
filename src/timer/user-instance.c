@@ -103,7 +103,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
     /**
      * ALSATimerUserInstance::handle-tstamp-event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): The instance of [struct@EventDataTstamp].
+     * @event: (transfer none): The instance of [struct@TstampEvent].
      *
      * Emitted when timestamp event occurs.
      */
@@ -114,7 +114,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
                      G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_tstamp_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__BOXED,
-                     G_TYPE_NONE, 1, ALSATIMER_TYPE_EVENT_DATA_TSTAMP);
+                     G_TYPE_NONE, 1, ALSATIMER_TYPE_TSTAMP_EVENT);
 
     /**
      * ALSATimerUserInstance::handle-disconnection:

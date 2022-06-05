@@ -19,7 +19,7 @@ sources = files(
   'instance-params.c',
   'instance-status.c',
   'tick-event.c',
-  'event-data-tstamp.c',
+  'tstamp-event.c',
 )
 
 headers = files(
@@ -33,7 +33,7 @@ headers = files(
   'instance-params.h',
   'instance-status.h',
   'tick-event.h',
-  'event-data-tstamp.h',
+  'tstamp-event.h',
 )
 
 privates = files(
