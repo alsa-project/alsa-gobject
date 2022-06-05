@@ -51,7 +51,7 @@ tstamp_event_types = (
     'MRESUME',
 )
 
-event_data_types = (
+event_types = (
     'TICK',
     'TSTAMP',
 )
@@ -70,7 +70,7 @@ types = {
     ALSATimer.DeviceInfoFlag:       device_info_flags,
     ALSATimer.InstanceParamFlag:    instance_param_flags,
     ALSATimer.TstampEventType:      tstamp_event_types,
-    ALSATimer.EventDataType:        event_data_types,
+    ALSATimer.EventType:            event_types,
     ALSATimer.UserInstanceError:    user_instance_error_types,
 }
 

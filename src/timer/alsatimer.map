@@ -5,7 +5,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsatimer_specific_global_device_get_type";
     "alsatimer_device_info_flag_get_type";
     "alsatimer_instance_param_flag_get_type";
-    "alsatimer_event_data_type_get_type";
 
     "alsatimer_device_id_get_type";
     "alsatimer_device_id_new";
@@ -64,7 +63,6 @@ ALSA_GOBJECT_0_3_0 {
 
     "alsatimer_user_instance_open";
     "alsatimer_user_instance_get_protocol_version";
-    "alsatimer_user_instance_choose_event_data_type";
     "alsatimer_user_instance_attach";
     "alsatimer_user_instance_attach_as_slave";
     "alsatimer_user_instance_get_info";
@@ -75,6 +73,8 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_user_instance_stop";
     "alsatimer_user_instance_pause";
     "alsatimer_user_instance_continue";
+    "alsatimer_user_instance_choose_event_type";
 
     "alsatimer_tstamp_event_type_get_type";
+    "alsatimer_event_type_get_type";
 } ALSA_GOBJECT_0_2_0;

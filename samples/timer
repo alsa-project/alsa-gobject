@@ -13,7 +13,7 @@ instance = ALSATimer.UserInstance.new()
 instance.open(0)
 
 # Choose tstamp type of data for event and register event handler.
-instance.choose_event_data_type(ALSATimer.EventDataType.TSTAMP)
+instance.choose_event_type(ALSATimer.EventType.TSTAMP)
 def handle_tstamp_event(instance, event):
     tstamp = event.get_tstamp([0, 0])
     print('\nEvent at', tstamp)
