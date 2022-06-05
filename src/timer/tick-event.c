@@ -2,14 +2,14 @@
 #include "privates.h"
 
 /**
- * ALSATimerEventDataTick:
+ * ALSATimerTickEvent:
  * A boxed object to represent event of timer with tick count.
  *
- * A [struct@EventDataTick] is a boxed object to represent event of timer with tick count.
+ * A [struct@TickEvent] is a boxed object to represent event of timer with tick count.
  *
  * The object wraps `struct snd_timer_read` in UAPI of Linux sound subsystem.
  */
-ALSATimerEventDataTick *timer_event_data_tick_copy(const ALSATimerEventDataTick *self)
+ALSATimerTickEvent *timer_tick_event_copy(const ALSATimerTickEvent *self)
 {
 #ifdef g_memdup2
     return g_memdup2(self, sizeof(*self));
@@ -22,29 +22,29 @@ ALSATimerEventDataTick *timer_event_data_tick_copy(const ALSATimerEventDataTick 
 #endif
 }
 
-G_DEFINE_BOXED_TYPE(ALSATimerEventDataTick, alsatimer_event_data_tick, timer_event_data_tick_copy, g_free)
+G_DEFINE_BOXED_TYPE(ALSATimerTickEvent, alsatimer_tick_event, timer_tick_event_copy, g_free)
 
 /**
- * alsatimer_event_data_tick_get_resolution:
- * @self: A [struct@EventDataTick].
+ * alsatimer_tick_event_get_resolution:
+ * @self: A [struct@TickEvent].
  * @resolution: (out): The resolution of tick event.
  *
  * Get the resolution of tick event.
  */
-void alsatimer_event_data_tick_get_resolution(const ALSATimerEventDataTick *self,
+void alsatimer_tick_event_get_resolution(const ALSATimerTickEvent *self,
                                               guint *resolution)
 {
     *resolution = self->resolution;
 }
 
 /**
- * alsatimer_event_data_tick_get_ticks:
- * @self: A [struct@EventDataTick].
+ * alsatimer_tick_event_get_ticks:
+ * @self: A [struct@TickEvent].
  * @ticks: (out): The tick count since the last event.
  *
  * Get the tick count since the last event.
  */
-void alsatimer_event_data_tick_get_ticks(const ALSATimerEventDataTick *self,
+void alsatimer_tick_event_get_ticks(const ALSATimerTickEvent *self,
                                          guint *ticks)
 {
     *ticks = self->ticks;
