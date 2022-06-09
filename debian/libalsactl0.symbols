@@ -46,13 +46,13 @@ libalsactl.so.0 libalsactl0 #MINVER#
  alsactl_elem_info_single_array_get_type@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_elem_type_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_equal@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_bool@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_bytes@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_enum@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_iec60958_user_data@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_iec60958_channel_status@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_int64@ALSA_GOBJECT_0_0_0 0.1.0
- alsactl_elem_value_get_int@ALSA_GOBJECT_0_0_0 0.1.0
+ alsactl_elem_value_get_bool@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_bytes@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_enum@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_iec60958_user_data@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_iec60958_channel_status@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_int64@ALSA_GOBJECT_0_3_0 0.3.0
+ alsactl_elem_value_get_int@ALSA_GOBJECT_0_3_0 0.3.0
  alsactl_elem_value_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsactl_elem_value_set_bool@ALSA_GOBJECT_0_0_0 0.1.0

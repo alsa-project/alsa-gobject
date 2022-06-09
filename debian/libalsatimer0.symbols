@@ -15,21 +15,21 @@ libalsatimer.so.0 libalsatimer0 #MINVER#
  alsatimer_device_params_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_status_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_device_status_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_tick_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tick_event_get_resolution@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tick_event_get_ticks@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tstamp_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tstamp_event_get_event@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tstamp_event_get_tstamp@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tstamp_event_get_val@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tick_time_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tick_time_event_get_resolution@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_tick_time_event_get_count@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_real_time_event_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_real_time_event_get_event@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_real_time_event_get_time@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_real_time_event_get_val@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_event_type_get_type@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_tstamp_event_type_get_type@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_real_time_event_type_get_type@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_get_device_id_list@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_get_device_info@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_get_device_status@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_get_devnode@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_get_sysname@ALSA_GOBJECT_0_3_0 0.3.0
- alsatimer_get_tstamp_source@ALSA_GOBJECT_0_3_0 0.3.0
+ alsatimer_get_real_time_clock_id@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_instance_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_param_flag_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_params_get_event_filter@ALSA_GOBJECT_0_0_0 0.1.0
@@ -37,7 +37,7 @@ libalsatimer.so.0 libalsatimer0 #MINVER#
  alsatimer_instance_params_new@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_params_set_event_filter@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_instance_status_new@ALSA_GOBJECT_0_0_0 0.1.0
- alsatimer_instance_status_get_tstamp@ALSA_GOBJECT_0_0_0 0.1.0
+ alsatimer_instance_status_get_time@ALSA_GOBJECT_0_3_0 0.3.0
  alsatimer_instance_status_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_slave_class_get_type@ALSA_GOBJECT_0_0_0 0.1.0
  alsatimer_specific_global_device_get_type@ALSA_GOBJECT_0_0_0 0.1.0
