@@ -136,19 +136,16 @@ _, src = client.create_source()
 src.attach(dispatcher.get_context())
 
 # Register UNIX signal handler.
-def handle_unix_signal(dispatcher):
-    dispatcher.quit()
-GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT,
-                     handle_unix_signal, dispatcher)
+GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT, lambda d: d.quit(),
+                     dispatcher)
 
 # Start to dispatch events.
 dispatcher.run()
 
 # Stop the queue.
-ev_cntr = ALSASeq.EventCntr.new(1)
-ev_cntr.set_queue_id(0, queue_id)
-ev_cntr.set_event_type(0, ALSASeq.EventType.STOP)
-client.schedule_event(ev_cntr, 1)
+ev = ALSASeq.Event.new(ALSASeq.EventType.STOP)
+ev.set_queue_id(queue_id)
+client.schedule_event(ev)
 
 # Delete the queue.
 client.delete_queue(queue_id)
