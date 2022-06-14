@@ -17,6 +17,7 @@
 #include <event-data-connect.h>
 #include <event-data-result.h>
 #include <remove-filter.h>
+#include <event-cntr.h>
 
 #include <queue-timer-common.h>
 
