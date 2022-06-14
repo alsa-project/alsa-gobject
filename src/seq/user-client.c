@@ -60,7 +60,6 @@ typedef struct {
     gpointer tag;
     void *buf;
     size_t buf_len;
-    ALSASeqEventCntr *ev_cntr;
 } UserClientSource;
 
 enum seq_user_client_prop_type {
@@ -126,12 +125,10 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
     /**
      * ALSASeqUserClient::handle-event:
      * @self: A [class@UserClient].
-     * @ev_cntr: (transfer none): The instance of [class@EventCntr] which points to the batch of
-     *           events.
+     * @ev_cntr: (transfer none): The instance of [struct@EventCntr] which includes batch of events.
      *
-     * When event occurs, this signal is emit with the instance of object which points to a batch
-     * of events. The instance should not be passed directly to [method@UserClient.schedule_event]
-     * again because its memory alignment is different for events with blob data.
+     * When event occurs, this signal is emit with the instance of object which includes batch of
+     * of events.
      */
     seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT] =
         g_signal_new("handle-event",
@@ -139,7 +136,7 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
                      G_SIGNAL_RUN_LAST,
                      G_STRUCT_OFFSET(ALSASeqUserClientClass, handle_event),
                      NULL, NULL,
-                     g_cclosure_marshal_VOID__OBJECT,
+                     g_cclosure_marshal_VOID__BOXED,
                      G_TYPE_NONE, 1, ALSASEQ_TYPE_EVENT_CNTR);
 }
 
@@ -723,6 +720,7 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
     ALSASeqUserClient *self = src->self;
     ALSASeqUserClientPrivate *priv;
     GIOCondition condition;
+    ALSASeqEventCntr ev_cntr = { 0 };
     int len;
 
     priv = alsaseq_user_client_get_instance_private(self);
@@ -741,11 +739,12 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
         return G_SOURCE_REMOVE;
     }
 
-    seq_event_cntr_set_buf(src->ev_cntr, src->buf, len);
+    // NOTE: The buffer is flatten layout.
+    ev_cntr.buf = src->buf;
+    ev_cntr.length = len;
+    ev_cntr.aligned = TRUE;
 
-    g_signal_emit(self,
-                seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT],
-                0, src->ev_cntr);
+    g_signal_emit(self, seq_user_client_sigs[SEQ_USER_CLIENT_SIG_TYPE_HANDLE_EVENT], 0, &ev_cntr);
 
     // Just be sure to continue to process this source.
     return G_SOURCE_CONTINUE;
@@ -754,8 +753,6 @@ static gboolean seq_user_client_dispatch_src(GSource *gsrc, GSourceFunc cb,
 static void seq_user_client_finalize_src(GSource *gsrc)
 {
     UserClientSource *src = (UserClientSource *)gsrc;
-
-    g_object_unref(src->ev_cntr);
 
     g_free(src->buf);
     g_object_unref(src->self);
@@ -797,8 +794,6 @@ gboolean alsaseq_user_client_create_source(ALSASeqUserClient *self, GSource **gs
 
     *gsrc = g_source_new(&funcs, sizeof(*src));
     src = (UserClientSource *)(*gsrc);
-
-    src->ev_cntr = g_object_new(ALSASEQ_TYPE_EVENT_CNTR, NULL);
 
     g_source_set_name(*gsrc, "ALSASeqUserClient");
     g_source_set_priority(*gsrc, G_PRIORITY_HIGH_IDLE);

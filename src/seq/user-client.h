@@ -20,16 +20,12 @@ struct _ALSASeqUserClientClass {
     /**
      * ALSASeqUserClientClass::handle_event:
      * @self: A [class@UserClient].
-     * @ev_cntr: (transfer none): The instance of [class@EventCntr] which
-     *             points to the batch of events.
+     * @ev_cntr: (transfer none): The instance of [struct@EventCntr] which includes batch of events.
      *
-     * When event occurs, this signal is emit with the instance of object which
-     * points to a batch of events. The instance should not be passed directly
-     * to alsaseq_user_client_schedule_event() again because its memory
-     * alignment is different for events with blob data.
+     * When event occurs, this signal is emit with the instance of object which includes batch of
+     * events.
      */
-    void (*handle_event)(ALSASeqUserClient *self,
-                         const ALSASeqEventCntr *ev_cntr);
+    void (*handle_event)(ALSASeqUserClient *self, const ALSASeqEventCntr *ev_cntr);
 };
 
 ALSASeqUserClient *alsaseq_user_client_new();
