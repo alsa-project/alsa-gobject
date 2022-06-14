@@ -34,7 +34,6 @@ G_DEFINE_BOXED_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, seq_remove_filte
  *         [flags@RemoveFilterFlag].OUTPUT.
  * @queue_id: The numeric identifier of queue.
  * @dest: The address of destination.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events towards the
  * destination.
@@ -43,11 +42,10 @@ G_DEFINE_BOXED_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, seq_remove_filte
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqAddr *dest, GError **error)
+                                ALSASeqAddr *dest)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_DEST;
@@ -63,7 +61,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
  *         [flags@RemoveFilterFlag].OUTPUT.
  * @queue_id: The numeric identifier of queue.
  * @channel: The channel for note event.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with note
  * type towards the channel.
@@ -72,11 +69,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                guint8 channel, GError **error)
+                                guint8 channel)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_DEST_CHANNEL;
@@ -92,7 +88,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
  *         [flags@RemoveFilterFlag].OUTPUT.
  * @queue_id: The numeric identifier of queue.
  * @ev_type: The type of event.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
  * type.
@@ -101,11 +96,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqEventType ev_type, GError **error)
+                                ALSASeqEventType ev_type)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_EVENT_TYPE;
@@ -120,7 +114,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
  * @queue_id: The numeric identifier of queue.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events for note,
  * except for [enum@EventType:NOTEOFF].
@@ -128,12 +121,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
  * Returns: A [struct@RemoveFilter].
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                GError **error)
+                                ALSASeqRemoveFilterFlag inout, guint8 queue_id)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_IGNORE_OFF;
@@ -148,7 +139,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
  *         [flags@RemoveFilterFlag].OUTPUT.
  * @queue_id: The numeric identifier of queue.
  * @tag: The tag of event to remove.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
  * tag.
@@ -157,11 +147,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint8 tag, GError **error)
+                                gint8 tag)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_TAG_MATCH;
@@ -178,7 +167,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
  * @queue_id: The numeric identifier of queue.
  * @tick_time: The count of tick.
  * @after: Remove events after the tick time if true, else remove events before the tick time.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
  * before/after the tick time.
@@ -187,12 +175,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tick_time, gboolean after,
-                                GError **error)
+                                gint32 tick_time, gboolean after)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout | SNDRV_SEQ_REMOVE_TIME_TICK;
@@ -214,7 +200,6 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
  * @tv_sec: The second part of time.
  * @tv_nsec: The nanosecond part of time.
  * @after: Remove events after the real time if true, else remove events before the real time.
- * @error: A [struct@GLib.Error].
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
  * before/after the real time.
@@ -223,12 +208,10 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
  */
 ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
                                 ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tv_sec, guint32 tv_nsec, gboolean after,
-                                GError **error)
+                                gint32 tv_sec, guint32 tv_nsec, gboolean after)
 {
     struct snd_seq_remove_events filter;
 
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
     g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
 
     filter.remove_mode = inout;
