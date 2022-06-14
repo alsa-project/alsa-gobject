@@ -617,10 +617,9 @@ gboolean alsaseq_user_client_schedule_events(ALSASeqUserClient *self, const GLis
                                              gsize *count, GError **error)
 {
     ALSASeqUserClientPrivate *priv;
+    ALSASeqEventCntr cntr = { 0 };
     const GList *entry;
     gsize index;
-    gsize total_length;
-    guint8 *buf;
     gsize pos;
     ssize_t result;
     gsize scheduled;
@@ -630,9 +629,7 @@ gboolean alsaseq_user_client_schedule_events(ALSASeqUserClient *self, const GLis
 
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    // Calculate total length of flattened and unaligned events.
     index = 0;
-    total_length = 0;
     for (entry = events; entry != NULL; entry = g_list_next(entry)) {
         const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
 
@@ -644,33 +641,17 @@ gboolean alsaseq_user_client_schedule_events(ALSASeqUserClient *self, const GLis
                         index);
             return FALSE;
         }
-
-        total_length += seq_event_calculate_flattened_length(ev, FALSE);
         ++index;
     }
 
+    seq_event_cntr_serialize(&cntr, events, FALSE);
+
     // Nothing to do.
-    if (total_length == 0)
+    if (cntr.length == 0)
         return TRUE;
 
-    buf = g_malloc0(total_length);
-
-    pos = 0;
-    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
-        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
-        gsize length;
-
-        g_return_val_if_fail(ev != NULL, FALSE);
-
-        length = seq_event_calculate_flattened_length(ev, FALSE);
-        seq_event_copy_flattened(ev, buf + pos, length);
-        pos += length;
-    }
-
-    g_return_val_if_fail(total_length == pos, FALSE);
-
-    result = write(priv->fd, buf, total_length);
-    g_free(buf);
+    result = write(priv->fd, cntr.buf, cntr.length);
+    g_free(cntr.buf);
     if (result < 0) {
         GFileError code = g_file_error_from_errno(errno);
 

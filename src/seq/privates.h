@@ -39,6 +39,7 @@ void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
 void seq_event_cntr_get_buf(ALSASeqEventCntr *self, gsize count,
                               const guint8 **buf, gsize *length);
 
+void seq_event_cntr_serialize(ALSASeqEventCntr *self, const GList *events, gboolean aligned);
 void seq_event_copy_flattened(const ALSASeqEvent *self, guint8 *buf, gsize length);
 gsize seq_event_calculate_flattened_length(const ALSASeqEvent *self, gboolean aligned);
 gboolean seq_event_is_deliverable(const ALSASeqEvent *self);

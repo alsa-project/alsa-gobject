@@ -66,6 +66,53 @@ static struct snd_seq_event *seq_event_iter_next(struct seq_event_iter *iter)
     return NULL;
 }
 
+void seq_event_cntr_serialize(ALSASeqEventCntr *self, const GList *events, gboolean aligned)
+{
+    const GList *entry;
+    gsize total_length;
+    guint8 *buf;
+    gsize pos;
+
+    g_return_if_fail(self != NULL);
+    g_return_if_fail(events != NULL);
+
+    // Calculate total length of flattened events.
+    total_length = 0;
+    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
+        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
+
+        g_return_if_fail(ev != NULL);
+
+        total_length += seq_event_calculate_flattened_length(ev, aligned);
+    }
+
+    // Nothing to do.
+    if (total_length == 0)
+        return;
+
+    buf = g_malloc0(total_length);
+
+    pos = 0;
+    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
+        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
+        gsize length;
+
+        g_return_if_fail(ev != NULL);
+
+        length = seq_event_calculate_flattened_length(ev, aligned);
+        seq_event_copy_flattened(ev, buf + pos, length);
+        pos += length;
+    }
+
+    g_return_if_fail(total_length == pos);
+
+    g_free(self->buf);
+
+    self->buf = buf;
+    self->length = total_length;
+    self->aligned = aligned;
+}
+
 /**
  * alsaseq_event_cntr_deserialize:
  * @self: A [struct@EventCntr].
