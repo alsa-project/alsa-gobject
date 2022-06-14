@@ -19,8 +19,8 @@ props = (
     'synth-voices',
     'read-users',
     'write-users',
-    'timestamp-overwrite',
-    'timestamp-mode',
+    'tstamp-overwrite',
+    'tstamp-mode',
     'queue-id',
 )
 methods = (
