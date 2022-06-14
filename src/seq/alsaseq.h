@@ -10,7 +10,6 @@
 #include <alsaseq-enum-types.h>
 #include <alsaseq-enums.h>
 
-#include <tstamp.h>
 #include <addr.h>
 #include <event-data-note.h>
 #include <event-data-ctl.h>
