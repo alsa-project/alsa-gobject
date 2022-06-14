@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2022/04/03
+2022/06/06
 Takashi Sakamoto
 
 Introduction
@@ -77,21 +77,20 @@ How to build
 
 Preparation ::
 
-    $ meson (--prefix=xxx) . build
-    $ cd build
+    $ meson (--prefix=install-directory) build-directory
 
 Build ::
 
-    $ ninja
+    $ meson compile -C build-directory
 
 Test ::
 
-    $ meson test
+    $ meson test -C build-directory
     (PyGObject <https://pygobject.readthedocs.io/> is required)
 
 Install ::
 
-    $ meson install
+    $ meson install -C build-directory
 
 After installed, C headers for APIs are available and pkg-config returns
 arguments for them. For example ::
@@ -101,10 +100,9 @@ arguments for them. For example ::
 
 Generate documentation ::
 
-    $ meson --prefix=xxx -D doc=true . build
-    $ cd build
-    $ meson install
-    $ xdg-open xxx/share/doc/alsa-gobject/index.html
+    $ meson --prefix=install-directory -D doc=true build
+    $ meson install -C build
+    $ xdg-open (install-directory)/share/doc/alsa-gobject/index.html
 
 Design note
 ===========
