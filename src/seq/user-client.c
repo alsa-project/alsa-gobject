@@ -543,8 +543,7 @@ gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
 /**
  * alsaseq_user_client_schedule_event:
  * @self: A [class@UserClient].
- * @ev_cntr: An instance of [class@EventCntr] pointing to events.
- * @count: The number of events in the ev_cntr to write.
+ * @event: An instance of [struct@Event].
  * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
  *         `ALSASeq.UserClientError`.
  *
@@ -554,38 +553,51 @@ gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, ALSASeqEventCntr *ev_cntr,
-                                            gsize count, GError **error)
+gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, const ALSASeqEvent *event,
+                                            GError **error)
 {
     ALSASeqUserClientPrivate *priv;
-    gsize total;
-    const guint8 *buf;
-    gsize length;
-    ssize_t len;
+    size_t length;
+    guint8 *buf;
+    ssize_t result;
 
     g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
-    priv = alsaseq_user_client_get_instance_private(self);
-
-    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(ev_cntr), FALSE);
+    g_return_val_if_fail(event != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    alsaseq_event_cntr_count_events(ev_cntr, &total);
-    g_return_val_if_fail(count <= total, FALSE);
+    priv = alsaseq_user_client_get_instance_private(self);
 
-    seq_event_cntr_get_buf(ev_cntr, count, &buf, &length);
-    g_return_val_if_fail(buf != NULL && length > 0, FALSE);
+    if (!seq_event_is_deliverable(event)) {
+        g_set_error_literal(error, ALSASEQ_USER_CLIENT_ERROR,
+                            ALSASEQ_USER_CLIENT_ERROR_EVENT_UNDELIVERABLE,
+                            "The operation failes due to undeliverable event");
+        return FALSE;
+    }
 
-    len = write(priv->fd, buf, length);
-    if (len < 0) {
+    length = seq_event_calculate_flattened_length(event, FALSE);
+    if (length == sizeof(*event)) {
+        buf = (guint8 *)event;
+    } else {
+        buf = g_malloc0(length);
+
+        seq_event_copy_flattened(event, buf, length);
+    }
+
+    result = write(priv->fd, buf, length);
+    if (length != sizeof(*event))
+        g_free(buf);
+    if (result < 0) {
         GFileError code = g_file_error_from_errno(errno);
 
         if (code != G_FILE_ERROR_FAILED)
-            generate_file_error(error, code, "write(%s)", priv->devnode);
+            generate_file_error(error, errno, "write(%s)", priv->devnode);
         else
             generate_syscall_error(error, errno, "write(%s)", priv->devnode);
 
         return FALSE;
     }
+
+    g_return_val_if_fail(result == length, FALSE);
 
     return TRUE;
 }
