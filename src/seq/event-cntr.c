@@ -689,19 +689,18 @@ gboolean alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index, gu
 }
 
 /**
- * alsaseq_event_cntr_get_tstamp:
+ * alsaseq_event_cntr_get_tick_time:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @tstamp: (out)(transfer none): The timestamp for the event. The content is affected by the mode
- *          of tstamping.
+ * @tick_time: (out): The value of MIDI ticks.
  * @error: A [struct@GLib.Error].
  *
- * Get the timestamp of event pointed by index.
+ * Get event time as MIDI ticks.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
-                                       const ALSASeqTstamp **tstamp, GError **error)
+gboolean alsaseq_event_cntr_get_tick_time(ALSASeqEventCntr *self, gsize index,
+                                          guint *tick_time, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -710,32 +709,31 @@ gboolean alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
     g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_val_if_fail(tstamp != NULL, FALSE);
+    g_return_val_if_fail(tick_time != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
-
     ev = event_iterator_find(&iter, index);
     g_return_val_if_fail(ev != NULL, FALSE);
 
-    *tstamp = (const ALSASeqTstamp *)&ev->time;
+    *tick_time = ev->time.tick;
 
     return TRUE;
 }
 
 /**
- * alsaseq_event_cntr_set_tstamp:
+ * alsaseq_event_cntr_set_tick_time:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @tstamp: The timestamp for the event. The content is affected by the mode of tstamping.
+ * @tick_time: The value of MIDI ticks.
  * @error: A [struct@GLib.Error].
  *
- * Set the timestamp for the event pointed by index.
+ * Get event time as MIDI ticks.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
-                                       const ALSASeqTstamp *tstamp, GError **error)
+gboolean alsaseq_event_cntr_set_tick_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint tick_time, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -744,15 +742,82 @@ gboolean alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
     g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_val_if_fail(tstamp != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
-
     ev = event_iterator_find(&iter, index);
     g_return_val_if_fail(ev != NULL, FALSE);
 
-    ev->time = *tstamp;
+    ev->data.time.tick = tick_time;
+
+    return TRUE;
+}
+
+/**
+ * alsaseq_event_cntr_get_real_time:
+ * @self: A [class@EventCntr].
+ * @index: The index of event to set.
+ * @real_time: (array fixed-size=2) (out) (transfer none): The array with two elements for sec part
+ *             and nsec part of real time.
+ * @error: A [struct@GLib.Error].
+ *
+ * Refer to the time as wall-clock event time.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
+ */
+gboolean alsaseq_event_cntr_get_real_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint32 *real_time[2], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    g_return_val_if_fail(real_time != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    g_return_val_if_fail(ev != NULL, FALSE);
+
+    // MEMO: I expect 32-bit storage size is aligned to 32 bit offset in all of supported ABIs.
+    *real_time = (guint32 *)&ev->time.time;
+
+    return TRUE;
+}
+
+/**
+ * alsaseq_event_cntr_set_real_time:
+ * @self: A [class@EventCntr].
+ * @index: The index of event to set.
+ * @real_time: (array fixed-size=2) (transfer none): The array with two elements for sec part and
+ *             nsec part of real time.
+ * @error: A [struct@GLib.Error].
+ *
+ * Copy the time as wall-clock event time.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
+ */
+gboolean alsaseq_event_cntr_set_real_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint32 real_time[2], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    g_return_val_if_fail(ev != NULL, FALSE);
+
+    ev->data.time.time.tv_sec = real_time[0];
+    ev->data.time.time.tv_nsec = real_time[1];
 
     return TRUE;
 }
@@ -1400,18 +1465,18 @@ gboolean alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
 }
 
 /**
- * alsaseq_event_cntr_get_tstamp_data:
+ * alsaseq_event_cntr_get_tick_time_data:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @data: (out)(transfer none): The timestamp data of event.
+ * @tick_time: (out): The value of MIDI ticks.
  * @error: A [struct@GLib.Error].
  *
- * Get the timestamp data of event pointed by the index.
+ * Get time data as MIDI ticks.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                            const ALSASeqTstamp **data, GError **error)
+gboolean alsaseq_event_cntr_get_tick_time_data(ALSASeqEventCntr *self, gsize index,
+                                               guint *tick_time, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -1420,31 +1485,31 @@ gboolean alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
     g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_val_if_fail(data != NULL, FALSE);
+    g_return_val_if_fail(tick_time != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
     ev = event_iterator_find(&iter, index);
     g_return_val_if_fail(ev != NULL, FALSE);
 
-    *data = (const ALSASeqTstamp *)&ev->data.time;
+    *tick_time = ev->data.time.tick;
 
     return TRUE;
 }
 
 /**
- * alsaseq_event_cntr_set_tstamp_data:
+ * alsaseq_event_cntr_set_tick_time_data:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @data: The timestamp data of event.
+ * @tick_time: The value of MIDI ticks.
  * @error: A [struct@GLib.Error].
  *
- * Copy the timestamp data to the event pointed by the index.
+ * Set time data as MIDI ticks.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                            const ALSASeqTstamp *data, GError **error)
+gboolean alsaseq_event_cntr_set_tick_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint tick_time, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -1453,7 +1518,6 @@ gboolean alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
     g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
     priv = alsaseq_event_cntr_get_instance_private(self);
 
-    g_return_val_if_fail(data != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
     event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
@@ -1463,7 +1527,80 @@ gboolean alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
     if (!ensure_fixed_length_event(priv, ev, error))
         return FALSE;
 
-    ev->data.time = *(union snd_seq_timestamp *)data;
+    ev->data.time.tick = tick_time;
+
+    return TRUE;
+}
+
+/**
+ * alsaseq_event_cntr_get_real_time_data:
+ * @self: A [class@EventCntr].
+ * @index: The index of event to set.
+ * @real_time: (array fixed-size=2) (out) (transfer none): The array with two elements for sec part
+ *             and nsec part of real time.
+ * @error: A [struct@GLib.Error].
+ *
+ * Refer to the time as wall-clock time data.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
+ */
+gboolean alsaseq_event_cntr_get_real_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint32 *real_time[2], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    g_return_val_if_fail(real_time != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    g_return_val_if_fail(ev != NULL, FALSE);
+
+    // MEMO: I expect 32-bit storage size is aligned to 32 bit offset in all of supported ABIs.
+    *real_time = (guint32 *)&ev->data.time.time;
+
+    return TRUE;
+}
+
+/**
+ * alsaseq_event_cntr_set_real_time_data:
+ * @self: A [class@EventCntr].
+ * @index: The index of event to set.
+ * @real_time: (array fixed-size=2) (transfer none): The array with two elements for sec part and
+ *             nsec part of real time.
+ * @error: A [struct@GLib.Error].
+ *
+ * Copy the time as wall-clock time data.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
+ */
+gboolean alsaseq_event_cntr_set_real_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint32 real_time[2], GError **error)
+{
+    ALSASeqEventCntrPrivate *priv;
+    struct event_iterator iter;
+    struct snd_seq_event *ev;
+
+    g_return_val_if_fail(ALSASEQ_IS_EVENT_CNTR(self), FALSE);
+    priv = alsaseq_event_cntr_get_instance_private(self);
+
+    g_return_val_if_fail(real_time != NULL, FALSE);
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+    event_iterator_init(&iter, priv->buf, priv->length, priv->allocated);
+    ev = event_iterator_find(&iter, index);
+    g_return_val_if_fail(ev != NULL, FALSE);
+
+    if (!ensure_fixed_length_event(priv, ev, error))
+        return FALSE;
+
+    ev->data.time.time.tv_nsec = real_time[0];
+    ev->data.time.time.tv_nsec = real_time[1];
 
     return TRUE;
 }

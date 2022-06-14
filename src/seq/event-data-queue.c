@@ -78,29 +78,57 @@ void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
 }
 
 /**
- * alsaseq_event_data_queue_get_tstamp_param:
+ * alsaseq_event_data_queue_get_tick_time_param:
  * @self: A [struct@EventDataQueue].
- * @tstamp: (out)(transfer none): The timestamp as param of the queue event.
+ * @tick_time: (out): The tick time as param of the queue event.
  *
- * Get the timestamp as param of the queue event.
+ * Get the tick time as param of the queue event.
  */
-void alsaseq_event_data_queue_get_tstamp_param(const ALSASeqEventDataQueue *self,
-                                               const ALSASeqTstamp **tstamp)
+void alsaseq_event_data_queue_get_tick_time_param(const ALSASeqEventDataQueue *self,
+                                                  guint *tick_time)
 {
-    *tstamp = &self->param.time;
+    *tick_time = self->param.time.tick;
 }
 
 /**
- * alsaseq_event_data_queue_set_tstamp_param:
+ * alsaseq_event_data_queue_set_tick_time_param:
  * @self: A [struct@EventDataQueue].
- * @tstamp: (transfer none): The timestamp as param of the queue event.
+ * @tick_time: The tick time as param of the queue event.
  *
- * Set the timestamp as param of the queue event.
+ * Set the tick time as param of the queue event.
  */
-void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
-                                               const ALSASeqTstamp *tstamp)
+void alsaseq_event_data_queue_set_tick_time_param(ALSASeqEventDataQueue *self,
+                                                  const guint tick_time)
 {
-    self->param.time = *tstamp;
+    self->param.time.tick = tick_time;
+}
+
+/**
+ * alsaseq_event_data_queue_get_real_time_param:
+ * @self: A [struct@EventDataQueue].
+ * @real_time: (array fixed-size=2) (out) (transfer none): The real time as param of the queue
+ *             event.
+ *
+ * Get the real time as parameter of the queue event.
+ */
+void alsaseq_event_data_queue_get_real_time_param(const ALSASeqEventDataQueue *self,
+                                                  const guint32 *real_time[2])
+{
+    *real_time = (guint32 *)&self->param.time.time;
+}
+
+/**
+ * alsaseq_event_data_queue_set_real_time_param:
+ * @self: A [struct@EventDataQueue].
+ * @real_time: (array fixed-size=2): The real time as param of the queue event.
+ *
+ * Set the real time as parameter of the queue event.
+ */
+void alsaseq_event_data_queue_set_real_time_param(ALSASeqEventDataQueue *self,
+                                                  const guint32 real_time[2])
+{
+    self->param.time.time.tv_sec = real_time[0];
+    self->param.time.time.tv_nsec = real_time[1];
 }
 
 /**

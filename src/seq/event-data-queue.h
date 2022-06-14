@@ -22,10 +22,15 @@ void alsaseq_event_data_queue_get_value_param(const ALSASeqEventDataQueue *self,
 void alsaseq_event_data_queue_set_value_param(ALSASeqEventDataQueue *self,
                                               gint value);
 
-void alsaseq_event_data_queue_get_tstamp_param(const ALSASeqEventDataQueue *self,
-                                               const ALSASeqTstamp **tstamp);
-void alsaseq_event_data_queue_set_tstamp_param(ALSASeqEventDataQueue *self,
-                                               const ALSASeqTstamp *tstamp);
+void alsaseq_event_data_queue_get_tick_time_param(const ALSASeqEventDataQueue *self,
+                                                  guint *tick_time);
+void alsaseq_event_data_queue_set_tick_time_param(ALSASeqEventDataQueue *self,
+                                                  const guint tick_time);
+
+void alsaseq_event_data_queue_get_real_time_param(const ALSASeqEventDataQueue *self,
+                                                  const guint32 *real_time[2]);
+void alsaseq_event_data_queue_set_real_time_param(ALSASeqEventDataQueue *self,
+                                                  const guint32 real_time[2]);
 
 void alsaseq_event_data_queue_get_position_param(const ALSASeqEventDataQueue *self,
                                                  guint *position);
