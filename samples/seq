@@ -66,32 +66,37 @@ for prop in ('name', 'queue-id', 'client-id', 'locked'):
 queue_id = info.get_property('queue-id')
 
 # Prepare two events; one to start the queue, another to deliver on the queue.
-ev_cntr = ALSASeq.EventCntr.new(2)
+events = []
 
-ev_cntr.set_event_type(0, ALSASeq.EventType.START)
-ev_cntr.set_tstamp_mode(0, ALSASeq.EventTstampMode.REAL)
-ev_cntr.set_time_mode(0, ALSASeq.EventTimeMode.REL)
-ev_cntr.set_priority_mode(0, ALSASeq.EventPriorityMode.NORMAL)
-ev_cntr.set_tag(0, 0)
-ev_cntr.set_queue_id(0, ALSASeq.SpecificQueueId.DIRECT)
-ev_cntr.set_dst(0, ALSASeq.Addr.new(ALSASeq.SpecificClientId.SYSTEM,
-                                    ALSASeq.SpecificPortId.TIMER));
-ev_cntr.set_src(0, ALSASeq.Addr.new(client.get_property('client-id'), 0));
-_, data = ev_cntr.get_queue_data(0)
+ev = ALSASeq.Event.new(ALSASeq.EventType.START)
+ev.set_time_mode(ALSASeq.EventTimeMode.REL)
+ev.set_priority_mode(ALSASeq.EventPriorityMode.NORMAL)
+ev.set_tag(0)
+ev.set_queue_id(ALSASeq.SpecificQueueId.DIRECT)
+dst = ALSASeq.Addr.new(ALSASeq.SpecificClientId.SYSTEM,
+                       ALSASeq.SpecificPortId.TIMER)
+ev.set_destination(dst)
+src = ALSASeq.Addr.new(client.get_property('client-id'), 0)
+ev.set_source(src)
+_, data = ev.get_queue_data()
 data.set_queue_id(queue_id)
-ev_cntr.set_queue_data(0, data)
+ev.set_queue_data(data)
+events.append(ev)
 
-ev_cntr.set_event_type(1, ALSASeq.EventType.CONTROLLER)
-ev_cntr.set_tstamp_mode(1, ALSASeq.EventTstampMode.REAL)
-ev_cntr.set_time_mode(1, ALSASeq.EventTimeMode.REL)
-ev_cntr.set_priority_mode(1, ALSASeq.EventPriorityMode.NORMAL)
-ev_cntr.set_tag(1, 10)
-ev_cntr.set_queue_id(1, queue_id)
-ev_cntr.set_dst(1, ALSASeq.Addr.new(client.get_property('client-id'), 0));
-ev_cntr.set_src(1, ALSASeq.Addr.new(client.get_property('client-id'), 0));
+ev = ALSASeq.Event.new(ALSASeq.EventType.CONTROLLER)
+ev.set_time_mode(ALSASeq.EventTimeMode.REL)
+ev.set_priority_mode(ALSASeq.EventPriorityMode.NORMAL)
+ev.set_tag(10)
+ev.set_queue_id(queue_id)
+dst = ALSASeq.Addr.new(client.get_property('client-id'), 0)
+ev.set_destination(dst)
+src = ALSASeq.Addr.new(client.get_property('client-id'), 0)
+ev.set_source(src)
+events.append(ev)
 
 # Schedule the events.
-client.schedule_event(ev_cntr, 2)
+_, count = client.schedule_events(events)
+print('scheduled:', count)
 
 # Register event handler.
 def handle_event(client, ev_cntr):
@@ -140,6 +145,8 @@ GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, SIGINT,
 dispatcher.run()
 
 # Stop the queue.
+ev_cntr = ALSASeq.EventCntr.new(1)
+ev_cntr.set_queue_id(0, queue_id)
 ev_cntr.set_event_type(0, ALSASeq.EventType.STOP)
 client.schedule_event(ev_cntr, 1)
 

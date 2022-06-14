@@ -39,6 +39,10 @@ void seq_event_cntr_set_buf(ALSASeqEventCntr *self, guint8 *buf,
 void seq_event_cntr_get_buf(ALSASeqEventCntr *self, gsize count,
                               const guint8 **buf, gsize *length);
 
+void seq_event_copy_flattened(const ALSASeqEvent *self, guint8 *buf, gsize length);
+gsize seq_event_calculate_flattened_length(const ALSASeqEvent *self, gboolean aligned);
+gboolean seq_event_is_deliverable(const ALSASeqEvent *self);
+
 #define QUEUE_ID_PROP_NAME          "queue-id"
 #define TIMER_TYPE_PROP_NAME        "timer-type"
 

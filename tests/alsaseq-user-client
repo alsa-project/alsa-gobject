@@ -38,6 +38,7 @@ methods = (
     'set_queue_timer',
     'get_queue_timer',
     'remove_events',
+    'schedule_events',
 )
 signals = ()
 

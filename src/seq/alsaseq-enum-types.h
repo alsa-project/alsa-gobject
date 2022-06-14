@@ -352,6 +352,7 @@ typedef enum /*< flags >*/
  * @ALSASEQ_USER_CLIENT_ERROR_FAILED:               The system call failed.
  * @ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION:      The operation fails due to access permission of port.
  * @ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION:     The operation fails due to access permission of queue.
+ * @ALSASEQ_USER_CLIENT_ERROR_EVENT_UNDELIVERABLE:  The operation failes due to undeliverable event.
  *
  * A set of error code for [structGLib.Error] with `struct@UserClientError` domain.
  */
@@ -359,6 +360,7 @@ typedef enum {
     ALSASEQ_USER_CLIENT_ERROR_FAILED,
     ALSASEQ_USER_CLIENT_ERROR_PORT_PERMISSION,
     ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION,
+    ALSASEQ_USER_CLIENT_ERROR_EVENT_UNDELIVERABLE,
 } ALSASeqUserClientError;
 
 /**
