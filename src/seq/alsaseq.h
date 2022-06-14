@@ -26,6 +26,7 @@
 #include <port-info.h>
 #include <subscribe-data.h>
 #include <event-cntr.h>
+#include <event.h>
 #include <queue-info.h>
 #include <queue-status.h>
 #include <queue-tempo.h>

@@ -361,6 +361,24 @@ typedef enum {
     ALSASEQ_USER_CLIENT_ERROR_QUEUE_PERMISSION,
 } ALSASeqUserClientError;
 
+/**
+ * ALSASeqEventError:
+ * @ALSASEQ_EVENT_ERROR_FAILED:                 General error due to unspecified reason.
+ * @ALSASEQ_EVENT_ERROR_INVALID_DATA_TYPE:      The type of requested data is invalid in the event.
+ * @ALSASEQ_EVENT_ERROR_INVALID_LENGTH_MODE:    The mode of length for requested data is invalid in
+ *                                              the event.
+ * @ALSASEQ_EVENT_ERROR_INVALID_TSTAMP_MODE:    The type of time stamp for requested data is is
+ *                                              invalid in the event.
+ *
+ * A set of error code for [struct@GLib.Error] with `struct@EventError` domain.
+ */
+typedef enum {
+    ALSASEQ_EVENT_ERROR_FAILED = 0,
+    ALSASEQ_EVENT_ERROR_INVALID_DATA_TYPE,
+    ALSASEQ_EVENT_ERROR_INVALID_LENGTH_MODE,
+    ALSASEQ_EVENT_ERROR_INVALID_TSTAMP_MODE,
+} ALSASeqEventError;
+
 G_END_DECLS
 
 #endif

@@ -164,6 +164,13 @@ user_client_error_types = (
     'QUEUE_PERMISSION',
 )
 
+event_error_types = (
+    'FAILED',
+    'INVALID_DATA_TYPE',
+    'INVALID_LENGTH_MODE',
+    'INVALID_TSTAMP_MODE',
+)
+
 types = {
     ALSASeq.SpecificAddress:    specific_address_types,
     ALSASeq.SpecificClientId:   specific_client_id_types,
@@ -182,6 +189,7 @@ types = {
     ALSASeq.QueueTimerType:     queue_timer_types,
     ALSASeq.RemoveFilterFlag:   remove_filter_flags,
     ALSASeq.UserClientError:    user_client_error_types,
+    ALSASeq.EventError:         event_error_types,
 }
 
 for obj, types in types.items():

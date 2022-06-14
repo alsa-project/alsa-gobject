@@ -29,6 +29,7 @@ sources = files(
   'event-cntr.c',
   'queue-timer-common.c',
   'queue-timer-alsa.c',
+  'event.c',
 )
 
 headers = files(
@@ -52,6 +53,7 @@ headers = files(
   'event-cntr.h',
   'queue-timer-common.h',
   'queue-timer-alsa.h',
+  'event.h',
 )
 
 privates = files(
