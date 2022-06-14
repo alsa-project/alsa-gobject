@@ -44,7 +44,7 @@ _, info = client.create_port(info)
 # Dump port information.
 print('The information of port:')
 for prop in ('name', 'midi-channels', 'midi-voices', 'synth-voices',
-             'read-users', 'write-users', 'timestamp-overwrite', 'queue-id'):
+             'read-users', 'write-users', 'tstamp-overwrite', 'queue-id'):
     print('  {}: {}'.format(prop, info.get_property(prop)))
 for prop in ('caps', 'attrs'):
     print('  {}: {}'.format(prop, info.get_property(prop).value_nicks))

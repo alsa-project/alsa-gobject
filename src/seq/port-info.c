@@ -151,34 +151,67 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
     gobject_class->set_property = seq_port_info_set_property;
     gobject_class->get_property = seq_port_info_get_property;
 
+    /**
+     * ALSASeqPortInfo:addr:
+     *
+     * The address of port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_ADDR] =
         g_param_spec_boxed("addr", "addr",
                            "The address of port.",
                            ALSASEQ_TYPE_ADDR,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+    /**
+     * ALSASeqPortInfo:name:
+     *
+     * The name of port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of port.",
                             "",
                             G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:caps:
+     *
+     * The capabilities of port, a set of [flags@PortCapFlag].
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_CAPS] =
         g_param_spec_flags("caps", "caps",
-                           "The capabilities of port, a set of "
-                           "ALSASeqPortCapFlag",
+                           "The capabilities of port, a set of ALSASeqPortCapFlag",
                            ALSASEQ_TYPE_PORT_CAP_FLAG,
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:attrs:
+     *
+     * The attributes of port, a set of [flags@PortAttrFlag].
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_ATTRS] =
         g_param_spec_flags("attrs", "attrs",
-                           "The attributes of port, a set of "
-                           "ALSASeqPortAttrFlag",
+                           "The attributes of port, a set of ALSASeqPortAttrFlag",
                            ALSASEQ_TYPE_PORT_ATTR_FLAG,
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:midi-channels:
+     *
+     * The number of channels per MIDI port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_MIDI_CHANNELS] =
         g_param_spec_int("midi-channels", "midi-channels",
                          "The number of channels per MIDI port.",
@@ -186,6 +219,13 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:midi-voices:
+     *
+     * The number of voices per MIDI port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_MIDI_VOICES] =
         g_param_spec_int("midi-voices", "midi-voices",
                          "The number of voices per MIDI port",
@@ -193,6 +233,13 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:synth-voices:
+     *
+     * The number of voices per synth port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_SYNTH_VOICES] =
         g_param_spec_int("synth-voices", "synth-voices",
                          "The number of voices per synth port",
@@ -200,6 +247,13 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:read-users:
+     *
+     * The current number of subscribers to read.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_READ_USERS] =
         g_param_spec_int("read-users", "read-users",
                          "The current number of subscribers to read.",
@@ -207,6 +261,13 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqPortInfo:write-users:
+     *
+     * The current number of subscribers to write.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_WRITE_USERS] =
         g_param_spec_int("write-users", "write-users",
                          "The current number of subscribers to write.",
@@ -214,26 +275,49 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqPortInfo:tstamp-overwrite:
+     *
+     * The mode whether to overwrite time stamp for event when the event is delivered from the port.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TSTAMP_OVERWRITE] =
-        g_param_spec_boolean("timestamp-overwrite", "timestamp-overwrite",
-                             "The mode whether to overwrite timestamp for "
-                             "event when the event is delivered from the port.",
+        g_param_spec_boolean("tstamp-overwrite", "tstamp-overwrite",
+                             "The mode whether to overwrite time stamp for event when the event "
+                             "is delivered from the port.",
                              FALSE,
                              G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:tstamp-mode:
+     *
+     * The mode of time stamp. This is effective when the [property@PortInfo:tstamp-overwrite] is
+     * enabled.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TSTAMP_MODE] =
-        g_param_spec_enum("timestamp-mode", "timestamp-mode",
-                          "The type of timestamp. This is effective when the "
-                          "timestamp-overwrite property is enabled.",
+        g_param_spec_enum("tstamp-mode", "tstamp-mode",
+                          "The mode of time stamp. This is effective when the tstamp-overwrite "
+                          "property is enabled.",
                           ALSASEQ_TYPE_EVENT_TSTAMP_MODE,
                           ALSASEQ_EVENT_TSTAMP_MODE_TICK,
                           G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqPortInfo:queue-id:
+     *
+     * The numeric ID of queue to update time stamp when [property@PortInfo:tstamp-overwrite] is
+     * set to True. One of [enum@SpecificQueueId] is available as well.
+     *
+     * Since: 0.3.
+     */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TIME_QUEUE] =
         g_param_spec_uchar("queue-id", "queue-id",
-                           "The numerical ID of queue to update timestamp "
-                           "when timestamp-overwrite property is set to True. "
-                           "One of ALSASeqSpecificQueueId is available as well.",
+                           "The numeric ID of queue to update time stamp when tstamp-overwrite "
+                           "property is set to True.  One of ALSASeqSpecificQueueId is available "
+			   "as well",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
