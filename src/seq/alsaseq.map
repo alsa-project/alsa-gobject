@@ -8,7 +8,7 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_port_cap_flag_get_type";
     "alsaseq_port_attr_flag_get_type";
     "alsaseq_event_type_get_type";
-    "alsaseq_event_timestamp_mode_get_type";
+    "alsaseq_event_tstamp_mode_get_type";
     "alsaseq_event_time_mode_get_type";
     "alsaseq_event_length_mode_get_type";
     "alsaseq_event_priority_mode_get_type";

@@ -27,9 +27,9 @@ gboolean alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self, gsize index,
                                            ALSASeqEventType ev_type, GError **error);
 
 gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                            ALSASeqEventTimestampMode *mode, GError **error);
+                                            ALSASeqEventTstampMode *mode, GError **error);
 gboolean alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                            ALSASeqEventTimestampMode mode, GError **error);
+                                            ALSASeqEventTstampMode mode, GError **error);
 
 gboolean alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
                                           ALSASeqEventTimeMode *mode, GError **error);

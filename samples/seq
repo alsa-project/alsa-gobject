@@ -69,7 +69,7 @@ queue_id = info.get_property('queue-id')
 ev_cntr = ALSASeq.EventCntr.new(2)
 
 ev_cntr.set_event_type(0, ALSASeq.EventType.START)
-ev_cntr.set_tstamp_mode(0, ALSASeq.EventTimestampMode.REAL)
+ev_cntr.set_tstamp_mode(0, ALSASeq.EventTstampMode.REAL)
 ev_cntr.set_time_mode(0, ALSASeq.EventTimeMode.REL)
 ev_cntr.set_priority_mode(0, ALSASeq.EventPriorityMode.NORMAL)
 ev_cntr.set_tag(0, 0)
@@ -82,7 +82,7 @@ data.set_queue_id(queue_id)
 ev_cntr.set_queue_data(0, data)
 
 ev_cntr.set_event_type(1, ALSASeq.EventType.CONTROLLER)
-ev_cntr.set_tstamp_mode(1, ALSASeq.EventTimestampMode.REAL)
+ev_cntr.set_tstamp_mode(1, ALSASeq.EventTstampMode.REAL)
 ev_cntr.set_time_mode(1, ALSASeq.EventTimeMode.REL)
 ev_cntr.set_priority_mode(1, ALSASeq.EventPriorityMode.NORMAL)
 ev_cntr.set_tag(1, 10)
@@ -113,7 +113,7 @@ def handle_event(client, ev_cntr):
         print('    tag:', tag)
         _, queue_id = ev_cntr.get_queue_id(i)
         print('    queue-id:', queue_id)
-        if tstamp_mode == ALSASeq.EventTimestampMode.TICK:
+        if tstamp_mode == ALSASeq.EventTstampMode.TICK:
             _, tick_time = ev_cntr.get_tick_time(i)
             print('    tick-time:', tick_time)
         else:

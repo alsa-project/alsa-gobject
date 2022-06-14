@@ -253,16 +253,16 @@ typedef enum {
 } ALSASeqEventType;
 
 /**
- * ALSASeqEventTimestampMode:
- * @ALSASEQ_EVENT_TIMESTAMP_MODE_TICK:      The timestamp includes tick count.
- * @ALSASEQ_EVENT_TIMESTAMP_MODE_REAL:      The timestamp includes real time.
+ * ALSASeqEventTstampMode:
+ * @ALSASEQ_EVENT_TSTAMP_MODE_TICK:      The time stamp includes tick count.
+ * @ALSASEQ_EVENT_TSTAMP_MODE_REAL:      The time stamp includes real time.
  *
- * A set of enumeration for the mode of timestamp.
+ * A set of enumeration for the mode of time stamp.
  */
 typedef enum {
-    ALSASEQ_EVENT_TIMESTAMP_MODE_TICK   = SNDRV_SEQ_TIME_STAMP_TICK,
-    ALSASEQ_EVENT_TIMESTAMP_MODE_REAL   = SNDRV_SEQ_TIME_STAMP_REAL,
-} ALSASeqEventTimestampMode;
+    ALSASEQ_EVENT_TSTAMP_MODE_TICK   = SNDRV_SEQ_TIME_STAMP_TICK,
+    ALSASEQ_EVENT_TSTAMP_MODE_REAL   = SNDRV_SEQ_TIME_STAMP_REAL,
+} ALSASeqEventTstampMode;
 
 /**
  * ALSASeqEventTimeMode:
@@ -315,15 +315,16 @@ typedef enum {
 /**
  * ALSASeqPortSubscribeFlag:
  * @ALSASEQ_PORT_SUBSCRIBE_FLAG_EXCLUSIVE:  The subscription can be changed by originator.
- * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TIMESTAMP:  Any event for this subscription has timestamp.
- * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TIME_REAL:  The timestamp on the event from the port has real time.
+ * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TSTAMP:  Any event for this subscription has time stamp.
+ * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TIME_REAL:  The time stamp on the event from the port has real time,
+ *                                          else tick time.
  *
  * A set of flags for subscription conditions.
  */
 typedef enum /*< flags >*/
 {
     ALSASEQ_PORT_SUBSCRIBE_FLAG_EXCLUSIVE = SNDRV_SEQ_PORT_SUBS_EXCLUSIVE,
-    ALSASEQ_PORT_SUBSCRIBE_FLAG_TIMESTAMP = SNDRV_SEQ_PORT_SUBS_TIMESTAMP,
+    ALSASEQ_PORT_SUBSCRIBE_FLAG_TSTAMP = SNDRV_SEQ_PORT_SUBS_TIMESTAMP,
     ALSASEQ_PORT_SUBSCRIBE_FLAG_TIME_REAL = SNDRV_SEQ_PORT_SUBS_TIME_REAL,
 } ALSASeqPortSubscribeFlag;
 
