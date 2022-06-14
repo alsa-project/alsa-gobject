@@ -13,7 +13,9 @@ target = ALSASeq.SubscribeData()
 props = (
     'sender',
     'dest',
-    'flag',
+    'is-exclusive',
+    'has-tstamp',
+    'tstamp-mode',
     'queue-id',
 )
 methods = (

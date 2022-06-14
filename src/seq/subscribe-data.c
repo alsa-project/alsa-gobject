@@ -19,7 +19,9 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqSubscribeData, alsaseq_subscribe_data, G_TYPE_
 enum seq_subscribe_data_prop_type {
     SEQ_SUBSCRIBE_DATA_PROP_SENDER = 1,
     SEQ_SUBSCRIBE_DATA_PROP_DEST,
-    SEQ_SUBSCRIBE_DATA_PROP_FLAG,
+    SEQ_SUBSCRIBE_DATA_PROP_IS_EXCLUSIVE,
+    SEQ_SUBSCRIBE_DATA_PROP_HAS_TSTAMP,
+    SEQ_SUBSCRIBE_DATA_PROP_TSTAMP_MODE,
     SEQ_SUBSCRIBE_DATA_PROP_QUEUE_ID,
     SEQ_SUBSCRIBE_DATA_PROP_COUNT,
 };
@@ -45,8 +47,20 @@ static void seq_subscribe_data_set_property(GObject *obj, guint id,
         priv->data.dest = *addr;
         break;
     }
-    case SEQ_SUBSCRIBE_DATA_PROP_FLAG:
-        priv->data.flags = (unsigned int)g_value_get_flags(val);
+    case SEQ_SUBSCRIBE_DATA_PROP_IS_EXCLUSIVE:
+        priv->data.flags &= ~SNDRV_SEQ_PORT_SUBS_EXCLUSIVE;
+        if (g_value_get_boolean(val))
+            priv->data.flags |= SNDRV_SEQ_PORT_SUBS_EXCLUSIVE;
+        break;
+    case SEQ_SUBSCRIBE_DATA_PROP_HAS_TSTAMP:
+        priv->data.flags &= ~SNDRV_SEQ_PORT_SUBS_TIMESTAMP;
+        if (g_value_get_boolean(val))
+            priv->data.flags |= SNDRV_SEQ_PORT_SUBS_TIMESTAMP;
+        break;
+    case SEQ_SUBSCRIBE_DATA_PROP_TSTAMP_MODE:
+        priv->data.flags &= ~SNDRV_SEQ_PORT_SUBS_TIME_REAL;
+        if (g_value_get_enum(val) == ALSASEQ_EVENT_TSTAMP_MODE_REAL)
+            priv->data.flags |= SNDRV_SEQ_PORT_SUBS_TIME_REAL;
         break;
     case SEQ_SUBSCRIBE_DATA_PROP_QUEUE_ID:
         priv->data.queue = g_value_get_uchar(val);
@@ -71,9 +85,24 @@ static void seq_subscribe_data_get_property(GObject *obj, guint id, GValue *val,
     case SEQ_SUBSCRIBE_DATA_PROP_DEST:
         g_value_set_static_boxed(val, &priv->data.dest);
         break;
-    case SEQ_SUBSCRIBE_DATA_PROP_FLAG:
-        g_value_set_flags(val, (ALSASeqPortSubscribeFlag)priv->data.flags);
+    case SEQ_SUBSCRIBE_DATA_PROP_IS_EXCLUSIVE:
+        g_value_set_boolean(val, (priv->data.flags & SNDRV_SEQ_PORT_SUBS_EXCLUSIVE) > 0);
         break;
+    case SEQ_SUBSCRIBE_DATA_PROP_HAS_TSTAMP:
+        g_value_set_boolean(val, (priv->data.flags & SNDRV_SEQ_PORT_SUBS_TIMESTAMP) > 0);
+        break;
+    case SEQ_SUBSCRIBE_DATA_PROP_TSTAMP_MODE:
+    {
+        ALSASeqEventTstampMode mode;
+
+        if (priv->data.flags & SNDRV_SEQ_PORT_SUBS_TIME_REAL)
+            mode = ALSASEQ_EVENT_TSTAMP_MODE_REAL;
+        else
+            mode = ALSASEQ_EVENT_TSTAMP_MODE_TICK;
+
+        g_value_set_enum(val, mode);
+        break;
+    }
     case SEQ_SUBSCRIBE_DATA_PROP_QUEUE_ID:
         g_value_set_uchar(val, priv->data.queue);
         break;
@@ -90,31 +119,85 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
     gobject_class->set_property = seq_subscribe_data_set_property;
     gobject_class->get_property = seq_subscribe_data_get_property;
 
+    /**
+     * ALSASeqSubscribeData:sender:
+     *
+     * The address of sender.
+     *
+     * Since: 0.3.
+     */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_SENDER] =
         g_param_spec_boxed("sender", "sender",
                            "The address of sender.",
                            ALSASEQ_TYPE_ADDR,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqSubscribeData:dest:
+     *
+     * The address of destination.
+     *
+     * Since: 0.3.
+     */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_DEST] =
         g_param_spec_boxed("dest", "dest",
                            "The address of destination.",
                            ALSASEQ_TYPE_ADDR,
                            G_PARAM_READWRITE);
 
-    seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_FLAG] =
-        g_param_spec_flags("flag", "flag",
-                          "The attributee flag, a set of "
-                          "ALSASeqPortSubscribeFlag.",
-                          ALSASEQ_TYPE_PORT_SUBSCRIBE_FLAG,
-                         0,
-                         G_PARAM_READWRITE);
+    /**
+     * ALSASeqSubscribeData:is-exclusive:
+     *
+     * Whether the subscription can be changed by originator only,
+     *
+     * Since: 0.3.
+     */
+    seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_IS_EXCLUSIVE] =
+        g_param_spec_boolean("is-exclusive", "is-exclusive",
+                             "Whether the subscription can be changed by originator only",
+                             FALSE,
+                             G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqSubscribeData:has-tstamp:
+     *
+     * Any event for the subscription has time stamp,
+     *
+     * Since: 0.3.
+     */
+    seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_HAS_TSTAMP] =
+        g_param_spec_boolean("has-tstamp", "has-tstamp",
+                             "Any event for the subscription has time stamp",
+                             FALSE,
+                             G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqSubscribeData:tstamp-mode:
+     *
+     * The type of time stamp. This is effective when the has-tstamp property enabled.
+     *
+     * Since: 0.3.
+     */
+    seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_TSTAMP_MODE] =
+        g_param_spec_enum("tstamp-mode", "tstamp-mode",
+                          "The type of time stamp. This is effective when the has-tstamp property"
+                          "enabled.",
+                          ALSASEQ_TYPE_EVENT_TSTAMP_MODE,
+                          ALSASEQ_EVENT_TSTAMP_MODE_TICK,
+                          G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqSubscribeData:queue-id:
+     *
+     * The numeric ID of queue to deliver. One of ALSASeqSpecificQueueId is available as well as
+     * any numeric value.
+     *
+     * Since: 0.3.
+     */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
-                           "The numerical ID of queue to deliver. One of "
-                           "ALSASeqSpecificQueueId is available as well as "
-                           "any numerical value.",
+                           "The numeric ID of queue to deliver. One of ALSASeqSpecificQueueId is "
+                           "available as well as any numeric value.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);

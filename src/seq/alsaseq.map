@@ -13,7 +13,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_length_mode_get_type";
     "alsaseq_event_priority_mode_get_type";
     "alsaseq_specific_queue_id_get_type";
-    "alsaseq_port_subscribe_flag_get_type";
     "alsaseq_query_subscribe_type_get_type";
     "alsaseq_queue_timer_type_get_type";
     "alsaseq_remove_filter_flag_get_type";
