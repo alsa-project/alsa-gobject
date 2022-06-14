@@ -76,8 +76,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsaseq_event_data_queue_set_queue_id";
     "alsaseq_event_data_queue_get_value_param";
     "alsaseq_event_data_queue_set_value_param";
-    "alsaseq_event_data_queue_get_tstamp_param";
-    "alsaseq_event_data_queue_set_tstamp_param";
     "alsaseq_event_data_queue_get_position_param";
     "alsaseq_event_data_queue_set_position_param";
     "alsaseq_event_data_queue_get_skew_param";
@@ -187,8 +185,6 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_event_cntr_set_tag";
     "alsaseq_event_cntr_get_queue_id";
     "alsaseq_event_cntr_set_queue_id";
-    "alsaseq_event_cntr_get_tstamp";
-    "alsaseq_event_cntr_set_tstamp";
     "alsaseq_event_cntr_get_dst";
     "alsaseq_event_cntr_set_dst";
     "alsaseq_event_cntr_get_src";
@@ -205,8 +201,6 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_event_cntr_set_blob_data";
     "alsaseq_event_cntr_get_queue_data";
     "alsaseq_event_cntr_set_queue_data";
-    "alsaseq_event_cntr_get_tstamp_data";
-    "alsaseq_event_cntr_set_tstamp_data";
     "alsaseq_event_cntr_get_addr_data";
     "alsaseq_event_cntr_set_addr_data";
     "alsaseq_event_cntr_get_connect_data";
@@ -218,4 +212,18 @@ ALSA_GOBJECT_0_3_0 {
 
     "alsaseq_queue_timer_alsa_get_type";
     "alsaseq_queue_timer_alsa_new";
+
+    "alsaseq_event_cntr_get_tick_time";
+    "alsaseq_event_cntr_set_tick_time";
+    "alsaseq_event_cntr_get_real_time";
+    "alsaseq_event_cntr_set_real_time";
+    "alsaseq_event_cntr_get_tick_time_data";
+    "alsaseq_event_cntr_set_tick_time_data";
+    "alsaseq_event_cntr_get_real_time_data";
+    "alsaseq_event_cntr_set_real_time_data";
+
+    "alsaseq_event_data_queue_get_tick_time_param";
+    "alsaseq_event_data_queue_set_tick_time_param";
+    "alsaseq_event_data_queue_get_real_time_param";
+    "alsaseq_event_data_queue_set_real_time_param";
 } ALSA_GOBJECT_0_2_0;

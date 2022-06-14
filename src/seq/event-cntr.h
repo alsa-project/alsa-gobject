@@ -53,10 +53,15 @@ gboolean alsaseq_event_cntr_get_queue_id(ALSASeqEventCntr *self, gsize index, gu
 gboolean alsaseq_event_cntr_set_queue_id(ALSASeqEventCntr *self, gsize index, guint8 queue_id,
                                          GError **error);
 
-gboolean alsaseq_event_cntr_get_tstamp(ALSASeqEventCntr *self, gsize index,
-                                       const ALSASeqTstamp **tstamp, GError **error);
-gboolean alsaseq_event_cntr_set_tstamp(ALSASeqEventCntr *self, gsize index,
-                                       const ALSASeqTstamp *tstamp, GError **error);
+gboolean alsaseq_event_cntr_get_tick_time(ALSASeqEventCntr *self, gsize index,
+                                          guint *tick_time, GError **error);
+gboolean alsaseq_event_cntr_set_tick_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint tick_time, GError **error);
+
+gboolean alsaseq_event_cntr_get_real_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint32 *real_time[2], GError **error);
+gboolean alsaseq_event_cntr_set_real_time(ALSASeqEventCntr *self, gsize index,
+                                          const guint32 real_time[2], GError **error);
 
 gboolean alsaseq_event_cntr_get_dst(ALSASeqEventCntr *self, gsize index, const ALSASeqAddr **dst,
                                     GError **error);
@@ -98,10 +103,15 @@ gboolean alsaseq_event_cntr_get_queue_data(ALSASeqEventCntr *self, gsize index,
 gboolean alsaseq_event_cntr_set_queue_data(ALSASeqEventCntr *self, gsize index,
                                            const ALSASeqEventDataQueue *data, GError **error);
 
-gboolean alsaseq_event_cntr_get_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                            const ALSASeqTstamp **data, GError **error);
-gboolean alsaseq_event_cntr_set_tstamp_data(ALSASeqEventCntr *self, gsize index,
-                                            const ALSASeqTstamp *data, GError **error);
+gboolean alsaseq_event_cntr_get_tick_time_data(ALSASeqEventCntr *self, gsize index,
+                                               guint *tick_time, GError **error);
+gboolean alsaseq_event_cntr_set_tick_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint tick_time, GError **error);
+
+gboolean alsaseq_event_cntr_get_real_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint *real_time[2], GError **error);
+gboolean alsaseq_event_cntr_set_real_time_data(ALSASeqEventCntr *self, gsize index,
+                                               const guint real_time[2], GError **error);
 
 gboolean alsaseq_event_cntr_get_addr_data(ALSASeqEventCntr *self, gsize index,
                                           const ALSASeqAddr **data, GError **error);

@@ -113,11 +113,12 @@ def handle_event(client, ev_cntr):
         print('    tag:', tag)
         _, queue_id = ev_cntr.get_queue_id(i)
         print('    queue-id:', queue_id)
-        _, tstamp = ev_cntr.get_tstamp(i)
-        if ev_cntr.get_tstamp_mode(i) == ALSASeq.EventTimestampMode.TICK:
-            print('    tstamp:', tstamp.get_tick_time())
+        if tstamp_mode == ALSASeq.EventTimestampMode.TICK:
+            _, tick_time = ev_cntr.get_tick_time(i)
+            print('    tick-time:', tick_time)
         else:
-            print('    tstamp:', tstamp.get_real_time())
+            _, real_time = ev_cntr.get_real_time(i)
+            print('    real-time:', real_time)
         _, dst = ev_cntr.get_dst(i)
         print('    dst:', dst.get_client_id(), dst.get_port_id())
         _, src = ev_cntr.get_src(i)
