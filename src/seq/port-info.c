@@ -131,9 +131,9 @@ static void seq_port_info_get_property(GObject *obj, guint id, GValue *val,
         break;
     case SEQ_PORT_INFO_PROP_TSTAMP_MODE:
         if (priv->info.flags & SNDRV_SEQ_PORT_FLG_TIME_REAL)
-            g_value_set_enum(val, ALSASEQ_EVENT_TIMESTAMP_MODE_REAL);
+            g_value_set_enum(val, ALSASEQ_EVENT_TSTAMP_MODE_REAL);
         else
-            g_value_set_enum(val, ALSASEQ_EVENT_TIMESTAMP_MODE_TICK);
+            g_value_set_enum(val, ALSASEQ_EVENT_TSTAMP_MODE_TICK);
         break;
     case SEQ_PORT_INFO_PROP_TIME_QUEUE:
         g_value_set_uchar(val, priv->info.time_queue);
@@ -225,8 +225,8 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
         g_param_spec_enum("timestamp-mode", "timestamp-mode",
                           "The type of timestamp. This is effective when the "
                           "timestamp-overwrite property is enabled.",
-                          ALSASEQ_TYPE_EVENT_TIMESTAMP_MODE,
-                          ALSASEQ_EVENT_TIMESTAMP_MODE_TICK,
+                          ALSASEQ_TYPE_EVENT_TSTAMP_MODE,
+                          ALSASEQ_EVENT_TSTAMP_MODE_TICK,
                           G_PARAM_READWRITE);
 
     seq_port_info_props[SEQ_PORT_INFO_PROP_TIME_QUEUE] =

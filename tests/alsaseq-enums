@@ -119,7 +119,7 @@ event_types = (
     'NONE',
 )
 
-event_timestamp_mode_types = (
+event_tstamp_mode_types = (
     'TICK',
     'REAL',
 )
@@ -146,7 +146,7 @@ specific_queue_id_types = (
 
 port_subscribe_flags = (
     'EXCLUSIVE',
-    'TIMESTAMP',
+    'TSTAMP',
     'TIME_REAL',
 )
 
@@ -179,7 +179,7 @@ types = {
     ALSASeq.PortCapFlag:        port_cap_flags,
     ALSASeq.PortAttrFlag:       port_attr_flags,
     ALSASeq.EventType:          event_types,
-    ALSASeq.EventTimestampMode: event_timestamp_mode_types,
+    ALSASeq.EventTstampMode:    event_tstamp_mode_types,
     ALSASeq.EventTimeMode:      event_time_mode_types,
     ALSASeq.EventLengthMode:    event_length_mode_types,
     ALSASeq.EventPriorityMode:  event_priority_mode_types,

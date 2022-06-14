@@ -319,7 +319,7 @@ gboolean alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_get_tstamp_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of timestamping, one of [enum@EventTimestampMode].
+ * @mode: (out): The mode of timestamping, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of timestamping for the event pointed by the index.
@@ -327,7 +327,7 @@ gboolean alsaseq_event_cntr_set_event_type(ALSASeqEventCntr *self, gsize index,
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                            ALSASeqEventTimestampMode *mode, GError **error)
+                                            ALSASeqEventTstampMode *mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -344,7 +344,7 @@ gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
     ev = event_iterator_find(&iter, index);
     g_return_val_if_fail(ev != NULL, FALSE);
 
-    *mode = (ALSASeqEventTimestampMode)(ev->flags & SNDRV_SEQ_TIME_STAMP_MASK);
+    *mode = (ALSASeqEventTstampMode)(ev->flags & SNDRV_SEQ_TIME_STAMP_MASK);
 
     return TRUE;
 }
@@ -353,7 +353,7 @@ gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_set_tstamp_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of timestamping, one of [enum@EventTimestampMode].
+ * @mode: The mode of timestamping, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of timestamping for the event pointed by the index.
@@ -361,7 +361,7 @@ gboolean alsaseq_event_cntr_get_tstamp_mode(ALSASeqEventCntr *self, gsize index,
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
 gboolean alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
-                                            ALSASeqEventTimestampMode mode, GError **error)
+                                            ALSASeqEventTstampMode mode, GError **error)
 {
     ALSASeqEventCntrPrivate *priv;
     struct event_iterator iter;
@@ -387,7 +387,7 @@ gboolean alsaseq_event_cntr_set_tstamp_mode(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_get_time_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of time, one of [enum@EventTimestampMode].
+ * @mode: (out): The mode of time, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of time for the event pointed by the index.
@@ -421,7 +421,7 @@ gboolean alsaseq_event_cntr_get_time_mode(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_set_time_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of time, one of [enum@EventTimestampMode].
+ * @mode: The mode of time, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of time for the event pointed by the index.
@@ -455,7 +455,7 @@ gboolean alsaseq_event_cntr_set_time_mode(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_get_length_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of length, one of [enum@EventTimestampMode].
+ * @mode: (out): The mode of length, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of length for the event pointed by the index.
@@ -489,7 +489,7 @@ gboolean alsaseq_event_cntr_get_length_mode(ALSASeqEventCntr *self, gsize index,
  * alsaseq_event_cntr_get_priority_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: (out): The mode of priority, one of [enum@EventTimestampMode].
+ * @mode: (out): The mode of priority, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Get the mode of priority for the event pointed by the index.
@@ -523,7 +523,7 @@ gboolean alsaseq_event_cntr_get_priority_mode(ALSASeqEventCntr *self, gsize inde
  * alsaseq_event_cntr_set_priority_mode:
  * @self: A [class@EventCntr].
  * @index: The index of event to set.
- * @mode: The mode of priority, one of [enum@EventTimestampMode].
+ * @mode: The mode of priority, one of [enum@EventTstampMode].
  * @error: A [struct@GLib.Error].
  *
  * Set the mode of priority for the event pointed by the index.
