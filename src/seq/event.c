@@ -1619,3 +1619,69 @@ gboolean alsaseq_event_set_result_data(ALSASeqEvent *self, const ALSASeqEventDat
 
     return TRUE;
 }
+
+void seq_event_copy_flattened(const ALSASeqEvent *self, guint8 *buf, gsize length)
+{
+    memcpy(buf, self, sizeof(*self));
+
+    switch (self->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+    {
+        g_return_if_fail(sizeof(*self) + self->data.ext.len <= length);
+        memcpy(buf + sizeof(*self), self->data.ext.ptr, self->data.ext.len);
+        break;
+    }
+    case SNDRV_SEQ_EVENT_LENGTH_VARUSR:
+    case SNDRV_SEQ_EVENT_LENGTH_FIXED:
+    default:
+        break;
+    }
+}
+
+// Calculate the length of event followed by allocated object for blob data at variable type. This
+// is the default layout for buffer read from ALSA Sequencer core.
+gsize seq_event_calculate_flattened_length(const ALSASeqEvent *self, gboolean aligned)
+{
+    gsize length = sizeof(*self);
+
+    switch (self->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+        length += self->data.ext.len;
+        break;
+    case SNDRV_SEQ_EVENT_LENGTH_VARUSR:
+    case SNDRV_SEQ_EVENT_LENGTH_FIXED:
+    default:
+        break;
+    }
+
+    if (aligned)
+        length = (length + sizeof(*self) - 1) / sizeof(*self) * sizeof(*self);
+
+    return length;
+}
+
+gboolean seq_event_is_deliverable(const ALSASeqEvent *self)
+{
+    enum seq_event_data_flag flags = seq_event_data_flags[self->type];
+
+    switch (self->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) {
+    case SNDRV_SEQ_EVENT_LENGTH_FIXED:
+    {
+        // NOTE: ALSA Sequencer core can emulates note on/off events by simple note event. The
+        // emulation is in queue implementation, thus it should not be dispatched directly.
+        if (self->type == ALSASEQ_EVENT_TYPE_NOTE)
+            return self->queue != SNDRV_SEQ_QUEUE_DIRECT;
+        else
+            return (flags & SEQ_EVENT_DATA_FLAG_FIXED_ANY) > 0;
+    }
+    case SNDRV_SEQ_EVENT_LENGTH_VARIABLE:
+        return (flags & SEQ_EVENT_DATA_FLAG_VARIABLE_ANY) > 0;
+    case SNDRV_SEQ_EVENT_LENGTH_VARUSR:
+        // NOTE: The data pointed by the pointer should be delivered to receivers immediately so
+        // that the user space application has no need to wait for completion of scheduled delivery.
+        return ((flags & SEQ_EVENT_DATA_FLAG_VARUSR_ANY) > 0) &&
+                (self->queue == SNDRV_SEQ_QUEUE_DIRECT);
+    default:
+        return FALSE;
+    }
+}

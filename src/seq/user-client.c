@@ -590,6 +590,109 @@ gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, ALSASeqEven
     return TRUE;
 }
 
+/**
+ * alsaseq_user_client_schedule_events:
+ * @self: A [class@UserClient].
+ * @events: (element-type ALSASeq.Event) (transfer none): The list of [struct@Event].
+ * @count: (out): The number of events to be scheduled.
+ * @error: A [struct@GLib.Error]. Error is generated with two domains; `GLib.FileError` and
+ *         `ALSASeq.UserClientError`.
+ *
+ * Deliver the events immediately, or schedule it into memory pool of the client.
+ *
+ * The call of function executes `write(2)` system call for ALSA sequencer character device.
+ *
+ * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
+ */
+gboolean alsaseq_user_client_schedule_events(ALSASeqUserClient *self, const GList *events,
+                                             gsize *count, GError **error)
+{
+    ALSASeqUserClientPrivate *priv;
+    const GList *entry;
+    gsize index;
+    gsize total_length;
+    guint8 *buf;
+    gsize pos;
+    ssize_t result;
+    gsize scheduled;
+
+    g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
+    priv = alsaseq_user_client_get_instance_private(self);
+
+    g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+    // Calculate total length of flattened and unaligned events.
+    index = 0;
+    total_length = 0;
+    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
+        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
+
+        g_return_val_if_fail(ev != NULL, FALSE);
+        if (!seq_event_is_deliverable(ev)) {
+            g_set_error(error, ALSASEQ_USER_CLIENT_ERROR,
+                        ALSASEQ_USER_CLIENT_ERROR_EVENT_UNDELIVERABLE,
+                        "The operation failes due to undeliverable event: index %lu",
+                        index);
+            return FALSE;
+        }
+
+        total_length += seq_event_calculate_flattened_length(ev, FALSE);
+        ++index;
+    }
+
+    // Nothing to do.
+    if (total_length == 0)
+        return TRUE;
+
+    buf = g_malloc0(total_length);
+
+    pos = 0;
+    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
+        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
+        gsize length;
+
+        g_return_val_if_fail(ev != NULL, FALSE);
+
+        length = seq_event_calculate_flattened_length(ev, FALSE);
+        seq_event_copy_flattened(ev, buf + pos, length);
+        pos += length;
+    }
+
+    g_return_val_if_fail(total_length == pos, FALSE);
+
+    result = write(priv->fd, buf, total_length);
+    g_free(buf);
+    if (result < 0) {
+        GFileError code = g_file_error_from_errno(errno);
+
+        if (code != G_FILE_ERROR_FAILED)
+            generate_file_error(error, errno, "write(%s)", priv->devnode);
+        else
+            generate_syscall_error(error, errno, "write(%s)", priv->devnode);
+
+        return FALSE;
+    }
+
+    // Compute the count of scheduled events.
+    pos = 0;
+    scheduled = 0;
+    for (entry = events; entry != NULL; entry = g_list_next(entry)) {
+        const struct snd_seq_event *ev = (const struct snd_seq_event *)entry->data;
+
+        ++scheduled;
+
+        pos += seq_event_calculate_flattened_length(ev, FALSE);
+        if (pos >= result)
+            break;
+    }
+
+    g_return_val_if_fail(result == pos, FALSE);
+
+    *count = scheduled;
+
+    return TRUE;
+}
+
 static gboolean seq_user_client_check_src(GSource *gsrc)
 {
     UserClientSource *src = (UserClientSource *)gsrc;

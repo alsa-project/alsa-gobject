@@ -64,6 +64,8 @@ gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
 
 gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, ALSASeqEventCntr *ev_cntr,
                                             gsize count, GError **error);
+gboolean alsaseq_user_client_schedule_events(ALSASeqUserClient *self, const GList *events,
+                                             gsize *count, GError **error);
 
 gboolean alsaseq_user_client_create_source(ALSASeqUserClient *self, GSource **gsrc, GError **error);
 

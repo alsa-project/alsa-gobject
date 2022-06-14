@@ -162,6 +162,7 @@ user_client_error_types = (
     'FAILED',
     'PORT_PERMISSION',
     'QUEUE_PERMISSION',
+    'EVENT_UNDELIVERABLE',
 )
 
 event_error_types = (
