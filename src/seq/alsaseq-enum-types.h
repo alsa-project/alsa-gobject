@@ -313,22 +313,6 @@ typedef enum {
 } ALSASeqSpecificQueueId;
 
 /**
- * ALSASeqPortSubscribeFlag:
- * @ALSASEQ_PORT_SUBSCRIBE_FLAG_EXCLUSIVE:  The subscription can be changed by originator.
- * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TSTAMP:  Any event for this subscription has time stamp.
- * @ALSASEQ_PORT_SUBSCRIBE_FLAG_TIME_REAL:  The time stamp on the event from the port has real time,
- *                                          else tick time.
- *
- * A set of flags for subscription conditions.
- */
-typedef enum /*< flags >*/
-{
-    ALSASEQ_PORT_SUBSCRIBE_FLAG_EXCLUSIVE = SNDRV_SEQ_PORT_SUBS_EXCLUSIVE,
-    ALSASEQ_PORT_SUBSCRIBE_FLAG_TSTAMP = SNDRV_SEQ_PORT_SUBS_TIMESTAMP,
-    ALSASEQ_PORT_SUBSCRIBE_FLAG_TIME_REAL = SNDRV_SEQ_PORT_SUBS_TIME_REAL,
-} ALSASeqPortSubscribeFlag;
-
-/**
  * ALSASeqQuerySubscribeType
  * @ALSASEQ_QUERY_SUBSCRIBE_TYPE_READ:  To query subscribers to read from the port.
  * @ALSASEQ_QUERY_SUBSCRIBE_TYPE_WRITE: To query subscribers to write to the port.

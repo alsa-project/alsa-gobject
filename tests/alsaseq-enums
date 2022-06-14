@@ -144,12 +144,6 @@ specific_queue_id_types = (
     'DIRECT',
 )
 
-port_subscribe_flags = (
-    'EXCLUSIVE',
-    'TSTAMP',
-    'TIME_REAL',
-)
-
 query_subscribe_types = (
     'READ',
     'WRITE',
@@ -184,7 +178,6 @@ types = {
     ALSASeq.EventLengthMode:    event_length_mode_types,
     ALSASeq.EventPriorityMode:  event_priority_mode_types,
     ALSASeq.SpecificQueueId:    specific_queue_id_types,
-    ALSASeq.PortSubscribeFlag:  port_subscribe_flags,
     ALSASeq.QuerySubscribeType: query_subscribe_types,
     ALSASeq.QueueTimerType:     queue_timer_types,
     ALSASeq.RemoveFilterFlag:   remove_filter_flags,
