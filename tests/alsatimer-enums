@@ -5,6 +5,8 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
+from helper import test_enums
+
 class_types = (
     'NONE',
     'GLOBAL',
@@ -74,8 +76,6 @@ types = {
     ALSATimer.UserInstanceError:    user_instance_error_types,
 }
 
-for obj, types in types.items():
-    for t in types:
-        if not hasattr(obj, t):
-            print('Enumerator {0} is not produced.'.format(t))
-            exit(1)
+for target_type, enumerations in types.items():
+    if not test_enums(target_type, enumerations):
+        exit(1)

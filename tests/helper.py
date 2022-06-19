@@ -18,3 +18,12 @@ def test_object(target, props, methods, signals) ->bool:
             print('Signal {0} is not produced.'.format(signal))
             return False
     return True
+
+
+def test_enums(target_type: object, enumerations: tuple[str]) -> bool:
+    for enumeration in enumerations:
+        if not hasattr(target_type, enumeration):
+            print('Enumeration {0} is not produced for {1}.'.format(
+                enumeration, target_type))
+            return False
+    return True

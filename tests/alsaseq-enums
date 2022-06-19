@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 from sys import exit
+
 import gi
 gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
+
+from helper import test_enums
 
 specific_address_types = (
     'UNKNOWN',
@@ -11,7 +14,7 @@ specific_address_types = (
     'BROADCAST',
 )
 
-specific_client_id_types= (
+specific_client_id_types = (
     'SYSTEM',
     'DUMMY',
     'OSS',
@@ -193,8 +196,6 @@ types = {
     ALSASeq.EventError:         event_error_types,
 }
 
-for obj, types in types.items():
-    for t in types:
-        if not hasattr(obj, t):
-            print('Enumerator {0} is not produced.'.format(t))
-            exit(1)
+for target_type, enumerations in types.items():
+    if not test_enums(target_type, enumerations):
+        exit(1)
