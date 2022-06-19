@@ -16,12 +16,11 @@ props = (
     'device-id',
     'resolution-ticks',
 )
-
 methods = (
     'new',
 )
-
+vmethods = ()
 signals = ()
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

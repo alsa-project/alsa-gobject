@@ -25,6 +25,8 @@ methods = (
     'drain_substream',
     'drop_substream',
     'create_source',
+)
+vmethods = (
     'do_handle_messages',
     'do_handle_disconnection',
 )
@@ -33,5 +35,5 @@ signals = (
     'handle-disconnection',
 )
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)
