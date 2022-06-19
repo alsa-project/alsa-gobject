@@ -3,7 +3,7 @@
 from sys import exit
 from errno import ENXIO
 
-from helper import test
+from helper import test_object
 
 import gi
 gi.require_version('ALSARawmidi', '0.0')
@@ -33,5 +33,5 @@ signals = (
     'handle-disconnection',
 )
 
-if not test(target, props, methods, signals):
+if not test_object(target, props, methods, signals):
     exit(ENXIO)

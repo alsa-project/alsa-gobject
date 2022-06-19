@@ -2,7 +2,7 @@ import gi
 gi.require_version('GObject', '2.0')
 from gi.repository import GObject
 
-def test(target, props, methods, signals) ->bool:
+def test_object(target, props, methods, signals) ->bool:
     labels = [prop.name for prop in target.props]
     for prop in props:
         if prop not in labels:
