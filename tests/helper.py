@@ -1,20 +1,30 @@
-import gi
-gi.require_version('GObject', '2.0')
-from gi.repository import GObject
-
-def test_object(target, props, methods, signals) ->bool:
-    labels = [prop.name for prop in target.props]
-    for prop in props:
-        if prop not in labels:
-            print('Property {0} is not produced.'.format(prop))
-            return False
+def test_object(target_type: object, props: tuple[str], methods: tuple[str],
+                signals: tuple[str]) -> bool:
+    # All of available methods are put into the list of attribute.
     for method in methods:
-        if not hasattr(target, method):
+        if not hasattr(target_type, method):
             print('Method {0} is not produced.'.format(method))
             return False
-    labels = GObject.signal_list_names(target)
+
+    # The properties, virtual methods, and signals in interface are not put
+    # into the list of attribute in object implementing the interface.
+    prop_labels = []
+    signal_labels = []
+
+    # The  gi.ObjectInfo and gi.InterfaceInfo keeps them. Let's traverse them.
+    for info in target_type.__mro__:
+        if hasattr(info, '__info__'):
+            for prop in info.__info__.get_properties():
+                prop_labels.append(prop.get_name())
+            for signal in info.__info__.get_signals():
+                signal_labels.append(signal.get_name())
+
+    for prop in props:
+        if prop not in prop_labels:
+            print('Property {0} is not produced.'.format(prop))
+            return False
     for signal in signals:
-        if signal not in labels:
+        if signal not in signal_labels:
             print('Signal {0} is not produced.'.format(signal))
             return False
     return True
