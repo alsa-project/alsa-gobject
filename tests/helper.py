@@ -27,3 +27,11 @@ def test_enums(target_type: object, enumerations: tuple[str]) -> bool:
                 enumeration, target_type))
             return False
     return True
+
+
+def test_struct(target_type: object, methods: tuple[str]) -> bool:
+    for method in methods:
+        if not hasattr(target_type, method):
+            print('Method {0} is not produced.'.format(method))
+            return False
+    return True
