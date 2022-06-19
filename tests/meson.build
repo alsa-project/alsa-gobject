@@ -43,6 +43,7 @@ tests = {
     'alsaseq-addr',
     'alsaseq-event-cntr',
     'alsaseq-event',
+    'alsaseq-event-data-connect',
   ],
   'hwdep': [
     'alsahwdep-enums',
