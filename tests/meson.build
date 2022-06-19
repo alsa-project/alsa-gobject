@@ -41,6 +41,7 @@ tests = {
     'alsaseq-queue-tempo',
     'alsaseq-queue-timer-alsa',
     'alsaseq-addr',
+    'alsaseq-event-cntr',
   ],
   'hwdep': [
     'alsahwdep-enums',
