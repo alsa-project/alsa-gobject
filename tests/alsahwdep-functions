@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+from sys import exit
+from errno import ENXIO
+
+import gi
+gi.require_version('ALSAHwdep', '0.0')
+from gi.repository import ALSAHwdep
+
+from helper import test_functions
+
+entries = {
+    ALSAHwdep: (
+        'get_device_id_list',
+        'get_hwdep_sysname',
+        'get_hwdep_devnode',
+        'get_device_info',
+    ),
+    ALSAHwdep.DeviceCommonError: (
+        'quark',
+        'to_label',
+    ),
+}
+
+for target_type, functions in entries.items():
+    if not test_functions(target_type, functions):
+        exit(ENXIO)

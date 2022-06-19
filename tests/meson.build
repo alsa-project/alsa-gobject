@@ -16,6 +16,7 @@ tests = {
     'alsactl-elem-id',
     'alsactl-elem-info-common',
     'alsactl-elem-info-single-array',
+    'alsactl-functions',
   ],
   'timer': [
     'alsatimer-enums',
@@ -29,6 +30,7 @@ tests = {
     'alsatimer-device-id',
     'alsatimer-tick-event',
     'alsatimer-tstamp-event',
+    'alsatimer-functions',
   ],
   'seq': [
     'alsaseq-enums',
@@ -52,11 +54,13 @@ tests = {
     'alsaseq-event-data-result',
     'alsaseq-remove-filter',
     'alsaseq-queue-timer-common',
+    'alsaseq-functions',
   ],
   'hwdep': [
     'alsahwdep-enums',
     'alsahwdep-device-info',
     'alsahwdep-device-common',
+    'alsahwdep-functions',
   ],
   'rawmidi': [
     'alsarawmidi-enums',
@@ -64,6 +68,7 @@ tests = {
     'alsarawmidi-stream-pair',
     'alsarawmidi-substream-params',
     'alsarawmidi-substream-status',
+    'alsarawmidi-functions',
   ],
 }
 

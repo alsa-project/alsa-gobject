@@ -52,3 +52,11 @@ def test_struct(target_type: object, methods: tuple[str]) -> bool:
             print('Method {0} is not produced.'.format(method))
             return False
     return True
+
+
+def test_functions(target_type: object, functions: tuple[str]) -> bool:
+    for function in functions:
+        if not hasattr(target_type, function):
+            print('Function {0} is not produced.'.format(function))
+            return False
+    return True

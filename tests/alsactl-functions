@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+from sys import exit
+from errno import ENXIO
+
+import gi
+gi.require_version('ALSACtl', '0.0')
+from gi.repository import ALSACtl
+
+from helper import test_functions
+
+entries = {
+    ALSACtl: (
+        'get_card_id_list',
+        'get_card_sysname',
+        'get_control_sysname',
+        'get_control_devnode',
+    ),
+    ALSACtl.CardError: (
+        'quark',
+    ),
+}
+
+for target_type, functions in entries.items():
+    if not test_functions(target_type, functions):
+        exit(ENXIO)
