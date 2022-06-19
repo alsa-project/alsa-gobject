@@ -13,6 +13,7 @@ tests = {
     'alsactl-elem-info-integer64',
     'alsactl-elem-info-enumerated',
     'alsactl-elem-value',
+    'alsactl-elem-id',
   ],
   'timer': [
     'alsatimer-enums',

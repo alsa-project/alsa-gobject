@@ -3,24 +3,22 @@
 from sys import exit
 from errno import ENXIO
 
-from helper import test_object
+from helper import test_struct
 
 import gi
 gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
-target = ALSACtl.ElemId()
-props = ()
+target_type = ALSACtl.ElemId
 methods = (
     'get_numid',
     'get_iface',
-    'get_device',
-    'get_subdevice',
+    'get_device_id',
+    'get_subdevice_id',
     'get_name',
     'get_index',
-    'equals',
+    'equal',
 )
-signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_struct(target_type, methods):
     exit(ENXIO)
