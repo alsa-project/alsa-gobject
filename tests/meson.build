@@ -48,6 +48,7 @@ tests = {
     'alsaseq-event-data-note',
     'alsaseq-event-data-queue',
     'alsaseq-event-data-result',
+    'alsaseq-remove-filter',
   ],
   'hwdep': [
     'alsahwdep-enums',
