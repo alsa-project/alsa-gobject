@@ -40,6 +40,7 @@ tests = {
     'alsaseq-queue-status',
     'alsaseq-queue-tempo',
     'alsaseq-queue-timer-alsa',
+    'alsaseq-addr',
   ],
   'hwdep': [
     'alsahwdep-enums',
