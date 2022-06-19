@@ -3,24 +3,20 @@
 from sys import exit
 from errno import ENXIO
 
-from helper import test_object
+from helper import test_struct
 
 import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target = ALSATimer.DeviceId()
-props = (
-    'class',
-    'slave-class',
-    'card-id',
-    'device-id',
-    'subdevice-id',
-)
+target_type = ALSATimer.DeviceId
 methods = (
     'new',
+    'get_class',
+    'get_card_id',
+    'get_device_id',
+    'get_subdevice_id',
 )
-signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_struct(target_type, methods):
     exit(ENXIO)
