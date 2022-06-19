@@ -20,7 +20,8 @@ methods = (
     'new',
     'get_tstamp',
 )
+vmethods = ()
 signals = ()
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

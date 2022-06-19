@@ -40,7 +40,12 @@ methods = (
     'remove_events',
     'schedule_events',
 )
-signals = ()
+vmethods = (
+    'do_handle_event',
+)
+signals = (
+    'handle-event',
+)
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

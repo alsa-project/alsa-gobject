@@ -31,6 +31,8 @@ methods = (
     'write_elem_value',
     'read_elem_value',
     'create_source',
+)
+vmethods = (
     'do_handle_elem_event',
     'do_handle_disconnection',
 )
@@ -39,5 +41,5 @@ signals = (
     'handle-disconnection',
 )
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

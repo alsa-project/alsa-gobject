@@ -26,7 +26,8 @@ methods = (
     'set_event_filter',
     'get_event_filter',
 )
+vmethods = ()
 signals = ()
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

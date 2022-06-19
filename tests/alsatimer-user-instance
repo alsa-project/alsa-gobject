@@ -22,13 +22,15 @@ methods = (
     'set_params',
     'get_status',
     'create_source',
-    'do_handle_tick_event',
-    'do_handle_tstamp_event',
-    'do_handle_disconnection',
     'start',
     'stop',
     'pause',
     'continue_',
+)
+vmethods = (
+    'do_handle_tick_event',
+    'do_handle_tstamp_event',
+    'do_handle_disconnection',
 )
 signals = (
     'handle-tick-event',
@@ -36,5 +38,5 @@ signals = (
     'handle-disconnection',
 )
 
-if not test_object(target_type, props, methods, signals):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)
