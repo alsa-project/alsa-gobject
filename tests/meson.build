@@ -15,6 +15,7 @@ tests = {
     'alsactl-elem-value',
     'alsactl-elem-id',
     'alsactl-elem-info-common',
+    'alsactl-elem-info-single-array',
   ],
   'timer': [
     'alsatimer-enums',
