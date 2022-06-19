@@ -9,19 +9,14 @@ import gi
 gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
-target_type = ALSACtl.ElemInfoEnumerated
+target_type = ALSACtl.ElemInfoCommon
 props = (
-    'labels',
-    # From interfaces.
     'elem-id',
     'elem-type',
     'access',
     'owner',
-    'value-count',
 )
-methods = (
-    'new',
-)
+methods = ()
 vmethods = ()
 signals = ()
 

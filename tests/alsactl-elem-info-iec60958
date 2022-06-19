@@ -11,6 +11,7 @@ from gi.repository import ALSACtl
 
 target_type = ALSACtl.ElemInfoIec60958
 props = (
+    # From interfaces.
     'elem-id',
     'elem-type',
     'access',

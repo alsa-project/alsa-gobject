@@ -11,6 +11,7 @@ from gi.repository import ALSACtl
 
 target_type = ALSACtl.ElemInfoBytes
 props = (
+    # From interfaces.
     'elem-id',
     'elem-type',
     'access',

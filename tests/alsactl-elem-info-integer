@@ -11,14 +11,15 @@ from gi.repository import ALSACtl
 
 target_type = ALSACtl.ElemInfoInteger
 props = (
+    'value-min',
+    'value-max',
+    'value-step',
+    # From interfaces.
     'elem-id',
     'elem-type',
     'access',
     'owner',
     'value-count',
-    'value-min',
-    'value-max',
-    'value-step',
 )
 methods = (
     'new',
