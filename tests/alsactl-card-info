@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
-target = ALSACtl.CardInfo()
+target_type = ALSACtl.CardInfo
 props = (
     'card-id',
     'id',
@@ -22,5 +22,5 @@ props = (
 methods = ()
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

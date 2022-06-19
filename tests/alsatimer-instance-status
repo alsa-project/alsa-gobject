@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target = ALSATimer.InstanceStatus()
+target_type = ALSATimer.InstanceStatus
 props = (
     'interval',
     'lost',
@@ -22,5 +22,5 @@ methods = (
 )
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

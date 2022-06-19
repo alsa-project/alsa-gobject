@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSAHwdep', '0.0')
 from gi.repository import ALSAHwdep
 
-target = ALSAHwdep.DeviceInfo()
+target_type = ALSAHwdep.DeviceInfo
 props = (
     'device-id',
     'card-id',
@@ -20,5 +20,5 @@ props = (
 methods = ()
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

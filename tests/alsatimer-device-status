@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target = ALSATimer.DeviceStatus()
+target_type = ALSATimer.DeviceStatus
 props = (
     'resolution',
     'resolution-numerator',
@@ -20,5 +20,5 @@ methods = (
 )
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)
