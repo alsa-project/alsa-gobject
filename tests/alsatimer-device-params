@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target = ALSATimer.DeviceParams()
+target_type = ALSATimer.DeviceParams
 props = (
     'period-numerator',
     'period-denominator',
@@ -19,5 +19,5 @@ methods = (
 )
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

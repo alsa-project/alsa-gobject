@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSACtl', '0.0')
 from gi.repository import ALSACtl
 
-target = ALSACtl.ElemInfoEnumerated.new()
+target_type = ALSACtl.ElemInfoEnumerated
 props = (
     'elem-id',
     'elem-type',
@@ -23,5 +23,5 @@ methods = (
 )
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

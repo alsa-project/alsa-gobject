@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSARawmidi', '0.0')
 from gi.repository import ALSARawmidi
 
-target = ALSARawmidi.StreamPair()
+target_type = ALSARawmidi.StreamPair
 props = (
     'devnode',
 )
@@ -33,5 +33,5 @@ signals = (
     'handle-disconnection',
 )
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)

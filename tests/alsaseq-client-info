@@ -9,7 +9,7 @@ import gi
 gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
-target = ALSASeq.ClientInfo()
+target_type = ALSASeq.ClientInfo
 props = (
     'client-id',
     'type',
@@ -28,5 +28,5 @@ methods = (
 )
 signals = ()
 
-if not test_object(target, props, methods, signals):
+if not test_object(target_type, props, methods, signals):
     exit(ENXIO)
