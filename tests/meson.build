@@ -55,6 +55,7 @@ tests = {
   'hwdep': [
     'alsahwdep-enums',
     'alsahwdep-device-info',
+    'alsahwdep-device-common',
   ],
   'rawmidi': [
     'alsarawmidi-enums',
