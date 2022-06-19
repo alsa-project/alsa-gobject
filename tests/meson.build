@@ -26,6 +26,7 @@ tests = {
     'alsatimer-instance-status',
     'alsatimer-device-id',
     'alsatimer-tick-event',
+    'alsatimer-tstamp-event',
   ],
   'seq': [
     'alsaseq-enums',
