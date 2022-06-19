@@ -46,6 +46,7 @@ tests = {
     'alsaseq-event-data-connect',
     'alsaseq-event-data-ctl',
     'alsaseq-event-data-note',
+    'alsaseq-event-data-queue',
   ],
   'hwdep': [
     'alsahwdep-enums',
