@@ -51,6 +51,7 @@ tests = {
     'alsaseq-event-data-queue',
     'alsaseq-event-data-result',
     'alsaseq-remove-filter',
+    'alsaseq-queue-timer-common',
   ],
   'hwdep': [
     'alsahwdep-enums',

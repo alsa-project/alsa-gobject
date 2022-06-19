@@ -9,17 +9,12 @@ import gi
 gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
-target_type = ALSASeq.QueueTimerAlsa
+target_type = ALSASeq.QueueTimerCommon
 props = (
-    'device-id',
-    'resolution-ticks',
-    # From interface.
     'queue-id',
     'timer-type',
 )
-methods = (
-    'new',
-)
+methods = ()
 vmethods = ()
 signals = ()
 
