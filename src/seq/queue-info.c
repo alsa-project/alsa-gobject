@@ -87,16 +87,16 @@ static void alsaseq_queue_info_class_init(ALSASeqQueueInfoClass *klass)
 
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
-                           "The numerical ID of queue, except for one of "
-                           "ALSASeqSpecificClientId.",
+                           "The numeric ID of queue. An entry of ALSASeqSpecificQueueId is "
+                           "available as well",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
 
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
-                           "The numerical ID of client which owns the queue, "
-                           "except for one of ALSASeqSpecificClientId.",
+                           "The numeric ID of client which owns the queue. An entry of "
+                           "ALSASeqSpecificClientId is available as well"
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);

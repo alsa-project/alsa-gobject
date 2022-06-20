@@ -32,7 +32,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, seq_remove_filte
  * alsaseq_remove_filter_new_with_dest_addr:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @dest: The address of destination.
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events towards the
@@ -59,7 +59,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
  * alsaseq_remove_filter_new_with_note_channel:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @channel: The channel for note event.
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with note
@@ -86,7 +86,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
  * alsaseq_remove_filter_new_with_event_type:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @ev_type: The type of event.
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
@@ -111,12 +111,11 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
 
 /**
  * alsaseq_remove_filter_new_with_note:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or [flags@RemoveFilterFlag].OUTPUT.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events for note,
- * except for [enum@EventType:NOTEOFF].
+ * excluding [enum@EventType:NOTEOFF].
  *
  * Returns: A [struct@RemoveFilter].
  */
@@ -137,7 +136,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
  * alsaseq_remove_filter_new_with_tag:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @tag: The tag of event to remove.
  *
  * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
@@ -164,7 +163,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
  * alsaseq_remove_filter_new_with_tick_time:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @tick_time: The count of tick.
  * @after: Remove events after the tick time if true, else remove events before the tick time.
  *
@@ -196,7 +195,7 @@ ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
  * alsaseq_remove_filter_new_with_real_time:
  * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
  *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric identifier of queue.
+ * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
  * @tv_sec: The second part of time.
  * @tv_nsec: The nanosecond part of time.
  * @after: Remove events after the real time if true, else remove events before the real time.
