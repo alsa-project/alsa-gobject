@@ -49,6 +49,11 @@ static void alsactl_elem_value_class_init(ALSACtlElemValueClass *klass)
 
     gobject_class->get_property = ctl_elem_value_get_property;
 
+    /**
+     * ALSACtlElemValue:elem-id:
+     *
+     * The identifier of element.
+     */
     ctl_elem_value_props[CTL_ELEM_VALUE_PROP_ELEM_ID] =
         g_param_spec_boxed("elem-id", "elem-id",
                            "The identifier of element",
