@@ -64,6 +64,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
 
     gobject_class->get_property = seq_system_info_get_property;
 
+    /**
+     * ALSASeqSystemInfo:maximum-queue-count:
+     *
+     * The maximum number of available queues.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_MAXIMUM_QUEUE_COUNT] =
         g_param_spec_int("maximum-queue-count", "maximum-queue-count",
                          "The maximum number of available queues.",
@@ -71,6 +76,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqSystemInfo:maximum-client-count:
+     *
+     * The maximum number of clients.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_MAXIMUM_CLIENT_COUNT] =
         g_param_spec_int("maximum-client-count", "maximum-client-count",
                          "The maximum number of clients.",
@@ -78,6 +88,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqSystemInfo:maximum-port-count:
+     *
+     * The maximum number of ports.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_MAXIMUM_PORT_COUNT] =
         g_param_spec_int("maximum-port-count", "maximum-port-count",
                          "The maximum number of ports.",
@@ -85,6 +100,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqSystemInfo:maximum-channel-count:
+     *
+     * The maximum number of channels.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_MAXIMUM_CHANNEL_COUNT] =
         g_param_spec_int("maximum-channel-count", "maximum-channel-count",
                          "The maximum number of channels.",
@@ -92,6 +112,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqSystemInfo:current-client-count:
+     *
+     * The current number of clients.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_CURRENT_CLIENT_COUNT] =
         g_param_spec_int("current-client-count", "current-client-count",
                          "The current number of clients.",
@@ -99,6 +124,11 @@ static void alsaseq_system_info_class_init(ALSASeqSystemInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqSystemInfo:current-queue-count:
+     *
+     * The current number of queues.
+     */
     seq_system_info_props[SEQ_SYSTEM_INFO_PROP_CURRENT_QUEUE_COUNT] =
         g_param_spec_int("current-queue-count", "current-queue-count",
                          "The current number of queues.",
