@@ -53,6 +53,11 @@ static void alsatimer_device_status_class_init(ALSATimerDeviceStatusClass *klass
 
     gobject_class->get_property = timer_device_status_get_property;
 
+    /**
+     * ALSATimerDeviceStatus:resolution:
+     *
+     * The current resolution in nano seconds.
+     */
     timer_device_status_props[TIMER_DEVICE_STATUS_PROP_RESOLUTION] =
         g_param_spec_uint64("resolution", "resolution",
                             "The current resolution in nano seconds.",
@@ -60,6 +65,11 @@ static void alsatimer_device_status_class_init(ALSATimerDeviceStatusClass *klass
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceStatus:resolution-numerator:
+     *
+     * The numerator of current resolution in seconds.
+     */
     timer_device_status_props[TIMER_DEVICE_STATUS_PROP_RESOLUTION_NUM] =
         g_param_spec_uint64("resolution-numerator", "resolution-numerator",
                             "The numerator of current resolution in seconds.",
@@ -67,6 +77,11 @@ static void alsatimer_device_status_class_init(ALSATimerDeviceStatusClass *klass
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceStatus:resolution-denominator:
+     *
+     * The denominator of current resolution in seconds.
+     */
     timer_device_status_props[TIMER_DEVICE_STATUS_PROP_RESOLUTION_DEN] =
         g_param_spec_uint64("resolution-denominator", "resolution-denominator",
                             "The denominator of current resolution in seconds.",
