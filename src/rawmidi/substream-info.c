@@ -81,62 +81,105 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
 
     gobject_class->get_property = rawmidi_substream_info_get_property;
 
+    /**
+     * ALSARawmidiSubstreamInfo:device-id:
+     *
+     * The numeric identifier of rawmidi device.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_DEVICE_ID] =
         g_param_spec_uint("device-id", "device-id",
-                         "The numerical identifier of rawmidi device.",
+                         "The numeric identifier of rawmidi device.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:subdevice-id:
+     *
+     * The numeric identifier of subdevice or rawmidi device.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_SUBDEVICE_ID] =
         g_param_spec_uint("subdevice-id", "subdevice-id",
-                          "The numerical identifier of subdevice for rawmidi device..",
+                          "The numeric identifier of subdevice for rawmidi device..",
                           0, G_MAXINT,
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:direction:
+     *
+     * The direction of stream, one of [enum@StreamDirection].
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_DIRECTION] =
         g_param_spec_enum("direction", "direction",
-                          "The direction of stream, one of "
-                          "ALSARawmidiStreamDirection",
+                          "The direction of stream, one of ALSARawmidiStreamDirection",
                           ALSARAWMIDI_TYPE_STREAM_DIRECTION,
                           ALSARAWMIDI_STREAM_DIRECTION_OUTPUT,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:card-id:
+     *
+     * The numeric identifier of sound card.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical identifier of sound card.",
+                         "The numeric identifier of sound card.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:flags:
+     *
+     * The information flags of rawmidi device with flags of [flags@StreamPairInfoFlag].
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
-                           "The information flags of rawmidi device with flags "
-                           "of ALSARawmidiStreamPairInfoFlag.",
+                           "The information flags of rawmidi device with flags of "
+                           "ALSARawmidiStreamPairInfoFlag.",
                           ALSARAWMIDI_TYPE_STREAM_PAIR_INFO_FLAG,
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:id:
+     *
+     * The string identifier of rawmidi device.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
                             "The string identifier of rawmidi device.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:name:
+     *
+     * The name of rawmidi device.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of rawmidi device.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:subdevice-name:
+     *
+     * The name of subdevice for the direction and the [property@SubstreamInfo:subdevice-id].
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_SUBNAME] =
         g_param_spec_string("subdevice-name", "subdevice-name",
-                            "The name of subdevice for the direction and the "
-                            "subdevice-id",
+                            "The name of subdevice for the direction and the subdevice-id",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:subdevice-count:
+     *
+     * The number of subdevices on the rawmidi device for the direction.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_SUBDEVICES_COUNT] =
         g_param_spec_uint("subdevices-count", "subdevices-count",
                           "The number of subdevices on the rawmidi device for "
@@ -145,6 +188,11 @@ static void alsarawmidi_substream_info_class_init(ALSARawmidiSubstreamInfoClass 
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamInfo:subdevices-avail:
+     *
+     * The current number of available subdevices on the rawmidi device for the direction.
+     */
     rawmidi_substream_info_props[RAWMIDI_SUBSTREAM_INFO_PROP_SUBDEVICES_AVAIL] =
         g_param_spec_uint("subdevices-avail", "subdevices-avail",
                           "The current number of available subdevices on the "
