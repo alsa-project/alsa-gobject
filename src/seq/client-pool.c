@@ -96,51 +96,77 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     gobject_class->set_property = seq_client_pool_set_property;
     gobject_class->get_property = seq_client_pool_get_property;
 
+    /**
+     * ALSASeqClientPool:client-id:
+     *
+     * The numeric ID of client. One of [enum@SpecificClientId] is available as well as any
+     * numeric value.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
-                           "The numerical ID of client. One of "
-                           "ALSASeqSpecificClientId is available as well as "
-                           "any numerical value.",
+                           "The numeric ID of client. One of ALSASeqSpecificClientId is available "
+                           "as well as any numeric value.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READABLE);
 
+    /**
+     * ALSASeqClientPool:output-pool:
+     *
+     * The total number of cells in memory pool for output direction.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
         g_param_spec_int("output-pool", "output-pool",
-                         "The total number of cells in memory pool for output "
-                         "direction.",
+                         "The total number of cells in memory pool for output direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientPool:input-pool:
+     *
+     * The total number of cells in memory pool for input direction.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_POOL] =
         g_param_spec_int("input-pool", "input-pool",
-                         "The total number of cells in memory pool for input "
-                         "direction.",
+                         "The total number of cells in memory pool for input direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientPool:output-room:
+     *
+     * The number of cells in memory pool for output direction to block user process.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM] =
         g_param_spec_int("output-room", "output-room",
-                         "The number of cells in memory pool for output "
-                         "direction to block user process.",
+                         "The number of cells in memory pool for output direction to block user "
+                         "process",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientPool:output-free:
+     *
+     * The free number of cells in memory pool for output direction.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_FREE] =
         g_param_spec_int("output-free", "output-free",
-                         "The free number of cells in memory pool for output "
-                         "direction.",
+                         "The free number of cells in memory pool for output direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientPool:input-free:
+     *
+     * The free number of cells in memory pool for input direction.
+     */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_FREE] =
         g_param_spec_int("input-free", "input-free",
-                         "The free number of cells in memory pool for input "
-                         "direction.",
+                         "The free number of cells in memory pool for input direction.",
                          0, G_MAXINT,
                          0,
                          G_PARAM_READWRITE);
