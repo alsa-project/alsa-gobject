@@ -61,6 +61,11 @@ static void alsatimer_instance_info_class_init(ALSATimerInstanceInfoClass *klass
 
     gobject_class->get_property = timer_instance_info_get_property;
 
+    /**
+     * ALSATimerInstanceInfo:flags:
+     *
+     * The flags for attached timer.
+     */
     timer_instance_info_props[TIMER_INSTANCE_INFO_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
                            "The flags for attached timer.",
@@ -68,25 +73,45 @@ static void alsatimer_instance_info_class_init(ALSATimerInstanceInfoClass *klass
                            0,
                            G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceInfo:card-id:
+     *
+     * The numeric ID of sound card for attached timer.
+     */
     timer_instance_info_props[TIMER_INSTANCE_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card for attached timer.",
+                         "The numeric ID of sound card for attached timer.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceInfo:id:
+     *
+     * The string ID of attached timer.
+     */
     timer_instance_info_props[TIMER_INSTANCE_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
                             "The string ID of attached timer.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceInfo:name:
+     *
+     * The name of attached timer.
+     */
     timer_instance_info_props[TIMER_INSTANCE_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of attached timer.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceInfo:resolution:
+     *
+     * The resolution of attached timer in nano seconds.
+     */
     timer_instance_info_props[TIMER_INSTANCE_INFO_PROP_RESOLUTION] =
         g_param_spec_uint64("resolution", "resolution",
                             "The resolution of attached timer in nano seconds.",
