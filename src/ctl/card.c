@@ -116,12 +116,22 @@ static void alsactl_card_class_init(ALSACtlCardClass *klass)
     gobject_class->finalize = ctl_card_finalize;
     gobject_class->get_property = ctl_card_get_property;
 
+    /**
+     * ALSACtlCard:devnode:
+     *
+     * The full path to special file of control character device.
+     */
     ctl_card_props[CTL_CARD_PROP_DEVNODE] =
         g_param_spec_string("devnode", "devnode",
-                            "The full path of control character device.",
+                            "The full path to special file of control character device.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCard:subscribed:
+     *
+     * Whether to be subscribed for event.
+     */
     ctl_card_props[CTL_CARD_PROP_SUBSCRIBED] =
         g_param_spec_boolean("subscribed", "subscribed",
                              "Whether to be subscribed for event.",
