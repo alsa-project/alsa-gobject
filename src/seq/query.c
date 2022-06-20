@@ -587,7 +587,7 @@ end:
 
 /**
  * alsaseq_get_queue_info_by_id:
- * @queue_id: The numeric ID of queue, except for one of [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. One of [enum@SpecificQueueId] is available as well.
  * @queue_info: (out): The information of queue.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
@@ -673,7 +673,7 @@ gboolean alsaseq_get_queue_info_by_name(const gchar *name, ALSASeqQueueInfo **qu
 
 /**
  * alsaseq_get_queue_status:
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. One of [enum@SpecificQueueId] is available as well.
  * @queue_status: (inout): The current status of queue.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *

@@ -876,7 +876,7 @@ gboolean alsaseq_user_client_create_queue(ALSASeqUserClient *self,
 /**
  * alsaseq_user_client_delete_queue:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for one of [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Delete the queue owned by the client.
@@ -947,7 +947,7 @@ gboolean alsaseq_user_client_update_queue(ALSASeqUserClient *self, ALSASeqQueueI
 /**
  * alsaseq_user_client_get_queue_usage:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @use: (out): Whether the client uses the queue or not.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
@@ -983,7 +983,7 @@ gboolean alsaseq_user_client_get_queue_usage(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_set_queue_usage:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @use: Whether to use the queue or not.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
@@ -1020,7 +1020,7 @@ gboolean alsaseq_user_client_set_queue_usage(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_set_queue_tempo:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @queue_tempo: The data of tempo for queue.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
@@ -1059,7 +1059,7 @@ gboolean alsaseq_user_client_set_queue_tempo(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_get_queue_tempo:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @queue_tempo: (out): The data of tempo for queue.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
@@ -1098,7 +1098,7 @@ gboolean alsaseq_user_client_get_queue_tempo(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_set_queue_timer:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @queue_timer: The data of timer for queue, which implements [iface@QueueTimerCommon].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
@@ -1150,7 +1150,7 @@ gboolean alsaseq_user_client_set_queue_timer(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_get_queue_timer:
  * @self: A [class@UserClient].
- * @queue_id: The numeric ID of queue, except for entries in [enum@SpecificQueueId].
+ * @queue_id: The numeric ID of queue. An entry of [enum@SpecificQueueId] is available as well.
  * @queue_timer: (out): The data of timer for queue, which implements [iface@QueueTimerCommon].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *

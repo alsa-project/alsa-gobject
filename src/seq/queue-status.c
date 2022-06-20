@@ -54,8 +54,8 @@ static void alsaseq_queue_status_class_init(ALSASeqQueueStatusClass *klass)
 
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
-                           "The numerical ID of queue, except for entries in "
-                           "ALSASeqSpecificQueueId.",
+                           "The numeric ID of queue. An entry of ALSASeqSpecificQueueId is "
+                           "available as well",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READABLE);

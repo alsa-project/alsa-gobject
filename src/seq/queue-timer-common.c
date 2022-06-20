@@ -21,7 +21,7 @@ static void alsaseq_queue_timer_common_default_init(ALSASeqQueueTimerCommonInter
     /**
      * ALSASeqQueueTimerCommon:queue-id:
      *
-     * The numeric identifier of queue, including one of [enum@SpecificClientId].
+     * The numeric identifier of queue. An entry of [enum@SpecificClientId] is available as well.
      *
      * Since: 0.3.
      */

@@ -77,8 +77,8 @@ static void alsaseq_queue_tempo_class_init(ALSASeqQueueTempoClass *klass)
 
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
-                           "The numerical ID of queue, except for one of "
-                           "ALSASeqSpecificClientId.",
+                           "The numeric ID of queue. An entry of ALSASeqSpecificClientId is "
+                           "available as well",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
