@@ -73,6 +73,11 @@ static void alsatimer_device_info_class_init(ALSATimerDeviceInfoClass *klass)
 
     gobject_class->get_property = timer_device_info_get_property;
 
+    /**
+     * ALSATimerDeviceInfo:flags:
+     *
+     * The flags of timer, one of [flags@DeviceInfoFlag].
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
                            "The flags of timer, one of ALSATimerDeviceInfoFlag.",
@@ -80,25 +85,45 @@ static void alsatimer_device_info_class_init(ALSATimerDeviceInfoClass *klass)
                            0,
                            G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:card-id:
+     *
+     * The numeric ID of sound card.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card.",
+                         "The numeric ID of sound card.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:id:
+     *
+     * The string ID of timer.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
                             "The string ID of timer.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:name:
+     *
+     * The name of timer.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of timer.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:resolution:
+     *
+     * The resolution in nano seconds.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_RESOLUTION] =
         g_param_spec_uint64("resolution", "resolution",
                             "The resolution in nano seconds.",
@@ -106,20 +131,35 @@ static void alsatimer_device_info_class_init(ALSATimerDeviceInfoClass *klass)
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:resolution-min:
+     *
+     * The minimum resolution in nano seconds.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_RESOLUTION_MIN] =
         g_param_spec_uint64("resolution-min", "resolution-min",
-                            "The resolution in nano seconds.",
+                            "The minimum resolution in nano seconds.",
                             0, G_MAXUINT64,
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:resolution-max:
+     *
+     * The maximum resolution in nano seconds.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_RESOLUTION_MAX] =
         g_param_spec_uint64("resolution-max", "resolution-max",
-                            "The resolution in nano seconds.",
+                            "The maximum resolution in nano seconds.",
                             0, G_MAXUINT64,
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSATimerDeviceInfo:instance-count:
+     *
+     * The number of instances for the timer.
+     */
     timer_device_info_props[TIMER_DEVICE_INFO_PROP_INSTANCE_COUNT] =
         g_param_spec_uint("instance-count", "instance-count",
                           "The number of instances for the timer.",
