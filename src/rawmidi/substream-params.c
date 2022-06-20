@@ -80,6 +80,11 @@ static void alsarawmidi_substream_params_class_init(ALSARawmidiSubstreamParamsCl
     gobject_class->set_property = rawmidi_substream_params_set_property;
     gobject_class->get_property = rawmidi_substream_params_get_property;
 
+    /**
+     * ALSARawmidiSubstreamParams:buffer-size:
+     *
+     * The size of intermediate buffer for substream.
+     */
     rawmidi_substream_params_props[RAWMIDI_SUBSTREAM_PARAMS_PROP_BUFFER_SIZE] =
         g_param_spec_uint("buffer-size", "buffer-size",
                           "The size of intermediate buffer for substream.",
@@ -87,18 +92,27 @@ static void alsarawmidi_substream_params_class_init(ALSARawmidiSubstreamParamsCl
                           page_size,
                           G_PARAM_READWRITE);
 
+    /**
+     * ALSARawmidiSubstreamParams:avail-min:
+     * 
+     * The threshold to wake up from any blocking operation such as poll(2), read(2) and write(2).
+     */
     rawmidi_substream_params_props[RAWMIDI_SUBSTREAM_PARAMS_PROP_AVAIL_MIN] =
         g_param_spec_uint("avail-min", "avail-min",
-                          "The threshold to wake up from any blocking "
-                          "operation such as poll(2), read(2) and write(2).",
+                          "The threshold to wake up from any blocking operation such as poll(2), "
+                          "read(2) and write(2).",
                           1, G_MAXUINT,
                           1,
                           G_PARAM_READWRITE);
 
+    /**
+     * ALSARawmidiSubstreamParams:active-sensing:
+     *
+     * Whether to emit 0xfe one time when closing substream.
+     */
     rawmidi_substream_params_props[RAWMIDI_SUBSTREAM_PARAMS_PROP_ACTIVE_SENSING] =
         g_param_spec_boolean("active-sensing", "active-sensing",
-                             "Whether to emit 0xfe one time when closing "
-                             "substream.",
+                             "Whether to emit 0xfe one time when closing substream.",
                              FALSE,
                              G_PARAM_READWRITE);
 
