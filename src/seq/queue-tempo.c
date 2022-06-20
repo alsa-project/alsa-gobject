@@ -75,6 +75,11 @@ static void alsaseq_queue_tempo_class_init(ALSASeqQueueTempoClass *klass)
     gobject_class->set_property = seq_queue_tempo_set_property;
     gobject_class->get_property = seq_queue_tempo_get_property;
 
+    /**
+     * ALSASeqQueueTempo:queue-id:
+     *
+     * The numeric ID of queue. An entry of ALSASeqSpecificClientId is available as well,
+     */
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
                            "The numeric ID of queue. An entry of ALSASeqSpecificClientId is "
@@ -83,6 +88,11 @@ static void alsaseq_queue_tempo_class_init(ALSASeqQueueTempoClass *klass)
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqQueueTempo:tempo:
+     *
+     * The number of micro second per tick as tempo.
+     */
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_TEMPO] =
         g_param_spec_uint("tempo", "tempo",
                          "The number of micro second per tick as tempo.",
@@ -90,6 +100,11 @@ static void alsaseq_queue_tempo_class_init(ALSASeqQueueTempoClass *klass)
                          0,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqQueueTempo:resolution:
+     *
+     * The number of pulse per quarter as resolution.
+     */
     seq_queue_tempo_props[SEQ_QUEUE_TEMPO_PROP_RESOLUTION] =
         g_param_spec_int("resolution", "resolution",
                          "The number of pulse per quarter as resolution.",
