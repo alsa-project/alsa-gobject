@@ -58,6 +58,11 @@ static void alsatimer_instance_status_class_init(ALSATimerInstanceStatusClass *k
 
     gobject_class->get_property = timer_instance_status_get_property;
 
+    /**
+     * ALSATimerInstanceStatus:interval:
+     *
+     * The current interval in nano second.
+     */
     timer_instance_status_props[TIMER_INSTANCE_STATUS_PROP_INTERVAL] =
         g_param_spec_uint("interval", "interval",
                           "The current interval in nano second.",
@@ -65,6 +70,11 @@ static void alsatimer_instance_status_class_init(ALSATimerInstanceStatusClass *k
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceStatus:lost:
+     *
+     * The count of losts master ticks.
+     */
     timer_instance_status_props[TIMER_INSTANCE_STATUS_PROP_LOST] =
         g_param_spec_uint("lost", "lost",
                           "The count of losts master ticks.",
@@ -72,6 +82,11 @@ static void alsatimer_instance_status_class_init(ALSATimerInstanceStatusClass *k
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceStatus:overrun:
+     *
+     * The count of overrun in read queue.
+     */
     timer_instance_status_props[TIMER_INSTANCE_STATUS_PROP_OVERRUN] =
         g_param_spec_uint("overrun", "overrun",
                           "The count of overrun in read queue.",
@@ -79,6 +94,11 @@ static void alsatimer_instance_status_class_init(ALSATimerInstanceStatusClass *k
                           0,
                           G_PARAM_READABLE);
 
+    /**
+     * ALSATimerInstanceStatus:queue-size:
+     *
+     * The current size of queue.
+     */
     timer_instance_status_props[TIMER_INSTANCE_STATUS_PROP_QUEUE_SIZE] =
         g_param_spec_uint("queue-size", "queue-size",
                           "The current size of queue.",
