@@ -67,43 +67,78 @@ static void alsactl_card_info_class_init(ALSACtlCardInfoClass *klass)
 
     gobject_class->get_property = ctl_card_info_get_property;
 
+    /**
+     * ALSACtlCardInfo:card-id:
+     *
+     * The numeric ID of sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card.",
+                         "The numeric ID of sound card.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:id:
+     *
+     * The string ID of sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
                             "The string ID of sound card.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:driver:
+     *
+     * The name of driver bound to the sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_DRIVER] =
         g_param_spec_string("driver", "driver",
                             "The name of driver bound to the sound card.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:name:
+     *
+     * The name of sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of sound card.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:long-name:
+     *
+     * The long name of sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_LONG_NAME] =
         g_param_spec_string("long-name", "long-name",
                             "The long name of sound card.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:mixer-name:
+     *
+     * The name of mixer for the sound card.
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_MIXER_NAME] =
         g_param_spec_string("mixer-name", "mixer-name",
                             "The name of mixer for the sound card.",
                             "",
                             G_PARAM_READABLE);
 
+    /**
+     * ALSACtlCardInfo:components:
+     *
+     * The The string with space-separated components for the sound card.,
+     */
     ctl_card_info_props[CTL_CARD_INFO_PROP_COMPONENTS] =
         g_param_spec_string("components", "components",
                             "The The string with space-separated components "
