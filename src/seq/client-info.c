@@ -120,15 +120,25 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
     gobject_class->set_property = seq_client_info_set_property;
     gobject_class->get_property = seq_client_info_get_property;
 
+    /**
+     * ALSASeqClientInfo:client-id:
+     *
+     * The numeric ID of client. One of [enum@SpecificClientId] is available as well as any
+     * numeric value.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
-                           "The numerical ID of client. One of "
-                           "ALSASeqSpecificClientId is available as well as "
-                           "any numerical value.",
+                           "The numeric ID of client. One of ALSASeqSpecificClientId is "
+                           "available as well as any numeric value.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:type:
+     *
+     * The type of client, one of [enum@ClientType].
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CLIENT_TYPE] =
         g_param_spec_enum("type", "type",
                          "The type of client, one of ALSASeqClientType.",
@@ -136,12 +146,22 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
                          ALSASEQ_CLIENT_TYPE_NONE,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:name:
+     *
+     * The name of client.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of client.",
                             "",
                             G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:filter-attributes:
+     *
+     * The attributes for event filter.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_FILTER_ATTR_FLAGS] =
         g_param_spec_flags("filter-attributes", "filter-attributes",
                            "The attributes for event filter.",
@@ -149,12 +169,22 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:use-filter:
+     *
+     * Whether using filter to receive event or not.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_USE_FILTER] =
         g_param_spec_boolean("use-filter", "use-filter",
                              "Whether using filter to receive event or not.",
                              FALSE,
                              G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:port-count:
+     *
+     * The number of ports opened by the client.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_PORT_COUNT] =
         g_param_spec_int("port-count", "port-count",
                          "The number of ports opened by the client.",
@@ -162,6 +192,11 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqClientInfo:lost-count:
+     *
+     * The number of lost events.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_LOST_COUNT] =
         g_param_spec_int("lost-count", "lost-count",
                          "The number of lost events.",
@@ -169,18 +204,28 @@ static void alsaseq_client_info_class_init(ALSASeqClientInfoClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqClientInfo:card-id:
+     *
+     * The numeric ID of sound card. Available in Linux kernel 4.6.0 or later.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card. "
-                         "Available in Linux kernel 4.6.0 or later.",
+                         "The numeric ID of sound card. Available in Linux kernel 4.6.0 or "
+                         "later.",
                          G_MININT, G_MAXINT,
                          -1,
                          G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqClientInfo:process-id:
+     *
+     * The process ID for user client, otherwise -1. Available in Linux kernel 4.6.0 or later.
+     */
     seq_client_info_props[SEQ_CLIENT_INFO_PROP_PROCESS_ID] =
         g_param_spec_int64("process-id", "process-id",
-                           "The process ID for user client, otherwise -1. "
-                           "Available in Linux kernel 4.6.0 or later",
+                           "The process ID for user client, otherwise -1. Available in Linux "
+                           "kernel 4.6.0 or later",
                            G_MININT64, G_MAXINT64,
                            -1,
                            G_PARAM_READABLE);
