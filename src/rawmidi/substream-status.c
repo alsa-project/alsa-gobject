@@ -49,6 +49,11 @@ static void alsarawmidi_substream_status_class_init(ALSARawmidiSubstreamStatusCl
 
     gobject_class->get_property = rawmidi_substream_status_get_property;
 
+    /**
+     * ALSARawmidiSubstreamStatus:avail:
+     *
+     * The size of available space in intermediate buffer.
+     */
     rawmidi_substream_status_props[RAWMIDI_SUBSTREAM_STATUS_PROP_AVAIL] =
         g_param_spec_uint64("avail", "avail",
                             "The size of available space in intermediate buffer.",
@@ -56,6 +61,11 @@ static void alsarawmidi_substream_status_class_init(ALSARawmidiSubstreamStatusCl
                             0,
                             G_PARAM_READABLE);
 
+    /**
+     * ALSARawmidiSubstreamStatus:xruns:
+     *
+     * The count of XRUNs since the last query of status.
+     */
     rawmidi_substream_status_props[RAWMIDI_SUBSTREAM_STATUS_PROP_XRUN] =
         g_param_spec_uint64("xruns", "xruns",
                             "The count of XRUNs since the last query of status.",
