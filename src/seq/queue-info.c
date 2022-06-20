@@ -85,6 +85,11 @@ static void alsaseq_queue_info_class_init(ALSASeqQueueInfoClass *klass)
     gobject_class->set_property = seq_queue_info_set_property;
     gobject_class->get_property = seq_queue_info_get_property;
 
+    /**
+     * ALSASeqQueueInfo:queue-id:
+     *
+     * The numeric ID of queue. An entry of ALSASeqSpecificQueueId is available as well.
+     */
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
                            "The numeric ID of queue. An entry of ALSASeqSpecificQueueId is "
@@ -93,20 +98,35 @@ static void alsaseq_queue_info_class_init(ALSASeqQueueInfoClass *klass)
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqQueueInfo:client-id:
+     *
+     * The numeric ID of client which owns the queue, including one of ALSASeqSpecificClientId.
+     */
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
-                           "The numeric ID of client which owns the queue. An entry of "
-                           "ALSASeqSpecificClientId is available as well"
+                           "The numeric ID of client which owns the queue, including one of "
+                           "ALSASeqSpecificClientId.",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqQueueInfo:locked:
+     *
+     * Whether to be locked by the other queues or not.
+     */
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_LOCKED] =
         g_param_spec_boolean("locked", "locked",
                              "Whether to be locked by the other queues or not.",
                              FALSE,
                              G_PARAM_READWRITE);
 
+    /**
+     * ALSASeqQueueInfo:name:
+     *
+     * The name of queue.
+     */
     seq_queue_info_props[SEQ_QUEUE_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of queue.",
