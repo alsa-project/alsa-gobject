@@ -52,6 +52,11 @@ static void alsaseq_queue_status_class_init(ALSASeqQueueStatusClass *klass)
 
     gobject_class->get_property = seq_queue_status_get_property;
 
+    /**
+     * ALSASeqQueueStatus:queue-id:
+     *
+     * The numeric ID of queue. An entry of ALSASeqSpecificQueueId is available as well.
+     */
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
                            "The numeric ID of queue. An entry of ALSASeqSpecificQueueId is "
@@ -60,6 +65,11 @@ static void alsaseq_queue_status_class_init(ALSASeqQueueStatusClass *klass)
                            0,
                            G_PARAM_READABLE);
 
+    /**
+     * ALSASeqQueueStatus:event-count:
+     *
+     * The number of available events in the queue.
+     */
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_EVENT_COUNT] =
         g_param_spec_int("event-count", "event-count",
                          "The number of available events in the queue.",
@@ -67,6 +77,11 @@ static void alsaseq_queue_status_class_init(ALSASeqQueueStatusClass *klass)
                          0,
                          G_PARAM_READABLE);
 
+    /**
+     * ALSASeqQueueStatus:running:
+     *
+     * Whether the queue is running or not.
+     */
     seq_queue_status_props[SEQ_QUEUE_STATUS_PROP_RUNNING] =
         g_param_spec_boolean("running", "running",
                              "Whether the queue is running or not.",
