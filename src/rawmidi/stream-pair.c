@@ -115,9 +115,14 @@ static void alsarawmidi_stream_pair_class_init(ALSARawmidiStreamPairClass *klass
     gobject_class->finalize = rawmidi_stream_pair_finalize;
     gobject_class->get_property = rawmidi_stream_pair_get_property;
 
+    /**
+     * ALSARawmidiStreamPair:devnode:
+     *
+     * The full path to special file of rawmidi character device.
+     */
     rawmidi_stream_pair_props[RAWMIDI_STREAM_PAIR_PROP_DEVNODE] =
         g_param_spec_string("devnode", "devnode",
-                            "The full path of rawmidi character device.",
+                            "The full path to special file of rawmidi character device.",
                             "",
                             G_PARAM_READABLE);
 
