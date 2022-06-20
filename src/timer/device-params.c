@@ -69,6 +69,11 @@ static void alsatimer_device_params_class_init(ALSATimerDeviceParamsClass *klass
     gobject_class->set_property = timer_device_params_set_property;
     gobject_class->get_property = timer_device_params_get_property;
 
+    /**
+     * ALSATimerDeviceParams:period-numerator:
+     *
+     * The numerator of period for timer.
+     */
     timer_device_params_props[TIMER_DEVICE_PARAMS_PROP_PERIOD_NUM] =
         g_param_spec_uint64("period-numerator", "period-numerator",
                             "The numerator of period for timer.",
@@ -76,6 +81,11 @@ static void alsatimer_device_params_class_init(ALSATimerDeviceParamsClass *klass
                             0,
                             G_PARAM_READWRITE);
 
+    /**
+     * ALSATimerDeviceParams:period-denominator:
+     *
+     * The denominator of period for timer.
+     */
     timer_device_params_props[TIMER_DEVICE_PARAMS_PROP_PERIOD_DEN] =
         g_param_spec_uint64("period-denominator", "period-denominator",
                             "The denominator of period for timer.",
