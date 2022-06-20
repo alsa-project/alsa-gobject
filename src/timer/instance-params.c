@@ -79,14 +79,23 @@ static void alsatimer_instance_params_class_init(ALSATimerInstanceParamsClass *k
     gobject_class->set_property = timer_instance_params_set_property;
     gobject_class->get_property = timer_instance_params_get_property;
 
+    /**
+     * ALSATimerInstanceParams:flags:
+     *
+     * The flags for user instance, as a set of [flags@InstanceParamFlag].
+     */
     timer_instance_params_props[TIMER_INSTANCE_PARAMS_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
-                           "The flags for user instance, as a set of "
-                           "ALSATimerInstanceParamFlag",
+                           "The flags for user instance, as a set of ALSATimerInstanceParamFlag",
                            ALSATIMER_TYPE_INSTANCE_PARAM_FLAG,
                            0,
                            G_PARAM_READWRITE);
 
+    /**
+     * ALSATimerInstanceParams:interval:
+     *
+     * The interval to generate event in tick count.
+     */
     timer_instance_params_props[TIMER_INSTANCE_PARAMS_PROP_INTERVAL] =
         g_param_spec_uint("interval", "interval",
                           "The interval to generate event in tick count.",
@@ -94,6 +103,11 @@ static void alsatimer_instance_params_class_init(ALSATimerInstanceParamsClass *k
                           0,
                           G_PARAM_READWRITE);
 
+    /**
+     * ALSATimerInstanceParams:queue-size:
+     *
+     * The size of queue.
+     */
     timer_instance_params_props[TIMER_INSTANCE_PARAMS_PROP_QUEUE_SIZE] =
         g_param_spec_uint("queue-size", "queue-size",
                           "The size of queue.",
