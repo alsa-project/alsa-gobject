@@ -317,7 +317,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
         g_param_spec_uchar("queue-id", "queue-id",
                            "The numeric ID of queue to update time stamp when tstamp-overwrite "
                            "property is set to True.  One of ALSASeqSpecificQueueId is available "
-			   "as well",
+                           "as well",
                            0, G_MAXUINT8,
                            0,
                            G_PARAM_READWRITE);
