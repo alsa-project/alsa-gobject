@@ -111,6 +111,11 @@ static void alsaseq_user_client_class_init(ALSASeqUserClientClass *klass)
     gobject_class->finalize = seq_user_client_finalize;
     gobject_class->get_property = seq_user_client_get_property;
 
+    /**
+     * ALSASeqUserClient:client-id:
+     *
+     * The numeric ID of the client.
+     */
     seq_user_client_props[SEQ_USER_CLIENT_PROP_CLIENT_ID] =
         g_param_spec_uchar("client-id", "client-id",
                            "The numeric ID of the client.",
