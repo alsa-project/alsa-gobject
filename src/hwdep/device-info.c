@@ -88,36 +88,60 @@ static void alsahwdep_device_info_class_init(ALSAHwdepDeviceInfoClass *klass)
     gobject_class->set_property = hwdep_device_info_set_property;
     gobject_class->get_property = hwdep_device_info_get_property;
 
+    /**
+     * ALSAHwdepDeviceInfo:device-id:
+     *
+     * The numeric ID of device.
+     */
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_DEVICE_ID] =
         g_param_spec_uint("device-id", "device-id",
-                          "The numerical ID of device.",
+                          "The numeric ID of device.",
                           0, G_MAXUINT,
                           0,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+    /**
+     * ALSAHwdepDeviceInfo:card-id:
+     *
+     * The numeric ID of sound card.
+     */
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_CARD_ID] =
         g_param_spec_int("card-id", "card-id",
-                         "The numerical ID of sound card.",
+                         "The numeric ID of sound card.",
                          G_MININT, G_MAXINT,
                          0,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+    /**
+     * ALSAHwdepDeviceInfo:id:
+     *
+     * The string ID of the hwdep device.
+     */
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_ID] =
         g_param_spec_string("id", "id",
-                            "The ID string of the hwdep device",
+                            "The string ID of the hwdep device",
                             "",
                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+    /**
+     * ALSAHwdepDeviceInfo:name:
+     *
+     * The name of the hwdep device.
+     */
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
                             "The name of the hwdep device",
                             "",
                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+    /**
+     * ALSAHwdepDeviceInfo:iface:
+     *
+     * The type of interface for the hwdep device, one of ALSAHwdepIfaceType.
+     */
     hwdep_device_info_props[HWDEP_DEVICE_INFO_PROP_IFACE] =
         g_param_spec_enum("iface", "iface",
-                          "The type of interface for the hwdep device, one of "
-                          "ALSAHwdepIfaceType.",
+                          "The type of interface for the hwdep device, one of ALSAHwdepIfaceType.",
                           ALSAHWDEP_TYPE_IFACE_TYPE,
                           SNDRV_HWDEP_IFACE_OPL2,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
