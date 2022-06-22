@@ -28,7 +28,7 @@ tests = {
     'alsatimer-instance-params',
     'alsatimer-instance-status',
     'alsatimer-device-id',
-    'alsatimer-tick-event',
+    'alsatimer-tick-time-event',
     'alsatimer-tstamp-event',
     'alsatimer-functions',
   ],
