@@ -43,7 +43,7 @@ void alsatimer_real_time_event_get_event(const ALSATimerRealTimeEvent *self,
  * @real_time: (array fixed-size=2) (inout): The array with two elements for the seconds and
  *             nanoseconds part of timestamp when the instance queues the timestamp event.
  *
- * Get the seconds and nanoseconds part for the timestamp event.
+ * Get the seconds and nanoseconds part for the real time event.
  */
 void alsatimer_real_time_event_get_time(const ALSATimerRealTimeEvent *self,
                                         gint64 *const real_time[2])

@@ -54,8 +54,8 @@ tstamp_event_types = (
 )
 
 event_types = (
-    'TICK',
-    'TSTAMP',
+    'TICK_TIME',
+    'REAL_TIME',
 )
 
 user_instance_error_types = (
