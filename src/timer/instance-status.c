@@ -5,9 +5,9 @@
  * ALSATimerInstanceStatus:
  * A GObject-derived object to represent status of user instance.
  *
- * A [class@InstanceStatus] is a GObject-derived object to represent status of user instance
- * attached to any timer device or the other instance as slave. The call of
- * [method@UserInstance.get_status] returns the instance of object.
+ * A [class@InstanceStatus] is a GObject-derived object to express status of user instance attached
+ * to any timer device or the other instance as slave. The call of [method@UserInstance.get_status]
+ * returns the instance of object.
  *
  * The object wraps `struct snd_timer_status` in UAPI of Linux sound subsystem.
  */
@@ -117,27 +117,27 @@ static void alsatimer_instance_status_init(ALSATimerInstanceStatus *self)
 }
 
 /**
- * alsatimer_instance_status_get_tstamp:
+ * alsatimer_instance_status_get_time:
  * @self: A [class@InstanceStatus].
- * @tstamp: (array fixed-size=2)(out)(transfer none): The array with two elements for the seconds
- *          and nanoseconds parts of timestamp when the instance queues the latest event.
+ * @real_time: (array fixed-size=2)(out)(transfer none): The array with two elements for the
+ *             seconds and nanoseconds parts of timestamp when the instance queues the latest
+ *             event.
  *
- * Get timestamp for the latest event.
+ * Get real time at which the timer starts, stops, pauses, and continues.
  */
-void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
-                                          const gint64 *tstamp[2])
+void alsatimer_instance_status_get_time(ALSATimerInstanceStatus *self, const gint64 *real_time[2])
 {
     ALSATimerInstanceStatusPrivate *priv;
 
     g_return_if_fail(ALSATIMER_IS_INSTANCE_STATUS(self));
     priv = alsatimer_instance_status_get_instance_private(self);
 
-    g_return_if_fail(tstamp != NULL);
+    g_return_if_fail(real_time != NULL);
 
     priv->tstamp[0] = (gint64)priv->status.tstamp.tv_sec;
     priv->tstamp[1] = (gint64)priv->status.tstamp.tv_nsec;
 
-    *tstamp = (const gint64 *)&priv->tstamp;
+    *real_time = (const gint64 *)&priv->tstamp;
 }
 
 /**

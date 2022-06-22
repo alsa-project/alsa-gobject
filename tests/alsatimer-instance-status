@@ -18,7 +18,7 @@ props = (
 )
 methods = (
     'new',
-    'get_tstamp',
+    'get_time',
 )
 vmethods = ()
 signals = ()
