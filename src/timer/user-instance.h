@@ -29,13 +29,13 @@ struct _ALSATimerUserInstanceClass {
                                    const ALSATimerTickTimeEvent *event);
 
     /**
-     * ALSATimerUserInstanceClass::handle_tstamp_event:
+     * ALSATimerUserInstanceClass::handle_real_time_event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): An object derived from [struct@TstampEvent].
+     * @event: (transfer none): An object derived from [struct@RealTimeEvent].
      *
-     * Class closure for the [signal@UserInstance::handle-tstamp-event] signal.
+     * Class closure for the [signal@UserInstance::handle-real-time-event] signal.
      */
-    void (*handle_tstamp_event)(ALSATimerUserInstance *self, const ALSATimerTstampEvent *event);
+    void (*handle_real_time_event)(ALSATimerUserInstance *self, const ALSATimerRealTimeEvent *event);
 
     /**
      * ALSATimerUserInstanceClass::handle_disconnection:
