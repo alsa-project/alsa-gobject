@@ -19,13 +19,14 @@ struct _ALSATimerUserInstanceClass {
     GObjectClass parent_class;
 
     /**
-     * ALSATimerUserInstanceClass::handle_tick_event:
+     * ALSATimerUserInstanceClass::handle_tick_time_event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): An object derived from [struct@TickEvent].
+     * @event: (transfer none): An object derived from [struct@TickTimeEvent].
      *
-     * Class closure for the [signal@UserInstance::handle-tick-event] signal.
+     * Class closure for the [signal@UserInstance::handle-tick-time-event] signal.
      */
-    void (*handle_tick_event)(ALSATimerUserInstance *self, const ALSATimerTickEvent *event);
+    void (*handle_tick_time_event)(ALSATimerUserInstance *self,
+                                   const ALSATimerTickTimeEvent *event);
 
     /**
      * ALSATimerUserInstanceClass::handle_tstamp_event:

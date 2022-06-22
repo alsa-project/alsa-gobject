@@ -9,10 +9,10 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target_type = ALSATimer.TickEvent
+target_type = ALSATimer.TickTimeEvent
 methods = (
     'get_resolution',
-    'get_ticks',
+    'get_count',
 )
 
 if not test_struct(target_type, methods):

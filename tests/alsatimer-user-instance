@@ -28,12 +28,12 @@ methods = (
     'continue_',
 )
 vmethods = (
-    'do_handle_tick_event',
+    'do_handle_tick_time_event',
     'do_handle_tstamp_event',
     'do_handle_disconnection',
 )
 signals = (
-    'handle-tick-event',
+    'handle-tick-time-event',
     'handle-tstamp-event',
     'handle-disconnection',
 )
