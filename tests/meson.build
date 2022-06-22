@@ -29,7 +29,7 @@ tests = {
     'alsatimer-instance-status',
     'alsatimer-device-id',
     'alsatimer-tick-time-event',
-    'alsatimer-tstamp-event',
+    'alsatimer-real-time-event',
     'alsatimer-functions',
   ],
   'seq': [
