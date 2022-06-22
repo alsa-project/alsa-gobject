@@ -21,7 +21,7 @@ gboolean alsatimer_get_device_status(ALSATimerDeviceId *device_id,
 gboolean alsatimer_set_device_params(ALSATimerDeviceId *device_id,
                                      const ALSATimerDeviceParams *device_params, GError **error);
 
-gboolean alsatimer_get_tstamp_source(int *clock_id, GError **error);
+gboolean alsatimer_get_real_time_clock_id(int *clock_id, GError **error);
 
 G_END_DECLS
 
