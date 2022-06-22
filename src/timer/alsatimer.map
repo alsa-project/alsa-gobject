@@ -50,7 +50,7 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_get_device_id_list";
     "alsatimer_get_device_info";
     "alsatimer_get_device_status";
-    "alsatimer_get_tstamp_source";
+    "alsatimer_get_real_time_clock_id";
 
     "alsatimer_user_instance_open";
     "alsatimer_user_instance_get_protocol_version";

@@ -305,23 +305,23 @@ end:
 }
 
 /**
- * alsatimer_get_tstamp_source:
- * @clock_id: (out): The clock source for timestamp. The value of `CLOCK_XXX` in UAPI of Linux
+ * alsatimer_get_real_time_clock_id:
+ * @clock_id: (out): The clock_id for real time. The value of `CLOCK_XXX` in UAPI of Linux
  *            kernel.
  * @error: A [struct@GLib.Error]. Error is generated with domain of `GLib.FileError`.
  *
- * Get the clock source for timestamp when [class@UserInstance] is configured to receive event
- * with timestamp. The source is selected according to parameter of `snd-timer` kernel module,
- * and the call of function is just to refer to it.
+ * Get `clock_id` for real time. The `clock_id` governs real time retrieved by both
+ * [method@RealTimeEvent.get_time] and [method@InstanceStatus.get_time].
  *
- * `0` means `CLOCK_REALTIME` is used. `1` means `CLOCK_MONOTONIC` is used.
+ * The call of function is just to refer to parameter of `snd-timer` kernel module. `0` means
+ * `CLOCK_REALTIME` is used. `1` means `CLOCK_MONOTONIC` is used.
  *
  * The call of function executes `open(2)`, `read(2)`, `close(2)` system calls for the sysfs node
- * corresponding to `snd-timer` kernel module.
+ * corresponding to the parameter.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
-gboolean alsatimer_get_tstamp_source(int *clock_id, GError **error)
+gboolean alsatimer_get_real_time_clock_id(int *clock_id, GError **error)
 {
     int val;
     gsize size;

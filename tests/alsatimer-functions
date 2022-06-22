@@ -17,7 +17,7 @@ entries = {
         'get_device_info',
         'get_device_status',
         'set_device_params',
-        'get_tstamp_source',
+        'get_real_time_clock_id',
     ),
     ALSATimer.UserInstanceError: (
         'quark',
