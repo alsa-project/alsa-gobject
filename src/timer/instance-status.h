@@ -17,8 +17,7 @@ struct _ALSATimerInstanceStatusClass {
 
 ALSATimerInstanceStatus *alsatimer_instance_status_new();
 
-void alsatimer_instance_status_get_tstamp(ALSATimerInstanceStatus *self,
-                                          const gint64 *tstamp[2]);
+void alsatimer_instance_status_get_time(ALSATimerInstanceStatus *self, const gint64 *real_time[2]);
 
 G_END_DECLS
 

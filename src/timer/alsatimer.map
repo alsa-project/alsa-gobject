@@ -33,7 +33,7 @@ ALSA_GOBJECT_0_0_0 {
 
     "alsatimer_instance_status_get_type";
     "alsatimer_instance_status_new";
-    "alsatimer_instance_status_get_tstamp";
+    "alsatimer_instance_status_get_time";
   local:
     *;
 };
