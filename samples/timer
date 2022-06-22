@@ -13,7 +13,7 @@ instance = ALSATimer.UserInstance.new()
 instance.open(0)
 
 # Choose tstamp type of data for event and register event handler.
-instance.choose_event_type(ALSATimer.EventType.TSTAMP)
+instance.choose_event_type(ALSATimer.EventType.REAL_TIME)
 def handle_real_time_event(instance, event):
     real_time = event.get_time([0, 0])
     print('\nEvent at', real_time)

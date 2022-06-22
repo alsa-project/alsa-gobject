@@ -89,7 +89,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
      * @self: A [class@UserInstance].
      * @event: (transfer none): The instance of [struct@TickTimeEvent].
      *
-     * Emitted when tick event occurs.
+     * Emitted when event occurs to notify tick time.
      */
     timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_TICK_TIME_EVENT] =
         g_signal_new("handle-tick-time-event",
@@ -105,7 +105,7 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
      * @self: A [class@UserInstance].
      * @event: (transfer none): The instance of [struct@RealTimeEvent].
      *
-     * Emitted when timestamp event occurs.
+     * Emitted when event occurs to notify real time.
      */
     timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_REAL_TIME_EVENT] =
         g_signal_new("handle-real-time-event",
@@ -250,9 +250,11 @@ gboolean alsatimer_user_instance_get_protocol_version(ALSATimerUserInstance *sel
  *
  * Choose the type of event data to receive.
  *
- * The call of function is successful just before the instance is not attached yet.
- * [enum@EventType:TICK] is used as a default if the function is not called for
- * [enum@EventType:TSTAMP] explicitly.
+ * The call of function is successful just before call of [method@UserInstance.attach].
+ * [enum@EventType].TICK_TIME is used as a default if the function is not called for
+ * [enum@EventType].REAL_TIME explicitly. When the former is configured, event for tick time is
+ * available for [signal@UserInstance::handle_tick_time_event]. When the latter is configured,
+ * event for real time is available for [signal@UserInstance::handle_real_time_event].
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_TREAD` command
  * for ALSA timer character device.
@@ -556,10 +558,10 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
     }
 
     switch (priv->event_type) {
-    case ALSATIMER_EVENT_TYPE_TICK:
+    case ALSATIMER_EVENT_TYPE_TICK_TIME:
         dispatch_tick_time_events(self, src->buf, (size_t)len);
         break;
-    case ALSATIMER_EVENT_TYPE_TSTAMP:
+    case ALSATIMER_EVENT_TYPE_REAL_TIME:
         dispatch_real_time_events(self, src->buf, (size_t)len);
         break;
     default:
