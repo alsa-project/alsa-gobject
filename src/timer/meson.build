@@ -18,7 +18,7 @@ sources = files(
   'instance-info.c',
   'instance-params.c',
   'instance-status.c',
-  'tick-event.c',
+  'tick-time-event.c',
   'tstamp-event.c',
 )
 
@@ -32,7 +32,7 @@ headers = files(
   'instance-info.h',
   'instance-params.h',
   'instance-status.h',
-  'tick-event.h',
+  'tick-time-event.h',
   'tstamp-event.h',
 )
 
