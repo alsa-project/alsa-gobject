@@ -13,7 +13,7 @@ long long_from_string(const char *literal, long *number)
     val = strtol(literal, &endptr, 10);
     if (errno > 0)
         return -errno;
-    if (!endptr || endptr == literal || *endptr != 0)
+    if (!endptr || endptr == literal || (*endptr != 0 && *endptr != '\n'))
         return -EINVAL;
     *number = val;
     return 0;
