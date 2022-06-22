@@ -13,7 +13,7 @@ typedef struct snd_timer_tread ALSATimerRealTimeEvent;
 GType alsatimer_real_time_event_get_type() G_GNUC_CONST;
 
 void alsatimer_real_time_event_get_event(const ALSATimerRealTimeEvent *self,
-                                         ALSATimerTstampEventType *event);
+                                         ALSATimerRealTimeEventType *event);
 
 void alsatimer_real_time_event_get_time(const ALSATimerRealTimeEvent *self,
                                         gint64 *const real_time[2]);

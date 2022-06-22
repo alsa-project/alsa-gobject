@@ -66,7 +66,7 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_user_instance_continue";
     "alsatimer_user_instance_choose_event_type";
 
-    "alsatimer_tstamp_event_type_get_type";
+    "alsatimer_real_time_event_type_get_type";
     "alsatimer_event_type_get_type";
 
     "alsatimer_tick_time_event_get_type";
