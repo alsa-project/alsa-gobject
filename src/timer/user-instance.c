@@ -59,7 +59,7 @@ typedef struct {
 } TimerUserInstanceSource;
 
 enum timer_user_instance_sig_type {
-    TIMER_USER_INSTANCE_SIG_HANDLE_TICK_EVENT = 0,
+    TIMER_USER_INSTANCE_SIG_HANDLE_TICK_TIME_EVENT = 0,
     TIMER_USER_INSTANCE_SIG_HANDLE_TSTAMP_EVENT,
     TIMER_USER_INSTANCE_SIG_HANDLE_DISCONNECTION,
     TIMER_USER_INSTANCE_SIG_COUNT,
@@ -85,20 +85,20 @@ static void alsatimer_user_instance_class_init(ALSATimerUserInstanceClass *klass
     gobject_class->finalize = timer_user_instance_finalize;
 
     /**
-     * ALSATimerUserInstance::handle-tick-event:
+     * ALSATimerUserInstance::handle-tick-time-event:
      * @self: A [class@UserInstance].
-     * @event: (transfer none): The instance of [struct@TickEvent].
+     * @event: (transfer none): The instance of [struct@TickTimeEvent].
      *
      * Emitted when tick event occurs.
      */
-    timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_TICK_EVENT] =
-        g_signal_new("handle-tick-event",
+    timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_TICK_TIME_EVENT] =
+        g_signal_new("handle-tick-time-event",
                      G_OBJECT_CLASS_TYPE(klass),
                      G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_tick_event),
+                     G_STRUCT_OFFSET(ALSATimerUserInstanceClass, handle_tick_time_event),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__BOXED,
-                     G_TYPE_NONE, 1, ALSATIMER_TYPE_TICK_EVENT);
+                     G_TYPE_NONE, 1, ALSATIMER_TYPE_TICK_TIME_EVENT);
 
     /**
      * ALSATimerUserInstance::handle-tstamp-event:
@@ -494,14 +494,15 @@ static gboolean timer_user_instance_check_src(GSource *gsrc)
     return !!(condition & (G_IO_IN | G_IO_ERR));
 }
 
-static void dispatch_tick_events(ALSATimerUserInstance *self, const guint8 *buf, gsize length)
+static void dispatch_tick_time_events(ALSATimerUserInstance *self, const guint8 *buf, gsize length)
 {
     const struct snd_timer_read *ev;
 
     while (length >= sizeof(*ev)) {
         ev = (const struct snd_timer_read *)buf;
 
-        g_signal_emit(self, timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_TICK_EVENT],
+        g_signal_emit(self,
+                      timer_user_instance_sigs[TIMER_USER_INSTANCE_SIG_HANDLE_TICK_TIME_EVENT],
                       0, ev);
 
         length -= sizeof(*ev);
@@ -555,7 +556,7 @@ static gboolean timer_user_instance_dispatch_src(GSource *gsrc, GSourceFunc cb,
 
     switch (priv->event_type) {
     case ALSATIMER_EVENT_TYPE_TICK:
-        dispatch_tick_events(self, src->buf, (size_t)len);
+        dispatch_tick_time_events(self, src->buf, (size_t)len);
         break;
     case ALSATIMER_EVENT_TYPE_TSTAMP:
         dispatch_tstamp_events(self, src->buf, (size_t)len);
@@ -584,7 +585,7 @@ static void timer_user_instance_finalize_src(GSource *gsrc)
  *
  * Allocate [struct@GLib.Source] structure to handle events from ALSA timer character device. In
  * each iteration of [struct@GLib.MainContext], the `read(2)` system call is executed to dispatch
- * timer event for either [signal@UserInstance::handle-tick-event] or
+ * timer event for either [signal@UserInstance::handle-tick-time-event] or
  * [signal@UserInstance::handle-tstamp-event] signals, according to the result of `poll(2)` system
  * call.
  *

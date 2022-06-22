@@ -69,9 +69,9 @@ ALSA_GOBJECT_0_3_0 {
     "alsatimer_tstamp_event_type_get_type";
     "alsatimer_event_type_get_type";
 
-    "alsatimer_tick_event_get_type";
-    "alsatimer_tick_event_get_resolution";
-    "alsatimer_tick_event_get_ticks";
+    "alsatimer_tick_time_event_get_type";
+    "alsatimer_tick_time_event_get_resolution";
+    "alsatimer_tick_time_event_get_count";
 
     "alsatimer_tstamp_event_get_type";
     "alsatimer_tstamp_event_get_event";

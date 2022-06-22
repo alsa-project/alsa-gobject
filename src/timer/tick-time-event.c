@@ -2,14 +2,14 @@
 #include "privates.h"
 
 /**
- * ALSATimerTickEvent:
- * A boxed object to represent event of timer with tick count.
+ * ALSATimerTickTimeEvent:
+ * A boxed object to express event of timer with tick count.
  *
- * A [struct@TickEvent] is a boxed object to represent event of timer with tick count.
+ * A [struct@TickTimeEvent] includes tick count at which the event is queued.
  *
  * The object wraps `struct snd_timer_read` in UAPI of Linux sound subsystem.
  */
-ALSATimerTickEvent *timer_tick_event_copy(const ALSATimerTickEvent *self)
+ALSATimerTickTimeEvent *timer_tick_time_event_copy(const ALSATimerTickTimeEvent *self)
 {
 #ifdef g_memdup2
     return g_memdup2(self, sizeof(*self));
@@ -22,30 +22,29 @@ ALSATimerTickEvent *timer_tick_event_copy(const ALSATimerTickEvent *self)
 #endif
 }
 
-G_DEFINE_BOXED_TYPE(ALSATimerTickEvent, alsatimer_tick_event, timer_tick_event_copy, g_free)
+G_DEFINE_BOXED_TYPE(ALSATimerTickTimeEvent, alsatimer_tick_time_event, timer_tick_time_event_copy, g_free)
 
 /**
- * alsatimer_tick_event_get_resolution:
- * @self: A [struct@TickEvent].
+ * alsatimer_tick_time_event_get_resolution:
+ * @self: A [struct@TickTimeEvent].
  * @resolution: (out): The resolution of tick event.
  *
  * Get the resolution of tick event.
  */
-void alsatimer_tick_event_get_resolution(const ALSATimerTickEvent *self,
+void alsatimer_tick_time_event_get_resolution(const ALSATimerTickTimeEvent *self,
                                               guint *resolution)
 {
     *resolution = self->resolution;
 }
 
 /**
- * alsatimer_tick_event_get_ticks:
- * @self: A [struct@TickEvent].
- * @ticks: (out): The tick count since the last event.
+ * alsatimer_tick_time_event_get_count:
+ * @self: A [struct@TickTimeEvent].
+ * @count: (out): The tick count since the last event.
  *
  * Get the tick count since the last event.
  */
-void alsatimer_tick_event_get_ticks(const ALSATimerTickEvent *self,
-                                         guint *ticks)
+void alsatimer_tick_time_event_get_ticks(const ALSATimerTickTimeEvent *self, guint *count)
 {
-    *ticks = self->ticks;
+    *count = self->ticks;
 }
