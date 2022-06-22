@@ -47,6 +47,8 @@
  * The type of time stamp is associated to the mode of time stamp, while the type of data is
  * associated to the type of event loosely. Each of the variant type property has single storage
  * internally, thus an event can includes the sole variant.
+ *
+ * The object wraps `struct snd_seq_event` in UAPI of Linux sound subsystem.
  */
 
 static ALSASeqEvent *seq_event_copy(const ALSASeqEvent *self)
@@ -381,8 +383,8 @@ static gboolean validate_event_tstamp_mode(const struct snd_seq_event *ev,
  * @tick_time: (out) (transfer none): The tick time of event.
  * @error: A [struct@GLib.Error].
  *
- * Get the tick time of event, available only when [method@Event.get_tstamp_mode is
- * [enum@EventTstampMode].TICK.
+ * Get the tick time of event, available only when [enum@EventTstampMode].TICK is retrieved by
+ * [method@Event.get_tstamp_mode].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
@@ -406,8 +408,7 @@ gboolean alsaseq_event_get_tick_time(const ALSASeqEvent *self, guint *tick_time,
  * @tick_time: The tick time of event.
  * @error: A [struct@GLib.Error].
  *
- * Copy the tick time to the event, available only when [method@Event.get_tstamp_mode results in
- * [enum@EventTstampMode].TICK.
+ * Copy the real time to the event and set [enum@EventTstampMode].TICK.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
@@ -430,8 +431,8 @@ gboolean alsaseq_event_set_tick_time(ALSASeqEvent *self, guint tick_time, GError
  * @real_time: (array fixed-size=2) (out) (transfer none): The real time of event.
  * @error: A [struct@GLib.Error].
  *
- * Copy the real time to the event, available only when [method@Event.get_tstamp_mode] results in
- * [enum@EventTstampMode].REAL.
+ * Copy the real time to the event, available only when [enum@EventTstampMode].REAL is retrieved by
+ * [method@Event.get_tstamp_mode].
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
@@ -456,8 +457,7 @@ gboolean alsaseq_event_get_real_time(const ALSASeqEvent *self, const guint32 *re
  * @real_time: (array fixed-size=2): The real time of event.
  * @error: A [struct@GLib.Error].
  *
- * Copy the real time to the event, available only when [method@Event.get_tstamp_mode is
- * [enum@EventTstampMode].REAL.
+ * Copy the real time to the event and set [enum@EventTstampMode].REAL.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
