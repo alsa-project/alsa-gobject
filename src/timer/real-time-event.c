@@ -27,21 +27,21 @@ G_DEFINE_BOXED_TYPE(ALSATimerRealTimeEvent, alsatimer_real_time_event, timer_rea
 /**
  * alsatimer_real_time_event_get_event:
  * @self: A [struct@RealTimeEvent].
- * @event: (out): The type of tstamp event, one of [enum@TstampEventType].
+ * @event: (out): The type of real time event, one of [enum@RealTimeEventType].
  *
- * Get the kind of event for the timestamp event.
+ * Get the kind of event for the real time event.
  */
 void alsatimer_real_time_event_get_event(const ALSATimerRealTimeEvent *self,
-                                         ALSATimerTstampEventType *event)
+                                         ALSATimerRealTimeEventType *event)
 {
-    *event = (ALSATimerTstampEventType)self->event;
+    *event = (ALSATimerRealTimeEventType)self->event;
 }
 
 /**
  * alsatimer_real_time_event_get_time:
  * @self: A [struct@RealTimeEvent].
  * @real_time: (array fixed-size=2) (inout): The array with two elements for the seconds and
- *             nanoseconds part of timestamp when the instance queues the timestamp event.
+ *             nanoseconds part of timestamp when the real time event occurs.
  *
  * Get the seconds and nanoseconds part for the real time event.
  */
@@ -57,7 +57,7 @@ void alsatimer_real_time_event_get_time(const ALSATimerRealTimeEvent *self,
  * @self: A [struct@RealTimeEvent].
  * @val: (out): The value depending on the type of timestamp event.
  *
- * Get the value depending on the type of timestamp event.
+ * Get the value depending on the type of real time event.
  */
 void alsatimer_real_time_event_get_val(const ALSATimerRealTimeEvent *self, guint *val)
 {
