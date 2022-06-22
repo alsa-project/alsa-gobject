@@ -9,10 +9,10 @@ import gi
 gi.require_version('ALSATimer', '0.0')
 from gi.repository import ALSATimer
 
-target_type = ALSATimer.TstampEvent
+target_type = ALSATimer.RealTimeEvent
 methods = (
     'get_event',
-    'get_tstamp',
+    'get_time',
     'get_val',
 )
 
