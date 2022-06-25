@@ -49,7 +49,7 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self,
 void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
                                   gsize value_count);
 void alsactl_elem_value_get_int64(ALSACtlElemValue *self,
-                                  gint64 *const *values, gsize *value_count);
+                                  const gint64 **values, gsize *value_count);
 
 gboolean alsactl_elem_value_equal(const ALSACtlElemValue *self,
                                   const ALSACtlElemValue *target);
