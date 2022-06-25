@@ -40,7 +40,6 @@ def handle_elem_event(card, elem_id, events):
     _, elem_value = card.read_elem_value(elem_id, elem_value)
     if isinstance(info, ALSACtl.ElemInfoSingleArray):
         value_count = info.get_property('value-count')
-        value = [0] * value_count
         if info.get_property('elem-type') == ALSACtl.ElemType.BOOLEAN:
             value = elem_value.get_bool()[:value_count]
         elif info.get_property('elem-type') == ALSACtl.ElemType.INTEGER:
@@ -50,7 +49,7 @@ def handle_elem_event(card, elem_id, events):
         elif info.get_property('elem-type') == ALSACtl.ElemType.BYTES:
             value = elem_value.get_bytes()[:value_count]
         elif info.get_property('elem-type') == ALSACtl.ElemType.INTEGER64:
-            value = elem_value.get_int64(value)
+            value = elem_value.get_int64()[:value_count]
         print(value)
     elif info.get_property('elem-type') == ALSACtl.ElemType.IEC60958:
         channel_status = elem_value.get_channel_status()

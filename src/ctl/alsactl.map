@@ -31,7 +31,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_value_set_iec60958_user_data";
     "alsactl_elem_value_set_iec60958_channel_status";
     "alsactl_elem_value_set_int64";
-    "alsactl_elem_value_get_int64";
     "alsactl_elem_value_equal";
   local:
     *;
@@ -94,4 +93,5 @@ ALSA_GOBJECT_0_3_0 {
     "alsactl_elem_value_get_bytes";
     "alsactl_elem_value_get_iec60958_user_data";
     "alsactl_elem_value_get_iec60958_channel_status";
+    "alsactl_elem_value_get_int64";
 } ALSA_GOBJECT_0_2_0;
