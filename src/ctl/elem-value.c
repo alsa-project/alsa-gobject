@@ -332,18 +332,17 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self, cons
 /**
  * alsactl_elem_value_get_iec60958_channel_status:
  * @self: A [class@ElemValue].
- * @status: (array length=length)(inout): The array of byte data for channel status bits for
- *          IEC 60958 element.
- * @length: The number of bytes in status argument, up to 24.
+ * @status: (array length=length) (out) (transfer none): The array of byte data for channel status
+ *          bits of IEC 60958.
+ * @length: The number of bytes in status argument up to 24.
  *
- * Copy channel status of IEC 60958 from internal storage.
+ * Refer to the array specific to [enum@ElemType].IEC60958 element in internal storage.
  */
-void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, guint8 *const *status,
+void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, const guint8 **status,
                                                     gsize *length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
-    int i;
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
@@ -352,9 +351,8 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, guin
     g_return_if_fail(length != NULL);
 
     value = &priv->value;
-    *length = MIN(*length, G_N_ELEMENTS(value->value.iec958.status));
-    for (i = 0; i < *length; ++i)
-        (*status)[i] = value->value.iec958.status[i];
+    *status = value->value.iec958.status;
+    *length = G_N_ELEMENTS(value->value.iec958.status);
 }
 
 /**
