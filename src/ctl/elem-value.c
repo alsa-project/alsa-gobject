@@ -15,6 +15,7 @@
  */
 typedef struct {
     struct snd_ctl_elem_value value;
+    gboolean boolean[128];
 } ALSACtlElemValuePrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemValue, alsactl_elem_value, G_TYPE_OBJECT)
 
@@ -117,12 +118,12 @@ void alsactl_elem_value_set_bool(ALSACtlElemValue *self, const gboolean *values,
 /**
  * alsactl_elem_value_get_bool:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count)(inout): The array for values of boolean type.
+ * @values: (array length=value_count) (out) (transfer none): The array for boolean values.
  * @value_count: The number of values up to 128.
- *
- * Copy the array for values of boolean type from internal data.
+ * 
+ * Refer to the array specific to [enum@ElemType].BOOLEAN element in internal storage.
  */
-void alsactl_elem_value_get_bool(ALSACtlElemValue *self, gboolean *const *values,
+void alsactl_elem_value_get_bool(ALSACtlElemValue *self, const gboolean **values,
                                  gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
@@ -136,9 +137,11 @@ void alsactl_elem_value_get_bool(ALSACtlElemValue *self, gboolean *const *values
     g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
-    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
-    for (i = 0; i < *value_count; ++i)
-        (*values)[i] = (gboolean)value->value.integer.value[i];
+    for (i = 0; i < G_N_ELEMENTS(value->value.integer.value); ++i)
+        priv->boolean[i] = value->value.integer.value[i] > 0;
+
+    *values = priv->boolean;
+    *value_count = G_N_ELEMENTS(value->value.integer.value);
 }
 
 /**
