@@ -16,6 +16,7 @@
 typedef struct {
     struct snd_ctl_elem_value value;
     gboolean boolean[128];
+    gint32 integer[128];
 } ALSACtlElemValuePrivate;
 G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlElemValue, alsactl_elem_value, G_TYPE_OBJECT)
 
@@ -173,13 +174,13 @@ void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values, gs
 /**
  * alsactl_elem_value_get_int:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count)(inout): The array for values of integer
- *          type.
+ * @values: (array length=value_count) (out) (transfer none): The array for 32 bit signed integer
+ *          values.
  * @value_count: The number of values up to 128.
  *
- * Copy the array for values of integer type from internal storage.
+ * Refer to the array for [enum@ElemType].INTEGER element in internal storage.
  */
-void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values, gsize *value_count)
+void alsactl_elem_value_get_int(ALSACtlElemValue *self, const gint32 **values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -192,9 +193,11 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, gint32 *const *values, g
     g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
-    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.integer.value));
-    for (i = 0; i < *value_count; ++i)
-        (*values)[i] = (gint32)value->value.integer.value[i];
+    for (i = 0; i < G_N_ELEMENTS(value->value.integer.value); ++i)
+            priv->integer[i] = (gint32)value->value.integer.value[i];
+
+    *values = priv->integer;
+    *value_count = G_N_ELEMENTS(value->value.integer.value);
 }
 
 /**
