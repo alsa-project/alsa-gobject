@@ -108,6 +108,7 @@ void alsactl_elem_value_set_bool(ALSACtlElemValue *self, const gboolean *values,
     g_return_if_fail(values != NULL);
 
     value = &priv->value;
+    memset(&value->value.integer.value, 0, sizeof(value->value.integer.value));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer.value[i] = (long)values[i];
@@ -160,6 +161,7 @@ void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values, gs
     g_return_if_fail(values != NULL);
 
     value = &priv->value;
+    memset(&value->value.integer.value, 0, sizeof(value->value.integer.value));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer.value[i] = (long)values[i];
@@ -212,6 +214,7 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self, const guint32 *values, 
     g_return_if_fail(values != NULL);
 
     value = &priv->value;
+    memset(&value->value.enumerated.item, 0, sizeof(value->value.enumerated.item));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.enumerated.item));
     for (i = 0; i < value_count; ++i)
         value->value.enumerated.item[i] = (unsigned int)values[i];
@@ -263,6 +266,7 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, 
     g_return_if_fail(values != NULL);
 
     value = &priv->value;
+    memset(&value->value.bytes.data, 0, sizeof(value->value.bytes.data));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.bytes.data));
     for (i = 0; i < value_count; ++i)
         value->value.bytes.data[i] = (long)values[i];
@@ -315,6 +319,7 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self, cons
     g_return_if_fail(status != NULL);
 
     value = &priv->value;
+    memset(&value->value.iec958.status, 0, sizeof(value->value.iec958.status));
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.status));
     for (i = 0; i < length; ++i)
         value->value.iec958.status[i] = status[i];
@@ -369,6 +374,7 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self, const gui
     g_return_if_fail(data != NULL);
 
     value = &priv->value;
+    memset(&value->value.iec958.subcode, 0, sizeof(value->value.iec958.subcode));
     length = MIN(length, G_N_ELEMENTS(value->value.iec958.subcode));
     for (i = 0; i < length; ++i)
         value->value.iec958.subcode[i] = data[i];
@@ -421,6 +427,7 @@ void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values, 
     g_return_if_fail(values != NULL);
 
     value = &priv->value;
+    memset(&value->value.integer64.value, 0, sizeof(value->value.integer64.value));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.integer64.value));
     for (i = 0; i < value_count; ++i)
         value->value.integer64.value[i] = (long long)values[i];
