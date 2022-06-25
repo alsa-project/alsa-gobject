@@ -48,7 +48,7 @@ def handle_elem_event(card, elem_id, events):
         elif info.get_property('elem-type') == ALSACtl.ElemType.ENUMERATED:
             value = elem_value.get_enum()[:value_count]
         elif info.get_property('elem-type') == ALSACtl.ElemType.BYTES:
-            value = elem_value.get_bytes(value)
+            value = elem_value.get_bytes()[:value_count]
         elif info.get_property('elem-type') == ALSACtl.ElemType.INTEGER64:
             value = elem_value.get_int64(value)
         print(value)

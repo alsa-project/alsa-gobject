@@ -34,7 +34,7 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
 void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
                                   const guint8 *values, gsize value_count);
 void alsactl_elem_value_get_bytes(ALSACtlElemValue *self,
-                                  guint8 *const *values, gsize *value_count);
+                                  const guint8 **values, gsize *value_count);
 
 void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
                                         const guint8 *status, gsize length);

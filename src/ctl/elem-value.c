@@ -280,16 +280,16 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, 
 /**
  * alsactl_elem_value_get_bytes:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count)(inout): The array for values of bytes type.
- * @value_count: The number of values up to 512.
+ * @values: (array length=value_count) (out) (transfer none): The array for 8 bit unsigned integer
+ *          values.
+ * @value_count: (out): The number of values up to 512.
  *
- * Copy the array for values of bytes type into internal storage.
+ * Refer to the array specific to [enum@ElemType].BYTES element in internal storage.
  */
-void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, guint8 *const *values, gsize *value_count)
+void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values, gsize *value_count)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
-    int i;
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
@@ -298,9 +298,8 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, guint8 *const *values,
     g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
-    *value_count = MIN(*value_count, G_N_ELEMENTS(value->value.bytes.data));
-    for (i = 0; i < *value_count; ++i)
-        (*values)[i] = (guint8)value->value.bytes.data[i];
+    *values = value->value.bytes.data;
+    *value_count = G_N_ELEMENTS(value->value.bytes.data);
 }
 
 /**
