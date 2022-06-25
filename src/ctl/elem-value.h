@@ -29,7 +29,7 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, const gint32 **values,
 void alsactl_elem_value_set_enum(ALSACtlElemValue *self,
                                  const guint32 *values, gsize value_count);
 void alsactl_elem_value_get_enum(ALSACtlElemValue *self,
-                                 guint32 *const *values, gsize *value_count);
+                                 const guint32 **values, gsize *value_count);
 
 void alsactl_elem_value_set_bytes(ALSACtlElemValue *self,
                                   const guint8 *values, gsize value_count);
