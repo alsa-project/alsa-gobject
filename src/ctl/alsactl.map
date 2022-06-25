@@ -25,7 +25,6 @@ ALSA_GOBJECT_0_0_0 {
     "alsactl_elem_value_get_type";
     "alsactl_elem_value_new";
     "alsactl_elem_value_set_bool";
-    "alsactl_elem_value_get_bool";
     "alsactl_elem_value_set_int";
     "alsactl_elem_value_get_int";
     "alsactl_elem_value_set_enum";
@@ -93,4 +92,6 @@ ALSA_GOBJECT_0_3_0 {
 
     "alsactl_elem_info_enumerated_get_type";
     "alsactl_elem_info_enumerated_new";
+
+    "alsactl_elem_value_get_bool";
 } ALSA_GOBJECT_0_2_0;
