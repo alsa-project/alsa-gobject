@@ -385,17 +385,17 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self, const gui
 /**
  * alsactl_elem_value_get_iec60958_user_data:
  * @self: A [class@ElemValue].
- * @data: (array length=length)(inout): The array of byte data for user data bits in IEC 60958.
- * @length: The number of bytes in user_data argument, up to 147.
+ * @data: (array length=length) (out) (transfer none): The array of byte data for user data bits of
+ *        IEC 60958.
+ * @length: The number of bytes in user_data argument up to 147.
  *
- * Copy user data of IEC 60958 from internal storage.
+ * Refer to the array specific to [enum@ElemType].IEC60958 element in internal storage.
  */
-void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, guint8 *const *data,
+void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const guint8 **data,
                                                gsize *length)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
-    int i;
 
     g_return_if_fail(ALSACTL_IS_ELEM_VALUE(self));
     priv = alsactl_elem_value_get_instance_private(self);
@@ -404,9 +404,8 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, guint8 *c
     g_return_if_fail(length != NULL);
 
     value = &priv->value;
-    *length = MIN(*length, G_N_ELEMENTS(value->value.iec958.subcode));
-    for (i = 0; i < *length; ++i)
-        (*data)[i] = value->value.iec958.subcode[i];
+    *data = value->value.iec958.subcode;
+    *length = G_N_ELEMENTS(value->value.iec958.subcode);
 }
 
 /**
