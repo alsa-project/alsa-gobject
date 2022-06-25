@@ -3,13 +3,12 @@
 
 /**
  * ALSACtlElemValue:
- * A boxed object to represent the container of array of values for any type of element.
+ * A GObject-derived object to express the container of array for values specific to element type.
  *
- * A [class@ElemValue] is boxed object to represent the container of values for any type of
- * element. The arrays of values for each type of element shares the same storage, thus it's
- * important for applications to distinguish the type of element in advance of accessing the
- * array. The object is used for the call of [method@Card.write_elem_value] and
- * [method@Card.read_elem_value].
+ * A [class@ElemValue] includes several types of array for values specific to element type. The
+ * arrays shares the same internal storage, thus the user application should decide the type of
+ * array according to the type of element when accessing to the array. The object is used for the
+ * call of [method@Card.write_elem_value] and [method@Card.read_elem_value].
  *
  * The object wraps `struct snd_ctl_elem_value` in UAPI of Linux sound subsystem.
  */
@@ -93,10 +92,10 @@ void ctl_elem_value_refer_private(ALSACtlElemValue *self, struct snd_ctl_elem_va
 /**
  * alsactl_elem_value_set_bool:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count): The array for values of boolean type.
+ * @values: (array length=value_count): The array for boolean values.
  * @value_count: The number of values up to 128.
  *
- * Copy the array for values of boolean type into internal data.
+ * Copy the array into internal data for [enum@ElemType].BOOLEAN element.
  */
 void alsactl_elem_value_set_bool(ALSACtlElemValue *self, const gboolean *values, gsize value_count)
 {
@@ -148,10 +147,10 @@ void alsactl_elem_value_get_bool(ALSACtlElemValue *self, const gboolean **values
 /**
  * alsactl_elem_value_set_int:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count): The array for values of integer type.
+ * @values: (array length=value_count): The array for 32 bit signed integer values.
  * @value_count: The number of values up to 128.
  *
- * Copy the array for values of integer type into internal storage.
+ * Copy the array into internal storage for [enum@ElemType].INTEGER element.
  */
 void alsactl_elem_value_set_int(ALSACtlElemValue *self, const gint32 *values, gsize value_count)
 {
@@ -203,10 +202,10 @@ void alsactl_elem_value_get_int(ALSACtlElemValue *self, const gint32 **values, g
 /**
  * alsactl_elem_value_set_enum:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count): The array for values of enumeration index.
+ * @values: (array length=value_count): The array for enumeration index values.
  * @value_count: The number of values up to 128.
  *
- * Copy the array for values of enumeration index into internal storage.
+ * Copy the array into internal storage for [enum@ElemType].ENUMERATED element.
  */
 void alsactl_elem_value_set_enum(ALSACtlElemValue *self, const guint32 *values, gsize value_count)
 {
@@ -254,10 +253,10 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self, const guint32 **values,
 /**
  * alsactl_elem_value_set_bytes:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count): The array for values of bytes type.
+ * @values: (array length=value_count): The array for 8 bit unsigned integer values.
  * @value_count: The number of values up to 512.
  *
- * Copy the array for values of bytes type into internal storage.
+ * Copy the array into internal storage for [enum@ElemType].BYTES element.
  */
 void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, gsize value_count)
 {
@@ -305,10 +304,10 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values,
 /**
  * alsactl_elem_value_set_iec60958_channel_status:
  * @self: A [class@ElemValue].
- * @status: (array length=length): The array of byte data for channel status bits in IEC 60958.
+ * @status: (array length=length): The array of byte data for channel status bits of IEC 60958.
  * @length: The number of bytes in channel_status argument, up to 24.
  *
- * Copy the given channel status of IEC 60958 into internal storage.
+ * Copy the channel status bits into internal storage for [enum@ElemType].IEC60958 element.
  */
 void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self, const guint8 *status,
                                                     gsize length)
@@ -358,10 +357,10 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, cons
 /**
  * alsactl_elem_value_set_iec60958_user_data:
  * @self: A [class@ElemValue].
- * @data: (array length=length): The array of byte data for user data bits in IEC 60958.
+ * @data: (array length=length): The array of byte data for user data bits of IEC 60958.
  * @length: The number of bytes in data argument, up to 147.
  *
- * Copy the given user data of IEC 60958 into internal storage.
+ * Copy the user data bits into internal storage for [enum@ElemType].IEC60958 element.
  */
 void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self, const guint8 *data,
                                                gsize length)
@@ -411,10 +410,10 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const gui
 /**
  * alsactl_elem_value_set_int64:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count): The array for values of integer64 type.
+ * @values: (array length=value_count): The array for 64 bit signed integer values.
  * @value_count: The number of values up to 64.
  *
- * Copy the array for values of integer64 type into internal storage.
+ * Copy the array into internal storage for [enum@ElemType].INTEGER64 element.
  */
 void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values, gsize value_count)
 {
