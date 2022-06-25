@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2022/06/06
+2022/06/25
 Takashi Sakamoto
 
 Introduction
@@ -30,15 +30,15 @@ Namespaces of g-i produced by the project
 =========================================
 
 ALSACtl-0.0
-    For bindings to use libalsactl0
+    For bindings to use the ``libalsactl0``
 ALSATimer-0.0
-    For bindings to use libalsatimer0
+    For bindings to use the ``libalsatimer0``
 ALSASeq-0.0
-    For bindings to use libalsaseq0
+    For bindings to use the ``libalsaseq0``
 ALSAHwdep-0.0
-    For bindings to use libalsahwdep0
+    For bindings to use the ``libalsahwdep0``
 ALSARawmidi-0.0
-    For bindings to use libalsarawmidi0
+    For bindings to use the ``libalsarawmidi0``
 
 Documentation
 =============
@@ -111,7 +111,7 @@ Design note
   kernel land directly by system calls without alsa-lib's configuration space
   and plugin framework.
 * The way to enumerate any device is based on sysfs, programmed with libudev1.
-* GObject object is used for structures in UAPI of Linux sound subsystem with
+* GObject-drived object is used for structures in UAPI of Linux sound subsystem with
   reserved space.
 * Boxed object is used for structures in UAPI of Linux sound subsystem without
   reserved space.
@@ -137,3 +137,113 @@ included in this repository and available to suppress the report.
 For example ::
 
     $ valgrind --suppressions=valgrind-glib.suppressions --leak-check=full your-executable
+
+Loss of backward compatibility between v0.2/0.3 releases
+========================================================
+
+Following to GNOME convention for throw function
+------------------------------------------------
+
+In GNOME convention, the throw function to report error at GError argument should return gboolean
+value to report the overall operation finished successfully or not. At v0.3 release, the most of
+public API are rewritten according to it.
+
+All of constructor in ``ALSASeq.RemoveFilter`` become non-throw function since they bring no
+failure.
+
+Using GObject Interface
+-----------------------
+
+GObject Interface is utilized for some cases to express structure with union.
+
+- ``ALSACtl.ElemInfoCommon`` and ``ALSACtl.ElemInfoSingleArray`` for ``struct snd_ctl_elem_info``
+- ``ALSASeq.QueueTimerCommon`` for ``struct snd_seq_queue_timer``
+
+Therefore some GObject-derived objects implements the interfaces.
+
+- ``ALSACtl.ElemInfoIec60958``
+- ``ALSACtl.ElemInfoBoolean``
+- ``ALSACtl.ElemInfoBytes``
+- ``ALSACtl.ElemInfoInteger``
+- ``ALSACtl.ElemInfoInteger64``
+- ``ALSACtl.ElemInfoEnumerated``
+- ``ALSASeq.QueueTimerAlsa``
+
+Some boxed structures are obsoleted and removed.
+
+- ``ALSACtl.ElemInfo``
+- ``ALSACtl.QueueTimer``
+- ``ALSACtl.QueueTimerDataAlsa``
+
+GObject Interface is utlized to define common feature of hwdep device as well.
+``ALSAHwdep.DeviceCommon`` interface is added for the purpose.
+
+Event expression for ALSA Sequencer
+-----------------------------------
+
+``ALSASeq.Event`` boxed structure is newly added to each event, and ``ALSASeq.EventCntr`` is
+simplified to include deserializer only. ``ALSASeq.EventError`` domain is newly added to express
+event handling problem.
+
+Name consistency in time stamp expression
+-----------------------------------------
+
+The word ``tstamp`` is renamed to ``real time`` in the most of functions, enumerations, object
+names, and methods for name consistency.
+
+- ``ALSATimer.TstampEvent`` boxed structure is renamed to ``ALSATimer.RealTimeEvent``
+- ``ALSATimer.EventType`` enumeration is renamed to ``ALSATimer.RealTimeEventType``
+- ``ALSATimer.EventDataType`` enumeration is renamed to ``ALSATimer.EventType``
+- ``ALSATimer.InstanceStatus.get_tstamp()`` method is renamed to ``ALSATimer.InstanceStatus.get_time()``
+- ``ALSATimer.get_tstamp_source()`` function is renamed to ``ALSATimer.get_real_time_clock_id()``
+
+In time stamp, the counterpart of ``real time`` is ``tick``. ``ALSATimer.TickEvent`` boxed structure
+is renamed to ``ALSATimer.TickTimeEvent``. ``ALSATimer.Event``, ``ALSATimer.EventDataTick`` and
+``ALSATimer.EventDataTstamp`` are obsoleted and removed.  ``ALSATimer.UserInstance::handle-event``
+is obsoleted as well. The alternatives are available to retrieve corresponding event.
+
+- ``ALSATimer.UserInstance::handle-tick-time-event``
+- ``ALSATimer.UserInstance::handle-real-time-event``
+
+``ALSASeq.Tstamp`` is obsoleted and removed as well. The accessor methods to it are rewritten
+to retrieve either tick time or real time.
+
+- ``ALSASeq.Event.get_tick_time()``
+- ``ALSASeq.Event.get_real_time()``
+- ``ALSASeq.Event.get_tick_time_data()``
+- ``ALSASeq.Event.get_real_time_data()``
+- ``ALSASeq.EventDataQueue.get_tick_time_param()``
+- ``ALSASeq.EventDataQueue.get_real_time_param()``
+- ``ALSASeq.RemoveFilter.new_with_tick_time()``
+- ``ALSASeq.RemoveFilter.new_with_real_time()``
+
+The word ``tstamp`` still remains in the enumerations and properties to affects both ``tick``
+and ``real time``.
+
+- ``ALSASeq.EventTstampMode``
+- ``ALSASeq.Event.get_tstamp_mode()``
+- ``ALSASeq.PortInfo:tstamp-mode``
+- ``ALSASeq.PortInfo:tstamp-overwrite``
+- ``ALSASeq.SusbscribeData:has-tstamp``
+- ``ALSASeq.SusbscribeData:tstamp-mode``
+
+Some properties are added to ``ALSASeq.SubscribeData`` to obsolete ``ALSASeq.PortSubscribeFlag``.
+
+- ``ALSASeq.SubscribeData:is-exclusive``
+- ``ALSASeq.SubscribeData:has-tstamp``
+- ``ALSASeq.SubscribeData:tstamp-mode``
+- ``ALSASeq.SubscribeData:queue-id``
+
+Rewrite setter method in ALSACtl.ElemValue
+------------------------------------------
+
+Below methods are rewritten to retrieve the pointer in internal storage instead of copying to given
+buffer:
+
+- ``ALSACtl.ElemValue.get_bool``
+- ``ALSACtl.ElemValue.get_int``
+- ``ALSACtl.ElemValue.get_enum``
+- ``ALSACtl.ElemValue.get_bytes``
+- ``ALSACtl.ElemValue.get_iec60958_user_data``
+- ``ALSACtl.ElemValue.get_iec60958_channel_status``
+- ``ALSACtl.ElemValue.get_int64``
