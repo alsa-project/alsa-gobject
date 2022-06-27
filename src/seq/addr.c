@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqAddr:
- * A boxed object to represent address in ALSA Sequencer.
+ * A boxed object to express address in ALSA Sequencer.
  *
- * A [struct@Addr] is a boxed object to represent address in ALSA Sequencer. The address consists
+ * A [struct@Addr] is a boxed object to express address in ALSA Sequencer. The address consists
  * of two parts; the numeric ID of client and port.
  *
  * The object wraps `struct snd_seq_addr` in UAPI of Linux sound subsystem.

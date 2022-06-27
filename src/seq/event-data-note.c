@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqEventDataNote:
- * A boxed object to represent data of note event.
+ * A boxed object to express data of note event.
  *
- * A [struct@EventDataNote] is a boxed object to represent data of note event. The instance of
+ * A [struct@EventDataNote] is a boxed object to express data of note event. The instance of
  * object is one of data properties in event.
  *
  * The object wraps `struct snd_seq_ev_note` in UAPI of Linux sound subsystem.

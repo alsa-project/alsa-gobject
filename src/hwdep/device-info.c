@@ -3,9 +3,9 @@
 
 /**
  * ALSAHwdepDeviceInfo:
- * A GObject-derived object to represent information of ALSA hwdep device.
+ * A GObject-derived object to express information of ALSA hwdep device.
  *
- * A [class@DeviceInfo] is a GObject-derived object to represent information of ALSA hwdep device.
+ * A [class@DeviceInfo] is a GObject-derived object to express information of ALSA hwdep device.
  * The call of [func@get_device_info] returns an instance of the object.
  *
  * The object wraps `struct snd_hwdep_info` in UAPI of Linux sound subsystem.

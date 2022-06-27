@@ -5,9 +5,9 @@
 
 /**
  * ALSARawmidiSubstreamParams:
- * A GObject-derived object to represent parameters of substream.
+ * A GObject-derived object to express parameters of substream.
  *
- * A [class@SubstreamParams] is a GObject-derived object to represent parameters of substream
+ * A [class@SubstreamParams] is a GObject-derived object to express parameters of substream
  * attached to the pair of streams. The call of [method@StreamPair.set_substream_params] requires
  * the instance of object.
  *

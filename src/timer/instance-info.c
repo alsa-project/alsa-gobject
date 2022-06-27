@@ -3,9 +3,9 @@
 
 /**
  * ALSATimerInstanceInfo:
- * A GObject-derived object to represent information of user instance.
+ * A GObject-derived object to express information of user instance.
  *
- * A [class@InstanceInfo] is a GObject-derived object to represent information of user instance
+ * A [class@InstanceInfo] is a GObject-derived object to express information of user instance
  * attached to any timer device or the other instance as slave. The call of
  * [method@UserInstance.get_info] returns the instance of object.
  *

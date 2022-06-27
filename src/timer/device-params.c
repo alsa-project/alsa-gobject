@@ -3,9 +3,9 @@
 
 /**
  * ALSATimerDeviceParams:
- * A GObject-derived object to represent parameter of timer device.
+ * A GObject-derived object to express parameter of timer device.
  *
- * A [class@DeviceParams] is a GObject-derived object to represent parameter of timer device. The
+ * A [class@DeviceParams] is a GObject-derived object to express parameter of timer device. The
  * call of alsatimer_set_device_params() requires the instance of object.
  *
  * The object wraps `struct snd_timer_gparams` in UAPI of Linux sound subsystem.

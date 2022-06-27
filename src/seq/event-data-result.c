@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqEventDataResult:
- * A boxed object to represent data of result event.
+ * A boxed object to express data of result event.
  *
- * A [struct@EventDataResult] is a boxed object to represent data of result event. The instance of
+ * A [struct@EventDataResult] is a boxed object to express data of result event. The instance of
  * object is one of data properties in event.
  *
  * The object wraps `struct snd_seq_result` in UAPI of Linux sound subsystem.

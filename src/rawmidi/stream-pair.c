@@ -13,9 +13,9 @@
 
 /**
  * ALSARawmidiStreamPair:
- * GObject-derived object to represent a pair of Rawmidi stream.
+ * GObject-derived object to express a pair of Rawmidi stream.
  *
- * A [class@StreamPair] is a GObject-derived object to represent a pair of Rawmidi stream to which
+ * A [class@StreamPair] is a GObject-derived object to express a pair of Rawmidi stream to which
  * substreams are attached. The substream is pointed by the combination of the numeric identifier
  * of device, subdevice, and direction. When the call of [method@StreamPair.open] with the
  * combination, corresponding substreams are attached to the object. Then the object maintains file
@@ -281,7 +281,7 @@ gboolean alsarawmidi_stream_pair_open(ALSARawmidiStreamPair *self, guint card_id
  *                     used.
  * @error: A [struct@GLib.Error].
  *
- * Get the version of rawmidi protocol currently used. The version is represented as the array with
+ * Get the version of rawmidi protocol currently used. The version is expressed as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
  *

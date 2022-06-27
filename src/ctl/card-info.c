@@ -3,7 +3,7 @@
 
 /**
  * ALSACtlCardInfo:
- * A GObject-derived object to represent information of sound card.
+ * A GObject-derived object to express information of sound card.
  *
  * A [class@CardInfo] is information of sound card. The call of [method@Card.get_info] returns an
  * instance of the object.

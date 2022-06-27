@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqEventDataConnect:
- * A boxed object to represent data of connect event.
+ * A boxed object to express data of connect event.
  *
- * A [struct@EventDataConnect] is a boxed object to represent data of connect event. The instance
+ * A [struct@EventDataConnect] is a boxed object to express data of connect event. The instance
  * of object is one of data properties in event.
  *
  * The object wraps `struct snd_seq_connect` in UAPI of Linux sound subsystem.

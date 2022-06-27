@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqEventDataCtl:
- * A boxed object to represent data of control event.
+ * A boxed object to express data of control event.
  *
- * A [struct@EventDataCtl] is a boxed object to represent data of control event. The instance of
+ * A [struct@EventDataCtl] is a boxed object to express data of control event. The instance of
  * object is one of data properties in event.
  *
  * The object wraps `struct snd_seq_ev_ctrl` in UAPI of Linux sound subsystem.

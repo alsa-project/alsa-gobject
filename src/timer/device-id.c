@@ -3,9 +3,9 @@
 
 /**
  * ALSATimerDeviceId:
- * A boxed object to represent the identifier of timer device.
+ * A boxed object to express the identifier of timer device.
  *
- * A [struct@DeviceId] is a boxed object to represent the identifier of timer device. The
+ * A [struct@DeviceId] is a boxed object to express the identifier of timer device. The
  * identifier mainly consists of the class of timer device. The other members; the numeric ID of
  * card, device, and subdevice are optional according to the class of timer device.
  *

@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqSystemInfo:
- * A GObject-derived object to represent information of ALSA Sequencer.
+ * A GObject-derived object to express information of ALSA Sequencer.
  *
- * A [class@SystemInfo] is a GObject-derived object to represent information of ALSA Sequencer. The
+ * A [class@SystemInfo] is a GObject-derived object to express information of ALSA Sequencer. The
  * call of [func@get_system_info] returns the instance of object.
  *
  * The object wraps `struct snd_seq_system_info` in UAPI of Linux sound subsystem.

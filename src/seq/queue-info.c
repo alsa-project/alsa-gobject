@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqQueueInfo:
- * A GObject-derived object to represent information of queue.
+ * A GObject-derived object to express information of queue.
  *
- * A [class@QueueInfo] is a GObject-derived object to represent information of queue. The call of
+ * A [class@QueueInfo] is a GObject-derived object to express information of queue. The call of
  * [func@get_queue_info_by_id] and [func@get_queue_info_by_name] returns the instance of object.
  * The call of [method@UserClient.create_queue] and [method@UserClient.update_queue] requires the
  * instance of object.

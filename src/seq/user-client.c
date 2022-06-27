@@ -12,9 +12,9 @@
 
 /**
  * ALSASeqUserClient:
- * A GObject-derived object to represent user client.
+ * A GObject-derived object to express user client.
  *
- * A [class@UserClient] is a GObject-derived object to represent user client. Any port can be added
+ * A [class@UserClient] is a GObject-derived object to express user client. Any port can be added
  * to the client as destination or source for any event.
  *
  * When the call of [method@UserClient.open] the object maintain file descriptor till object
@@ -236,7 +236,7 @@ gboolean alsaseq_user_client_open(ALSASeqUserClient *self, gint open_flag, GErro
  *                     used.
  * @error: A [struct@GLib.Error].
  *
- * Get the version of sequencer protocol currently used. The version is represented as the array
+ * Get the version of sequencer protocol currently used. The version is expressed as the array
  * with three elements; major, minor, and micro version in the order. The length of major version
  * is 16 bit, the length of minor and micro version is 8 bit each.
  *
