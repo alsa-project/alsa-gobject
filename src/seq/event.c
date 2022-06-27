@@ -1620,6 +1620,22 @@ gboolean alsaseq_event_set_result_data(ALSASeqEvent *self, const ALSASeqEventDat
     return TRUE;
 }
 
+/**
+ * alsaseq_event_calculate_pool_consumption:
+ * @self: A [struct@Event].
+ * @cells: (out): The number of consumed cells in client pool.
+ *
+ * Calculate the number of cells in client pool to be consumed when the event is delivered.
+ * The comparison to properties of [class@ClientPool] is useful when scheduling the event.
+ */
+void alsaseq_event_calculate_pool_consumption(const ALSASeqEvent *self, guint *cells)
+{
+    g_return_if_fail(self != NULL);
+    g_return_if_fail(cells != NULL);
+
+    *cells = seq_event_calculate_flattened_length(self, TRUE) / sizeof(*self);
+}
+
 void seq_event_copy_flattened(const ALSASeqEvent *self, guint8 *buf, gsize length)
 {
     memcpy(buf, self, sizeof(*self));
