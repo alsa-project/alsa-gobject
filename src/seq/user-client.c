@@ -551,7 +551,10 @@ gboolean alsaseq_user_client_get_pool(ALSASeqUserClient *self,
  *
  * Deliver the event immediately, or schedule it into memory pool of the client.
  *
- * The call of function executes `write(2)` system call for ALSA sequencer character device.
+ * The call of function executes `write(2)` system call for ALSA sequencer character device. When
+ * [property@ClientPool:output-free] is less than [method@Event.calculate_pool_consumption] and
+ * [method@UserClient.open] is called without non-blocking flag, the user process can be blocked
+ * untill enough number of cells becomes available.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
@@ -614,7 +617,10 @@ gboolean alsaseq_user_client_schedule_event(ALSASeqUserClient *self, const ALSAS
  *
  * Deliver the events immediately, or schedule it into memory pool of the client.
  *
- * The call of function executes `write(2)` system call for ALSA sequencer character device.
+ * The call of function executes `write(2)` system call for ALSA sequencer character device. When
+ * [property@ClientPool:output-free] is less than sum of [method@Event.calculate_pool_consumption]
+ * and [method@UserClient.open] is called without non-blocking flag, the user process can be
+ * blocked untill enough number of cells becomes available.
  *
  * Returns: %TRUE when the overall operation finishes successfully, else %FALSE.
  */
