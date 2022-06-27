@@ -37,19 +37,19 @@ static void seq_client_pool_set_property(GObject *obj, guint id,
 
     switch (id) {
     case SEQ_CLIENT_POOL_PROP_OUTPUT_POOL:
-        priv->pool.output_pool = g_value_get_int(val);
+        priv->pool.output_pool = g_value_get_uint(val);
         break;
     case SEQ_CLIENT_POOL_PROP_INPUT_POOL:
-        priv->pool.input_pool = g_value_get_int(val);
+        priv->pool.input_pool = g_value_get_uint(val);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM:
-        priv->pool.output_room = g_value_get_int(val);
+        priv->pool.output_room = g_value_get_uint(val);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_FREE:
-        priv->pool.output_free = g_value_get_int(val);
+        priv->pool.output_free = g_value_get_uint(val);
         break;
     case SEQ_CLIENT_POOL_PROP_INPUT_FREE:
-        priv->pool.input_free = g_value_get_int(val);
+        priv->pool.input_free = g_value_get_uint(val);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -69,19 +69,19 @@ static void seq_client_pool_get_property(GObject *obj, guint id, GValue *val,
         g_value_set_uchar(val, (guint8)priv->pool.client);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_POOL:
-        g_value_set_int(val, priv->pool.output_pool);
+        g_value_set_uint(val, priv->pool.output_pool);
         break;
     case SEQ_CLIENT_POOL_PROP_INPUT_POOL:
-        g_value_set_int(val, priv->pool.input_pool);
+        g_value_set_uint(val, priv->pool.input_pool);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM:
-        g_value_set_int(val, priv->pool.output_room);
+        g_value_set_uint(val, priv->pool.output_room);
         break;
     case SEQ_CLIENT_POOL_PROP_OUTPUT_FREE:
-        g_value_set_int(val, priv->pool.output_free);
+        g_value_set_uint(val, priv->pool.output_free);
         break;
     case SEQ_CLIENT_POOL_PROP_INPUT_FREE:
-        g_value_set_int(val, priv->pool.input_free);
+        g_value_set_uint(val, priv->pool.input_free);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, id, spec);
@@ -116,11 +116,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
      * The total number of cells in memory pool for output direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
-        g_param_spec_int("output-pool", "output-pool",
-                         "The total number of cells in memory pool for output direction.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uint("output-pool", "output-pool",
+                          "The total number of cells in memory pool for output direction.",
+                          0, G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     /**
      * ALSASeqClientPool:input-pool:
@@ -128,11 +128,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
      * The total number of cells in memory pool for input direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_POOL] =
-        g_param_spec_int("input-pool", "input-pool",
-                         "The total number of cells in memory pool for input direction.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uint("input-pool", "input-pool",
+                          "The total number of cells in memory pool for input direction.",
+                          0, G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     /**
      * ALSASeqClientPool:output-room:
@@ -140,12 +140,12 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
      * The number of cells in memory pool for output direction to block user process.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM] =
-        g_param_spec_int("output-room", "output-room",
-                         "The number of cells in memory pool for output direction to block user "
-                         "process",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uint("output-room", "output-room",
+                          "The number of cells in memory pool for output direction to block user "
+                          "process",
+                          0, G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     /**
      * ALSASeqClientPool:output-free:
@@ -153,11 +153,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
      * The free number of cells in memory pool for output direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_FREE] =
-        g_param_spec_int("output-free", "output-free",
-                         "The free number of cells in memory pool for output direction.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uint("output-free", "output-free",
+                          "The free number of cells in memory pool for output direction.",
+                          0, G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     /**
      * ALSASeqClientPool:input-free:
@@ -165,11 +165,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
      * The free number of cells in memory pool for input direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_FREE] =
-        g_param_spec_int("input-free", "input-free",
-                         "The free number of cells in memory pool for input direction.",
-                         0, G_MAXINT,
-                         0,
-                         G_PARAM_READWRITE);
+        g_param_spec_uint("input-free", "input-free",
+                          "The free number of cells in memory pool for input direction.",
+                          0, G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE);
 
     g_object_class_install_properties(gobject_class,
                                       SEQ_CLIENT_POOL_PROP_COUNT,
