@@ -217,6 +217,7 @@ ALSA_GOBJECT_0_3_0 {
     "alsaseq_event_set_connect_data";
     "alsaseq_event_get_result_data";
     "alsaseq_event_set_result_data";
+    "alsaseq_event_calculate_pool_consumption";
 
     "alsaseq_user_client_schedule_events";
     "alsaseq_user_client_schedule_event";

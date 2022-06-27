@@ -107,6 +107,8 @@ gboolean alsaseq_event_get_result_data(const ALSASeqEvent *self,
 gboolean alsaseq_event_set_result_data(ALSASeqEvent *self, const ALSASeqEventDataResult *data,
                                        GError **error);
 
+void alsaseq_event_calculate_pool_consumption(const ALSASeqEvent *self, guint *cells);
+
 G_END_DECLS
 
 #endif

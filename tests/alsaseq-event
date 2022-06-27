@@ -55,6 +55,7 @@ methods = (
     'set_connect_data',
     'get_result_data',
     'set_result_data',
+    'calculate_pool_consumption',
 )
 
 if not test_struct(target_type, methods):
