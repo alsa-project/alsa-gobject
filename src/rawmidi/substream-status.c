@@ -3,9 +3,9 @@
 
 /**
  * ALSARawmidiSubstreamStatus:
- * A GObject-derived object to represent status of substream.
+ * A GObject-derived object to express status of substream.
  *
- * A [class@SubstreamStatus] is a GObject-derived object to represent status of substream attached
+ * A [class@SubstreamStatus] is a GObject-derived object to express status of substream attached
  * to the pair of stream. The call of [method@StreamPair.get_substream_status] returns the instance
  * of object.
  *

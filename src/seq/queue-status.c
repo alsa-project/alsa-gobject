@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqQueueStatus:
- * A GObject-derived object to represent status of queue.
+ * A GObject-derived object to express status of queue.
  *
- * A [class@QueueStatus] is a GObject-derived object to represent status of queue. The call of
+ * A [class@QueueStatus] is a GObject-derived object to express status of queue. The call of
  * [func@get_queue_status] returns the instance of object.
  *
  * The object wraps `struct snd_seq_queue_status` in UAPI of Linux sound subsystem.

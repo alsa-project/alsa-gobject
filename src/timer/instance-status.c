@@ -3,7 +3,7 @@
 
 /**
  * ALSATimerInstanceStatus:
- * A GObject-derived object to represent status of user instance.
+ * A GObject-derived object to express status of user instance.
  *
  * A [class@InstanceStatus] is a GObject-derived object to express status of user instance attached
  * to any timer device or the other instance as slave. The call of [method@UserInstance.get_status]

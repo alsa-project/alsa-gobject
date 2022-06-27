@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqClientPool:
- * A GObject-derived object to represent information of pool owned by client.
+ * A GObject-derived object to express information of pool owned by client.
  *
- * A [class@ClientPool] is a GObject-derived object to represent information of pool owned by
+ * A [class@ClientPool] is a GObject-derived object to express information of pool owned by
  * client. The pool consists of a batch of cells to store message contents in kernel space. The
  * call of [func@get_client_pool] returns the instance of object. The call of
  * [method@UserClient.set_pool]) and [method@UserClient.get_pool] require the instance of object.

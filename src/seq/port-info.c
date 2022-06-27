@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqPortInfo:
- * A GObject-derived object to represent information of port.
+ * A GObject-derived object to express information of port.
  *
- * A [class@PortInfo] is a GObject-derived object to represent information of port. The call of
+ * A [class@PortInfo] is a GObject-derived object to express information of port. The call of
  * [func@get_port_info] returns the instance of object. The call of [method@UserClient.create_port]
  * and [method@UserClient.update_port] requires the instance of object.
  *

@@ -5,9 +5,9 @@
 
 /**
  * ALSATimerInstanceParams:
- * A GObject-derived object to represent parameters of user instance.
+ * A GObject-derived object to express parameters of user instance.
  *
- * A [class@InstanceParams] is a GObject-derived object to represent parameters of user instance
+ * A [class@InstanceParams] is a GObject-derived object to express parameters of user instance
  * attached to any timer device or the other instance as slave. The call of
  * [method@UserInstance.set_params] requires the instance of object.
  *

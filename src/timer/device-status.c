@@ -3,9 +3,9 @@
 
 /**
  * ALSATimerDeviceStatus:
- * A GObject-derived object to represent status of timer device.
+ * A GObject-derived object to express status of timer device.
  *
- * A [class@DeviceStatus] is a GObject-derived object to represent status of timer device. The
+ * A [class@DeviceStatus] is a GObject-derived object to express status of timer device. The
  * call of [func@get_device_status] returns the instance of object.
  *
  * The object wraps 'struct snd_timer_gstatus' in UAPI of Linux sound subsystem.

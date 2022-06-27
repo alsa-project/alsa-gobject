@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqSubscribeData:
- * A GObject-derived object to represent data for subscription between ports.
+ * A GObject-derived object to express data for subscription between ports.
  *
- * A [class@SubscribeData] is a GObject-derived object to represent data for subscription between
+ * A [class@SubscribeData] is a GObject-derived object to express data for subscription between
  * a pair of ports. The call of [func@get_subscription_list] returns the list of data. The call of
  * [method@UserClient.operate_subscription] requires the instance of object.
  *

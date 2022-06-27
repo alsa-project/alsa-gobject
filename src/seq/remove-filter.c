@@ -5,9 +5,9 @@
 
 /**
  * ALSASeqRemoveFilter:
- * A boxed object to represent filter to remove scheduled event in queue.
+ * A boxed object to express filter to remove scheduled event in queue.
  *
- * A [struct@RemoveFilter] is a boxed object to represent filter to remove scheduled event in
+ * A [struct@RemoveFilter] is a boxed object to express filter to remove scheduled event in
  * queue. The call of [method@UserClient.remove_events] requires the instance of object. In the
  * object, data shares the same storage, thus it's not possible to use several purposes.
  *

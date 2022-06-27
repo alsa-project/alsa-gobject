@@ -3,9 +3,9 @@
 
 /**
  * ALSACtlElemId:
- * A boxed object to represent the identifier of element.
+ * A boxed object to express the identifier of element.
  *
- * A [struct@ElemId] is a boxed object to represent the identifier of element. It points to a
+ * A [struct@ElemId] is a boxed object to express the identifier of element. It points to a
  * element by two ways; by the numeric identifier, or by the combination of the type of interface,
  * the numeric identifier of device, the numeric identifier of subdevice, the name, and the index.
  *

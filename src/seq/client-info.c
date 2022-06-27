@@ -6,9 +6,9 @@
 
 /**
  * ALSASeqClientInfo:
- * A GObject-derived object to represent information of client.
+ * A GObject-derived object to express information of client.
  *
- * A [class@ClientInfo] is a GObject-derived object to represent information of client. The call
+ * A [class@ClientInfo] is a GObject-derived object to express information of client. The call
  * of [func@get_client_info] returns the instance of object.  The call of
  * [method@UserClient.set_info] and [method@UserClient.get_info] require the instance of object.
  *

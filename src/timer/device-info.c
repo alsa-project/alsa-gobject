@@ -3,9 +3,9 @@
 
 /**
  * ALSATimerDeviceInfo:
- * A GObject-derived object to represent information of timer device.
+ * A GObject-derived object to express information of timer device.
  *
- * A [class@DeviceInfo] is a GObject-derived object to represent information of timer device.
+ * A [class@DeviceInfo] is a GObject-derived object to express information of timer device.
  * The call of alsatimer_get_device_info() returns an instance of the object according to the
  * identifier of timer device.
  *

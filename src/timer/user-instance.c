@@ -12,9 +12,9 @@
 
 /**
  * ALSATimerUserInstance:
- * A GObject-derived object to represent user instance.
+ * A GObject-derived object to express user instance.
  *
- * A [class@UserInstance] is a GObject-derived object to represent information of user instance
+ * A [class@UserInstance] is a GObject-derived object to express information of user instance
  * attached to any timer device or the other instance as slave. After calling
  * [method@UserInstance.open], the object maintains file descriptor till object destruction. After
  * calling [method@UserInstance.attach] or [method@UserInstance.attach_as_slave], the user instance
@@ -218,7 +218,7 @@ ALSATimerUserInstance *alsatimer_user_instance_new()
  *                     used.
  * @error: A [struct@GLib.Error].
  *
- * Get the version of timer protocol currently used. The version is represented as the array with
+ * Get the version of timer protocol currently used. The version is expressed as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
  *

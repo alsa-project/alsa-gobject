@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqQueueTempo:
- * A GObject-derived object to represent tempo of queue.
+ * A GObject-derived object to express tempo of queue.
  *
- * A [class@QueueTempo] is a GObject-derived object to represent tempo of queue.
+ * A [class@QueueTempo] is a GObject-derived object to express tempo of queue.
  *
  * The object wraps `struct snd_seq_queue_tempo` in UAPI of Linux sound subsystem.
  */

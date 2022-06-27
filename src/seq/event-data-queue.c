@@ -3,9 +3,9 @@
 
 /**
  * ALSASeqEventDataQueue:
- * A boxed object to represent data of queue event.
+ * A boxed object to express data of queue event.
  *
- * A [struct@EventDataQueue] is a boxed object to represent data of queue event. The instance of
+ * A [struct@EventDataQueue] is a boxed object to express data of queue event. The instance of
  * object is one of data properties in event.
  *
  * The object wraps `struct snd_seq_ev_queue_control` in UAPI of Linux sound subsystem.

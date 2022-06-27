@@ -13,9 +13,9 @@
 
 /**
  * ALSACtlCard:
- * An GObject-derived object to represent sound card.
+ * An GObject-derived object to express sound card.
  *
- * A [class@Card] is a GObject-derived object to represent sound card. Applications use the
+ * A [class@Card] is a GObject-derived object to express sound card. Applications use the
  * instance of object to manipulate functionalities on sound card. After the call of
  * [method@Card.open] for the numeric ID of sound card, the object maintains file descriptor till
  * object destruction.
@@ -269,7 +269,7 @@ gboolean alsactl_card_open(ALSACtlCard *self, guint card_id, gint open_flag, GEr
  *                     used.
  * @error: A [struct@GLib.Error].
  *
- * Get the version of control protocol currently used. The version is represented as the array with
+ * Get the version of control protocol currently used. The version is expressed as the array with
  * three elements; major, minor, and micro version in the order. The length of major version is
  * 16 bit, the length of minor and micro version is 8 bit each.
  *

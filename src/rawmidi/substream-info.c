@@ -3,9 +3,9 @@
 
 /**
  * ALSARawmidiSubstreamInfo:
- * A GObject-derived object to represent information of substream.
+ * A GObject-derived object to express information of substream.
  *
- * A [class@SubstreamInfo] is a GObject-derived object to represent information of substream
+ * A [class@SubstreamInfo] is a GObject-derived object to express information of substream
  * attached to the pair of streams. The call of [method@StreamPair.get_substream_info] or
  * [func@get_substream_info] return the instance of object.
  *
