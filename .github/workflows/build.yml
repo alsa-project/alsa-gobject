@@ -52,8 +52,9 @@ jobs:
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get update'
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get -y full-upgrade'
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y git build-essential'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y meson ninja-build libglib2.0-dev libudev-dev gobject-introspection libgirepository1.0-dev'
+        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y meson ninja-build libglib2.0-dev gobject-introspection libgirepository1.0-dev'
         sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y gi-docgen python3-gi'
+        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y libudev-dev'
     - name: Checkout repository.
       uses: actions/checkout@v2
     - name: Generate archive and expand it inner the container.
