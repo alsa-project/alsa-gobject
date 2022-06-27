@@ -113,7 +113,9 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     /**
      * ALSASeqClientPool:output-pool:
      *
-     * The total number of cells in memory pool for output direction.
+     * The total number of cells in memory pool for output direction. The client enqueue any event
+     * into the pool at scheduling, then the event is copied to input memory pool of destination
+     * client.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_POOL] =
         g_param_spec_uint("output-pool", "output-pool",
@@ -125,7 +127,8 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     /**
      * ALSASeqClientPool:input-pool:
      *
-     * The total number of cells in memory pool for input direction.
+     * The total number of cells in memory pool for input direction. The client dequeue any event
+     * from the pool when the event is copied from the output memory pool of source client.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_POOL] =
         g_param_spec_uint("input-pool", "input-pool",
@@ -137,7 +140,9 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     /**
      * ALSASeqClientPool:output-room:
      *
-     * The number of cells in memory pool for output direction to block user process.
+     * The number of cells in memory pool for output direction as threshold for writable condition
+     * at the result of poll(2). The property is useless for [class@UserClient] since it doesn't
+     * perform poll(2) to check writable or not.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_ROOM] =
         g_param_spec_uint("output-room", "output-room",
@@ -150,11 +155,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     /**
      * ALSASeqClientPool:output-free:
      *
-     * The free number of cells in memory pool for output direction.
+     * The current number of free cells in memory pool for output direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_OUTPUT_FREE] =
         g_param_spec_uint("output-free", "output-free",
-                          "The free number of cells in memory pool for output direction.",
+                          "The current number of free cells in memory pool for output direction.",
                           0, G_MAXINT,
                           0,
                           G_PARAM_READWRITE);
@@ -162,11 +167,11 @@ static void alsaseq_client_pool_class_init(ALSASeqClientPoolClass *klass)
     /**
      * ALSASeqClientPool:input-free:
      *
-     * The free number of cells in memory pool for input direction.
+     * The current number of free cells in memory pool for input direction.
      */
     seq_client_pool_props[SEQ_CLIENT_POOL_PROP_INPUT_FREE] =
         g_param_spec_uint("input-free", "input-free",
-                          "The free number of cells in memory pool for input direction.",
+                          "The current number of free cells in memory pool for input direction.",
                           0, G_MAXINT,
                           0,
                           G_PARAM_READWRITE);
