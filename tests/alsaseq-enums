@@ -159,6 +159,14 @@ queue_timer_types = (
 remove_filter_flags = (
     'INPUT',
     'OUTPUT',
+    'DEST',
+    'DEST_CHANNEL',
+    'TIME_BEFORE',
+    'TIME_AFTER',
+    'TIME_TICK',
+    'EVENT_TYPE',
+    'IGNORE_OFF',
+    'TAG_MATCH',
 )
 
 user_client_error_types = (
