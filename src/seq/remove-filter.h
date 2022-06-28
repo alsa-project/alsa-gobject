@@ -8,36 +8,19 @@ G_BEGIN_DECLS
 
 #define ALSASEQ_TYPE_REMOVE_FILTER     (alsaseq_remove_filter_get_type())
 
-typedef struct snd_seq_remove_events    ALSASeqRemoveFilter;
+G_DECLARE_DERIVABLE_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, ALSASEQ, REMOVE_FILTER, GObject);
 
-GType alsaseq_remove_filter_get_type() G_GNUC_CONST;
+struct _ALSASeqRemoveFilterClass {
+    GObjectClass parent_class;
+};
 
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqAddr *dest);
+ALSASeqRemoveFilter *alsaseq_remove_filter_new(void);
 
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                guint8 channel);
+void alsaseq_remove_filter_get_tick_time(ALSASeqRemoveFilter *self, guint *tick_time);
+void alsaseq_remove_filter_set_tick_time(ALSASeqRemoveFilter *self, guint tick_time);
 
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqEventType ev_type);
-
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id);
-
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint8 tag);
-
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tick_time, gboolean after);
-
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tv_sec, guint32 tv_nsec, gboolean after);
+void alsaseq_remove_filter_get_real_time(ALSASeqRemoveFilter *self, const guint32 *real_time[2]);
+void alsaseq_remove_filter_set_real_time(ALSASeqRemoveFilter *self, const guint32 real_time[2]);
 
 G_END_DECLS
 
