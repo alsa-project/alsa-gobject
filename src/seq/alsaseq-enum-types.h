@@ -336,15 +336,33 @@ typedef enum {
 
 /**
  * ALSASeqRemoveFilterFlag:
- * @ALSASEQ_REMOVE_FILTER_FLAG_INPUT:   Flush of input queues.
- * @ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT:  Flush of output queues.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_INPUT:           Flush events in input queues.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT:          Flush events in output queues.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_DEST:            Flush events towards the given destination.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_DEST_CHANNEL:    Flush events with the given channel, available for
+ *                                              NOTE, NOTEON, NOTEOFF, KEYPRESS, CONTROLLER, PGMCHANGE, CHANPRESS,
+ *                                              PITCHBEND, CONTROL14, NONREGPARAM, REGPARAM.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_TIME_BEFORE:     Flush events scheduled before the given time.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_TIME_AFTER:      Flush events scheduled after the given time.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_TIME_TICK:       The given time is for tick time.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_EVENT_TYPE:      Flush events with the type.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_IGNORE_OFF:      Flush events except for NOTEOFF.
+ * @ALSASEQ_REMOVE_FILTER_FLAG_TAG_MATCH:       Flush events with the given tag.
  *
  * A set of flags of the mode of removal event.
  */
 typedef enum /*< flags >*/
 {
-    ALSASEQ_REMOVE_FILTER_FLAG_INPUT    = SNDRV_SEQ_REMOVE_INPUT,
-    ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT   = SNDRV_SEQ_REMOVE_OUTPUT,
+    ALSASEQ_REMOVE_FILTER_FLAG_INPUT        = SNDRV_SEQ_REMOVE_INPUT,
+    ALSASEQ_REMOVE_FILTER_FLAG_OUTPUT       = SNDRV_SEQ_REMOVE_OUTPUT,
+    ALSASEQ_REMOVE_FILTER_FLAG_DEST         = SNDRV_SEQ_REMOVE_DEST,
+    ALSASEQ_REMOVE_FILTER_FLAG_DEST_CHANNEL = SNDRV_SEQ_REMOVE_DEST_CHANNEL,
+    ALSASEQ_REMOVE_FILTER_FLAG_TIME_BEFORE  = SNDRV_SEQ_REMOVE_TIME_BEFORE,
+    ALSASEQ_REMOVE_FILTER_FLAG_TIME_AFTER   = SNDRV_SEQ_REMOVE_TIME_AFTER,
+    ALSASEQ_REMOVE_FILTER_FLAG_TIME_TICK    = SNDRV_SEQ_REMOVE_TIME_TICK,
+    ALSASEQ_REMOVE_FILTER_FLAG_EVENT_TYPE   = SNDRV_SEQ_REMOVE_EVENT_TYPE,
+    ALSASEQ_REMOVE_FILTER_FLAG_IGNORE_OFF   = SNDRV_SEQ_REMOVE_IGNORE_OFF,
+    ALSASEQ_REMOVE_FILTER_FLAG_TAG_MATCH    = SNDRV_SEQ_REMOVE_TAG_MATCH,
 } ALSASeqRemoveFilterFlag;
 
 /**
