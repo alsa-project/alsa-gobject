@@ -33,6 +33,9 @@ void seq_queue_tempo_refer_private(ALSASeqQueueTempo *self,
 void seq_queue_timer_alsa_refer_private(ALSASeqQueueTimerAlsa *self,
                                         struct snd_seq_queue_timer **timer);
 
+void seq_remove_filter_refer_private(ALSASeqRemoveFilter *self,
+                                     struct snd_seq_remove_events **data);
+
 void seq_event_cntr_serialize(ALSASeqEventCntr *self, const GList *events, gboolean aligned);
 void seq_event_copy_flattened(const ALSASeqEvent *self, guint8 *buf, gsize length);
 gsize seq_event_calculate_flattened_length(const ALSASeqEvent *self, gboolean aligned);

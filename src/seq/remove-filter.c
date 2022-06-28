@@ -5,222 +5,308 @@
 
 /**
  * ALSASeqRemoveFilter:
- * A boxed object to express filter to remove scheduled event in queue.
+ * An object to express filter to remove scheduled event in queue.
  *
- * A [struct@RemoveFilter] is a boxed object to express filter to remove scheduled event in
- * queue. The call of [method@UserClient.remove_events] requires the instance of object. In the
- * object, data shares the same storage, thus it's not possible to use several purposes.
+ * A [class@RemoveFilter] is a GObject-derived object to express filter to remove scheduled event in
+ * queue. The call of [method@UserClient.remove_events] requires the instance of object.
  *
  * The object wraps `struct snd_seq_remove_events` in UAPI of Linux sound subsystem.
  */
-ALSASeqRemoveFilter *seq_remove_filter_copy(const ALSASeqRemoveFilter *self)
+
+typedef struct {
+    struct snd_seq_remove_events data;
+} ALSASeqRemoveFilterPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqRemoveFilter, alsaseq_remove_filter, G_TYPE_OBJECT)
+
+enum seq_remove_filter_prop_type {
+    SEQ_REMOVE_FILTER_PROP_FLAGS = 1,
+    SEQ_REMOVE_FILTER_PROP_QUEUE_ID,
+    SEQ_REMOVE_FILTER_PROP_DST,
+    SEQ_REMOVE_FILTER_PROP_CHANNEL,
+    SEQ_REMOVE_FILTER_PROP_EVENT_TYPE,
+    SEQ_REMOVE_FILTER_PROP_TAG,
+    SEQ_REMOVE_FILTER_PROP_COUNT,
+};
+static GParamSpec *seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_COUNT] = { NULL };
+
+static void seq_remove_filter_get_property(GObject *obj, guint id, GValue *val, GParamSpec *spec)
 {
-#ifdef g_memdup2
-    return g_memdup2(self, sizeof(*self));
-#else
-    // GLib v2.68 deprecated g_memdup() with concern about overflow by narrow conversion from size_t to
-    // unsigned int however it's safe in the local case.
-    gpointer ptr = g_malloc(sizeof(*self));
-    memcpy(ptr, self, sizeof(*self));
-    return ptr;
-#endif
+    ALSASeqRemoveFilter *self = ALSASEQ_REMOVE_FILTER(obj);
+    ALSASeqRemoveFilterPrivate *priv = alsaseq_remove_filter_get_instance_private(self);
+    const struct snd_seq_remove_events *data = &priv->data;
+
+    switch (id) {
+    case SEQ_REMOVE_FILTER_PROP_FLAGS:
+        g_value_set_flags(val, (ALSASeqRemoveFilterFlag)data->remove_mode);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_QUEUE_ID:
+        g_value_set_uchar(val, data->queue);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_DST:
+        g_value_set_static_boxed(val, &data->dest);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_CHANNEL:
+        g_value_set_uchar(val, data->channel);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_EVENT_TYPE:
+        g_value_set_enum(val, data->type);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_TAG:
+        g_value_set_schar(val, data->tag);
+        break;
+    default:
+        break;
+    }
 }
 
-G_DEFINE_BOXED_TYPE(ALSASeqRemoveFilter, alsaseq_remove_filter, seq_remove_filter_copy, g_free)
+static void seq_remove_filter_set_property(GObject *obj, guint id, const GValue *val,
+                                           GParamSpec *spec)
+{
+    ALSASeqRemoveFilter *self = ALSASEQ_REMOVE_FILTER(obj);
+    ALSASeqRemoveFilterPrivate *priv = alsaseq_remove_filter_get_instance_private(self);
+    struct snd_seq_remove_events *data = &priv->data;
+
+    switch (id) {
+    case SEQ_REMOVE_FILTER_PROP_FLAGS:
+        data->remove_mode = g_value_get_flags(val);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_QUEUE_ID:
+        data->queue = g_value_get_uchar(val);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_DST:
+    {
+        const ALSASeqAddr *src = g_value_get_boxed(val);
+        data->dest = *src;
+        break;
+    }
+    case SEQ_REMOVE_FILTER_PROP_CHANNEL:
+        data->channel = g_value_get_uchar(val);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_EVENT_TYPE:
+        data->type = g_value_get_enum(val);
+        break;
+    case SEQ_REMOVE_FILTER_PROP_TAG:
+        data->tag = g_value_get_schar(val);
+        break;
+    default:
+        break;
+    }
+}
+
+static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+
+    gobject_class->set_property = seq_remove_filter_set_property;
+    gobject_class->get_property = seq_remove_filter_get_property;
+
+    /**
+     * ALSASeqRemoveFilter:flags:
+     *
+     * The set of flags to filter events. They decide how to evaluate included data at call of
+     * [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_FLAGS] =
+        g_param_spec_flags("flags", "flags",
+                           "The set of flags to filter events",
+                           ALSASEQ_TYPE_REMOVE_FILTER_FLAG,
+                           0,
+                           G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqRemoveFilter:queue-id:
+     *
+     * The numeric identifier of queue as filter condition. This is always evaluated at call of
+     * [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_QUEUE_ID] =
+        g_param_spec_uchar("queue-id", "queue-id",
+                           "The numeric identifier of queue as filter condition",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqRemoveFilter:destination:
+     *
+     * The destionation of event as filter condition. This is evaluated with
+     * [flags@RemoveFilterFlag].DEST at call of [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_DST] =
+        g_param_spec_boxed("destination", "destination",
+                           "The destionation of event as filter condition",
+                           ALSASEQ_TYPE_ADDR,
+                           G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqRemoveFilter:channel:
+     *
+     * The channel of event as filter condition. This is evaluated with
+     * [flags@RemoveFilterFlag].DEST_CHANNEL at call of [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_CHANNEL] =
+        g_param_spec_uchar("channel", "channel",
+                           "The channel of event as filter condition",
+                           0, G_MAXUINT8,
+                           0,
+                           G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqRemoveFilter:event-type:
+     *
+     * The type of event as filter condition. This is evaluated with
+     * [flags@RemoveFilterFlag].EVENT_TYPE at call of [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_EVENT_TYPE] =
+        g_param_spec_enum("event-type", "event-type",
+                          "The type of event as filter condition",
+                          ALSASEQ_TYPE_EVENT_TYPE,
+                          ALSASEQ_EVENT_TYPE_NONE,
+                          G_PARAM_READWRITE);
+
+    /**
+     * ALSASeqRemoveFilter:tag:
+     *
+     * The tag of event as filter condition. This is evaluated with
+     * [flags@RemoveFilterFlag].TAG_MATCH at call of [method@UserClient.remove_events].
+     *
+     * Since: 0.3.
+     */
+    seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_TAG] =
+        g_param_spec_char("tag", "tag",
+                          "The tag of event as filter condition",
+                          G_MININT8, G_MAXINT8,
+                          0,
+                          G_PARAM_READWRITE);
+
+    g_object_class_install_properties(gobject_class,
+                                      SEQ_REMOVE_FILTER_PROP_COUNT,
+                                      seq_remove_filter_props);
+}
+
+static void alsaseq_remove_filter_init(ALSASeqRemoveFilter *self)
+{
+}
 
 /**
- * alsaseq_remove_filter_new_with_dest_addr:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- * @dest: The address of destination.
+ * alsaseq_remove_filter_new:
  *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events towards the
- * destination.
+ * Allocate and return an instance of [class@RemoveFilter].
  *
- * Returns: A [struct@RemoveFilter].
+ * Returns: An instance of [class@RemoveFilter].
  */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_dest_addr(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqAddr *dest)
+ALSASeqRemoveFilter *alsaseq_remove_filter_new(void)
 {
-    struct snd_seq_remove_events filter;
-
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
-
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_DEST;
-    filter.queue = queue_id;
-    filter.dest = *dest;
-
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
+    return g_object_new(ALSASEQ_TYPE_REMOVE_FILTER, NULL);
 }
 
 /**
- * alsaseq_remove_filter_new_with_note_channel:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- * @channel: The channel for note event.
+ * alsaseq_remove_filter_get_tick_time:
+ * @self: A [class@RemoveFilter].
+ * @tick_time: (out): The count of tick.
  *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with note
- * type towards the channel.
- *
- * Returns: A [struct@RemoveFilter].
+ * Refer to tick count in internal storage. The call works expectedly as long as
+ * [property@RemoveFilter:flags] contains [flags@RemoveFilterFlag].TICK. This is evaluated with
+ * [flags@RemoveFilterFlag].TIME_BEFORE and [flags@RemoveFilterFlag].TIME_AFTER at call of
+ * [method@UserClient.remove_events].
  */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note_channel(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                guint8 channel)
+void alsaseq_remove_filter_get_tick_time(ALSASeqRemoveFilter *self, guint *tick_time)
 {
-    struct snd_seq_remove_events filter;
+    ALSASeqRemoveFilterPrivate *priv;
 
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
+    g_return_if_fail(ALSASEQ_IS_REMOVE_FILTER(self));
+    g_return_if_fail(tick_time != NULL);
 
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_DEST_CHANNEL;
-    filter.queue = queue_id;
-    filter.channel = channel;
+    priv = alsaseq_remove_filter_get_instance_private(self);
+    g_return_if_fail((priv->data.remove_mode & SNDRV_SEQ_REMOVE_TIME_TICK) > 0);
 
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
+    *tick_time = priv->data.time.tick;
 }
 
 /**
- * alsaseq_remove_filter_new_with_event_type:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- * @ev_type: The type of event.
- *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
- * type.
- *
- * Returns: A [struct@RemoveFilter].
- */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_event_type(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                ALSASeqEventType ev_type)
-{
-    struct snd_seq_remove_events filter;
-
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
-
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_EVENT_TYPE;
-    filter.queue = queue_id;
-    filter.type = ev_type;
-
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
-}
-
-/**
- * alsaseq_remove_filter_new_with_note:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events for note,
- * excluding [enum@EventType:NOTEOFF].
- *
- * Returns: A [struct@RemoveFilter].
- */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_note(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id)
-{
-    struct snd_seq_remove_events filter;
-
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
-
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_IGNORE_OFF;
-    filter.queue = queue_id;
-
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
-}
-
-/**
- * alsaseq_remove_filter_new_with_tag:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- * @tag: The tag of event to remove.
- *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events with the
- * tag.
- *
- * Returns: A [struct@RemoveFilter].
- */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tag(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint8 tag)
-{
-    struct snd_seq_remove_events filter;
-
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
-
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_TAG_MATCH;
-    filter.queue = queue_id;
-    filter.tag = tag;
-
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
-}
-
-/**
- * alsaseq_remove_filter_new_with_tick_time:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
+ * alsaseq_remove_filter_set_tick_time:
+ * @self: A [class@RemoveFilter].
  * @tick_time: The count of tick.
- * @after: Remove events after the tick time if true, else remove events before the tick time.
  *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
- * before/after the tick time.
+ * Copy tick count into internal storage. The call works expectedly as long as
+ * [property@RemoveFilter:flags] contains [flags@RemoveFilterFlag].TICK. This is evaluated with
+ * [flags@RemoveFilterFlag].TIME_BEFORE and [flags@RemoveFilterFlag].TIME_AFTER at call of
+ * [method@UserClient.remove_events].
  *
- * Returns: A [struct@RemoveFilter].
  */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_tick_time(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tick_time, gboolean after)
+void alsaseq_remove_filter_set_tick_time(ALSASeqRemoveFilter *self, guint tick_time)
 {
-    struct snd_seq_remove_events filter;
+    ALSASeqRemoveFilterPrivate *priv;
 
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
+    g_return_if_fail(ALSASEQ_IS_REMOVE_FILTER(self));
 
-    filter.remove_mode = inout | SNDRV_SEQ_REMOVE_TIME_TICK;
-    if (after)
-        filter.remove_mode |= SNDRV_SEQ_REMOVE_TIME_BEFORE;
-    else
-        filter.remove_mode |= SNDRV_SEQ_REMOVE_TIME_AFTER;
-    filter.queue = queue_id;
-    filter.time.tick = tick_time;
+    priv = alsaseq_remove_filter_get_instance_private(self);
+    g_return_if_fail((priv->data.remove_mode & SNDRV_SEQ_REMOVE_TIME_TICK) > 0);
 
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
+    priv->data.time.tick = tick_time;
 }
 
 /**
- * alsaseq_remove_filter_new_with_real_time:
- * @inout: The direction of queue; [flags@RemoveFilterFlag].INPUT or
- *         [flags@RemoveFilterFlag].OUTPUT.
- * @queue_id: The numeric ID of queue, excluding [enum@SpecificQueueId].DIRECT.
- * @tv_sec: The second part of time.
- * @tv_nsec: The nanosecond part of time.
- * @after: Remove events after the real time if true, else remove events before the real time.
+ * alsaseq_remove_filter_get_real_time:
+ * @self: A [class@RemoveFilter].
+ * @real_time: (array fixed-size=2) (out) (transfer none): The real time data of event.
  *
- * Allocate and return a memory object of [struct@RemoveFilter] to remove queued events
- * before/after the real time.
- *
- * Returns: A [struct@RemoveFilter].
+ * Refer to doublet of real time in internal storage. The call works expectedly as long as
+ * [property@RemoveFilter:flags] doesn't contain [flags@RemoveFilterFlag].TICK. This is evaluated
+ * with [flags@RemoveFilterFlag].TIME_BEFORE and [flags@RemoveFilterFlag].TIME_AFTER at call of
+ * [method@UserClient.remove_events].
  */
-ALSASeqRemoveFilter *alsaseq_remove_filter_new_with_real_time(
-                                ALSASeqRemoveFilterFlag inout, guint8 queue_id,
-                                gint32 tv_sec, guint32 tv_nsec, gboolean after)
+void alsaseq_remove_filter_get_real_time(ALSASeqRemoveFilter *self, const guint32 *real_time[2])
 {
-    struct snd_seq_remove_events filter;
+    ALSASeqRemoveFilterPrivate *priv;
 
-    g_return_val_if_fail(!(inout & ~(SNDRV_SEQ_REMOVE_INPUT | SNDRV_SEQ_REMOVE_OUTPUT)), NULL);
+    g_return_if_fail(ALSASEQ_IS_REMOVE_FILTER(self));
+    g_return_if_fail(real_time != NULL);
 
-    filter.remove_mode = inout;
-    if (after)
-        filter.remove_mode |= SNDRV_SEQ_REMOVE_TIME_AFTER;
-    else
-        filter.remove_mode |= SNDRV_SEQ_REMOVE_TIME_BEFORE;
-    filter.queue = queue_id;
-    filter.time.time.tv_sec = tv_sec;
-    filter.time.time.tv_nsec = tv_nsec;
+    priv = alsaseq_remove_filter_get_instance_private(self);
+    g_return_if_fail((priv->data.remove_mode & SNDRV_SEQ_REMOVE_TIME_TICK) == 0);
 
-    return g_boxed_copy(ALSASEQ_TYPE_REMOVE_FILTER, &filter);
+    *real_time = (const guint32 *)&priv->data.time.time;
+}
+
+/**
+ * alsaseq_remove_filter_set_real_time:
+ * @self: A [class@RemoveFilter].
+ * @real_time: (array fixed-size=2): The real time data of event.
+ *
+ * Copy doublet of real time into internal storage. The call works expectedly as long as
+ * [property@RemoveFilter:flags] doesn't contain [flags@RemoveFilterFlag].TICK. This is evaluated
+ * with [flags@RemoveFilterFlag].TIME_BEFORE and [flags@RemoveFilterFlag].TIME_AFTER at call of
+ * [method@UserClient.remove_events].
+ */
+void alsaseq_remove_filter_set_real_time(ALSASeqRemoveFilter *self, const guint32 real_time[2])
+{
+    ALSASeqRemoveFilterPrivate *priv;
+
+    g_return_if_fail(ALSASEQ_IS_REMOVE_FILTER(self));
+
+    priv = alsaseq_remove_filter_get_instance_private(self);
+    g_return_if_fail((priv->data.remove_mode & SNDRV_SEQ_REMOVE_TIME_TICK) == 0);
+
+    priv->data.time.time.tv_sec = real_time[0];
+    priv->data.time.time.tv_nsec = real_time[1];
+}
+
+void seq_remove_filter_refer_private(ALSASeqRemoveFilter *self,
+                                     struct snd_seq_remove_events **data)
+{
+    ALSASeqRemoveFilterPrivate *priv = alsaseq_remove_filter_get_instance_private(self);
+
+    *data = &priv->data;
 }

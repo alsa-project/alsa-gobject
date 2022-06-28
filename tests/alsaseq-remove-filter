@@ -3,22 +3,29 @@
 from sys import exit
 from errno import ENXIO
 
-from helper import test_struct
+from helper import test_object
 
 import gi
 gi.require_version('ALSASeq', '0.0')
 from gi.repository import ALSASeq
 
 target_type = ALSASeq.RemoveFilter
-methods = (
-    'new_with_dest_addr',
-    'new_with_note_channel',
-    'new_with_event_type',
-    'new_with_note',
-    'new_with_tag',
-    'new_with_tick_time',
-    'new_with_real_time',
+props = (
+    'flags',
+    'queue-id',
+    'destination',
+    'channel',
+    'event-type',
+    'tag',
 )
+methods = (
+    'get_tick_time',
+    'set_tick_time',
+    'get_real_time',
+    'set_real_time',
+)
+vmethods = ()
+signals = ()
 
-if not test_struct(target_type, methods):
+if not test_object(target_type, props, methods, vmethods, signals):
     exit(ENXIO)

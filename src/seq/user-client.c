@@ -1210,7 +1210,7 @@ gboolean alsaseq_user_client_get_queue_timer(ALSASeqUserClient *self, guint8 que
 /**
  * alsaseq_user_client_remove_events:
  * @self: A [class@UserClient].
- * @filter: A [struct@RemoveFilter].
+ * @filter: A [class@RemoveFilter].
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSASeq.UserClientError`.
  *
  * Remove queued events according to the filter.
@@ -1224,6 +1224,7 @@ gboolean alsaseq_user_client_remove_events(ALSASeqUserClient *self, ALSASeqRemov
                                            GError **error)
 {
     ALSASeqUserClientPrivate *priv;
+    struct snd_seq_remove_events *data;
 
     g_return_val_if_fail(ALSASEQ_IS_USER_CLIENT(self), FALSE);
     priv = alsaseq_user_client_get_instance_private(self);
@@ -1231,7 +1232,9 @@ gboolean alsaseq_user_client_remove_events(ALSASeqUserClient *self, ALSASeqRemov
     g_return_val_if_fail(filter != NULL, FALSE);
     g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, filter) < 0) {
+    seq_remove_filter_refer_private(filter, &data);
+
+    if (ioctl(priv->fd, SNDRV_SEQ_IOCTL_REMOVE_EVENTS, data) < 0) {
         generate_syscall_error(error, errno, "ioctl(%s)", "REMOVE_EVENTS");
         return FALSE;
     }
