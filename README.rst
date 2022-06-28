@@ -148,9 +148,6 @@ In GNOME convention, the throw function to report error at GError argument shoul
 value to report the overall operation finished successfully or not. At v0.3 release, the most of
 public API are rewritten according to it.
 
-All of constructor in ``ALSASeq.RemoveFilter`` become non-throw function since they bring no
-failure.
-
 Using GObject Interface
 -----------------------
 
@@ -247,3 +244,9 @@ buffer:
 - ``ALSACtl.ElemValue.get_iec60958_user_data``
 - ``ALSACtl.ElemValue.get_iec60958_channel_status``
 - ``ALSACtl.ElemValue.get_int64``
+
+Rewrite ALSASeq.RemoveFilter
+----------------------------
+
+ALSASeq.RemoveFilter is largely written so that it's GObject-derived object instead of boxed
+structure for flexible configuration of filter condition.
