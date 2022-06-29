@@ -118,13 +118,11 @@ void alsactl_elem_value_set_bool(ALSACtlElemValue *self, const gboolean *values,
 /**
  * alsactl_elem_value_get_bool:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count) (out) (transfer none): The array for boolean values.
- * @value_count: The number of values up to 128.
+ * @values: (array fixed-size=128) (out) (transfer none): The array for boolean values.
  * 
  * Refer to the array specific to [enum@ElemType].BOOLEAN element in internal storage.
  */
-void alsactl_elem_value_get_bool(ALSACtlElemValue *self, const gboolean **values,
-                                 gsize *value_count)
+void alsactl_elem_value_get_bool(ALSACtlElemValue *self, const gboolean **values)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -134,14 +132,12 @@ void alsactl_elem_value_get_bool(ALSACtlElemValue *self, const gboolean **values
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(values != NULL);
-    g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
     for (i = 0; i < G_N_ELEMENTS(value->value.integer.value); ++i)
         priv->boolean[i] = value->value.integer.value[i] > 0;
 
     *values = priv->boolean;
-    *value_count = G_N_ELEMENTS(value->value.integer.value);
 }
 
 /**
