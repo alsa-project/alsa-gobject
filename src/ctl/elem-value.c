@@ -318,14 +318,12 @@ void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self, cons
 /**
  * alsactl_elem_value_get_iec60958_channel_status:
  * @self: A [class@ElemValue].
- * @status: (array length=length) (out) (transfer none): The array of byte data for channel status
+ * @status: (array fixed-size=24) (out) (transfer none): The array of byte data for channel status
  *          bits of IEC 60958.
- * @length: The number of bytes in status argument up to 24.
  *
  * Refer to the array specific to [enum@ElemType].IEC60958 element in internal storage.
  */
-void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, const guint8 **status,
-                                                    gsize *length)
+void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, const guint8 **status)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -334,11 +332,9 @@ void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, cons
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(status != NULL);
-    g_return_if_fail(length != NULL);
 
     value = &priv->value;
     *status = value->value.iec958.status;
-    *length = G_N_ELEMENTS(value->value.iec958.status);
 }
 
 /**
@@ -371,14 +367,12 @@ void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self, const gui
 /**
  * alsactl_elem_value_get_iec60958_user_data:
  * @self: A [class@ElemValue].
- * @data: (array length=length) (out) (transfer none): The array of byte data for user data bits of
+ * @data: (array fixed-size=147) (out) (transfer none): The array of byte data for user data bits of
  *        IEC 60958.
- * @length: The number of bytes in user_data argument up to 147.
  *
  * Refer to the array specific to [enum@ElemType].IEC60958 element in internal storage.
  */
-void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const guint8 **data,
-                                               gsize *length)
+void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const guint8 **data)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -387,11 +381,9 @@ void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const gui
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(data != NULL);
-    g_return_if_fail(length != NULL);
 
     value = &priv->value;
     *data = value->value.iec958.subcode;
-    *length = G_N_ELEMENTS(value->value.iec958.subcode);
 }
 
 /**
