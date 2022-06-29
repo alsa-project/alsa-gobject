@@ -34,13 +34,11 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values)
 
 void alsactl_elem_value_set_iec60958_channel_status(ALSACtlElemValue *self,
                                         const guint8 *status, gsize length);
-void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self,
-                                        const guint8 **status, gsize *length);
+void alsactl_elem_value_get_iec60958_channel_status(ALSACtlElemValue *self, const guint8 **status);
 
 void alsactl_elem_value_set_iec60958_user_data(ALSACtlElemValue *self,
                                         const guint8 *data, gsize length);
-void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self,
-                                        const guint8 **data, gsize *length);
+void alsactl_elem_value_get_iec60958_user_data(ALSACtlElemValue *self, const guint8 **data);
 
 void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values,
                                   gsize value_count);
