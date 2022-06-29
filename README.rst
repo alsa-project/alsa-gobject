@@ -235,7 +235,7 @@ Rewrite setter method in ALSACtl.ElemValue
 ------------------------------------------
 
 Below methods are rewritten to retrieve the pointer in internal storage instead of copying to given
-buffer:
+buffer as fixed-sized array:
 
 - ``ALSACtl.ElemValue.get_bool``
 - ``ALSACtl.ElemValue.get_int``
