@@ -221,13 +221,12 @@ void alsactl_elem_value_set_enum(ALSACtlElemValue *self, const guint32 *values, 
 /**
  * alsactl_elem_value_get_enum:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count) (out) (transfer none): The array for enumeration index
+ * @values: (array fixed-size=128) (out) (transfer none): The array for enumeration index
  *          values.
- * @value_count: The number of values up to 128.
  *
  * Refer to the array specific to [enum@ElemType].ENUMERATED element in internal storage.
  */
-void alsactl_elem_value_get_enum(ALSACtlElemValue *self, const guint32 **values, gsize *value_count)
+void alsactl_elem_value_get_enum(ALSACtlElemValue *self, const guint32 **values)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -236,11 +235,9 @@ void alsactl_elem_value_get_enum(ALSACtlElemValue *self, const guint32 **values,
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(values != NULL);
-    g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
     *values = value->value.enumerated.item;
-    *value_count = G_N_ELEMENTS(value->value.enumerated.item);
 }
 
 /**
