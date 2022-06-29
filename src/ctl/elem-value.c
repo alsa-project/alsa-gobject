@@ -269,13 +269,12 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, 
 /**
  * alsactl_elem_value_get_bytes:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count) (out) (transfer none): The array for 8 bit unsigned integer
+ * @values: (array fixed-size=512) (out) (transfer none): The array for 8 bit unsigned integer
  *          values.
- * @value_count: (out): The number of values up to 512.
  *
  * Refer to the array specific to [enum@ElemType].BYTES element in internal storage.
  */
-void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values, gsize *value_count)
+void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -284,11 +283,9 @@ void alsactl_elem_value_get_bytes(ALSACtlElemValue *self, const guint8 **values,
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(values != NULL);
-    g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
     *values = value->value.bytes.data;
-    *value_count = G_N_ELEMENTS(value->value.bytes.data);
 }
 
 /**
