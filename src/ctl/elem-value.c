@@ -273,7 +273,7 @@ void alsactl_elem_value_set_bytes(ALSACtlElemValue *self, const guint8 *values, 
     memset(&value->value.bytes.data, 0, sizeof(value->value.bytes.data));
     value_count = MIN(value_count, G_N_ELEMENTS(value->value.bytes.data));
     for (i = 0; i < value_count; ++i)
-        value->value.bytes.data[i] = (long)values[i];
+        value->value.bytes.data[i] = (unsigned char)values[i];
 }
 
 /**
