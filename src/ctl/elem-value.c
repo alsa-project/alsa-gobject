@@ -415,13 +415,11 @@ void alsactl_elem_value_set_int64(ALSACtlElemValue *self, const gint64 *values, 
 /**
  * alsactl_elem_value_get_int64:
  * @self: A [class@ElemValue].
- * @values: (array length=value_count) (out) (transfer none): The array for 64 bit signed integer
- *          values.
- * @value_count: The number of values up to 64.
+ * @values: (array fixed-size=64) (out) (transfer none): The array for 64 bit signed integer values.
  *
  * Refer to the array for [enum@ElemType].INTEGER64 element in internal storage.
  */
-void alsactl_elem_value_get_int64(ALSACtlElemValue *self, const gint64 **values, gsize *value_count)
+void alsactl_elem_value_get_int64(ALSACtlElemValue *self, const gint64 **values)
 {
     ALSACtlElemValuePrivate *priv;
     struct snd_ctl_elem_value *value;
@@ -430,11 +428,9 @@ void alsactl_elem_value_get_int64(ALSACtlElemValue *self, const gint64 **values,
     priv = alsactl_elem_value_get_instance_private(self);
 
     g_return_if_fail(values != NULL);
-    g_return_if_fail(value_count != NULL);
 
     value = &priv->value;
     *values = (const gint64 *)value->value.integer64.value;
-    *value_count = G_N_ELEMENTS(value->value.integer64.value);
 }
 
 /**
