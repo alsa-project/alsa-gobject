@@ -3,13 +3,13 @@ name: Build test
 on: [push, pull_request]
 
 jobs:
-  build_in_fedora_for_amd64_on_docker:
+  build_in_fedora_amd64_on_docker:
     runs-on: ubuntu-latest
     container:
       image: fedora:rawhide
     steps:
     - name: Checkout repository.
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Prepare build environment.
       run: |
         dnf -y upgrade
@@ -21,59 +21,44 @@ jobs:
         meson --prefix=/tmp. -Ddoc=true -Dwarning_level=3 . build
     - name: Display configuration.
       run: |
-        cd build
-        meson configure
+        meson configure build
     - name: Build library.
       run: |
-        cd build
-        ninja
+        meson compile -C build
     - name: Test interfaces exposed by g-i.
       run: |
-        cd build
-        meson test
+        meson test -C build
     - name: Test install.
       run: |
-        cd build
-        meson install
+        meson install -C build
 
-  build_in_ubuntu_for_amd64_on_lxd:
+  build_in_ubuntu_amd64_on_docker:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
     steps:
-    - name: Install and initialize LXD
-      run: |
-        sudo snap install lxd
-        sudo lxd init --auto
-    - name: Launch container
-      run: |
-        sudo lxc launch ubuntu-daily:22.04/amd64 builder
-        sudo lxc exec builder -- bash -c 'while [ "$(systemctl is-system-running 2>/dev/null)" != "running" ] && [ "$(systemctl is-system-running 2>/dev/null)" != "degraded" ]; do :; done'
+    - name: Checkout repository.
+      uses: actions/checkout@v3
     - name: Prepare build environment.
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get update'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get -y full-upgrade'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y git build-essential'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y meson ninja-build libglib2.0-dev gobject-introspection libgirepository1.0-dev'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y gi-docgen python3-gi'
-        sudo lxc exec builder -- su ubuntu -c 'sudo apt-get install -y libudev-dev'
-    - name: Checkout repository.
-      uses: actions/checkout@v2
-    - name: Generate archive and expand it inner the container.
+        DEBIAN_FRONTEND=noninteractive apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get -y full-upgrade
+        DEBIAN_FRONTEND=noninteractive apt-get install -y git build-essential
+        DEBIAN_FRONTEND=noninteractive apt-get install -y meson ninja-build libglib2.0-dev gobject-introspection libgirepository1.0-dev
+        DEBIAN_FRONTEND=noninteractive apt-get install -y gi-docgen python3-gi
+        DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev
+    - name: Initialization for build.
       run: |
-        git archive --format=tar --prefix=dist/ HEAD | xz > archive.tar.xz
-        sudo lxc file push archive.tar.xz builder/home/ubuntu/
-        sudo lxc exec builder -- su ubuntu -c 'cd; tar xf archive.tar.xz'
-    - name: Initialization for build
-      run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist; meson --prefix=/home/ubuntu/install -Ddoc=true -Dwarning_level=3 . build'
+        meson --prefix=/tmp. -Ddoc=true -Dwarning_level=3 . build
     - name: Display configuration.
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson configure'
+        meson configure build
     - name: Build library.
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; ninja'
+        meson compile -C build
     - name: Test interfaces exposed by g-i.
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson test'
+        meson test -C build
     - name: Test install.
       run: |
-        sudo lxc exec builder -- su ubuntu -c 'cd; cd dist/build; meson install'
+        meson install -C build
