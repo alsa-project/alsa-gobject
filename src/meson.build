@@ -3,8 +3,6 @@ gobject_dependency = dependency('gobject-2.0',
   version: '>=2.44.0'
 )
 
-libudev_dependency = dependency('libudev')
-
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
