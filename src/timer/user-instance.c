@@ -30,8 +30,8 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSATimerUserInstance, alsatimer_user_instance, G_TYP
 /**
  * alsatimer_user_instance_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code in [enum@UserInstanceError]
- * enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code in
+ * `ALSATimer.UserInstanceError`.
  *
  * Returns: A [alias@GLib.Quark].
  */

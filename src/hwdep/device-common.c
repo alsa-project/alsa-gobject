@@ -17,8 +17,7 @@ G_DEFINE_INTERFACE(ALSAHwdepDeviceCommon, alsahwdep_device_common, G_TYPE_OBJECT
 /**
  * alsahwdep_device_common_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in ALSAHwdep.DeviceCommonError
- * enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in `ALSAHwdep.DeviceCommonError`.
  *
  * Returns: A [alias@GLib.Quark].
  */

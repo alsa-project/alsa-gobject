@@ -31,7 +31,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSACtlCard, alsactl_card, G_TYPE_OBJECT)
 /**
  * alsactl_card_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in [enum@CardError] enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in `ALSACtl.CardError`.
  *
  * Returns: A [alias@GLib.Quark].
  */

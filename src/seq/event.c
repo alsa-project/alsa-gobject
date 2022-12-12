@@ -117,8 +117,7 @@ G_DEFINE_BOXED_TYPE(ALSASeqEvent, alsaseq_event, seq_event_copy, seq_event_free)
 /**
  * alsaseq_event_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code of [enum@EventError]
- * enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code of `ALSASeq.EventError`.
  *
  * Returns: A [alias@GLib.Quark].
  */

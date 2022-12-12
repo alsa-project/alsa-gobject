@@ -39,8 +39,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSARawmidiStreamPair, alsarawmidi_stream_pair, G_TYP
 /**
  * alsarawmidi_stream_pair_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in [enum@StreamPairError]
- * enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] with code in `ALSARawmidi.StreamPairError`.
  *
  * Returns: A [alias@GLib.Quark].
  */

@@ -35,8 +35,8 @@ G_DEFINE_TYPE_WITH_PRIVATE(ALSASeqUserClient, alsaseq_user_client, G_TYPE_OBJECT
 /**
  * alsaseq_user_client_error_quark:
  *
- * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code of [enum@UserClientError]
- * enumerations.
+ * Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code of
+ * `ALSASeq.UserClientError`.
  *
  * Returns: A [alias@GLib.Quark].
  */
