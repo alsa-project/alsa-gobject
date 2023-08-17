@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <errno.h>
 
 #include <time.h>
 
