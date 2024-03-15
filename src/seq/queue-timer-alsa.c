@@ -82,7 +82,7 @@ static void alsaseq_queue_timer_alsa_class_init(ALSASeqQueueTimerAlsaClass *klas
      *
      * The identifier of associated timer instance in ALSA Timer.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, QUEUE_TIMER_ALSA_PROP_DEVICE_ID,
         g_param_spec_boxed("device-id", "device-id",
@@ -95,7 +95,7 @@ static void alsaseq_queue_timer_alsa_class_init(ALSASeqQueueTimerAlsaClass *klas
      *
      * The number of ticks as resolution of timer.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, QUEUE_TIMER_ALSA_PROP_RESOLUTION_TICKS,
         g_param_spec_uint("resolution-ticks", "resolution-ticks",

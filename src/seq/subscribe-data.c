@@ -124,7 +124,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      *
      * The address of sender.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_SENDER] =
         g_param_spec_boxed("sender", "sender",
@@ -137,7 +137,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      *
      * The address of destination.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_DEST] =
         g_param_spec_boxed("dest", "dest",
@@ -150,7 +150,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      *
      * Whether the subscription can be changed by originator only,
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_IS_EXCLUSIVE] =
         g_param_spec_boolean("is-exclusive", "is-exclusive",
@@ -163,7 +163,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      *
      * Any event for the subscription has time stamp,
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_HAS_TSTAMP] =
         g_param_spec_boolean("has-tstamp", "has-tstamp",
@@ -176,7 +176,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      *
      * The type of time stamp. This is effective when the has-tstamp property enabled.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_TSTAMP_MODE] =
         g_param_spec_enum("tstamp-mode", "tstamp-mode",
@@ -192,7 +192,7 @@ static void alsaseq_subscribe_data_class_init(ALSASeqSubscribeDataClass *klass)
      * The numeric ID of queue to deliver. One of ALSASeqSpecificQueueId is available as well as
      * any numeric value.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_subscribe_data_props[SEQ_SUBSCRIBE_DATA_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",

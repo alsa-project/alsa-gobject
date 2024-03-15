@@ -9,7 +9,7 @@
  *
  * The object wraps `struct snd_seq_queue_timer` in UAPI of Linux sound subsystem.
  *
- * Since: 0.3.
+ * Since: 0.3
  */
 
 static void alsaseq_queue_timer_common_default_init(ALSASeqQueueTimerCommonInterface *iface);
@@ -23,7 +23,7 @@ static void alsaseq_queue_timer_common_default_init(ALSASeqQueueTimerCommonInter
      *
      * The numeric identifier of queue. An entry of [enum@SpecificClientId] is available as well.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_uchar(QUEUE_ID_PROP_NAME, QUEUE_ID_PROP_NAME,
@@ -36,7 +36,7 @@ static void alsaseq_queue_timer_common_default_init(ALSASeqQueueTimerCommonInter
      *
      * The type of timer for the queue, one of [enum@QueueTimerType].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_enum(TIMER_TYPE_PROP_NAME, TIMER_TYPE_PROP_NAME,
