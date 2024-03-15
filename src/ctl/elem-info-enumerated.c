@@ -91,7 +91,7 @@ static void alsactl_elem_info_enumerated_class_init(ALSACtlElemInfoEnumeratedCla
      *  - The length of label including terminator should be within 64 bytes.
      *  - The total length of labels including terminators should be within (64 * 1024) bytes.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, ELEM_INFO_ENUMERATED_PROP_LABELS,
         g_param_spec_boxed("labels", "labels",

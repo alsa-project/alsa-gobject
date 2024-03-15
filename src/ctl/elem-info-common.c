@@ -7,7 +7,7 @@
  *
  * A [iface@ElemInfoCommon] should be implemented by any type of element information.
  *
- * Since: 0.3.
+ * Since: 0.3
  */
 
 static void alsactl_elem_info_common_default_init(ALSACtlElemInfoCommonInterface *iface);
@@ -21,7 +21,7 @@ static void alsactl_elem_info_common_default_init(ALSACtlElemInfoCommonInterface
      *
      * The identifier of element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_boxed(ELEM_ID_PROP_NAME, ELEM_ID_PROP_NAME,
@@ -34,7 +34,7 @@ static void alsactl_elem_info_common_default_init(ALSACtlElemInfoCommonInterface
      *
      * The type of element, one of [enum@ElemType].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_enum(ELEM_TYPE_PROP_NAME, ELEM_TYPE_PROP_NAME,
@@ -48,7 +48,7 @@ static void alsactl_elem_info_common_default_init(ALSACtlElemInfoCommonInterface
      *
      * The access permission for the element with [flags@ElemAccessFlag].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_flags(ACCESS_PROP_NAME, ACCESS_PROP_NAME,
@@ -62,7 +62,7 @@ static void alsactl_elem_info_common_default_init(ALSACtlElemInfoCommonInterface
      *
      * The value of PID for process to own the element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_int(OWNER_PROP_NAME, OWNER_PROP_NAME,
