@@ -9,7 +9,7 @@ jobs:
       image: fedora:rawhide
     steps:
     - name: Checkout repository.
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Prepare build environment.
       run: |
         dnf -y upgrade
@@ -38,7 +38,7 @@ jobs:
       image: ubuntu:latest
     steps:
     - name: Checkout repository.
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Prepare build environment.
       run: |
         DEBIAN_FRONTEND=noninteractive apt-get update
