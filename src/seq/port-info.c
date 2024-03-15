@@ -156,7 +156,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The address of port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_ADDR] =
         g_param_spec_boxed("addr", "addr",
@@ -169,7 +169,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The name of port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_NAME] =
         g_param_spec_string("name", "name",
@@ -182,7 +182,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The capabilities of port, a set of [flags@PortCapFlag].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_CAPS] =
         g_param_spec_flags("caps", "caps",
@@ -196,7 +196,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The attributes of port, a set of [flags@PortAttrFlag].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_ATTRS] =
         g_param_spec_flags("attrs", "attrs",
@@ -210,7 +210,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The number of channels per MIDI port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_MIDI_CHANNELS] =
         g_param_spec_int("midi-channels", "midi-channels",
@@ -224,7 +224,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The number of voices per MIDI port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_MIDI_VOICES] =
         g_param_spec_int("midi-voices", "midi-voices",
@@ -238,7 +238,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The number of voices per synth port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_SYNTH_VOICES] =
         g_param_spec_int("synth-voices", "synth-voices",
@@ -252,7 +252,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The current number of subscribers to read.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_READ_USERS] =
         g_param_spec_int("read-users", "read-users",
@@ -266,7 +266,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The current number of subscribers to write.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_WRITE_USERS] =
         g_param_spec_int("write-users", "write-users",
@@ -280,7 +280,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      *
      * The mode whether to overwrite time stamp for event when the event is delivered from the port.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TSTAMP_OVERWRITE] =
         g_param_spec_boolean("tstamp-overwrite", "tstamp-overwrite",
@@ -295,7 +295,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      * The mode of time stamp. This is effective when the [property@PortInfo:tstamp-overwrite] is
      * enabled.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TSTAMP_MODE] =
         g_param_spec_enum("tstamp-mode", "tstamp-mode",
@@ -311,7 +311,7 @@ static void alsaseq_port_info_class_init(ALSASeqPortInfoClass *klass)
      * The numeric ID of queue to update time stamp when [property@PortInfo:tstamp-overwrite] is
      * set to True. One of [enum@SpecificQueueId] is available as well.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_port_info_props[SEQ_PORT_INFO_PROP_TIME_QUEUE] =
         g_param_spec_uchar("queue-id", "queue-id",

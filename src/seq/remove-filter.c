@@ -107,7 +107,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The set of flags to filter events. They decide how to evaluate included data at call of
      * [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_FLAGS] =
         g_param_spec_flags("flags", "flags",
@@ -122,7 +122,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The numeric identifier of queue as filter condition. This is always evaluated at call of
      * [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_QUEUE_ID] =
         g_param_spec_uchar("queue-id", "queue-id",
@@ -137,7 +137,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The destionation of event as filter condition. This is evaluated with
      * [flags@RemoveFilterFlag].DEST at call of [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_DST] =
         g_param_spec_boxed("destination", "destination",
@@ -151,7 +151,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The channel of event as filter condition. This is evaluated with
      * [flags@RemoveFilterFlag].DEST_CHANNEL at call of [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_CHANNEL] =
         g_param_spec_uchar("channel", "channel",
@@ -166,7 +166,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The type of event as filter condition. This is evaluated with
      * [flags@RemoveFilterFlag].EVENT_TYPE at call of [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_EVENT_TYPE] =
         g_param_spec_enum("event-type", "event-type",
@@ -181,7 +181,7 @@ static void alsaseq_remove_filter_class_init(ALSASeqRemoveFilterClass *klass)
      * The tag of event as filter condition. This is evaluated with
      * [flags@RemoveFilterFlag].TAG_MATCH at call of [method@UserClient.remove_events].
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     seq_remove_filter_props[SEQ_REMOVE_FILTER_PROP_TAG] =
         g_param_spec_char("tag", "tag",
