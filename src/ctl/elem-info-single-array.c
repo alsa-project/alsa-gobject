@@ -8,7 +8,7 @@
  * A [iface@ElemInfoSingleArray] should be implemented by the type of information for element
  * whieh has single value array.
  *
- * Since: 0.3.
+ * Since: 0.3
  */
 
 static void alsactl_elem_info_single_array_default_init(ALSACtlElemInfoSingleArrayInterface *iface);
@@ -23,7 +23,7 @@ static void alsactl_elem_info_single_array_default_init(ALSACtlElemInfoSingleArr
      *
      * The count of elements in value array of the element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_interface_install_property(iface,
         g_param_spec_uint(VALUE_COUNT_PROP_NAME, VALUE_COUNT_PROP_NAME,

@@ -90,7 +90,7 @@ static void alsactl_elem_info_integer_class_init(ALSACtlElemInfoIntegerClass *kl
      *
      * The minimum value of element in value array for the element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, ELEM_INFO_INTEGER_PROP_MIN,
         g_param_spec_int("value-min", "value-min",
@@ -103,7 +103,7 @@ static void alsactl_elem_info_integer_class_init(ALSACtlElemInfoIntegerClass *kl
      *
      * The maximum value of element in value array for the element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, ELEM_INFO_INTEGER_PROP_MAX,
         g_param_spec_int("value-max", "value-max",
@@ -116,7 +116,7 @@ static void alsactl_elem_info_integer_class_init(ALSACtlElemInfoIntegerClass *kl
      *
      * The step value of element in value array for the element.
      *
-     * Since: 0.3.
+     * Since: 0.3
      */
     g_object_class_install_property(gobject_class, ELEM_INFO_INTEGER_PROP_STEP,
         g_param_spec_int("value-step", "value-step",
