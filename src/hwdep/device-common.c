@@ -7,7 +7,7 @@
  *
  * A [iface@DeviceCommon] should be implemented by any type of ALSA HwDep device.
  *
- * Since: 0.3.
+ * Since: 0.3
  */
 
 static void alsahwdep_device_common_default_init(ALSAHwdepDeviceCommonInterface *iface);
