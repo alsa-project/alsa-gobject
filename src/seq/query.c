@@ -70,7 +70,7 @@ static gboolean open_fd(int *fd, GError **error)
     gboolean result;
 
     if (!alsaseq_get_seq_devnode(&devname, error))
-        return -1;
+        return FALSE;
 
     result = TRUE;
     *fd = open(devname, O_RDONLY);
