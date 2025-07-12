@@ -76,7 +76,7 @@ static gboolean open_fd(int *fd, GError **error)
     gboolean result;
 
     if (!alsatimer_get_devnode(&devname, error))
-        return -1;
+        return FALSE;
 
     result = TRUE;
     *fd = open(devname, O_RDONLY);
