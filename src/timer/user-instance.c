@@ -332,9 +332,9 @@ gboolean alsatimer_user_instance_attach(ALSATimerUserInstance *self, ALSATimerDe
  * @error: A [struct@GLib.Error]. Error is generated with domain of `ALSATimer.UserInstanceError`.
  *
  * Attach the instance as an slave to another instance indicated by a pair of slave_class and
- * slave_id. If the slave_class is [enum@SlaveClass:APPLICATION], the slave_id is for the PID of
+ * slave_id. If the slave_class is [enum@SlaveClass].APPLICATION, the slave_id is for the PID of
  * application process which owns the instance of timer. If the slave_class is
- * [enum@SlaveClass:SEQUENCER], the slave_id is the numeric ID of queue bound for timer device.
+ * [enum@SlaveClass].SEQUENCER, the slave_id is the numeric ID of queue bound for timer device.
  *
  * The call of function executes `ioctl(2)` system call with `SNDRV_TIMER_IOCTL_SELECT` command
  * for ALSA timer character device.
