@@ -44,7 +44,7 @@ void alsatimer_tick_time_event_get_resolution(const ALSATimerTickTimeEvent *self
  *
  * Get the tick count since the last event.
  */
-void alsatimer_tick_time_event_get_ticks(const ALSATimerTickTimeEvent *self, guint *count)
+void alsatimer_tick_time_event_get_count(const ALSATimerTickTimeEvent *self, guint *count)
 {
     *count = self->ticks;
 }
