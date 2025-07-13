@@ -1,15 +1,18 @@
 Source: alsa-gobject
 Section: libs
 Priority: optional
+Maintainer: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 Build-Depends: debhelper-compat (= 13),
+    dh-sequence-gir,
     meson (>= 0.32.0),
     libglib2.0-dev (>= 2.32.0),
-    gi-docgen (>= 2021.8+ds1-1),
+    gir1.2-gobject-2.0-dev,
     gobject-introspection (>= 1.32.1),
     libgirepository1.0-dev (>= 1.32.1),
-    python3-gi
-Maintainer: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+    python3-gi,
+    gi-docgen (>= 2021.8+ds1-1)
 Standards-Version: 4.3.0
+Rules-Requires-Root: no
 
 Package: libalsactl0
 Architecture: linux-any
@@ -128,6 +131,7 @@ Package: alsa-gobject-dev
 Section: libdevel
 Architecture: linux-any
 Depends: ${misc:Depends},
+    ${gir:Depends},
     libalsactl0 (= ${binary:Version}),
     libalsarawmidi0 (= ${binary:Version}),
     libalsatimer0 (= ${binary:Version}),
@@ -140,6 +144,7 @@ Depends: ${misc:Depends},
     gir1.2-alsatimer-0.0 (= ${binary:Version}),
     gir1.2-alsaseq-0.0 (= ${binary:Version}),
     gir1.2-alsahwdep-0.0 (= ${binary:Version}),
+Provides: ${gir:Provides}
 Description: I/O libraries for ALSA cdev with GObject framework (development file)
  An alsa-gobject project aims to produce a set of I/O libraries with GObject
  framework. These library supports any operations via the character device

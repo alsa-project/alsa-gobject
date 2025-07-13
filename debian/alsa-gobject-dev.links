@@ -1,0 +1,5 @@
+usr/share/doc/alsa-gobject/alsactl usr/share/gtk-doc/html/alsactl
+usr/share/doc/alsa-gobject/alsarawmidi usr/share/gtk-doc/html/alsarawmidi
+usr/share/doc/alsa-gobject/alsahwdep usr/share/gtk-doc/html/alsahwdep
+usr/share/doc/alsa-gobject/alsatimer usr/share/gtk-doc/html/alsatimer
+usr/share/doc/alsa-gobject/alsaseq usr/share/gtk-doc/html/alsaseq

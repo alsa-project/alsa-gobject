@@ -1,4 +1,5 @@
 libalsahwdep.so.0 libalsahwdep0 #MINVER#
+* Build-Depends-Package: alsa-gobject-dev
  ALSA_GOBJECT_0_0_0@ALSA_GOBJECT_0_0_0 0.1.0
  ALSA_GOBJECT_0_3_0@ALSA_GOBJECT_0_3_0 0.3.0
  alsahwdep_device_info_get_type@ALSA_GOBJECT_0_0_0 0.1.0
