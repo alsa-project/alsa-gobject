@@ -2,7 +2,7 @@
 The alsa-gobject project
 ========================
 
-2022/06/30
+2025/07/13
 Takashi Sakamoto
 
 Introduction
@@ -12,7 +12,7 @@ This project is a sub project in Advanced Linux Sound Architecture a.k.a ALSA,
 to produce libraries compatible with GObject introspection (g-i) for language
 bindings.
 
-The latest release is `0.3.0 <https://github.com/alsa-project/alsa-gobject/releases/tag/v0.3.0>`_.
+The latest release is `0.3.1 <https://github.com/alsa-project/alsa-gobject/releases/tag/v0.3.1>`_.
 
 Libraries produced by the project
 =================================
